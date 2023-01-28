@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "775538834378",
+    "project_id": "bestengineer-a2067",
+    "storage_bucket": "bestengineer-a2067.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775538834378:android:30defaa50618ac24d62d33",
+        "android_client_info": {
+          "package_name": "com.example.bestengineer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775538834378-jlc2d51ms4na14u6eff0eapscm37v4mh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD61BUmnBq102yDR5JBwWoVXrWVy3VEXLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775538834378-jlc2d51ms4na14u6eff0eapscm37v4mh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
