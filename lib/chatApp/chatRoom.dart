@@ -344,26 +344,25 @@ class _ChatRoomState extends State<ChatRoom> {
   int i = 0;
   File? audioFile;
   Future<String> getFilePath() async {
-    // Directory storageDirectory = await getApplicationDocumentsDirectory();
-    // String sdPath =
-    //     "${storageDirectory.path}/record${DateTime.now().microsecondsSinceEpoch}.acc";
-    Directory? extDir = await getExternalStorageDirectory();
-    String dirPath = '${extDir!.path}/Audio/';
+    Directory storageDirectory = await getApplicationDocumentsDirectory();
+    String sdPath = "${storageDirectory.path}/record";
+    // Directory? extDir = await getExternalStorageDirectory();
+    // String dirPath = '${extDir!.path}/Audio/';
 
-    dirPath = dirPath.replaceAll(
-        "Android/data/com.example.bestengineer/app_flutter/", "");
+    // dirPath = dirPath.replaceAll(
+    //     "Android/data/com.example.bestengineer/app_flutter/", "");
 
-    final File file = File('${dirPath}/test_${i++}.mp3');
-    print("file...$file");
-    String filpath = '$dirPath/test_${i++}.mp3';
+    // final File file = File('${dirPath}/test_${i++}.mp3');
+    // print("file...$file");
+    // String filpath = '$dirPath/test_${i++}.mp3';
     // await Directory(dirPath).create(recursive: true);
-    // var d = Directory(dirPath);
+    var d = Directory(sdPath);
 
-    // if (!d.existsSync()) {
-    //   d.createSync(recursive: true);
-    // }
+    if (!d.existsSync()) {
+      d.createSync(recursive: true);
+    }
 
-    return "$filpath";
+    return "$sdPath/test_${i++}.mp3";
   }
 
   late String recordFilePath;
@@ -397,6 +396,7 @@ class _ChatRoomState extends State<ChatRoom> {
   String audioURL = "";
 
   uploadAudio(String fil) async {
+    String filename = Uuid().v1();
     await _firestore
         .collection("chatroom")
         .doc(widget.chatRoomId)
@@ -408,9 +408,10 @@ class _ChatRoomState extends State<ChatRoom> {
       "type": "audio",
       "time": FieldValue.serverTimestamp()
     });
-    var res = FirebaseStorage.instance.ref().child('audio').child("$fil");
+    var res =
+        FirebaseStorage.instance.ref().child('audio').child("$filename.mp3");
 
-    print("response----$res");
+    print("File(recordFilePath)----${File(recordFilePath)}");
     var uploadTask = res.putFile(File(recordFilePath));
     final snapshiot = await uploadTask.whenComplete(() {});
     String adurldownlod = await snapshiot.ref.getDownloadURL();
