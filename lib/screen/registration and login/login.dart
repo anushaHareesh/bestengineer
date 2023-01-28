@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 400,
                             width: 300,
                             child: SvgPicture.asset(
-                              "asset/login.svg",
+                              "assets/login.svg",
                               height: 300,
                             ),
                           ),

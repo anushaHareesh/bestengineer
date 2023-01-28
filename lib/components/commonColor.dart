@@ -5,8 +5,8 @@ class P_Font {
 }
 
 class P_Image {
-  static String login = 'asset/image/01.jpg';
-  static String empty = 'asset/image/04.jpg';
+  static String login = 'assets/image/01.jpg';
+  static String empty = 'assets/image/04.jpg';
 }
 
 class P_Settings {

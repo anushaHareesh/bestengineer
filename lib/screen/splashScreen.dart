@@ -3,7 +3,6 @@ import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:bestengineer/screen/registration%20and%20login/registration.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -108,7 +107,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: 200,
                 width: 200,
                 child: Image.asset(
-                  "asset/logo_black_bg.png",
+                  "assets/logo_black_bg.png",
                 )),
           ],
         )),

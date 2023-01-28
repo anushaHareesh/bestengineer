@@ -106,7 +106,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 height: 500,
                                 width: 300,
                                 child: SvgPicture.asset(
-                                  "asset/signup.svg",
+                                  "assets/signup.svg",
                                   height: 300,
                                 )),
                           ),
