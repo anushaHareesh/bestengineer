@@ -1,7 +1,9 @@
 import 'package:bestengineer/chatApp/chatLogin.dart';
+import 'package:bestengineer/chatApp/pdftest/pdfhome.dart';
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/registrationController.dart';
+
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:bestengineer/screen/registration%20and%20login/registration.dart';
 
@@ -137,7 +139,7 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ),
         ),
-        home: ChatLogin()
+        home: PdfHome()
 
         //  AnimatedSplashScreen(
         //   backgroundColor: Colors.black,
