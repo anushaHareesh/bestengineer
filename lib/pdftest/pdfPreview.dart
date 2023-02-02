@@ -1,6 +1,7 @@
-import 'package:bestengineer/chatApp/pdftest/pdfApi.dart';
-import 'package:bestengineer/chatApp/pdftest/pdfExport.dart';
-import 'package:bestengineer/chatApp/pdftest/pdfmodel.dart';
+
+
+import 'package:bestengineer/pdftest/pdfExport.dart';
+import 'package:bestengineer/pdftest/pdfModel.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';

@@ -77,21 +77,19 @@ class BestEngineer {
             set_type INTEGER  
           )
           ''');
-    // await db.execute('''
-    //       CREATE TABLE bagTable (
-    //         id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //         itemName TEXT NOT NULL,
-    //         cartdate TEXT,
-    //         carttime TEXT,
-    //         srate1 REAL,
-    //         srate2 REAL,
-    //         cartrowno INTEGER,
-    //         batchcode TEXT,
-    //         img TEXT,
-    //         catid TEXT,
-    //         totalamount TEXT,
-    //       )
-    //       ''');
+    await db.execute('''
+          CREATE TABLE enquiryTable (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            itemName TEXT NOT NULL,
+            code TEXT,
+            qty REAL,
+            rate REAL,
+            totalamount REAL,
+            enqdate TEXT,
+            enqtime TEXT,
+            cartrowno INTEGER
+          )
+          ''');
   }
 
 /////////////////////////////////////////////////////////////////////////
@@ -130,50 +128,43 @@ class BestEngineer {
   }
 
   //////////////////////////////////////////////////////////////////////////////
-  // Future insertBagTable(
-  //   String itemName,
-  //   String cartdate,
-  //   String carttime,
-  //   String os,
-  //   String customerid,
-  //   int cartrowno,
-  //   String code,
-  //   int qty,
-  //   String rate,
-  //   String totalamount,
-  //   int cstatus,
-  // ) async {
-  //   print("qty--$qty");
-  //   print("code...........$code");
-  //   final db = await database;
-  //   var res;
-  //   var query3;
-  //   var query2;
-  //   List<Map<String, dynamic>> res1 = await db.rawQuery(
-  //       'SELECT  * FROM bagTable WHERE customerid="${customerid}" AND os = "${os}" AND code="${code}"');
-  //   print("SELECT from ---$res1");
-  //   if (res1.length == 1) {
-  //     int qty1 = res1[0]["qty"];
-  //     int updatedQty = qty1 + qty;
-  //     double amount = double.parse(res1[0]["totalamount"]);
-  //     print("res1.length----${res1.length}");
+  Future insertEnqTable(
+    String itemName,
+    String code,
+    double qty,
+    double rate,
+    double totalamount,
+    String enqdate,
+    String enqtime,
+    int cartrowno,
+  ) async {
+    print("qty--$qty");
+    print("code...........$code");
+    final db = await database;
+    var res;
 
-  //     print("upadted qty-----$updatedQty");
-  //     double amount1 = double.parse(totalamount);
-  //     double updatedAmount = amount + amount1;
-  //     var res = await db.rawUpdate(
-  //         'UPDATE orderBagTable SET qty=$updatedQty , totalamount="${updatedAmount}" WHERE customerid="${customerid}" AND os = "${os}" AND code="${code}"');
-  //     print("response-------$res");
-  //   } else {
-  //     query2 =
-  //         'INSERT INTO orderBagTable (itemName, cartdate, carttime , os, customerid, cartrowno, code, qty, rate, totalamount, cstatus) VALUES ("${itemName}","${cartdate}","${carttime}", "${os}", "${customerid}", $cartrowno, "${code}", $qty, "${rate}", "${totalamount}", $cstatus)';
-  //     var res = await db.rawInsert(query2);
-  //   }
+    List<Map<String, dynamic>> res1 =
+        await db.rawQuery('SELECT  * FROM enquiryTable WHERE code="${code}"');
+    print("SELECT from ---$res1");
 
-  //   print("insert query result $res");
-  //   print("insert-----$query2");
-  //   return res;
-  // }
+    if (res1.length == 1) {
+      int qty1 = res1[0]["qty"];
+      double updatedQty = qty1 + qty;
+      double amount = res1[0]["totalamount"];
+      double updatedAmount = amount + totalamount;
+      var quer =
+          'UPDATE enquiryTable SET qty=$updatedQty , totalamount="${updatedAmount}" WHERE code="${code}"';
+      print("updateion query-------$quer");
+      var res = await db.rawUpdate(quer);
+    } else {
+      var query2 =
+          'INSERT INTO enquiryTable (itemName, code, qty, rate, totalamount, cartdate, carttime ,cartrowno) VALUES ("${itemName}","${code}", $qty, ${rate}, ${totalamount}, "$enqdate}","${enqtime}",  $cartrowno, )';
+      var res = await db.rawInsert(query2);
+      print("updateion query-------$query2");
+    }
+
+    return res;
+  }
 
 ////////////////////////////////////////////////////////////////////////////////
   deleteFromTableCommonQuery(String table, String? condition) async {
@@ -247,5 +238,29 @@ class BestEngineer {
     var res = await db.rawUpdate(query);
     print("response-update------$res");
     return res;
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  getMaxCommonQuery(String table, String field, String? condition) async {
+    var res;
+    int max;
+    var result;
+    Database db = await instance.database;
+    print("condition---${condition}");
+    result = await db.rawQuery("SELECT * FROM '$table'");
+    if (result != null && result.isNotEmpty) {
+      var query = "SELECT MAX($field) max_val FROM '$table'";
+      print("max query-----$query");
+      res = await db.rawQuery(query);
+      print('res[0]["max_val"] ----${res[0]["max_val"]}');
+      // int convertedMax = int.parse(res[0]["max_val"]);
+      max = res[0]["max_val"] + 1;
+      print("max value.........$max");
+    } else {
+      print("else");
+      max = 1;
+    }
+    print("max common-----$res");
+    return max;
   }
 }

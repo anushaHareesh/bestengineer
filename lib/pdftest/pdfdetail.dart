@@ -1,6 +1,7 @@
-import 'package:bestengineer/chatApp/pdftest/pdfApi.dart';
-import 'package:bestengineer/chatApp/pdftest/pdfPreview.dart';
-import 'package:bestengineer/chatApp/pdftest/pdfmodel.dart';
+
+
+import 'package:bestengineer/pdftest/pdfModel.dart';
+import 'package:bestengineer/pdftest/pdfPreview.dart';
 import 'package:flutter/material.dart';
 
 class DetailPage extends StatelessWidget {
