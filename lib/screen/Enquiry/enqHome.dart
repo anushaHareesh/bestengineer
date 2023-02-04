@@ -1,4 +1,5 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/screen/Enquiry/enqDashboard.dart';
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../controller/controller.dart';
+import 'package:badges/badges.dart' as badges;
 
 class EnqHome extends StatefulWidget {
   const EnqHome({super.key});
@@ -15,15 +17,60 @@ class EnqHome extends StatefulWidget {
 }
 
 class _EnqHomeState extends State<EnqHome> {
+  String? selected;
+  List<String> area = ["jkdsd", "djsdj"];
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   List<Widget> drawerOpts = [];
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<Controller>(context, listen: false).getArea(context);
+    Provider.of<Controller>(context, listen: false).gePriorityList(context);
+    Provider.of<ProductController>(context, listen: false)
+        .geProductList(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 250, 248, 248),
       key: _key,
       appBar: AppBar(
+        actions: [
+          InkWell(
+            onTap: () {
+              buildPopupDialog(context, size);
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Consumer<Controller>(
+                builder: (context, value, child) {
+                  return Row(
+                    // mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(
+                        Icons.place,
+                        size: 15,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        value.selected == null
+                            ? "Choose Area"
+                            : value.selected.toString(),
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
         backgroundColor: P_Settings.loginPagetheme,
         leading: Builder(
           builder: (context) => Consumer<Controller>(
@@ -86,6 +133,52 @@ class _EnqHomeState extends State<EnqHome> {
           ),
         ),
       ),
+      bottomNavigationBar: SizedBox(
+          height: 50,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EnqCart()),
+              );
+            },
+            child: Container(
+              color: Colors.yellow,
+              child: Consumer<ProductController>(
+                builder: (context, value, child) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "View Data",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600]),
+                      ),
+                      SizedBox(
+                        width: size.width * 0.04,
+                      ),
+                      badges.Badge(
+                          badgeStyle: badges.BadgeStyle(
+                              shape: badges.BadgeShape.circle,
+                              badgeColor: Colors.red),
+                          position:
+                              badges.BadgePosition.topEnd(top: -10, end: -22),
+                          badgeContent: Text(
+                            value.cartCount.toString(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          child: Icon(
+                            Icons.shopping_cart,
+                            color: Colors.red,
+                          ))
+                    ],
+                  );
+                },
+              ),
+            ),
+          )),
       drawer: Consumer<Controller>(
         builder: (context, value, child) {
           return Drawer(
@@ -188,5 +281,87 @@ class _EnqHomeState extends State<EnqHome> {
         // );
       },
     );
+  }
+
+  //////////////////////////////////////////////////////////////////
+  buildPopupDialog(BuildContext context, Size size) {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              content: Consumer<Controller>(builder: (context, value, child) {
+                // if (value.isLoading) {
+                //   return CircularProgressIndicator();
+                // } else {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      color: Colors.grey[200],
+                      height: size.height * 0.04,
+                      child: DropdownButton<String>(
+                        value: selected,
+                        // isDense: true,
+                        hint: Text("Select"),
+                        // isExpanded: true,
+                        autofocus: false,
+                        underline: SizedBox(),
+                        elevation: 0,
+                        items: value.area_list
+                            .map((item) => DropdownMenuItem<String>(
+                                value: item.areaId.toString(),
+                                child: Container(
+                                  width: size.width * 0.4,
+                                  child: Text(
+                                    item.areaName.toString(),
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                )))
+                            .toList(),
+                        onChanged: (item) {
+                          print("clicked");
+
+                          if (item != null) {
+                            setState(() {
+                              selected = item;
+                            });
+                            print("se;ected---$item");
+                          }
+                        },
+                      ),
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: P_Settings.loginPagetheme),
+                        onPressed: () async {
+                          String tabId;
+                          Provider.of<Controller>(context, listen: false)
+                              .setDropdowndata(selected!);
+                          Provider.of<Controller>(context, listen: false)
+                              .getCustomerList(context, selected!);
+
+                          // if (value.menuClick == true) {
+                          //   tabId = value.customIndex!;
+                          // } else {
+                          //   tabId = value.tab_index!;
+                          // }
+                          // print("gahghgd------${value.customIndex}");
+                          // Provider.of<Controller>(context, listen: false)
+                          //     .loadReportData(context, tabId, value.fromDate!,
+                          //         value.todate!, value.brId!, "");
+
+                          Navigator.pop(context);
+                        },
+                        child: Text("Apply"))
+                  ],
+                );
+                // }
+              }),
+            );
+          });
+        });
   }
 }

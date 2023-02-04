@@ -1,5 +1,6 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
+import 'package:bestengineer/widgets/alertCommon/deletePopup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -8,8 +9,15 @@ class CustomerPopup {
   TextEditingController name = TextEditingController();
   TextEditingController adress = TextEditingController();
   TextEditingController phone = TextEditingController();
+  TextEditingController landmark = TextEditingController();
+  TextEditingController contact_person = TextEditingController();
+
+  String? selected;
   var cusout;
-  Future buildcusPopupDialog(BuildContext context, Size size) {
+  Future buildcusPopupDialog(
+    BuildContext context,
+    Size size,
+  ) {
     name.clear();
     adress.clear();
     phone.clear();
@@ -57,7 +65,7 @@ class CustomerPopup {
                                 return [];
                               } else {
                                 cusout = value.customerList.where(
-                                    (suggestion) => suggestion["name"]
+                                    (suggestion) => suggestion["company_name"]
                                         .toLowerCase()
                                         .contains(values.text.toLowerCase()));
                                 if (cusout == null || cusout.isEmpty) {
@@ -69,17 +77,28 @@ class CustomerPopup {
                                           listen: false)
                                       .setSelectedCustomer(true);
                                 }
+
+                                print(value.customerList.where((suggestion) =>
+                                    suggestion["company_name"]
+                                        .toLowerCase()
+                                        .contains(
+                                          values.text.toLowerCase(),
+                                        )));
+
                                 return value.customerList.where((suggestion) =>
-                                    suggestion["name"].toLowerCase().contains(
+                                    suggestion["company_name"]
+                                        .toLowerCase()
+                                        .contains(
                                           values.text.toLowerCase(),
                                         ) ||
-                                    suggestion["phone"].contains(
+                                    suggestion["phone_1"].contains(
                                       values.text.toLowerCase(),
                                     ));
                               }
                             },
                             displayStringForOption:
-                                (Map<String, dynamic> option) => option["name"],
+                                (Map<String, dynamic> option) =>
+                                    option["company_name"],
                             // onSelected: (value) {
                             //   setState(() {
 
@@ -142,9 +161,9 @@ class CustomerPopup {
                                   controller: fieldText,
                                   focusNode: fieldFocusNode,
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[800]
-                                      // fontWeight: FontWeight.bold
-                                      ),
+                                    fontSize: 16, color: Colors.grey[800],
+                                    // fontWeight: FontWeight.bold
+                                  ),
                                 ),
                               );
                             },
@@ -153,57 +172,138 @@ class CustomerPopup {
                                     onSelected,
                                 Iterable<Map<String, dynamic>> options) {
                               print("option----${options}");
-
                               return Align(
                                 alignment: Alignment.topLeft,
                                 child: Material(
-                                  child: Container(
-                                    height: size.height * 0.2,
-                                    width: size.width - 80,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.all(2.0),
-                                      itemCount: options.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        final Map<String, dynamic> option =
-                                            options.elementAt(index);
-                                        return Column(
-                                          children: [
-                                            ListTile(
-                                              // tileColor: Colors.amber,
-                                              onTap: () {
-                                                onSelected(option);
-                                                print("optionaid------$option");
-                                                Provider.of<Controller>(context,
-                                                        listen: false)
-                                                    .setCustomerName(
-                                                  option["name"].toString(),
-                                                  option["address"].toString(),
-                                                  option["phone"].toString(),
-                                                );
-                                                adress.text = option["address"]
-                                                    .toString();
-                                                phone.text =
-                                                    option["phone"].toString();
-                                              },
-                                              title: Text(
-                                                  option["name"].toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.black)),
-                                              subtitle: Text(
-                                                option["address"].toString(),
+                                  child: Expanded(
+                                    // width: 400,
+                                    // height: size.height * 0.3,
+                                    // color: Colors.grey[200],
+                                    child: Container(
+                                      width: 300,
+                                      color: Colors.grey[200],
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.all(10.0),
+                                        itemCount: options.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          final Map<String, dynamic> option =
+                                              options.elementAt(index);
+                                          return Column(
+                                            children: [
+                                              ListTile(
+                                                // tileColor: Colors.amber,
+                                                onTap: () {
+                                                  onSelected(option);
+                                                  print(
+                                                      "optionaid------$option");
+                                                  Provider.of<Controller>(
+                                                          context,
+                                                          listen: false)
+                                                      .setCustomerName(
+                                                    option["company_name"]
+                                                        .toString(),
+                                                    option["company_add1"]
+                                                        .toString(),
+                                                    option["phone_1"]
+                                                        .toString(),
+                                                  );
+                                                  adress.text =
+                                                      option["company_add1"]
+                                                          .toString();
+                                                  phone.text = option["phone_1"]
+                                                      .toString();
+                                                  landmark.text =
+                                                      option["landmark"]
+                                                          .toString();
+                                                  contact_person.text =
+                                                      option["owner_name"]
+                                                          .toString();
+                                                  value.dropSelected =
+                                                      option["priority"]
+                                                          .toString();
+                                                },
+                                                title: Text(
+                                                    option["company_name"]
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.black)),
+                                                subtitle: Text(
+                                                  option["phone_1"].toString(),
+                                                ),
                                               ),
-                                            ),
-                                            Divider()
-                                          ],
-                                        );
-                                      },
+                                              Divider()
+                                            ],
+                                          );
+
+                                          // return GestureDetector(
+                                          //   onTap: () {
+                                          //     onSelected(option);
+                                          //   },
+                                          //   child: ListTile(
+                                          //     title: Text(option.name,
+                                          //         style: const TextStyle(
+                                          //             color: Colors.white)),
+                                          //   ),
+                                          // );
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
                               );
+                              // return Align(
+                              //   alignment: Alignment.topLeft,
+                              //   child: Material(
+                              //     child: Container(
+                              //       height: size.height * 0.2,
+                              //       width: size.width - 80,
+                              //       child: ListView.builder(
+                              //         shrinkWrap: true,
+                              //         padding: EdgeInsets.all(2.0),
+                              //         itemCount: options.length,
+                              //         itemBuilder:
+                              //             (BuildContext context, int index) {
+                              //           final Map<String, dynamic> option =
+                              //               options.elementAt(index);
+                              //           return Column(
+                              //             children: [
+                              //               ListTile(
+                              //                 // tileColor: Colors.amber,
+                              //                 onTap: () {
+                              //                   onSelected(option);
+                              //                   print("optionaid------$option");
+                              //                   Provider.of<Controller>(context,
+                              //                           listen: false)
+                              //                       .setCustomerName(
+                              //                     option["name"].toString(),
+                              //                     option["address"].toString(),
+                              //                     option["phone"].toString(),
+                              //                   );
+                              //                   adress.text = option["address"]
+                              //                       .toString();
+                              //                   phone.text =
+                              //                       option["phone"].toString();
+                              //                 },
+                              //                 title: Text(
+                              //                     option["name"].toString(),
+                              //                     style: TextStyle(
+                              //                         fontSize: 15,
+                              //                         color: Colors.black)),
+                              //                 subtitle: Text(
+                              //                   option["address"].toString(),
+                              //                 ),
+                              //               ),
+                              //               Divider()
+                              //             ],
+                              //           );
+                              //         },
+                              //       ),
+                              //     ),
+                              //   ),
+                              // );
                             },
                           ),
                         ),
@@ -227,7 +327,7 @@ class CustomerPopup {
                           children: [
                             Container(
                               transform:
-                                  Matrix4.translationValues(0.0, -13.0, 0.0),
+                                  Matrix4.translationValues(0.0, -19.0, 0.0),
                               height: size.height * 0.07,
                               child: TextField(
                                 style: TextStyle(color: Colors.grey[800]),
@@ -235,7 +335,7 @@ class CustomerPopup {
                                 //     value.customContainerShow ? false : true,
                                 controller: adress,
                                 decoration: InputDecoration(
-                                  hintText: "Address",
+                                  hintText: "Customer Info",
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 1,
@@ -253,10 +353,59 @@ class CustomerPopup {
                                 maxLines: null,
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.all(1.0),
+                            Container(
+                              transform:
+                                  Matrix4.translationValues(0.0, -13.0, 0.0),
+                              height: size.height * 0.07,
+                              child: TextField(
+                                controller: landmark,
+                                style: TextStyle(color: Colors.grey[800]),
+                                decoration: InputDecoration(
+                                  hintText: "Landmark",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(
+                                            255, 134, 133, 133)), //<-- SEE HERE
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(
+                                            255, 134, 133, 133)), //<-- SEE HERE
+                                  ),
+                                ),
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                              ),
                             ),
                             Container(
+                              // transform: Matrix4.translationValues(0.0, 0, 0.0),
+                              height: size.height * 0.07,
+                              child: TextField(
+                                controller: contact_person,
+                                style: TextStyle(color: Colors.grey[800]),
+                                decoration: InputDecoration(
+                                  hintText: "Contact Person",
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(
+                                            255, 134, 133, 133)), //<-- SEE HERE
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Color.fromARGB(
+                                            255, 134, 133, 133)), //<-- SEE HERE
+                                  ),
+                                ),
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                              ),
+                            ),
+                            Container(
+                              transform: Matrix4.translationValues(0.0, 8, 0.0),
                               height: size.height * 0.07,
                               child: TextField(
                                 controller: phone,
@@ -280,6 +429,68 @@ class CustomerPopup {
                                 maxLines: null,
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 11.0),
+                              child: Container(
+                                // color: Colors.grey[200],
+                                height: size.height * 0.07,
+
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color:
+                                          Color.fromARGB(255, 134, 133, 133)),
+                                  borderRadius: BorderRadius.circular(3),
+                                  // shape: RoundedRectangleBorder(
+                                  //   side: BorderSide(
+                                  //       width: 1.0,
+                                  //       color:
+                                  //           Color.fromARGB(255, 134, 133, 133)),
+                                  // ),
+                                ),
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton<String>(
+                                    // value: selected,
+                                    hint: Padding(
+                                      padding: const EdgeInsets.only(left: 2.0),
+                                      child: Text(value.dropSelected == null
+                                          ? "Select Priority level"
+                                          : value.dropSelected!),
+                                    ),
+                                    isExpanded: true,
+                                    autofocus: false,
+                                    underline: SizedBox(),
+                                    elevation: 0,
+                                    items: value.priorityList
+                                        .map((item) => DropdownMenuItem<String>(
+                                            value: item.lId.toString(),
+                                            child: Container(
+                                              // width: size.width * 0.2,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 2.0),
+                                                child: Text(
+                                                  item.level.toString(),
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                              ),
+                                            )))
+                                        .toList(),
+                                    onChanged: (item) {
+                                      print("clicked");
+
+                                      if (item != null) {
+                                        selected = item;
+
+                                        print("se;ected---$item");
+                                        value.setPrioDrop(selected!);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         // : Container(),
@@ -299,6 +510,15 @@ class CustomerPopup {
                                             name.clear();
                                             adress.clear();
                                             phone.clear();
+                                            landmark.clear();
+                                            value.insertCustomer(
+                                              context,
+                                              name.text,
+                                              adress.text,
+                                              landmark.text,
+                                              phone.text,
+                                              "hhh",
+                                            );
                                             Navigator.pop(context);
                                           }
                                         : null,

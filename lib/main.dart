@@ -2,6 +2,7 @@ import 'package:bestengineer/chatApp/chatLogin.dart';
 
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
+import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
 import 'package:bestengineer/pdftest/hihi.dart';
 import 'package:bestengineer/pdftest/pdfhome.dart';
@@ -74,6 +75,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => Controller()),
       ChangeNotifierProvider(create: (_) => RegistrationController()),
+      ChangeNotifierProvider(create: (_) => ProductController()),
     ],
     child: MyApp(),
   ));

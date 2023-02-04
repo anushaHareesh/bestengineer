@@ -5,19 +5,19 @@ import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../model/productListModel.dart';
-
-class ItemSlectionBottomsheet {
-  showItemSheet(BuildContext context, ProductList list, int index) {
+class NewItemSheet {
+  showNewItemSheet(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print(" uuuu---$index---${list.description}");
+
+    TextEditingController name = TextEditingController();
+    TextEditingController desc = TextEditingController();
+
     String oldDesc;
-    // oldDesc = list["description"];
+
     return showModalBottomSheet<void>(
       isScrollControlled: true,
       context: context,
@@ -52,35 +52,35 @@ class ItemSlectionBottomsheet {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              list.productName!.toUpperCase(),
-                              style: GoogleFonts.aBeeZee(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                // color: P_Settings.loginPagetheme,
-                              ),
+                      padding:
+                          const EdgeInsets.only(left: 12, top: 12, right: 9),
+                      child: Container(
+                        transform: Matrix4.translationValues(0.0, -13.0, 0.0),
+                        height: size.height * 0.07,
+                        child: TextField(
+                          style: TextStyle(color: Colors.grey[800]),
+                          // readOnly:
+                          //     value.customContainerShow ? false : true,
+                          controller: name,
+                          decoration: InputDecoration(
+                            hintText: "ItemName",
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(
+                                      255, 134, 133, 133)), //<-- SEE HERE
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(
+                                      255, 134, 133, 133)), //<-- SEE HERE
                             ),
                           ),
-                          // Spacer(),
-                          // IconButton(
-                          //     onPressed: () {
-                          //       Navigator.pop(context);
-                          //     },
-                          //     icon: Icon(Icons.close))
-                        ],
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                        ),
                       ),
-                    ),
-                    Divider(
-                      indent: 20,
-                      endIndent: 20,
                     ),
                     Padding(
                       padding:
@@ -89,15 +89,11 @@ class ItemSlectionBottomsheet {
                         child: TextField(
                           onChanged: (val) {
                             print("val----$val");
-                            // if (val != oldDesc) {
-                            //   // Provider.of<Controller>(context,
-                            //   //         listen: false)
-                            //   //     .setaddNewItem(true);
-                            // }
                           },
                           style: TextStyle(color: Colors.grey[500]),
-                          controller: value.desc[index],
+                          controller: desc,
                           decoration: InputDecoration(
+                            hintText: "Description",
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 1,
@@ -113,38 +109,6 @@ class ItemSlectionBottomsheet {
                           ),
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 7.0, right: 9),
-                      child: ListTile(
-                        visualDensity:
-                            VisualDensity(horizontal: 0, vertical: -4),
-                        title: Row(
-                          children: [
-                            Text(
-                              "Rate",
-                              style: GoogleFonts.aBeeZee(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
-                                fontSize: 17,
-                                // fontWeight: FontWeight.bold,
-                                // color: P_Settings.loginPagetheme,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              '\u{20B9}${list.sRate1}',
-                              style: GoogleFonts.aBeeZee(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
-                                fontSize: 17,
-                                // fontWeight: FontWeight.bold,
-                                // color: P_Settings.loginPagetheme,
-                              ),
-                            )
-                          ],
                         ),
                       ),
                     ),
@@ -203,11 +167,19 @@ class ItemSlectionBottomsheet {
                                 child: Icon(Icons.remove, color: Colors.white),
                               ),
                             )
+                            // Container(
+                            //   width: size.width * 0.2,
+                            //   child: TextField(
+                            //     keyboardType: TextInputType.number,
+                            //     style: TextStyle(),
+                            //     textAlign: TextAlign.end,
+                            //     // controller: value.qty[index],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
                     ),
-                    Padding(padding: EdgeInsets.all(8)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -221,35 +193,14 @@ class ItemSlectionBottomsheet {
                                   //     : P_Settings.loginPagetheme
 
                                   ),
-                              onPressed: () async {
-                                value.setAddButtonColor(true, index);
-                                value.addDeletebagItem(list.productId!,
+                              onPressed: () {
+                                  value.addDeletebagItem(name.text,
                                     value.qtyVal.toString(), "0", "0", context);
-                                FocusManager.instance.primaryFocus!.unfocus();
-                                print("bhdb----${value.res}");
-                                if (value.res == "1") {
-                                  Fluttertoast.showToast(
-                                      msg: "${list.productName} Inserted Successfully...",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0,backgroundColor: Colors.green);
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: "Something went wrong...",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                }
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                "Add Item",
-                                style: TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.bold),
+                                "Add New Item",
+                                style: TextStyle(fontSize: 19),
                               )),
                         ),
                       ],
