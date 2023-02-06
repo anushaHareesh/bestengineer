@@ -129,7 +129,7 @@ class _EnqDashboardState extends State<EnqDashboard>
                           );
                         },
                         child: CircleAvatar(
-                          radius: 10,
+                          radius: 14,
                           backgroundColor: P_Settings.loginPagetheme,
                           child: Icon(
                             Icons.add,
@@ -169,9 +169,14 @@ class _EnqDashboardState extends State<EnqDashboard>
                           color: P_Settings.loginPagetheme,
                         ),
                       )
-                    : value.customer_id == null
-                        ? Container()
-                        : customerData(size),
+                    :
+                    //  value.customer_id == null
+                    //     ? Container()
+                    //     : 
+                        
+                        
+                        
+                        customerData(size),
                 // ListTile(
                 //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                 //   trailing: Icon(
@@ -351,12 +356,12 @@ class _EnqDashboardState extends State<EnqDashboard>
                                     left: 18.0, top: 8, bottom: 8),
                                 child: Row(
                                   children: [
-                                    Text(
-                                      "Customer Name",
-                                      style: TextStyle(
-                                          color: Colors.grey[500],
-                                          fontSize: 14),
-                                    ),
+                                    // Text(
+                                    //   "Customer Name",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500],
+                                    //       fontSize: 14),
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 0),
                                       child: Container(
@@ -376,12 +381,12 @@ class _EnqDashboardState extends State<EnqDashboard>
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Row(
                                   children: [
-                                    Text(
-                                      "Customer Info",
-                                      style: TextStyle(
-                                          color: Colors.grey[500],
-                                          fontSize: 14),
-                                    ),
+                                    // Text(
+                                    //   "Customer Info",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500],
+                                    //       fontSize: 14),
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 0),
                                       child: Text(
@@ -399,12 +404,12 @@ class _EnqDashboardState extends State<EnqDashboard>
                                     const EdgeInsets.only(left: 8.0, top: 8),
                                 child: Row(
                                   children: [
-                                    Text(
-                                      "Phone number",
-                                      style: TextStyle(
-                                          color: Colors.grey[500],
-                                          fontSize: 14),
-                                    ),
+                                    // Text(
+                                    //   "Phone number",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500],
+                                    //       fontSize: 14),
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 0),
                                       child: Text(
@@ -422,12 +427,12 @@ class _EnqDashboardState extends State<EnqDashboard>
                                     const EdgeInsets.only(left: 8.0, top: 8),
                                 child: Row(
                                   children: [
-                                    Text(
-                                      "Landmark",
-                                      style: TextStyle(
-                                          color: Colors.grey[500],
-                                          fontSize: 14),
-                                    ),
+                                    // Text(
+                                    //   "Landmark",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500],
+                                    //       fontSize: 14),
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 0),
                                       child: Text(
