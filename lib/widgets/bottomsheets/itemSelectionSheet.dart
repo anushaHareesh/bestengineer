@@ -82,132 +82,134 @@ class ItemSlectionBottomsheet {
                       indent: 20,
                       endIndent: 20,
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 12, top: 12, right: 9),
-                      child: Container(
-                        child: TextField(
-                          onChanged: (val) {
-                            print("val----$val");
-                            // if (val != oldDesc) {
-                            //   // Provider.of<Controller>(context,
-                            //   //         listen: false)
-                            //   //     .setaddNewItem(true);
-                            // }
-                          },
-                          style: TextStyle(color: Colors.grey[500]),
-                          controller: value.desc[index],
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(
-                                      255, 172, 170, 170)), //<-- SEE HERE
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(
-                                      255, 172, 170, 170)), //<-- SEE HERE
+                    Container(
+                      margin: EdgeInsets.only(left: 14, right: 14),
+                      child: TextField(
+                        onChanged: (val) {
+                          print("val----$val");
+                          // if (val != oldDesc) {
+                          //   // Provider.of<Controller>(context,
+                          //   //         listen: false)
+                          //   //     .setaddNewItem(true);
+                          // }
+                        },
+                        style: TextStyle(color: Colors.grey[500]),
+                        controller: value.desc[index],
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 172, 170, 170)), //<-- SEE HERE
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 172, 170, 170)), //<-- SEE HERE
+                          ),
+                        ),
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                      ),
+                    ),
+                    ListTile(
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                      title: Row(
+                        children: [
+                          Text(
+                            "Rate",
+                            style: GoogleFonts.aBeeZee(
+                              textStyle: Theme.of(context).textTheme.bodyText2,
+                              fontSize: 17,
+                              // fontWeight: FontWeight.bold,
+                              // color: P_Settings.loginPagetheme,
                             ),
                           ),
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                        ),
+                          Spacer(),
+                          Text(
+                            '\u{20B9}${list.sRate1}',
+                            style: GoogleFonts.aBeeZee(
+                              textStyle: Theme.of(context).textTheme.bodyText2,
+                              fontSize: 17,
+                              // fontWeight: FontWeight.bold,
+                              // color: P_Settings.loginPagetheme,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 7.0, right: 9),
-                      child: ListTile(
-                        visualDensity:
-                            VisualDensity(horizontal: 0, vertical: -4),
-                        title: Row(
-                          children: [
-                            Text(
-                              "Rate",
-                              style: GoogleFonts.aBeeZee(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
-                                fontSize: 17,
-                                // fontWeight: FontWeight.bold,
-                                // color: P_Settings.loginPagetheme,
-                              ),
+                    ListTile(
+                      // visualDensity:
+                      //     VisualDensity(horizontal: 0, vertical: -4),
+                      title: Row(
+                        children: [
+                          Text(
+                            "Qty",
+                            style: GoogleFonts.aBeeZee(
+                              textStyle: Theme.of(context).textTheme.bodyText2,
+                              fontSize: 17,
+                              // fontWeight: FontWeight.bold,
+                              // color: P_Settings.loginPagetheme,
                             ),
-                            Spacer(),
-                            Text(
-                              '\u{20B9}${list.sRate1}',
-                              style: GoogleFonts.aBeeZee(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
-                                fontSize: 17,
-                                // fontWeight: FontWeight.bold,
-                                // color: P_Settings.loginPagetheme,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 7.0, right: 9),
-                      child: ListTile(
-                        visualDensity:
-                            VisualDensity(horizontal: 0, vertical: -4),
-                        title: Row(
-                          children: [
-                            Text(
-                              "Qty",
-                              style: GoogleFonts.aBeeZee(
-                                textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
-                                fontSize: 17,
-                                // fontWeight: FontWeight.bold,
-                                // color: P_Settings.loginPagetheme,
-                              ),
-                            ),
-                            Spacer(),
-                            InkWell(
-                              onTap: () {
-                                value.inCrementQty();
-                              },
-                              child: Container(
+                          ),
+                          Spacer(),
+                          InkWell(
+                            onTap: () {
+                              value.inCrementQty(
+                                  int.parse(value.qty[index].text), index, "");
+                            },
+                            child: Container(
                                 height: size.height * 0.04,
+                                width: size.width * 0.06,
                                 decoration: BoxDecoration(
-                                    color: P_Settings.lightPurple,
-                                    borderRadius: BorderRadius.circular(10)
-                                    //more than 50% of width makes circle
-                                    ),
-                                width: size.width * 0.1,
-                                child: Icon(Icons.add, color: Colors.white),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8.0, right: 8),
-                              child: Text(
-                                value.qtyVal.toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                value.deCrementQty();
-                              },
-                              child: Container(
-                                height: size.height * 0.04,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: P_Settings.lightPurple,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 205, 195, 195),
+                                  ),
                                 ),
-                                width: size.width * 0.1,
-                                child: Icon(Icons.remove, color: Colors.white),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 14,
+                                  color: P_Settings.loginPagetheme,
+                                )),
+                          ),
+                          Container(
+                            width: size.width * 0.06,
+                            child: TextField(
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
                               ),
-                            )
-                          ],
-                        ),
+                              controller: value.qty[index],
+                              // value.qtyVal.toString(),
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              value.deCrementQty(
+                                  int.parse(value.qty[index].text), index, "");
+                            },
+                            child: Container(
+                                height: size.height * 0.04,
+                                width: size.width * 0.06,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: Color.fromARGB(255, 205, 195, 195),
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 14,
+                                  color: P_Settings.loginPagetheme,
+                                )),
+                          )
+                        ],
                       ),
                     ),
-                    Padding(padding: EdgeInsets.all(8)),
+                    // Padding(padding: EdgeInsets.all(8)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -223,33 +225,23 @@ class ItemSlectionBottomsheet {
                                   ),
                               onPressed: () async {
                                 value.setAddButtonColor(true, index);
-                                value.addDeletebagItem(list.productId!,
-                                    value.qtyVal.toString(), "0", "0", context);
+                                value.addDeletebagItem(
+                                    list.productName!,
+                                    list.productId!,
+                                    value.qty[index].text,
+                                    value.desc[index].text,
+                                    "0",
+                                    "0",
+                                    context);
                                 FocusManager.instance.primaryFocus!.unfocus();
                                 print("bhdb----${value.res}");
-                                if (value.res == "1") {
-                                  Fluttertoast.showToast(
-                                      msg: "${list.productName} Inserted Successfully...",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0,backgroundColor: Colors.green);
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: "Something went wrong...",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                }
+
                                 Navigator.pop(context);
                               },
                               child: Text(
                                 "Add Item",
                                 style: TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.bold),
+                                    fontSize: 15, fontWeight: FontWeight.bold),
                               )),
                         ),
                       ],

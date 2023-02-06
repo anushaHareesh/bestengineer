@@ -1,14 +1,15 @@
-import 'package:bestengineer/components/commonColor.dart';
-import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:provider/provider.dart';
 
-class DeletePopup {
+import '../../components/commonColor.dart';
+
+class SavePopup {
   Future builddeletePopupDialog(
-      BuildContext context, String itemName, String itemId, int index) {
+    BuildContext context,
+  ) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -17,7 +18,7 @@ class DeletePopup {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(child: Text("Do you want to delete $itemName ?")),
+                Text("Do you want to confirm ?"),
               ],
             ),
             actions: <Widget>[
@@ -30,14 +31,7 @@ class DeletePopup {
                           style: ElevatedButton.styleFrom(
                               primary: P_Settings.loginPagetheme),
                           onPressed: () {
-                            value.addDeletebagItem(
-                                itemName,
-                                itemId,
-                                value.cartQty[index].text,
-                                "",
-                                "2",
-                                value.bagList[index]["cart_id"],
-                                context);
+                            value.saveCartDetails(context);
                             Navigator.pop(context);
                           },
                           child: Text("Ok")),

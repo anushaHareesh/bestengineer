@@ -18,10 +18,12 @@ class _ProductListPageState extends State<ProductListPage> {
   ItemSlectionBottomsheet itemBottom = ItemSlectionBottomsheet();
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Consumer<ProductController>(
       builder: (context, value, child) {
         if (value.isProdLoading) {
           return Container(
+            height: size.height * 0.4,
             child: SpinKitCircle(color: P_Settings.loginPagetheme),
           );
         } else {
@@ -60,37 +62,68 @@ class _ProductListPageState extends State<ProductListPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListTile(
-                      trailing: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary:
-                                // value.addButton[index]
-                                //     ? Colors.green
-                                //     :
-
-                                P_Settings.lightPurple),
-                        child:
-                            //  value.addButton[index]
-                            //     ? Icon(Icons.done)
-                            //     :
-
-                            Text(
-                          "Add",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () {
-                          
+                      trailing: InkWell(
+                        onTap: () {
+                          value.qty[index].text = "1";
                           itemBottom.showItemSheet(
                             context,
                             value.productList[index],
                             index,
                           );
                         },
+                        child: Container(
+                          height: size.height * 0.03,
+                          width: size.width * 0.14,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                              color: P_Settings.loginPagetheme,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Add",
+                              style: TextStyle(color: Colors.grey[800]),
+                            ),
+                          ),
+                        ),
                       ),
+                      // trailing: Container(
+                      //   height: size.height*0.037,
+                      //   child:
+
+                      //    ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(
+                      //         primary:
+                      //             // value.addButton[index]
+                      //             //     ? Colors.green
+                      //             //     :
+
+                      //             Colors.yellow),
+                      //     child:
+                      //         //  value.addButton[index]
+                      //         //     ? Icon(Icons.done)
+                      //         //     :
+
+                      //         Text(
+                      //       "Add",
+                      //       style: TextStyle(fontWeight: FontWeight.bold),
+                      //     ),
+                      //     onPressed: () {
+
+                      //       itemBottom.showItemSheet(
+                      //         context,
+                      //         value.productList[index],
+                      //         index,
+                      //       );
+                      //     },
+                      //   ),
+                      // ),
                       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                       title: Text(
                         value.productList[index].productName!.toUpperCase(),
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey[600]),
                       ),
@@ -100,11 +133,11 @@ class _ProductListPageState extends State<ProductListPage> {
                           children: [
                             Text("Rate  : ",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 15,
                                 )),
                             Text('\u{20B9}${value.productList[index].sRate1}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold,
                                 )),

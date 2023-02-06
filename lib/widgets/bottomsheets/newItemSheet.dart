@@ -51,72 +51,69 @@ class NewItemSheet {
                             icon: Icon(Icons.close)),
                       ],
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 12, top: 12, right: 9),
-                      child: Container(
-                        transform: Matrix4.translationValues(0.0, -13.0, 0.0),
-                        height: size.height * 0.07,
-                        child: TextField(
-                          style: TextStyle(color: Colors.grey[800]),
-                          // readOnly:
-                          //     value.customContainerShow ? false : true,
-                          controller: name,
-                          decoration: InputDecoration(
-                            hintText: "ItemName",
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(
-                                      255, 134, 133, 133)), //<-- SEE HERE
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(
-                                      255, 134, 133, 133)), //<-- SEE HERE
-                            ),
+                    Container(
+                      margin: EdgeInsets.only(left: 14,right: 14,bottom: 8),
+
+                      // transform: Matrix4.translationValues(0.0, -13.0, 0.0),
+                      height: size.height * 0.05,
+                      child: TextField(
+                        style: TextStyle(color: Colors.grey[800]),
+                        // readOnly:
+                        //     value.customContainerShow ? false : true,
+                        controller: name,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          hintText: "ItemName",
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 134, 133, 133)), //<-- SEE HERE
                           ),
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 134, 133, 133)), //<-- SEE HERE
+                          ),
                         ),
+                        // keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 14,right: 14),
+                      child: TextField(
+                        onChanged: (val) {
+                          print("val----$val");
+                        },
+                        style: TextStyle(color: Colors.grey[500]),
+                        controller: desc,
+                        decoration: InputDecoration(
+                          hintText: "Description",
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 172, 170, 170)), //<-- SEE HERE
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 172, 170, 170)), //<-- SEE HERE
+                          ),
+                        ),
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(left: 12, top: 12, right: 9),
-                      child: Container(
-                        child: TextField(
-                          onChanged: (val) {
-                            print("val----$val");
-                          },
-                          style: TextStyle(color: Colors.grey[500]),
-                          controller: desc,
-                          decoration: InputDecoration(
-                            hintText: "Description",
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(
-                                      255, 172, 170, 170)), //<-- SEE HERE
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1,
-                                  color: Color.fromARGB(
-                                      255, 172, 170, 170)), //<-- SEE HERE
-                            ),
-                          ),
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 7.0, right: 9),
+                      padding: EdgeInsets.only(left: 7.0, right: 7,top: 3),
                       child: ListTile(
                         visualDensity:
-                            VisualDensity(horizontal: 0, vertical: -4),
+                            VisualDensity(horizontal: 0, vertical: -3),
                         title: Row(
                           children: [
                             Text(
@@ -132,18 +129,22 @@ class NewItemSheet {
                             Spacer(),
                             InkWell(
                               onTap: () {
-                                value.inCrementQty();
+                                value.inCrementQty(1, 0, "new");
                               },
                               child: Container(
-                                height: size.height * 0.04,
-                                decoration: BoxDecoration(
-                                    color: P_Settings.lightPurple,
-                                    borderRadius: BorderRadius.circular(10)
-                                    //more than 50% of width makes circle
+                                  height: size.height * 0.04,
+                                  width: size.width * 0.06,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: Color.fromARGB(255, 205, 195, 195),
                                     ),
-                                width: size.width * 0.1,
-                                child: Icon(Icons.add, color: Colors.white),
-                              ),
+                                  ),
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 14,
+                                    color: P_Settings.loginPagetheme,
+                                  )),
                             ),
                             Padding(
                               padding:
@@ -155,17 +156,22 @@ class NewItemSheet {
                             ),
                             InkWell(
                               onTap: () {
-                                value.deCrementQty();
+                                value.deCrementQty(1, 0, "new");
                               },
                               child: Container(
-                                height: size.height * 0.04,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: P_Settings.lightPurple,
-                                ),
-                                width: size.width * 0.1,
-                                child: Icon(Icons.remove, color: Colors.white),
-                              ),
+                                  height: size.height * 0.04,
+                                  width: size.width * 0.06,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(
+                                      color: Color.fromARGB(255, 205, 195, 195),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.remove,
+                                    size: 14,
+                                    color: P_Settings.loginPagetheme,
+                                  )),
                             )
                             // Container(
                             //   width: size.width * 0.2,
@@ -194,13 +200,19 @@ class NewItemSheet {
 
                                   ),
                               onPressed: () {
-                                  value.addDeletebagItem(name.text,
-                                    value.qtyVal.toString(), "0", "0", context);
+                                value.addDeletebagItem(
+                                    name.text,
+                                    name.text,
+                                    value.qtyVal.toString(),
+                                    desc.text,
+                                    "0",
+                                    "0",
+                                    context);
                                 Navigator.pop(context);
                               },
                               child: Text(
                                 "Add New Item",
-                                style: TextStyle(fontSize: 19),
+                                style: TextStyle(fontSize: 15),
                               )),
                         ),
                       ],

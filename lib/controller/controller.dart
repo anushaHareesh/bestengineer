@@ -18,11 +18,11 @@ class Controller extends ChangeNotifier {
   bool selectedCustomer = true;
   bool addNewItem = false;
 
-
   bool? arrowButtonclicked;
   TextEditingController searchcontroller = TextEditingController();
   bool isSearchLoading = false;
   bool isSaveLoading = false;
+  bool isSavecustomer = false;
 
   String? todate;
   String urlgolabl = Globaldata.apiglobal;
@@ -31,6 +31,10 @@ class Controller extends ChangeNotifier {
   String? customerName;
   String? address;
   String? customerPhone;
+  String? owner_name;
+  String? landmark;
+
+  String? customer_id;
   List<Map<String, dynamic>> enqDataList = [];
   // List<Map<String, dynamic>> productList = [];
   // List<Map<String, dynamic>> customerList = [];
@@ -38,12 +42,12 @@ class Controller extends ChangeNotifier {
   List<TextEditingController> desc = [];
   List<bool> addButton = [];
   String? dropSelected;
+  String? prioId;
+
   List<AreaList> area_list = [];
   List<PriorityLevel> priorityList = [];
 
   List<Map<String, dynamic>> customerList = [];
-
-
 
   ///////////////////////////////////////////////////////////////////////
 
@@ -283,62 +287,94 @@ class Controller extends ChangeNotifier {
   // }
   //////////////////////////////////////////////////////////////////////
 
-  setCustomerName(String name, String address, String phone) {
-    customerName = name;
-    address = address;
-    customerPhone = phone;
-
-    print("customer data---------$customerName---$customerPhone");
-    notifyListeners();
-  }
-
   setSelectedCustomer(bool show) {
     selectedCustomer = show;
     notifyListeners();
   }
 
-
-
-
   //////////////////////////////////////////////////
-  insertCustomer(BuildContext context, String cusName, String cusInfo,
-      String landmark, String phnum, String priority) {
+  // insertCustomer(BuildContext context, String cusName, String cusInfo,
+  //     String landmark, String phnum, String priority) {
+  //   NetConnection.networkConnection(context).then((value) async {
+  //     if (value == true) {
+  //       try {
+  //         print("nnnnnnnnnnnn----$cusName");
+  //         return showDialog(
+  //             context: context,
+  //             builder: (ct) {
+  //               Size size = MediaQuery.of(context).size;
+
+  //               Future.delayed(Duration(seconds: 3), () {
+  //                 Navigator.of(ct).pop(true);
+
+  //                 // Navigator.of(context).push(
+  //                 //   PageRouteBuilder(
+  //                 //       opaque: false, // set to false
+  //                 //       pageBuilder: (_, __, ___) => MainDashboard()
+  //                 //       // OrderForm(widget.areaname,"return"),
+  //                 //       ),
+  //                 // );
+  //               });
+  //               return AlertDialog(
+  //                   content: Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   Text(
+  //                     "Loading.......",
+  //                     style: TextStyle(color: P_Settings.loginPagetheme),
+  //                   ),
+  //                   CircularProgressIndicator()
+  //                   // Icon(
+  //                   //   Icons.done,
+  //                   //   color: Colors.green,
+  //                   // )
+  //                 ],
+  //               ));
+  //             });
+  //       } catch (e) {
+  //         print(e);
+  //         // return null;
+  //         return [];
+  //       }
+  //     }
+  //   });
+  // }
+  saveCustomerInfo(BuildContext context, String cust_id, String comName,
+      String owner_name, String phone, String cust_info, String landmark2) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
-          print("nnnnnnnnnnnn----$cusName");
-          return showDialog(
-              context: context,
-              builder: (ct) {
-                Size size = MediaQuery.of(context).size;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          isSavecustomer = true;
+          notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/save_temp_cust.php");
+          Map body = {
+            'staff_id': "1",
+            'branch_id': "1",
+            'cust_id': cust_id,
+            'company_name': comName,
+            "owner_name": owner_name,
+            'phone_1': phone,
+            'cust_info': cust_info,
+            'landmark': landmark2
+          };
+          print("customer body--$body");
 
-                Future.delayed(Duration(seconds: 3), () {
-                  Navigator.of(ct).pop(true);
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
 
-                  // Navigator.of(context).push(
-                  //   PageRouteBuilder(
-                  //       opaque: false, // set to false
-                  //       pageBuilder: (_, __, ___) => MainDashboard()
-                  //       // OrderForm(widget.areaname,"return"),
-                  //       ),
-                  // );
-                });
-                return AlertDialog(
-                    content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Loading.......",
-                      style: TextStyle(color: P_Settings.loginPagetheme),
-                    ),
-                    CircularProgressIndicator()
-                    // Icon(
-                    //   Icons.done,
-                    //   color: Colors.green,
-                    // )
-                  ],
-                ));
-              });
+          print("customerRespo----$map");
+          customer_id = map[0]["cust_id"];
+          customerName = map[0]["company_name"];
+          owner_name = map[0]["owner_name"];
+          customerPhone = map[0]["phone_1"];
+          landmark = map[0]["landmark"];
+          address = map[0]["cust_info"];
+          notifyListeners();
+          isSavecustomer = false;
+          notifyListeners();
         } catch (e) {
           print(e);
           // return null;
@@ -361,7 +397,7 @@ class Controller extends ChangeNotifier {
           var map = jsonDecode(response.body);
           AreaModel regModel = AreaModel.fromJson(map);
           print("areaList-----$map");
-
+          area_list.clear();
           for (var item in regModel.areaList!) {
             area_list.add(item);
           }
@@ -390,6 +426,7 @@ class Controller extends ChangeNotifier {
   setPrioDrop(String s) {
     for (int i = 0; i < priorityList.length; i++) {
       if (priorityList[i].lId == s) {
+        prioId = s;
         dropSelected = priorityList[i].level;
       }
     }

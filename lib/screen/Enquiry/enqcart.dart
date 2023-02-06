@@ -1,10 +1,14 @@
 import 'package:bestengineer/controller/controller.dart';
+import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/widgets/alertCommon/deletePopup.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/commonColor.dart';
 import '../../widgets/alertCommon/itemSelectionAlert.dart';
+import '../../widgets/alertCommon/savePopup.dart';
 import '../../widgets/bottomsheets/itemSelectionSheet.dart';
 
 class EnqCart extends StatefulWidget {
@@ -15,35 +19,156 @@ class EnqCart extends StatefulWidget {
 }
 
 class _EnqCartState extends State<EnqCart> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   DeletePopup deletePopup = DeletePopup();
   ItemSlectionBottomsheet itemsheet = ItemSlectionBottomsheet();
   ItemSelectionAlert popup = ItemSelectionAlert();
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+  SavePopup svaepop = SavePopup();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Enquiry Cart"),
-        backgroundColor: P_Settings.loginPagetheme,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return customTile(size);
-          },
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.grey[800],
+            )),
+        title: Text(
+          "Enquiry Cart",
+          style: TextStyle(
+              fontSize: 17,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.bold),
         ),
+        backgroundColor: P_Settings.whiteColor,
+        elevation: 1,
+      ),
+      body: Consumer<ProductController>(
+        builder: (context, value, child) {
+          if (value.isCartLoading) {
+            return SpinKitCircle(
+              color: P_Settings.loginPagetheme,
+            );
+          } else {
+            if (value.bagList.length == 0) {
+              return Center(
+                child: Lottie.asset("assets/cartem.json",
+                    height: size.height * 0.3),
+              );
+            } else {
+              return Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 8.0, right: 8, top: 8),
+                      child: ListView.builder(
+                        itemCount: value.bagList.length,
+                        itemBuilder: (context, index) {
+                          return customTile(size, index);
+                        },
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (value.bagList.length > 0) {
+                        showDialog(
+                            context: _scaffoldKey.currentContext!,
+                            barrierDismissible: false,
+                            builder: (BuildContext ctx) {
+                              return new AlertDialog(
+                                content: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Do you want to confirm ?"),
+                                  ],
+                                ),
+                                actions: <Widget>[
+                                  Consumer<ProductController>(
+                                    builder: (context, value, child) {
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: P_Settings
+                                                      .loginPagetheme),
+                                              onPressed: () {
+                                                Navigator.of(_scaffoldKey
+                                                        .currentContext!)
+                                                    .pop();
+                                                showDailogue(context, true,
+                                                    _keyLoader, 1);
+                                                value.saveCartDetails(
+                                                    _scaffoldKey
+                                                        .currentContext!);
+                                              },
+                                              child: Text("Ok")),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    primary: P_Settings
+                                                        .loginPagetheme),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("Cancel")),
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      }
+                    },
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Save",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      width: double.infinity,
+                      height: size.height * 0.05,
+                      color: P_Settings.loginPagetheme,
+                    ),
+                  )
+                ],
+              );
+            }
+          }
+        },
       ),
     );
   }
 
-  Widget customTile(Size size) {
+  Widget customTile(Size size, int index) {
     return Container(
       // color: Colors.yellow,
       // height: size.height * 0.16,
       child: InkWell(
-        child: Consumer<Controller>(
+        child: Consumer<ProductController>(
           builder: (context, value, child) {
             return Card(
               child: Column(
@@ -72,6 +197,7 @@ class _EnqCartState extends State<EnqCart> {
                       Column(
                         children: [
                           Container(
+                            margin: EdgeInsets.only(left: 8, bottom: 8, top: 8),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 // color: Colors.yellow,
@@ -79,9 +205,9 @@ class _EnqCartState extends State<EnqCart> {
                               Radius.circular(20),
                             )),
                             child: Image.asset(
-                              "assets/noImg.png",
-                              height: 100,
-                              width: 100,
+                              "assets/burger.jpg",
+                              height: 90,
+                              width: 80,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -101,162 +227,214 @@ class _EnqCartState extends State<EnqCart> {
                           // )
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 18.0),
-                        child: Container(
-                          width: size.width * 0.58,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              // Text(
-                              //   "CODE ",
-                              //   style: TextStyle(
-                              //       fontSize: 17, color: Colors.grey[700]),
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                  "Item Name",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
-                              // RichText(
-                              //   text: TextSpan(
-                              //     text:
-                              //         "Item Namefzlklkkldmklxmc,lxmvcvm.cmv.,cmv.,cmv,.cmv.",
-                              //     style: DefaultTextStyle.of(context).style,
-                              //     children: const <TextSpan>[
-                              //       TextSpan(
-                              //           // text: 'bold',
-                              //           style:
-                              //               TextStyle(fontWeight: FontWeight.bold)),
-                              //     ],
-                              //   ),
-                              // ),
-                              // Flexible(
-                              //   child: Text(
-                              //     "Item Namefzlklkkldmklxmc,lxmv,.cvm.cmv.,cmv.,cmv,.cmv.",
-                              //     style:
-                              //         TextStyle(fontSize: 17, color: Colors.grey[500]),
-                              //   ),
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Qty     : ",
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        // value.inCrementQty();
-                                      },
-                                      child: Container(
-                                        height: size.height * 0.03,
-                                        decoration: BoxDecoration(
-                                            color: P_Settings.lightPurple,
-                                            borderRadius:
-                                                BorderRadius.circular(10)
-                                            //more than 50% of width makes circle
-                                            ),
-                                        width: size.width * 0.1,
-                                        child: Icon(Icons.add,
-                                            color: Colors.white),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, right: 8),
-                                      child: Text(
-                                        "",
-                                        // value.qtyVal.toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        // value.deCrementQty();
-                                      },
-                                      child: Container(
-                                        height: size.height * 0.03,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: P_Settings.lightPurple,
-                                        ),
-                                        width: size.width * 0.1,
-                                        child: Icon(Icons.remove,
-                                            color: Colors.white),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
+                      Container(
+                        margin: EdgeInsets.all(8),
+                        width: size.width * 0.68,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Text(
+                            //   "CODE ",
+                            //   style: TextStyle(
+                            //       fontSize: 17, color: Colors.grey[700]),
+                            // ),
+                            Text(
+                              value.bagList[index]["item_name"].toString(),
+                              style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            // Container(
+                            //   margin: EdgeInsets.only(top: 5),
+                            //   child: Text(
+                            //     "Decsriptionnnxcx nbdsjfksfhkdfjdk xcbxn",
+                            //     style: TextStyle(
+                            //       color: Colors.grey[600],
+                            //         fontSize: 15, ),
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: size.height * 0.006,
+                            ),
 
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Text(
-                                  "Rate   : ",
+                            Row(
+                              children: [
+                                Text(
+                                  "Qty     : ",
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 15,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 12.0),
+                                  child: Container(
+                                    height: size.height * 0.03,
+                                    child: Row(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            value.inCrementQty(
+                                                int.parse(
+                                                    value.cartQty[index].text),
+                                                index,
+                                                "cart");
+                                          },
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                border: Border.all(
+                                                  color: Color.fromARGB(
+                                                      255, 205, 195, 195),
+                                                ),
+                                              ),
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 14,
+                                                color:
+                                                    P_Settings.loginPagetheme,
+                                              )),
+                                        ),
+                                        Container(
+                                          width: size.width * 0.06,
+                                          child: TextField(
+                                            readOnly: true,
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                            ),
+                                            controller: value.cartQty[index],
+                                            // value.qtyVal.toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            value.deCrementQty(
+                                                int.parse(
+                                                    value.cartQty[index].text),
+                                                index,
+                                                "cart");
+                                          },
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                border: Border.all(
+                                                  color: Color.fromARGB(
+                                                      255, 205, 195, 195),
+                                                ),
+                                              ),
+                                              child: Icon(
+                                                Icons.remove,
+                                                size: 14,
+                                                color:
+                                                    P_Settings.loginPagetheme,
+                                              )),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: size.height * 0.006,
+                            ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Text(
+                                //   "Rate   : ",
+                                //   style: TextStyle(
+                                //     fontSize: 15,
+                                //   ),
+                                // ),
+                                Text(
+                                    '\u{20B9}${value.bagList[index]["s_rate_1"]}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w600,
+                                    )),
+                                InkWell(
+                                  onTap: () {
+                                    deletePopup.builddeletePopupDialog(
+                                        context,
+                                        value.bagList[index]["item_name"]
+                                            .toString(),
+                                        value.bagList[index]["item_id"]
+                                            .toString(),
+                                        index);
+                                  },
+                                  child: Row(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Remove",
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            color: Colors.red,
+                                            fontSize: 15),
+                                      ),
+                                      Icon(Icons.close,
+                                          color: Colors.red, size: 18)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                   // Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            deletePopup.builddeletePopupDialog(
-                                context, "jhxhj");
-                          },
-                          child: Row(
-                            children: [
-                              Text(
-                                "Remove",
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.red,
-                                    fontSize: 15),
-                              ),
-                              Icon(Icons.close, color: Colors.red, size: 18)
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Total : 200",
-                                style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       InkWell(
+                  //         onTap: () {
+                  //           deletePopup.builddeletePopupDialog(
+                  //               context, "jhxhj");
+                  //         },
+                  //         child: Row(
+                  //           children: [
+                  //             Text(
+                  //               "Remove",
+                  //               style: TextStyle(
+                  //                   fontStyle: FontStyle.italic,
+                  //                   color: Colors.red,
+                  //                   fontSize: 15),
+                  //             ),
+                  //             Icon(Icons.close, color: Colors.red, size: 18)
+                  //           ],
+                  //         ),
+                  //       ),
+                  //       // Padding(
+                  //       //   padding: const EdgeInsets.only(right: 8.0),
+                  //       //   child: Row(
+                  //       //     children: [
+                  //       //       Text(
+                  //       //         "Total : 200",
+                  //       //         style: TextStyle(
+                  //       //             fontStyle: FontStyle.italic,
+                  //       //             color: Colors.red,
+                  //       //             fontWeight: FontWeight.bold,
+                  //       //             fontSize: 17),
+                  //       //       )
+                  //       //     ],
+                  //       //   ),
+                  //       // )
+                  //     ],
+                  //   ),
+                  // )
                 ],
               ),
             );
@@ -265,4 +443,37 @@ class _EnqCartState extends State<EnqCart> {
       ),
     );
   }
+}
+
+showDailogue(BuildContext context, bool isLoading, GlobalKey key, int content) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        Size size = MediaQuery.of(context).size;
+
+        return new WillPopScope(
+            onWillPop: () async => true,
+            child: SimpleDialog(
+                key: key,
+                backgroundColor: Colors.white,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // SizedBox(
+                          //   height: 10,
+                          // ),
+                          Text(
+                            "Loading .... ",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          CircularProgressIndicator(
+                            color: Colors.green,
+                          )
+                        ]),
+                  )
+                ]));
+      });
 }

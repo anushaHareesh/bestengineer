@@ -3,6 +3,7 @@ import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/screen/Enquiry/enqDashboard.dart';
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,8 @@ class _EnqHomeState extends State<EnqHome> {
     // TODO: implement initState
     super.initState();
     Provider.of<Controller>(context, listen: false).getArea(context);
+    Provider.of<ProductController>(context, listen: false)
+        .getbagData(context, "0");
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
@@ -53,7 +56,8 @@ class _EnqHomeState extends State<EnqHome> {
                     children: [
                       Icon(
                         Icons.place,
-                        size: 15,
+                        size: 17,
+                        color: Colors.red,
                       ),
                       SizedBox(
                         width: 8,
@@ -62,7 +66,7 @@ class _EnqHomeState extends State<EnqHome> {
                         value.selected == null
                             ? "Choose Area"
                             : value.selected.toString(),
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 14, color: Colors.grey[800]),
                       ),
                     ],
                   );
@@ -71,15 +75,13 @@ class _EnqHomeState extends State<EnqHome> {
             ),
           ),
         ],
-        backgroundColor: P_Settings.loginPagetheme,
+        backgroundColor: P_Settings.whiteColor,
+        elevation: 1,
         leading: Builder(
           builder: (context) => Consumer<Controller>(
             builder: (context, value, child) {
               return IconButton(
-                  icon: new Icon(
-                    Icons.menu,
-                    color: P_Settings.whiteColor,
-                  ),
+                  icon: new Icon(Icons.menu, color: Colors.grey[800]),
                   onPressed: () async {
                     drawerOpts.clear();
                     for (var i = 0;
@@ -133,52 +135,60 @@ class _EnqHomeState extends State<EnqHome> {
           ),
         ),
       ),
-      bottomNavigationBar: SizedBox(
-          height: 50,
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EnqCart()),
-              );
-            },
-            child: Container(
-              color: Colors.yellow,
-              child: Consumer<ProductController>(
-                builder: (context, value, child) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "View Data",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600]),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.04,
-                      ),
-                      badges.Badge(
-                          badgeStyle: badges.BadgeStyle(
-                              shape: badges.BadgeShape.circle,
-                              badgeColor: Colors.red),
-                          position:
-                              badges.BadgePosition.topEnd(top: -10, end: -22),
-                          badgeContent: Text(
-                            value.cartCount.toString(),
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          child: Icon(
-                            Icons.shopping_cart,
-                            color: Colors.red,
-                          ))
-                    ],
-                  );
-                },
-              ),
-            ),
-          )),
+      // bottomNavigationBar: SizedBox(
+      //     height: 50,
+      //     child: InkWell(
+      //       onTap: () {
+      //         Provider.of<ProductController>(context, listen: false)
+      //             .getbagData(context, "0");
+      //         Navigator.push(
+      //           context,
+      //           MaterialPageRoute(builder: (context) => EnqCart()),
+      //         );
+      //       },
+      //       child: Container(
+      //         color: P_Settings.loginPagetheme,
+      //         child: Consumer<ProductController>(
+      //           builder: (context, value, child) {
+      //             return Row(
+      //               mainAxisAlignment: MainAxisAlignment.center,
+      //               children: [
+      //                 Text(
+      //                   "View Data",
+      //                   style: TextStyle(
+      //                       fontSize: 16,
+      //                       fontWeight: FontWeight.bold,
+      //                       color: P_Settings.whiteColor),
+      //                 ),
+      //                 SizedBox(
+      //                   width: size.width * 0.04,
+      //                 ),
+      //                 badges.Badge(
+      //                     badgeStyle: badges.BadgeStyle(
+      //                         // badgeGradient: badges.BadgeGradient.radial(colors: Colors.primaries),
+      //                         shape: badges.BadgeShape.circle,
+      //                         badgeColor: Colors.red),
+      //                     position:
+      //                         badges.BadgePosition.topEnd(top: -10, end: -22),
+      //                     badgeContent: value.isCartLoading
+      //                         ? SpinKitChasingDots(
+      //                             color: P_Settings.loginPagetheme,
+      //                             size: 8,
+      //                           )
+      //                         : Text(
+      //                             value.cartCount.toString(),
+      //                             style: TextStyle(color: Colors.white),
+      //                           ),
+      //                     child: Icon(
+      //                       Icons.shopping_cart,
+      //                       color: Colors.white,
+      //                     ))
+      //               ],
+      //             );
+      //           },
+      //         ),
+      //       ),
+      //     )),
       drawer: Consumer<Controller>(
         builder: (context, value, child) {
           return Drawer(

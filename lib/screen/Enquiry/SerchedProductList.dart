@@ -18,10 +18,13 @@ class _SearchedProductListState extends State<SearchedProductList> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Consumer<ProductController>(
       builder: (context, value, child) {
         if (value.isnewlistLoading) {
           return Container(
+            height: size.height * 0.4,
             child: SpinKitCircle(color: P_Settings.loginPagetheme),
           );
         } else {
@@ -40,29 +43,32 @@ class _SearchedProductListState extends State<SearchedProductList> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListTile(
-                      trailing: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary:
-                                //  value.addButton[index]
-                                //     ? Colors.green
-                                //     :
-                                P_Settings.lightPurple),
-                        child:
-                            //  value.addButton[index]
-                            //     ? Icon(Icons.done)
-                            //     :
+                      trailing: InkWell(
+                        onTap: () {
+                          value.qty[index].text = "1";
 
-                            Text(
-                          "Add",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        onPressed: () {
                           itemBottom.showItemSheet(
                             context,
                             value.newList[index],
                             index,
                           );
                         },
+                        child: Container(
+                          height: size.height * 0.03,
+                          width: size.width * 0.14,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(
+                              color: P_Settings.loginPagetheme,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Add",
+                              style: TextStyle(color: Colors.grey[800]),
+                            ),
+                          ),
+                        ),
                       ),
                       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                       // onTap: () {
@@ -88,7 +94,7 @@ class _SearchedProductListState extends State<SearchedProductList> {
                       title: Text(
                         value.newList[index].productName!.toUpperCase(),
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey[600]),
                       ),
@@ -98,11 +104,11 @@ class _SearchedProductListState extends State<SearchedProductList> {
                           children: [
                             Text("Rate  : ",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 15,
                                 )),
                             Text('\u{20B9}${value.newList[index].sRate1}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold,
                                 )),
