@@ -12,6 +12,7 @@ class CustomerPopup {
   TextEditingController phone = TextEditingController();
   TextEditingController landmark = TextEditingController();
   TextEditingController contact_person = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   String? selected;
   var cusout;
@@ -23,6 +24,8 @@ class CustomerPopup {
     name.clear();
     adress.clear();
     phone.clear();
+    landmark.clear;
+    contact_person.clear();
     return showDialog(
         useSafeArea: true,
         context: context,
@@ -72,327 +75,83 @@ class CustomerPopup {
                         const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
                     child: Container(
                       width: MediaQuery.of(context).size.width - 50,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Autocomplete<Map<String, dynamic>>(
-                            optionsBuilder: (TextEditingValue values) {
-                              if (values.text.isEmpty) {
-                                return [];
-                              } else {
-                                cusout = value.customerList.where(
-                                    (suggestion) => suggestion["company_name"]
-                                        .toLowerCase()
-                                        .contains(values.text.toLowerCase()));
-                                if (cusout == null || cusout.isEmpty) {
-                                  Provider.of<Controller>(context,
-                                          listen: false)
-                                      .setSelectedCustomer(false);
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Autocomplete<Map<String, dynamic>>(
+                              optionsBuilder: (TextEditingValue values) {
+                                if (values.text.isEmpty) {
+                                  return [];
                                 } else {
-                                  Provider.of<Controller>(context,
-                                          listen: false)
-                                      .setSelectedCustomer(true);
-                                }
-
-                                print(value.customerList.where((suggestion) =>
-                                    suggestion["company_name"]
-                                        .toLowerCase()
-                                        .contains(
-                                          values.text.toLowerCase(),
-                                        )));
-
-                                return value.customerList.where((suggestion) =>
-                                    suggestion["company_name"]
-                                        .toLowerCase()
-                                        .contains(
-                                          values.text.toLowerCase(),
-                                        ) ||
-                                    suggestion["phone_1"].contains(
-                                      values.text.toLowerCase(),
-                                    ));
-                              }
-                            },
-                            displayStringForOption:
-                                (Map<String, dynamic> option) =>
-                                    option["company_name"],
-                            // onSelected: (value) {
-                            //   setState(() {
-
-                            //   });
-                            // },
-                            fieldViewBuilder: (BuildContext context,
-                                fieldText,
-                                FocusNode fieldFocusNode,
-                                VoidCallback onFieldSubmitted) {
-                              // Provider.of<Controller>(context, listen: false)
-                              //     .customerControllerSale = fieldText;
-                              return Container(
-                                height: size.height * 0.05,
-                                child: TextFormField(
-                                  // scrollPadding: EdgeInsets.only(
-                                  //     bottom: topInsets + size.height * 0.4),
-                                  onChanged: (value) {
-                                    name.text = fieldText.text;
+                                  cusout = value.customerList.where(
+                                      (suggestion) => suggestion["company_name"]
+                                          .toLowerCase()
+                                          .contains(values.text.toLowerCase()));
+                                  if (cusout == null || cusout.isEmpty) {
                                     Provider.of<Controller>(context,
                                             listen: false)
                                         .setSelectedCustomer(false);
-                                  },
-                                  // scrollPadding: EdgeInsets.only(
-                                  //     top: 500,),
-                                  maxLines: 1,
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    fillColor: Colors.white54,
-                                    filled: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 8),
-                                    prefixIcon: Icon(Icons.person),
-                                    hintText: 'Customer',
-                                    hintStyle: TextStyle(fontSize: 16),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        fieldText.clear();
-                                        adress.clear();
-                                        phone.clear();
-                                        contact_person.clear();
-                                        landmark.clear();
-                                        value.dropSelected = null;
-                                      },
-                                      icon: Icon(
-                                        Icons.clear,
-                                        color: Colors.black,
-                                        size: 18,
-                                      ),
-                                    ),
-                                  ),
+                                  } else {
+                                    Provider.of<Controller>(context,
+                                            listen: false)
+                                        .setSelectedCustomer(true);
+                                  }
 
-                                  textInputAction: TextInputAction.next,
+                                  print(value.customerList.where((suggestion) =>
+                                      suggestion["company_name"]
+                                          .toLowerCase()
+                                          .contains(
+                                            values.text.toLowerCase(),
+                                          )));
 
-                                  controller:
-                                      // cusout == null || cusout.isEmpty
-                                      //     ? name
-                                      //     :
+                                  return value.customerList.where(
+                                      (suggestion) =>
+                                          suggestion["company_name"]
+                                              .toLowerCase()
+                                              .contains(
+                                                values.text.toLowerCase(),
+                                              ) ||
+                                          suggestion["phone_1"].contains(
+                                            values.text.toLowerCase(),
+                                          ));
+                                }
+                              },
+                              displayStringForOption:
+                                  (Map<String, dynamic> option) =>
+                                      option["company_name"],
+                              // onSelected: (value) {
+                              //   setState(() {
 
-                                      fieldText,
-                                  focusNode: fieldFocusNode,
-                                  style: TextStyle(
-                                    fontSize: 16, color: Colors.grey[800],
-                                    // fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              );
-                            },
-                            optionsViewBuilder: (BuildContext context,
-                                AutocompleteOnSelected<Map<String, dynamic>>
-                                    onSelected,
-                                Iterable<Map<String, dynamic>> options) {
-                              print("option----${options}");
-                              return Align(
-                                alignment: Alignment.topLeft,
-                                child: Material(
-                                  child: Expanded(
-                                    // width: 400,
-                                    // height: size.height * 0.3,
-                                    // color: Colors.grey[200],
-                                    child: Container(
-                                      width: 300,
-                                      color: Colors.grey[200],
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        padding: EdgeInsets.all(10.0),
-                                        itemCount: options.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          final Map<String, dynamic> option =
-                                              options.elementAt(index);
-                                          return Column(
-                                            children: [
-                                              ListTile(
-                                                // tileColor: Colors.amber,
-                                                onTap: () {
-                                                  onSelected(option);
-                                                  print(
-                                                      "optionaid------$option");
-
-                                                  name.text =
-                                                      option["company_name"]
-                                                          .toString();
-                                                  adress.text =
-                                                      option["company_add1"]
-                                                          .toString();
-                                                  phone.text = option["phone_1"]
-                                                      .toString();
-                                                  landmark.text =
-                                                      option["landmark"]
-                                                          .toString();
-                                                  contact_person.text =
-                                                      option["owner_name"]
-                                                          .toString();
-                                                  custId = option["customer_id"]
-                                                      .toString();
-                                                  // value.dropSelected =
-                                                  //     option["priority"]
-                                                  //         .toString();
-                                                },
-                                                title: Text(
-                                                    option["company_name"]
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.black)),
-                                                subtitle: Text(
-                                                  option["phone_1"].toString(),
-                                                ),
-                                              ),
-                                              Divider()
-                                            ],
-                                          );
-
-                                          // return GestureDetector(
-                                          //   onTap: () {
-                                          //     onSelected(option);
-                                          //   },
-                                          //   child: ListTile(
-                                          //     title: Text(option.name,
-                                          //         style: const TextStyle(
-                                          //             color: Colors.white)),
-                                          //   ),
-                                          // );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                              // return Align(
-                              //   alignment: Alignment.topLeft,
-                              //   child: Material(
-                              //     child: Container(
-                              //       height: size.height * 0.2,
-                              //       width: size.width - 80,
-                              //       child: ListView.builder(
-                              //         shrinkWrap: true,
-                              //         padding: EdgeInsets.all(2.0),
-                              //         itemCount: options.length,
-                              //         itemBuilder:
-                              //             (BuildContext context, int index) {
-                              //           final Map<String, dynamic> option =
-                              //               options.elementAt(index);
-                              //           return Column(
-                              //             children: [
-                              //               ListTile(
-                              //                 // tileColor: Colors.amber,
-                              //                 onTap: () {
-                              //                   onSelected(option);
-                              //                   print("optionaid------$option");
-                              //                   Provider.of<Controller>(context,
-                              //                           listen: false)
-                              //                       .setCustomerName(
-                              //                     option["name"].toString(),
-                              //                     option["address"].toString(),
-                              //                     option["phone"].toString(),
-                              //                   );
-                              //                   adress.text = option["address"]
-                              //                       .toString();
-                              //                   phone.text =
-                              //                       option["phone"].toString();
-                              //                 },
-                              //                 title: Text(
-                              //                     option["name"].toString(),
-                              //                     style: TextStyle(
-                              //                         fontSize: 15,
-                              //                         color: Colors.black)),
-                              //                 subtitle: Text(
-                              //                   option["address"].toString(),
-                              //                 ),
-                              //               ),
-                              //               Divider()
-                              //             ],
-                              //           );
-                              //         },
-                              //       ),
-                              //     ),
-                              //   ),
-                              // );
-                            },
-                          ),
-                          // value.newCustomer
-                          //     ? Row(
-                          //         mainAxisAlignment: MainAxisAlignment.start,
-                          //         children: [
-                          //           Text(
-                          //             "Please Add new customer",
-                          //             style: TextStyle(color: Colors.green),
-                          //           ),
-                          //         ],
-                          //       )
-                          //     : Container(),
-                          // value.cusInitTime
-                          //     ? Container()
-                          //     : value.newCustomer
-                          //         ?
-
-                          Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Container(
-                                  // transform:
-                                  //     Matrix4.translationValues(0.0, -19.0, 0.0),
+                              //   });
+                              // },
+                              fieldViewBuilder: (BuildContext context,
+                                  fieldText,
+                                  FocusNode fieldFocusNode,
+                                  VoidCallback onFieldSubmitted) {
+                                // Provider.of<Controller>(context, listen: false)
+                                //     .customerControllerSale = fieldText;
+                                return Container(
                                   height: size.height * 0.05,
-                                  child: TextField(
-                                    style: TextStyle(color: Colors.grey[800]),
-                                    // readOnly:
-                                    //     value.customContainerShow ? false : true,
-                                    controller: adress,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      fillColor: Colors.white54,
-                                      filled: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 8),
-                                      prefixIcon: Icon(Icons.info),
-                                      hintText: "Customer Info",
-                                      hintStyle: TextStyle(fontSize: 16),
-                                    ),
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Container(
-                                  // transform:
-                                  //     Matrix4.translationValues(0.0, -13.0, 0.0),
-                                  height: size.height * 0.05,
-
-                                  child: TextField(
-                                    controller: landmark,
-                                    style: TextStyle(color: Colors.grey[800]),
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      fillColor: Colors.white54,
-                                      filled: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 8),
-                                      prefixIcon: Icon(Icons.place_outlined),
-                                      hintText: "Landmark",
-                                      hintStyle: TextStyle(fontSize: 16),
-                                    ),
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Container(
-                                  // transform: Matrix4.translationValues(0.0, 0, 0.0),
-                                  height: size.height * 0.05,
-                                  child: TextField(
-                                    controller: contact_person,
-                                    style: TextStyle(color: Colors.grey[800]),
+                                  child: TextFormField(
+                                    // validator: (text) {
+                                    //   if (text == null || text.isEmpty) {
+                                    //     return 'Please Enter Customer Name';
+                                    //   }
+                                    //   return null;
+                                    // },
+                                    // scrollPadding: EdgeInsets.only(
+                                    //     bottom: topInsets + size.height * 0.4),
+                                    onChanged: (value) {
+                                      name.text = fieldText.text;
+                                      Provider.of<Controller>(context,
+                                              listen: false)
+                                          .setSelectedCustomer(false);
+                                    },
+                                    // scrollPadding: EdgeInsets.only(
+                                    //     top: 500,),
+                                    maxLines: 1,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       fillColor: Colors.white54,
@@ -400,194 +159,472 @@ class CustomerPopup {
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 0, vertical: 8),
                                       prefixIcon: Icon(Icons.person),
-                                      hintText: "Contact Person",
-                                      hintStyle: TextStyle(fontSize: 16),
-                                    ),
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Container(
-                                  // transform: Matrix4.translationValues(0.0, 8, 0.0),
-                                  height: size.height * 0.05,
-                                  child: TextField(
-                                    controller: phone,
-                                    style: TextStyle(color: Colors.grey[800]),
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Phone Number",
-                                      hintStyle: TextStyle(fontSize: 16),
-                                      fillColor: Colors.white54,
-                                      filled: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 8),
-                                      prefixIcon: Icon(Icons.phone),
-                                    ),
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Container(
-                                  // color: Colors.grey[200],
-                                  height: size.height * 0.05,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white54, //<-- SEE HERE
-                                  ),
-                                  child: ButtonTheme(
-                                    alignedDropdown: true,
-                                    child: DropdownButton<String>(
-                                      // value: selected,
-                                      hint: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 2.0),
-                                        child: Text(value.dropSelected == null
-                                            ? "Select Priority level"
-                                            : value.dropSelected!),
+                                      hintText: 'Customer',
+                                      hintStyle: TextStyle(fontSize: 14),
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          fieldText.clear();
+                                          adress.clear();
+                                          phone.clear();
+                                          contact_person.clear();
+                                          landmark.clear();
+                                          value.dropSelected = null;
+                                        },
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: Colors.black,
+                                          size: 18,
+                                        ),
                                       ),
-                                      isExpanded: true,
-                                      autofocus: false,
-                                      underline: SizedBox(),
-                                      elevation: 0,
-                                      items: value.priorityList
-                                          .map((item) =>
-                                              DropdownMenuItem<String>(
-                                                  value: item.lId.toString(),
-                                                  child: Container(
-                                                    // width: size.width * 0.2,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 2.0),
-                                                      child: Text(
-                                                        item.level.toString(),
-                                                        style: TextStyle(
-                                                            fontSize: 14),
-                                                      ),
-                                                    ),
-                                                  )))
-                                          .toList(),
-                                      onChanged: (item) {
-                                        print("clicked");
+                                    ),
 
-                                        if (item != null) {
-                                          selected = item;
+                                    textInputAction: TextInputAction.next,
 
-                                          print("se;ected---$item");
-                                          value.setPrioDrop(selected!);
-                                        }
-                                      },
+                                    controller:
+                                        // cusout == null || cusout.isEmpty
+                                        //     ? name
+                                        //     :
+
+                                        fieldText,
+                                    focusNode: fieldFocusNode,
+                                    style: TextStyle(
+                                      fontSize: 16, color: Colors.grey[800],
+                                      // fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                );
+                              },
+                              optionsViewBuilder: (BuildContext context,
+                                  AutocompleteOnSelected<Map<String, dynamic>>
+                                      onSelected,
+                                  Iterable<Map<String, dynamic>> options) {
+                                print("option----${options}");
+                                return Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    child: Expanded(
+                                      // width: 400,
+                                      // height: size.height * 0.3,
+                                      // color: Colors.grey[200],
+                                      child: Container(
+                                        width: 300,
+                                        color: Colors.grey[200],
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: EdgeInsets.all(10.0),
+                                          itemCount: options.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            final Map<String, dynamic> option =
+                                                options.elementAt(index);
+                                            return Column(
+                                              children: [
+                                                ListTile(
+                                                  // tileColor: Colors.amber,
+                                                  onTap: () {
+                                                    onSelected(option);
+                                                    print(
+                                                        "optionaid------$option");
+
+                                                    name.text =
+                                                        option["company_name"]
+                                                            .toString();
+                                                    adress.text =
+                                                        option["company_add1"]
+                                                            .toString();
+                                                    phone.text =
+                                                        option["phone_1"]
+                                                            .toString();
+                                                    landmark.text =
+                                                        option["landmark"]
+                                                            .toString();
+                                                    contact_person.text =
+                                                        option["owner_name"]
+                                                            .toString();
+                                                    custId =
+                                                        option["customer_id"]
+                                                            .toString();
+                                                    // value.dropSelected =
+                                                    //     option["priority"]
+                                                    //         .toString();
+                                                  },
+                                                  title: Text(
+                                                      option["company_name"]
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: Colors.black)),
+                                                  subtitle: Text(
+                                                    option["phone_1"]
+                                                        .toString(),
+                                                  ),
+                                                ),
+                                                Divider()
+                                              ],
+                                            );
+
+                                            // return GestureDetector(
+                                            //   onTap: () {
+                                            //     onSelected(option);
+                                            //   },
+                                            //   child: ListTile(
+                                            //     title: Text(option.name,
+                                            //         style: const TextStyle(
+                                            //             color: Colors.white)),
+                                            //   ),
+                                            // );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                                // return Align(
+                                //   alignment: Alignment.topLeft,
+                                //   child: Material(
+                                //     child: Container(
+                                //       height: size.height * 0.2,
+                                //       width: size.width - 80,
+                                //       child: ListView.builder(
+                                //         shrinkWrap: true,
+                                //         padding: EdgeInsets.all(2.0),
+                                //         itemCount: options.length,
+                                //         itemBuilder:
+                                //             (BuildContext context, int index) {
+                                //           final Map<String, dynamic> option =
+                                //               options.elementAt(index);
+                                //           return Column(
+                                //             children: [
+                                //               ListTile(
+                                //                 // tileColor: Colors.amber,
+                                //                 onTap: () {
+                                //                   onSelected(option);
+                                //                   print("optionaid------$option");
+                                //                   Provider.of<Controller>(context,
+                                //                           listen: false)
+                                //                       .setCustomerName(
+                                //                     option["name"].toString(),
+                                //                     option["address"].toString(),
+                                //                     option["phone"].toString(),
+                                //                   );
+                                //                   adress.text = option["address"]
+                                //                       .toString();
+                                //                   phone.text =
+                                //                       option["phone"].toString();
+                                //                 },
+                                //                 title: Text(
+                                //                     option["name"].toString(),
+                                //                     style: TextStyle(
+                                //                         fontSize: 15,
+                                //                         color: Colors.black)),
+                                //                 subtitle: Text(
+                                //                   option["address"].toString(),
+                                //                 ),
+                                //               ),
+                                //               Divider()
+                                //             ],
+                                //           );
+                                //         },
+                                //       ),
+                                //     ),
+                                //   ),
+                                // );
+                              },
+                            ),
+                            // value.newCustomer
+                            //     ? Row(
+                            //         mainAxisAlignment: MainAxisAlignment.start,
+                            //         children: [
+                            //           Text(
+                            //             "Please Add new customer",
+                            //             style: TextStyle(color: Colors.green),
+                            //           ),
+                            //         ],
+                            //       )
+                            //     : Container(),
+                            // value.cusInitTime
+                            //     ? Container()
+                            //     : value.newCustomer
+                            //         ?
+
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Container(
+                                    // transform:
+                                    //     Matrix4.translationValues(0.0, -19.0, 0.0),
+                                    height: size.height * 0.05,
+                                    child: TextField(
+                                      style: TextStyle(color: Colors.grey[800]),
+                                      // readOnly:
+                                      //     value.customContainerShow ? false : true,
+                                      controller: adress,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        fillColor: Colors.white54,
+                                        filled: true,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 0, vertical: 8),
+                                        prefixIcon: Icon(Icons.info),
+                                        hintText: "Customer Info",
+                                        hintStyle: TextStyle(fontSize: 14),
+                                      ),
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          // : Container(),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 13.0, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: size.width * 0.3,
-                                  height: size.height * 0.05,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: P_Settings.loginPagetheme),
-                                      onPressed: value.selectedCustomer
-                                          ? () {
-                                              Provider.of<ProductController>(
-                                                      context,
-                                                      listen: false)
-                                                  .setCustomerName(
-                                                custId.toString(),
-                                                name.text,
-                                                adress.text,
-                                                phone.text,
-                                                contact_person.text,
-                                                landmark.text,
-                                                value.prioId!.toString(),
-                                              );
-                                              value.saveCustomerInfo(
-                                                context,
-                                                custId.toString(),
-                                                name.text,
-                                                contact_person.text,
-                                                phone.text,
-                                                adress.text,
-                                                landmark.text,
-                                              );
-                                              FocusManager
-                                                  .instance.primaryFocus!
-                                                  .unfocus();
-                                              name.clear();
-                                              adress.clear();
-                                              contact_person.clear();
-                                              phone.clear();
-                                              landmark.clear();
-                                              Navigator.pop(context);
-                                            }
-                                          : null,
-                                      child: Text(
-                                        "Ok",
-                                        style: TextStyle(fontSize: 18),
-                                      )),
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.02,
-                                ),
-                                Container(
-                                  // width: size.width * 0.34,
-                                  height: size.height * 0.05,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.green),
-                                      onPressed: () {
-                                        print("name.text----${name.text}");
-                                        Provider.of<ProductController>(context,
-                                                listen: false)
-                                            .setCustomerName(
-                                                "0",
-                                                name.text,
-                                                adress.text,
-                                                phone.text,
-                                                contact_person.text,
-                                                landmark.text,
-                                                value.prioId!);
-                                        value.saveCustomerInfo(
-                                          context,
-                                          "0",
-                                          name.text,
-                                          contact_person.text,
-                                          phone.text,
-                                          adress.text,
-                                          landmark.text,
-                                        );
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Container(
+                                    // transform:
+                                    //     Matrix4.translationValues(0.0, -13.0, 0.0),
+                                    height: size.height * 0.05,
 
-                                        name.clear();
-                                        adress.clear();
-                                        phone.clear();
-                                        landmark.clear();
-                                        FocusManager.instance.primaryFocus!
-                                            .unfocus();
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        "New Customer",
-                                        style: TextStyle(fontSize: 18),
-                                      )),
-                                )
+                                    child: TextField(
+                                      controller: landmark,
+                                      style: TextStyle(color: Colors.grey[800]),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        fillColor: Colors.white54,
+                                        filled: true,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 0, vertical: 8),
+                                        prefixIcon: Icon(Icons.place_outlined),
+                                        hintText: "Landmark",
+                                        hintStyle: TextStyle(fontSize: 14),
+                                      ),
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Container(
+                                    // transform: Matrix4.translationValues(0.0, 0, 0.0),
+                                    height: size.height * 0.05,
+                                    child: TextField(
+                                      controller: contact_person,
+                                      style: TextStyle(color: Colors.grey[800]),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        fillColor: Colors.white54,
+                                        filled: true,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 0, vertical: 8),
+                                        prefixIcon: Icon(Icons.person),
+                                        hintText: "Contact Person",
+                                        hintStyle: TextStyle(fontSize: 14),
+                                      ),
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Container(
+                                    // transform: Matrix4.translationValues(0.0, 8, 0.0),
+                                    height: size.height * 0.05,
+                                    child: TextFormField(
+                                      // validator: (text) {
+                                      //   if (text == null || text.isEmpty) {
+                                      //     return 'Please Enter Phone Number';
+                                      //   }
+                                      //   return null;
+                                      // },
+                                      controller: phone,
+                                      style: TextStyle(color: Colors.grey[800]),
+                                      decoration: InputDecoration(
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                          width: 1,
+                                          color: Colors.red,
+                                        )),
+                                        border: InputBorder.none,
+                                        hintText: "Phone Number",
+                                        hintStyle: TextStyle(fontSize: 14),
+                                        fillColor: Colors.white54,
+                                        filled: true,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 0, vertical: 8),
+                                        prefixIcon: Icon(Icons.phone),
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                     
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Container(
+                                    // color: Colors.grey[200],
+                                    height: size.height * 0.05,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white54, //<-- SEE HERE
+                                    ),
+                                    child: ButtonTheme(
+                                      alignedDropdown: true,
+                                      child: DropdownButton<String>(
+                                        // value: selected,
+                                        hint: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 2.0),
+                                          child: Text(
+                                            value.dropSelected == null
+                                                ? "Select Priority level"
+                                                : value.dropSelected!,
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ),
+
+                                        isExpanded: true,
+                                        autofocus: false,
+                                        underline: SizedBox(),
+                                        elevation: 0,
+                                        items: value.priorityList
+                                            .map((item) => DropdownMenuItem<
+                                                    String>(
+                                                value: item.lId.toString(),
+                                                child: Container(
+                                                  // width: size.width * 0.2,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 2.0),
+                                                    child: Text(
+                                                      item.level.toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 14),
+                                                    ),
+                                                  ),
+                                                )))
+                                            .toList(),
+                                        onChanged: (item) {
+                                          print("clicked");
+
+                                          if (item != null) {
+                                            selected = item;
+
+                                            print("se;ected---$item");
+                                            value.setPrioDrop(selected!);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
-                          )
-                        ],
+                            // : Container(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 13.0, bottom: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: size.width * 0.3,
+                                    height: size.height * 0.05,
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: P_Settings.loginPagetheme),
+                                        onPressed: value.selectedCustomer
+                                            ? () {
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  Provider.of<ProductController>(
+                                                          context,
+                                                          listen: false)
+                                                      .setCustomerName(
+                                                    custId.toString(),
+                                                    name.text,
+                                                    adress.text,
+                                                    phone.text,
+                                                    contact_person.text,
+                                                    landmark.text,
+                                                    value.prioId.toString(),
+                                                  );
+                                                  value.saveCustomerInfo(
+                                                    context,
+                                                    custId.toString(),
+                                                    name.text,
+                                                    contact_person.text,
+                                                    phone.text,
+                                                    adress.text,
+                                                    landmark.text,
+                                                  );
+                                                  name.clear();
+                                                  adress.clear();
+                                                  contact_person.clear();
+                                                  phone.clear();
+                                                  landmark.clear();
+                                                  Navigator.pop(context);
+                                                  FocusManager
+                                                      .instance.primaryFocus!
+                                                      .unfocus();
+                                                }
+                                              }
+                                            : null,
+                                        child: Text(
+                                          "Ok",
+                                          style: TextStyle(fontSize: 18),
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.02,
+                                  ),
+                                  Container(
+                                    // width: size.width * 0.34,
+                                    height: size.height * 0.05,
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.green),
+                                        onPressed: () {
+                                          print("name.text----${name.text}");
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            Provider.of<ProductController>(
+                                                    context,
+                                                    listen: false)
+                                                .setCustomerName(
+                                                    "0",
+                                                    name.text,
+                                                    adress.text,
+                                                    phone.text,
+                                                    contact_person.text,
+                                                    landmark.text,
+                                                    value.prioId.toString());
+                                            value.saveCustomerInfo(
+                                              context,
+                                              "0",
+                                              name.text,
+                                              contact_person.text,
+                                              phone.text,
+                                              adress.text,
+                                              landmark.text,
+                                            );
+                                            name.clear();
+                                            adress.clear();
+                                            phone.clear();
+                                            landmark.clear();
+                                            FocusManager.instance.primaryFocus!
+                                                .unfocus();
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text(
+                                          "New Customer",
+                                          style: TextStyle(fontSize: 18),
+                                        )),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );

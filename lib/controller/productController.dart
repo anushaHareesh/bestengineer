@@ -1,5 +1,6 @@
 import 'package:bestengineer/components/globaldata.dart';
 import 'package:bestengineer/components/networkConnectivity.dart';
+import 'package:bestengineer/model/enqHistoryModel.dart';
 
 import 'package:bestengineer/model/productListModel.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
@@ -10,9 +11,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/commonColor.dart';
+import '../model/enqHisDetailsModel.dart';
 
 class ProductController extends ChangeNotifier {
   String? branch_id;
+  String? todate;
+
+  String? fromDate;
   String? priority_level;
   String? customerName;
   String? address;
@@ -21,6 +26,8 @@ class ProductController extends ChangeNotifier {
   String? landmark;
   String? customer_id;
   bool isLoading = false;
+  bool isDetailLoading = false;
+
   var res;
   bool isCartLoading = false;
   List<ProductList> productList = [];
@@ -28,9 +35,21 @@ class ProductController extends ChangeNotifier {
   bool isSearch = false;
   String urlgolabl = Globaldata.apiglobal;
   List<TextEditingController> qty = [];
+  List<TextEditingController> pname = [];
+
   List<TextEditingController> desc = [];
+  List<TextEditingController> hisqty = [];
   List<TextEditingController> cartQty = [];
   List<Map<String, dynamic>> bagList = [];
+  List<EnqList> enQhistoryList = [];
+  List<Master> enQhistoryMaster = [];
+  List<Detail> enQhistoryDetail = [];
+  TextEditingController cname = TextEditingController();
+  TextEditingController cperson = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController cinfo = TextEditingController();
+  TextEditingController landmarked = TextEditingController();
+
   List<bool> addButton = [];
   bool isProdLoading = false;
   bool isnewlistLoading = false;
@@ -127,18 +146,20 @@ class ProductController extends ChangeNotifier {
 
   /////////////////////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////////
   inCrementQty(int qtyi, int index, String type) {
     if (type == "new") {
       qtyVal = qtyVal + 1;
     } else if (type == "cart") {
       cartQty[index].text = (qtyi + 1).toString();
+    } else if (type == "editHis") {
+      hisqty[index].text = (qtyi + 1).toString();
     } else {
       qty[index].text = (qtyi + 1).toString();
     }
     notifyListeners();
   }
 
+/////////////////////////////////////////////////////////
   setAddButtonColor(
     bool val,
     int index,
@@ -147,6 +168,7 @@ class ProductController extends ChangeNotifier {
     notifyListeners();
   }
 
+////////////////////////////////////////////////////////////////////////
   deCrementQty(int qtyi, int index, String type) {
     print("qtyi-----${qty[index].text}");
 
@@ -158,6 +180,11 @@ class ProductController extends ChangeNotifier {
       if (int.parse(cartQty[index].text) > 1) {
         int q = qtyi - 1;
         cartQty[index].text = q.toString();
+      }
+    } else if (type == "editHis") {
+      if (int.parse(cartQty[index].text) > 1) {
+        int q = qtyi - 1;
+        hisqty[index].text = q.toString();
       }
     } else {
       if (int.parse(qty[index].text) > 1) {
@@ -179,7 +206,7 @@ class ProductController extends ChangeNotifier {
     String prodName,
     String itemId,
     String qty,
-    String description,
+    String? description,
     String event,
     String cart_id,
     BuildContext context,
@@ -205,26 +232,34 @@ class ProductController extends ChangeNotifier {
           cartCount = map["cart_count"];
           notifyListeners();
           if (map["err_status"] == 0) {
-            Fluttertoast.showToast(
-              msg: event == "0"
-                  ? "${prodName} Inserted Successfully..."
-                  : "${prodName} deleted Successfully...",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              textColor: Colors.white,
-              fontSize: 14.0,
-              backgroundColor: Colors.green,
-            );
-            notifyListeners();
-          } else {
-            Fluttertoast.showToast(
-                msg: "Something went wrong...",
+            if (event == "0" || event == "2") {
+              Fluttertoast.showToast(
+                msg: event == "0"
+                    ? "${prodName} Inserted Successfully..."
+                    : event == "2"
+                        ? "${prodName} deleted Successfully..."
+                        : "",
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 1,
                 textColor: Colors.white,
-                fontSize: 14.0);
+                fontSize: 14.0,
+                backgroundColor: Colors.green,
+              );
+            }
+
+            notifyListeners();
+          } else {
+            if (event == "0") {
+              Fluttertoast.showToast(
+                  msg: "Something went wrong...",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  textColor: Colors.white,
+                  fontSize: 14.0);
+            }
+
             notifyListeners();
           }
 
@@ -305,7 +340,7 @@ class ProductController extends ChangeNotifier {
 
   ///////////////////////////////////////////////////
   setCustomerName(String custome_id, String name, String address1, String phone,
-      String owner_name1, String landm, String prio) {
+      String owner_name1, String landm, String? prio) {
     print(
         "cus  ---$custome_id-----$name---$address1---$phone----$owner_name1---$landm-$prio");
     customer_id = custome_id;
@@ -324,6 +359,7 @@ class ProductController extends ChangeNotifier {
 ///////////////////////////////////////////////////////////////////////////////
   saveCartDetails(
     BuildContext context,
+    String row_id,
   ) async {
     List<Map<String, dynamic>> jsonResult = [];
     Map<String, dynamic> itemmap = {};
@@ -357,7 +393,7 @@ class ProductController extends ChangeNotifier {
           "company_name": customerName,
           "contact_num": customerPhone,
           "cust_info": address,
-          "row_id": "0",
+          "row_id": row_id,
           "hidden_status": "0",
           "landmark": landmark,
           "priority_level": priority_level,
@@ -421,6 +457,201 @@ class ProductController extends ChangeNotifier {
                 ],
               ));
             });
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////////
+  setDate(String date1, String date2) {
+    fromDate = date1;
+    todate = date2;
+    print("gtyy----$fromDate----$todate");
+    notifyListeners();
+  }
+
+  /////////////////////////////////////////////////////////////
+  getEnqhistoryData(
+    BuildContext context,
+    String action,
+    String fromDate,
+    String tillDate,
+  ) async {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          String? user_id = prefs.getString("user_id");
+          print("history------------------$user_id-----");
+          Uri url = Uri.parse("$urlgolabl/enquiry_list.php");
+          Map body = {
+            'staff_id': "1",
+            "branch_id": "1",
+            'from_date': fromDate,
+            'till_date': tillDate,
+          };
+          print("history body-----$body");
+          if (action != "delete") {
+            isLoading = true;
+            notifyListeners();
+          }
+
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          var map = jsonDecode(response.body);
+          EnqHistoryModel model = EnqHistoryModel.fromJson(map);
+          print("history response-----------------${map}");
+
+          if (action != "delete") {
+            isLoading = false;
+            notifyListeners();
+          }
+
+          if (map != null) {
+            enQhistoryList.clear();
+
+            for (var item in model.enqList!) {
+              enQhistoryList.add(item);
+            }
+          }
+
+          print("enq history list data........${enQhistoryList}");
+          // isLoading = false;
+          notifyListeners();
+
+          /////////////// insert into local db /////////////////////
+        } catch (e) {
+          print("error...$e");
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  getEnqhistoryDetails(BuildContext context, String enqId) async {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          String? user_id = prefs.getString("user_id");
+          print("history------------------$user_id-----");
+          Uri url = Uri.parse("$urlgolabl/enquiry_list_detail.php");
+          Map body = {
+            'enq_id': enqId,
+          };
+          print("history body-----$body");
+          // if (action != "delete") {
+          isDetailLoading = true;
+          notifyListeners();
+          // }
+
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          var map = jsonDecode(response.body);
+          print("enQhistoryDetails response-----------------${map}");
+
+          // if (action != "delete") {
+          isDetailLoading = false;
+          notifyListeners();
+          // }
+          EnqHisDetails hisDeta = EnqHisDetails.fromJson(map);
+          // enQhistoryDetails.clear();
+          enQhistoryMaster.clear();
+          enQhistoryDetail.clear();
+
+          if (map != null) {
+            for (var item in hisDeta.master!) {
+              enQhistoryMaster.add(item);
+            }
+
+            cname.text = enQhistoryMaster[0].companyName.toString();
+            phone.text = enQhistoryMaster[0].contactNum.toString();
+            landmarked.text = enQhistoryMaster[0].landmark.toString();
+            cperson.text = enQhistoryMaster[0].ownerName.toString();
+            cinfo.text = enQhistoryMaster[0].custInfo.toString();
+
+            for (var item in hisDeta.detail!) {
+              enQhistoryDetail.add(item);
+            }
+          }
+          pname = List.generate(
+            enQhistoryDetail.length,
+            (index) => TextEditingController(),
+          );
+          desc = List.generate(
+            enQhistoryDetail.length,
+            (index) => TextEditingController(),
+          );
+          hisqty = List.generate(
+            enQhistoryDetail.length,
+            (index) => TextEditingController(),
+          );
+          for (int i = 0; i < enQhistoryDetail.length; i++) {
+            pname[i].text = enQhistoryDetail[i].productName.toString();
+            desc[i].text = enQhistoryDetail[i].productInfo.toString();
+            hisqty[i].text = enQhistoryDetail[i].qty.toString();
+          }
+          print(
+              "enQhistoryMaster.......${enQhistoryMaster}------$enQhistoryDetail");
+          // isLoading = false;
+          notifyListeners();
+
+          /////////////// insert into local db /////////////////////
+        } catch (e) {
+          print("error...$e");
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ////////////////////////////////////////////////////////////
+  updateHistory(BuildContext context, String event, String enqId, String fdate,
+      String tdate) async {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          print("kjn---------------$branch_id----$user_id-");
+          isSearch = false;
+          notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/enq_update.php");
+          Map body = {
+            'enq_id': enqId,
+            'event': event,
+            'added_by': "1",
+            'branch_id': "1",
+          };
+          print("update transaction--body----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          var map = jsonDecode(response.body);
+          print("update transaction------$map");
+
+          if (map["flag"] == 0) {
+            getEnqhistoryData(context, "", fdate, tdate);
+          }
+          /////////////// insert into local db /////////////////////
+        } catch (e) {
+          print("error...$e");
+          // return null;
+          return [];
+        }
       }
     });
   }

@@ -25,7 +25,7 @@ class _EnqCartState extends State<EnqCart> {
   ItemSlectionBottomsheet itemsheet = ItemSlectionBottomsheet();
   ItemSelectionAlert popup = ItemSelectionAlert();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
-  SavePopup svaepop = SavePopup();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +112,11 @@ class _EnqCartState extends State<EnqCart> {
                                                     _keyLoader, 1);
                                                 value.saveCartDetails(
                                                     _scaffoldKey
-                                                        .currentContext!);
+                                                        .currentContext!,"0");
+
+                                                Provider.of<Controller>(context,
+                                                        listen: false)
+                                                    .customer_id = null;
                                               },
                                               child: Text("Ok")),
                                           Padding(
@@ -173,24 +177,6 @@ class _EnqCartState extends State<EnqCart> {
             return Card(
               child: Column(
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Flexible(
-                  //         child: Text(
-                  //           "Name.....",
-                  //           overflow: TextOverflow.ellipsis,
-                  //           maxLines: 1,
-                  //           softWrap: false,
-                  //           style:
-                  //               TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   Row(
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -211,39 +197,20 @@ class _EnqCartState extends State<EnqCart> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          // Positioned(
-                          //   top: 112,
-                          //   left: 29,
-                          //   child: ElevatedButton(
-                          //     style: ElevatedButton.styleFrom(
-                          //       primary: P_Settings.loginPagetheme,
-                          //       shape: RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(10), // <-- Radius
-                          //       ),
-                          //     ),
-                          //     onPressed: () {},
-                          //     child: Text("ADD"),
-                          //   ),
-                          // )
                         ],
                       ),
                       Container(
                         margin: EdgeInsets.all(8),
-                        width: size.width * 0.68,
+                        width: size.width * 0.64,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            // Text(
-                            //   "CODE ",
-                            //   style: TextStyle(
-                            //       fontSize: 17, color: Colors.grey[700]),
-                            // ),
                             Text(
                               value.bagList[index]["item_name"].toString(),
                               style: TextStyle(
                                   color: Colors.grey[600],
-                                  fontSize: 15,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold),
                             ),
                             // Container(
@@ -264,7 +231,7 @@ class _EnqCartState extends State<EnqCart> {
                                 Text(
                                   "Qty     : ",
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                   ),
                                 ),
                                 Padding(
@@ -280,6 +247,23 @@ class _EnqCartState extends State<EnqCart> {
                                                     value.cartQty[index].text),
                                                 index,
                                                 "cart");
+                                            Provider.of<ProductController>(
+                                                    context,
+                                                    listen: false)
+                                                .addDeletebagItem(
+                                                    value.bagList[index]
+                                                            ["item_name"]
+                                                        .toString(),
+                                                    value.bagList[index]
+                                                            ["item_id"]
+                                                        .toString(),
+                                                    value.cartQty[index].text,
+                                                    value.bagList[index]
+                                                        ["description"],
+                                                    "1",
+                                                    value.bagList[index]
+                                                        ["cart_id"],
+                                                    context);
                                           },
                                           child: Container(
                                               decoration: BoxDecoration(
@@ -308,7 +292,8 @@ class _EnqCartState extends State<EnqCart> {
                                             controller: value.cartQty[index],
                                             // value.qtyVal.toString(),
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
                                           ),
                                         ),
                                         InkWell(
@@ -318,6 +303,23 @@ class _EnqCartState extends State<EnqCart> {
                                                     value.cartQty[index].text),
                                                 index,
                                                 "cart");
+                                            Provider.of<ProductController>(
+                                                    context,
+                                                    listen: false)
+                                                .addDeletebagItem(
+                                                    value.bagList[index]
+                                                            ["item_name"]
+                                                        .toString(),
+                                                    value.bagList[index]
+                                                            ["item_id"]
+                                                        .toString(),
+                                                    value.cartQty[index].text,
+                                                    value.bagList[index]
+                                                        ["description"],
+                                                    "1",
+                                                    value.bagList[index]
+                                                        ["cart_id"],
+                                                    context);
                                           },
                                           child: Container(
                                               decoration: BoxDecoration(
@@ -357,7 +359,7 @@ class _EnqCartState extends State<EnqCart> {
                                 Text(
                                     '\u{20B9}${value.bagList[index]["s_rate_1"]}',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       color: Colors.grey[600],
                                       fontWeight: FontWeight.w600,
                                     )),
@@ -369,7 +371,7 @@ class _EnqCartState extends State<EnqCart> {
                                             .toString(),
                                         value.bagList[index]["item_id"]
                                             .toString(),
-                                        index);
+                                        index,"cart","","","");
                                   },
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,

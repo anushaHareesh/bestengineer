@@ -9,14 +9,12 @@ import 'package:bestengineer/model/registrationModel.dart';
 import 'package:bestengineer/model/staffDetailsModel.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 
-
 import 'package:bestengineer/services/dbHelper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class RegistrationController extends ChangeNotifier {
   bool isLoading = false;
@@ -111,8 +109,8 @@ class RegistrationController extends ChangeNotifier {
 
               await BestEngineer.instance
                   .deleteFromTableCommonQuery("companyRegistrationTable", "");
-              var res =
-                  await BestEngineer.instance.insertRegistrationDetails(regModel);
+              var res = await BestEngineer.instance
+                  .insertRegistrationDetails(regModel);
               // getMaxSerialNumber(os);
               // getMenuAPi(cid!, fp1, company_code, context);
               Navigator.push(

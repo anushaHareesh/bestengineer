@@ -7,8 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class DeletePopup {
-  Future builddeletePopupDialog(
-      BuildContext context, String itemName, String itemId, int index) {
+  Future builddeletePopupDialog(BuildContext context, String itemName,
+      String itemId, int index, String type,String enqId,String fdtae,String tdate) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -30,14 +30,19 @@ class DeletePopup {
                           style: ElevatedButton.styleFrom(
                               primary: P_Settings.loginPagetheme),
                           onPressed: () {
-                            value.addDeletebagItem(
-                                itemName,
-                                itemId,
-                                value.cartQty[index].text,
-                                "",
-                                "2",
-                                value.bagList[index]["cart_id"],
-                                context);
+                            if (type == "history") {
+                              value.updateHistory(context, "2", enqId,fdtae,tdate);
+                            } else {
+                              value.addDeletebagItem(
+                                  itemName,
+                                  itemId,
+                                  value.cartQty[index].text,
+                                  "",
+                                  "2",
+                                  value.bagList[index]["cart_id"],
+                                  context);
+                            }
+
                             Navigator.pop(context);
                           },
                           child: Text("Ok")),

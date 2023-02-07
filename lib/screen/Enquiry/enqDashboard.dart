@@ -1,4 +1,5 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/components/customSnackbar.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/screen/Enquiry/SerchedProductList.dart';
@@ -50,12 +51,18 @@ class _EnqDashboardState extends State<EnqDashboard>
           height: 50,
           child: InkWell(
             onTap: () {
-              Provider.of<ProductController>(context, listen: false)
-                  .getbagData(context, "0");
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EnqCart()),
-              );
+              if (Provider.of<Controller>(context, listen: false).customer_id ==
+                  null) {
+                CustomSnackbar snackbar = CustomSnackbar();
+                snackbar.showSnackbar(context, "Please Choose a Customer", "");
+              } else {
+                Provider.of<ProductController>(context, listen: false)
+                    .getbagData(context, "0");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EnqCart()),
+                );
+              }
             },
             child: Container(
               color: P_Settings.loginPagetheme,
@@ -81,15 +88,16 @@ class _EnqDashboardState extends State<EnqDashboard>
                               badgeColor: Colors.red),
                           position:
                               badges.BadgePosition.topEnd(top: -10, end: -22),
-                          badgeContent: value.isCartLoading
-                              ? SpinKitChasingDots(
-                                  color: P_Settings.loginPagetheme,
-                                  size: 8,
-                                )
-                              : Text(
-                                  value.cartCount.toString(),
-                                  style: TextStyle(color: Colors.white),
-                                ),
+                          badgeContent:
+                              value.isCartLoading || value.customer_id == null
+                                  ? SpinKitChasingDots(
+                                      color: P_Settings.loginPagetheme,
+                                      size: 8,
+                                    )
+                                  : Text(
+                                      value.cartCount.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                           child: Icon(
                             Icons.shopping_cart,
                             color: Colors.white,
@@ -116,7 +124,7 @@ class _EnqDashboardState extends State<EnqDashboard>
                             ? "Add Customer"
                             : "Customer Details",
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       InkWell(
                         onTap: () {
@@ -169,14 +177,9 @@ class _EnqDashboardState extends State<EnqDashboard>
                           color: P_Settings.loginPagetheme,
                         ),
                       )
-                    :
-                    //  value.customer_id == null
-                    //     ? Container()
-                    //     : 
-                        
-                        
-                        
-                        customerData(size),
+                    : value.customer_id == null
+                        ? Container()
+                        : customerData(size),
                 // ListTile(
                 //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                 //   trailing: Icon(
@@ -206,7 +209,7 @@ class _EnqDashboardState extends State<EnqDashboard>
                           Text(
                             "Product Details",
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -235,57 +238,65 @@ class _EnqDashboardState extends State<EnqDashboard>
                               );
                             },
                           ),
-                          Container(
-                              width: size.width * 0.68,
-                              height: size.height * 0.045,
-                              child: TextField(
-                                controller: search,
-                                onChanged: (val) {
-                                  if (val != null && val.isNotEmpty) {
-                                    Provider.of<ProductController>(context,
-                                            listen: false)
-                                        .searchProduct(context, val);
-                                    // Provider.of<ProductController>(context,
-                                    //         listen: false)
-                                    //     .setIssearch(true);
-                                    // Provider.of<ProductController>(context,
-                                    //         listen: false)
-                                    //     .geProductList(context);
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  suffixIcon: IconButton(
-                                    icon: Icon(Icons.close),
-                                    onPressed: () {
-                                      search.clear();
+                          Expanded(
+                            child: Container(
+                                margin: EdgeInsets.only(left: 6),
+                                // width: size.width * 0.68,
+                                height: size.height * 0.045,
+                                child: TextField(
+                                  controller: search,
+                                  onChanged: (val) {
+                                    if (val != null && val.isNotEmpty) {
                                       Provider.of<ProductController>(context,
                                               listen: false)
-                                          .adddNewItem = false;
-                                      Provider.of<ProductController>(context,
-                                              listen: false)
-                                          .setIssearch(false);
-                                    },
+                                          .searchProduct(context, val);
+                                      // Provider.of<ProductController>(context,
+                                      //         listen: false)
+                                      //     .setIssearch(true);
+                                      // Provider.of<ProductController>(context,
+                                      //         listen: false)
+                                      //     .geProductList(context);
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 19,
+                                      ),
+                                      onPressed: () {
+                                        search.clear();
+                                        Provider.of<ProductController>(context,
+                                                listen: false)
+                                            .adddNewItem = false;
+                                        Provider.of<ProductController>(context,
+                                                listen: false)
+                                            .setIssearch(false);
+                                      },
+                                    ),
+                                    hintText: "Search item here",
+                                    hintStyle: TextStyle(fontSize: 13),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                      ), //<-- SEE HERE
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                      ), //<-- SEE HERE
+                                    ),
                                   ),
-                                  hintText: "Search item here",
-                                  hintStyle: TextStyle(fontSize: 13),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                    ), //<-- SEE HERE
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                    ), //<-- SEE HERE
-                                  ),
-                                ),
-                              ))
+                                )),
+                          )
                         ],
                       ),
                     ],
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(3)),
+                Padding(padding: EdgeInsets.all(4)),
                 // Text(
                 //     "${Provider.of<ProductController>(context, listen: false).isSearch}"),
                 // Text(
@@ -335,142 +346,279 @@ class _EnqDashboardState extends State<EnqDashboard>
   }
 
   Widget customerData(Size size) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Consumer<Controller>(
-        builder: (context, value, child) {
-          return Stack(
-            children: [
-              Card(
-                margin: EdgeInsets.only(left: 20, right: 16),
-                child: ListTile(
-                  title: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+    return Consumer<Controller>(
+      builder: (context, value, child) {
+        return Card(
+          // margin: EdgeInsets.only(left: 0, right: 16),
+          child: ListTile(
+            title: Column(
+              children: [
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 18.0, top: 8, bottom: 8),
-                                child: Row(
-                                  children: [
-                                    // Text(
-                                    //   "Customer Name",
-                                    //   style: TextStyle(
-                                    //       color: Colors.grey[500],
-                                    //       fontSize: 14),
-                                    // ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 0),
-                                      child: Container(
-                                        width: size.width * 0.7,
-                                        child: Text(
-                                          value.customerName.toString(),
-                                          style: TextStyle(
-                                              color: Colors.grey[700],
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                              Icon(
+                                Icons.person,
+                                size: 18,
+                                color: Colors.blue,
+                              ),
+                              // Text(
+                              //   "Name",
+                              //   style: TextStyle(
+                              //       color: Colors.grey[500], fontSize: 14),
+                              // ),
+                              Container(
+                                margin: EdgeInsets.only(left: 8),
+                                width: size.width * 0.6,
+                                child: Text(
+                                  value.customerName.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  // value.customerName.toString(),
+                                  style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Row(
-                                  children: [
-                                    // Text(
-                                    //   "Customer Info",
-                                    //   style: TextStyle(
-                                    //       color: Colors.grey[500],
-                                    //       fontSize: 14),
-                                    // ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 0),
-                                      child: Text(
-                                        value.address.toString(),
-                                        style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 8),
-                                child: Row(
-                                  children: [
-                                    // Text(
-                                    //   "Phone number",
-                                    //   style: TextStyle(
-                                    //       color: Colors.grey[500],
-                                    //       fontSize: 14),
-                                    // ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 0),
-                                      child: Text(
-                                        value.customerPhone.toString(),
-                                        style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 8),
-                                child: Row(
-                                  children: [
-                                    // Text(
-                                    //   "Landmark",
-                                    //   style: TextStyle(
-                                    //       color: Colors.grey[500],
-                                    //       fontSize: 14),
-                                    // ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 0),
-                                      child: Text(
-                                        value.landmark.toString(),
-                                        style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                              )
                             ],
-                          )
-                        ],
-                      ),
-                      Row()
-                    ],
-                  ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.business,
+                                size: 18,
+                                color: Colors.green,
+                              ),
+                              // Text(
+                              //   "Info",
+                              //   style: TextStyle(
+                              //       color: Colors.grey[500], fontSize: 14),
+                              // ),
+                              Container(
+                                margin: EdgeInsets.only(left: 8),
+                                width: size.width * 0.6,
+                                child: Text(
+                                  value.address.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.phone,
+                                size: 18,
+                                color: Colors.orange,
+                              ),
+                              // Text(
+                              //   "Phone",
+                              //   style: TextStyle(
+                              //       color: Colors.grey[500], fontSize: 14),
+                              // ),
+                              Container(
+                                margin: EdgeInsets.only(left: 8),
+                                child: Text(
+                                  value.customerPhone.toString(),
+                                  style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.place,
+                                size: 18,
+                                color: Colors.red,
+                              ),
+                              // Text(
+                              //   "Landmark",
+                              //   style: TextStyle(
+                              //       color: Colors.grey[500], fontSize: 14),
+                              // ),
+                              Container(
+                                margin: EdgeInsets.only(left: 8),
+                                child: Text(
+                                  value.landmark.toString(),
+                                  style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                        )
+                      ],
+                    )
+                  ],
                 ),
-              ),
-              Positioned(
-                  top: 32,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage("assets/man.png"),
-                    backgroundColor: Colors.transparent,
-                    radius: 30,
-                    // child: Icon(
-                    //   Icons.person,
-                    // ),
-                  )),
-            ],
-          );
-        },
-      ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
+
+  // Widget customerData(Size size) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(top: 8.0),
+  //     child: Consumer<Controller>(
+  //       builder: (context, value, child) {
+  //         return Stack(
+  //           children: [
+  //             Card(
+  //               margin: EdgeInsets.only(left: 0, right: 16),
+  //               child: ListTile(
+  //                 title: Column(
+  //                   children: [
+  //                     Row(
+  //                       children: [
+  //                         Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(
+  //                                   left: 0, top: 8, bottom: 8),
+  //                               child: Row(
+  //                                 children: [
+  //                                   Text(
+  //                                     "Customer Name",
+  //                                     style: TextStyle(
+  //                                         color: Colors.grey[500],
+  //                                         fontSize: 14),
+  //                                   ),
+  //                                   Padding(
+  //                                     padding: const EdgeInsets.only(left: 0),
+  //                                     child: Container(
+  //                                       width: size.width * 0.7,
+  //                                       child: Text(
+  //                                         value.customerName.toString(),
+  //                                         style: TextStyle(
+  //                                             color: Colors.grey[700],
+  //                                             fontWeight: FontWeight.w500),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 8.0),
+  //                               child: Row(
+  //                                 children: [
+  //                                   Text(
+  //                                     "Customer Info",
+  //                                     style: TextStyle(
+  //                                         color: Colors.grey[500],
+  //                                         fontSize: 14),
+  //                                   ),
+  //                                   Padding(
+  //                                     padding: const EdgeInsets.only(left: 0),
+  //                                     child: Text(
+  //                                       value.address.toString(),
+  //                                       style: TextStyle(
+  //                                           color: Colors.grey[700],
+  //                                           fontWeight: FontWeight.w500),
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                             Padding(
+  //                               padding:
+  //                                   const EdgeInsets.only(left: 8.0, top: 8),
+  //                               child: Row(
+  //                                 children: [
+  //                                   Text(
+  //                                     "Phone number",
+  //                                     style: TextStyle(
+  //                                         color: Colors.grey[500],
+  //                                         fontSize: 14),
+  //                                   ),
+  //                                   Padding(
+  //                                     padding: const EdgeInsets.only(left: 0),
+  //                                     child: Text(
+  //                                       value.customerPhone.toString(),
+  //                                       style: TextStyle(
+  //                                           color: Colors.grey[700],
+  //                                           fontWeight: FontWeight.w500),
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                             Padding(
+  //                               padding:
+  //                                   const EdgeInsets.only(left: 8.0, top: 8),
+  //                               child: Row(
+  //                                 children: [
+  //                                   Text(
+  //                                     "Landmark",
+  //                                     style: TextStyle(
+  //                                         color: Colors.grey[500],
+  //                                         fontSize: 14),
+  //                                   ),
+  //                                   Padding(
+  //                                     padding: const EdgeInsets.only(left: 0),
+  //                                     child: Text(
+  //                                       value.landmark.toString(),
+  //                                       style: TextStyle(
+  //                                           color: Colors.grey[700],
+  //                                           fontWeight: FontWeight.w500),
+  //                                     ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                             Padding(
+  //                               padding: const EdgeInsets.all(8),
+  //                             )
+  //                           ],
+  //                         )
+  //                       ],
+  //                     ),
+  //                     Row()
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             // Positioned(
+  //             //     top: 32,
+  //             //     child: CircleAvatar(
+  //             //       backgroundImage: AssetImage("assets/man.png"),
+  //             //       backgroundColor: Colors.transparent,
+  //             //       radius: 30,
+  //             //       // child: Icon(
+  //             //       //   Icons.person,
+  //             //       // ),
+  //             //     )),
+  //           ],
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 }

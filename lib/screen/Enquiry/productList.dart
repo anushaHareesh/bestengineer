@@ -1,4 +1,5 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/components/customSnackbar.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -8,7 +9,8 @@ import '../../controller/controller.dart';
 import '../../widgets/bottomsheets/itemSelectionSheet.dart';
 
 class ProductListPage extends StatefulWidget {
-  const ProductListPage({super.key});
+  String? cus_id;
+  ProductListPage({this.cus_id});
 
   @override
   State<ProductListPage> createState() => _ProductListPageState();
@@ -64,12 +66,20 @@ class _ProductListPageState extends State<ProductListPage> {
                     child: ListTile(
                       trailing: InkWell(
                         onTap: () {
-                          value.qty[index].text = "1";
-                          itemBottom.showItemSheet(
-                            context,
-                            value.productList[index],
-                            index,
-                          );
+                          if (Provider.of<Controller>(context, listen: false)
+                                  .customer_id ==
+                              null) {
+                            CustomSnackbar snackbar = CustomSnackbar();
+                            snackbar.showSnackbar(
+                                context, "Please Choose a Customer", "");
+                          } else {
+                            value.qty[index].text = "1";
+                            itemBottom.showItemSheet(
+                              context,
+                              value.productList[index],
+                              index,
+                            );
+                          }
                         },
                         child: Container(
                           height: size.height * 0.03,

@@ -1,5 +1,6 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/screen/Enquiry/EnqHistory.dart';
 import 'package:bestengineer/screen/Enquiry/enqDashboard.dart';
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,21 @@ class _EnqHomeState extends State<EnqHome> {
       key: _key,
       appBar: AppBar(
         actions: [
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EnQHistory()),
+                  );
+                },
+                child: Icon(
+                  Icons.history,
+                  size: 20,
+                  color: Colors.red,
+                )),
+          ),
           InkWell(
             onTap: () {
               buildPopupDialog(context, size);
