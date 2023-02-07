@@ -354,7 +354,9 @@ class _EnQHistoryState extends State<EnQHistory> {
                                               children: [
                                                 Text("View"),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left:8.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
                                                   child: Image.asset(
                                                     "assets/eye.png",
                                                     height: 23,

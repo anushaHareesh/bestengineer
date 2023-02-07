@@ -159,7 +159,7 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Customer Details",
+                                  "Customer Details ",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
@@ -172,9 +172,9 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                             child: Row(
                               children: [
                                 Text(
-                                  "Company Name",
+                                  "Company Name :",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 16, color: Colors.grey[600]
                                   ),
                                 )
                               ],
@@ -207,9 +207,9 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                             child: Row(
                               children: [
                                 Text(
-                                  "Contact Person",
+                                  "Contact Person :",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 16, color: Colors.grey[600]
                                   ),
                                 )
                               ],
@@ -242,9 +242,9 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                             child: Row(
                               children: [
                                 Text(
-                                  "Contact Num",
+                                  "Contact Num :",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 16, color: Colors.grey[600]
                                   ),
                                 )
                               ],
@@ -277,9 +277,10 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                             child: Row(
                               children: [
                                 Text(
-                                  "Customer Info",
+                                  "Customer Info :",
                                   style: TextStyle(
                                     fontSize: 16,
+                                    color: Colors.grey[600]
                                   ),
                                 )
                               ],
@@ -312,9 +313,9 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                             child: Row(
                               children: [
                                 Text(
-                                  "Landmark",
+                                  "Landmark :",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 16, color: Colors.grey[600]
                                   ),
                                 )
                               ],

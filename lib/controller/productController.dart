@@ -573,11 +573,11 @@ class ProductController extends ChangeNotifier {
               enQhistoryMaster.add(item);
             }
 
-            cname.text = enQhistoryMaster[0].companyName.toString();
+            cname.text = enQhistoryMaster[0].companyName.toString().toUpperCase();
             phone.text = enQhistoryMaster[0].contactNum.toString();
-            landmarked.text = enQhistoryMaster[0].landmark.toString();
-            cperson.text = enQhistoryMaster[0].ownerName.toString();
-            cinfo.text = enQhistoryMaster[0].custInfo.toString();
+            landmarked.text = enQhistoryMaster[0].landmark.toString().toUpperCase();
+            cperson.text = enQhistoryMaster[0].ownerName.toString().toUpperCase();
+            cinfo.text = enQhistoryMaster[0].custInfo.toString().toUpperCase();
 
             for (var item in hisDeta.detail!) {
               enQhistoryDetail.add(item);
