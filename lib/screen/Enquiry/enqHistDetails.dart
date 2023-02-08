@@ -10,7 +10,8 @@ import '../../controller/productController.dart';
 
 class EnQHistoryDetails extends StatefulWidget {
   String enqId;
-  EnQHistoryDetails({required this.enqId});
+  String enqCode;
+  EnQHistoryDetails({required this.enqId,required this.enqCode});
 
   @override
   State<EnQHistoryDetails> createState() => _EnQHistoryDetailsState();
@@ -26,8 +27,10 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       key: _scaffoldKey,
       appBar: AppBar(
+        title: Text(widget.enqCode.toString(),style: TextStyle(color: Colors.grey[700]),),
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -147,277 +150,287 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
             } else {
               return Column(
                 children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8.0, right: 8, bottom: 12, top: 8),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Customer Details ",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Company Name :",
-                                  style: TextStyle(
-                                    fontSize: 16, color: Colors.grey[600]
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      color: P_Settings.fillcolor,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 8, bottom: 20, top: 8),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Customer Details ",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                )
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            height: size.height * 0.05,
-                            margin: EdgeInsets.only(left: 9, right: 9, top: 10),
-                            child: TextFormField(
-                              readOnly: true,
-                              controller: value.cname,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
+                            Container(
+                              margin: EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Company Name :",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.grey[600]),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: size.height * 0.05,
+                              margin: EdgeInsets.only(left: 9, right: 9, top: 10),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: value.cname,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: P_Settings.whiteColor,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Contact Person :",
-                                  style: TextStyle(
-                                    fontSize: 16, color: Colors.grey[600]
-                                  ),
-                                )
-                              ],
+                            Container(
+                              margin: EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Contact Person :",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.grey[600]),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            height: size.height * 0.05,
-                            margin: EdgeInsets.only(left: 9, right: 9, top: 10),
-                            child: TextFormField(
-                              readOnly: true,
-                              controller: value.cperson,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
+                            Container(
+                              height: size.height * 0.05,
+                              margin: EdgeInsets.only(left: 9, right: 9, top: 10),
+                              child: TextFormField(
+                                
+                                readOnly: true,
+                                controller: value.cperson,
+                                decoration: InputDecoration(
+                                   filled: true,
+                                  fillColor: P_Settings.whiteColor,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Contact Num :",
-                                  style: TextStyle(
-                                    fontSize: 16, color: Colors.grey[600]
-                                  ),
-                                )
-                              ],
+                            Container(
+                              margin: EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Contact Num :",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.grey[600]),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            height: size.height * 0.05,
-                            margin: EdgeInsets.only(left: 9, right: 9, top: 10),
-                            child: TextFormField(
-                              readOnly: true,
-                              controller: value.phone,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
+                            Container(
+                              height: size.height * 0.05,
+                              margin: EdgeInsets.only(left: 9, right: 9, top: 10),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: value.phone,
+                                decoration: InputDecoration(
+                                   filled: true,
+                                  fillColor: P_Settings.whiteColor,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Customer Info :",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[600]
-                                  ),
-                                )
-                              ],
+                            Container(
+                              margin: EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Customer Info :",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.grey[600]),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            height: size.height * 0.05,
-                            margin: EdgeInsets.only(left: 9, right: 9, top: 10),
-                            child: TextFormField(
-                              readOnly: true,
-                              controller: value.cinfo,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
+                            Container(
+                              // height: size.height * 0.05,
+                              margin: EdgeInsets.only(left: 9, right: 9, top: 10),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: value.cinfo,
+                                decoration: InputDecoration(
+                                   filled: true,
+                                  fillColor: P_Settings.whiteColor,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Landmark :",
-                                  style: TextStyle(
-                                    fontSize: 16, color: Colors.grey[600]
-                                  ),
-                                )
-                              ],
+                            Container(
+                              margin: EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Landmark :",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.grey[600]),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            height: size.height * 0.05,
-                            margin: EdgeInsets.only(left: 9, right: 9, top: 10),
-                            child: TextFormField(
-                              readOnly: true,
-                              controller: value.landmarked,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.grey), //<-- SEE HERE
+                            Container(
+                              height: size.height * 0.05,
+                              margin: EdgeInsets.only(left: 9, right: 9, top: 10),
+                              child: TextFormField(
+                  
+                                readOnly: true,
+                                controller: value.landmarked,
+                                decoration: InputDecoration(
+                                   filled: true,
+                                  fillColor: P_Settings.whiteColor,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1,
+                                        color: Colors.grey), //<-- SEE HERE
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          // Container(
-                          //   margin: EdgeInsets.only(top: 8),
-                          //   child: Row(
-                          //     children: [
-                          //       Text(
-                          //         "Priority Level",
-                          //         style: TextStyle(
-                          //           fontSize: 16,
-                          //         ),
-                          //       )
-                          //     ],
-                          //   ),
-                          // ),
-                          // Consumer<Controller>(
-                          //   builder: (context, value, child) {
-                          //     return Container(
-                          //       height: size.height * 0.05,
-                          //       margin:
-                          //           EdgeInsets.only(left: 9, right: 9, top: 10),
-                          //       decoration: BoxDecoration(
-                          //           borderRadius:
-                          //               BorderRadius.all(Radius.circular(5)),
-                          //           border: Border.all(
-                          //             color: Colors.grey,
-                          //           )),
-                          //       child: ButtonTheme(
-                          //         alignedDropdown: true,
-                          //         child: DropdownButton<String>(
-                          //           // value: selected,
-                          //           hint: Padding(
-                          //             padding: const EdgeInsets.only(left: 2.0),
-                          //             child: Text(
-                          //               value.dropSelected == null
-                          //                   ? "Select Priority level"
-                          //                   : value.dropSelected!,
-                          //               style: TextStyle(fontSize: 14),
-                          //             ),
-                          //           ),
-
-                          //           isExpanded: true,
-                          //           autofocus: false,
-                          //           underline: SizedBox(),
-                          //           elevation: 0,
-                          //           items: value.priorityList
-                          //               .map((item) => DropdownMenuItem<String>(
-                          //                   value: item.lId.toString(),
-                          //                   child: Container(
-                          //                     // width: size.width * 0.2,
-                          //                     child: Padding(
-                          //                       padding: const EdgeInsets.only(
-                          //                           left: 2.0),
-                          //                       child: Text(
-                          //                         item.level.toString(),
-                          //                         style:
-                          //                             TextStyle(fontSize: 14),
-                          //                       ),
-                          //                     ),
-                          //                   )))
-                          //               .toList(),
-                          //           onChanged: (item) {
-                          //             print("clicked");
-
-                          //             if (item != null) {
-                          //               selected = item;
-
-                          //               print("se;ected---$item");
-                          //               value.setPrioDrop(selected!);
-                          //             }
-                          //           },
-                          //         ),
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
-                        ],
+                            // Container(
+                            //   margin: EdgeInsets.only(top: 8),
+                            //   child: Row(
+                            //     children: [
+                            //       Text(
+                            //         "Priority Level",
+                            //         style: TextStyle(
+                            //           fontSize: 16,
+                            //         ),
+                            //       )
+                            //     ],
+                            //   ),
+                            // ),
+                            // Consumer<Controller>(
+                            //   builder: (context, value, child) {
+                            //     return Container(
+                            //       height: size.height * 0.05,
+                            //       margin:
+                            //           EdgeInsets.only(left: 9, right: 9, top: 10),
+                            //       decoration: BoxDecoration(
+                            //           borderRadius:
+                            //               BorderRadius.all(Radius.circular(5)),
+                            //           border: Border.all(
+                            //             color: Colors.grey,
+                            //           )),
+                            //       child: ButtonTheme(
+                            //         alignedDropdown: true,
+                            //         child: DropdownButton<String>(
+                            //           // value: selected,
+                            //           hint: Padding(
+                            //             padding: const EdgeInsets.only(left: 2.0),
+                            //             child: Text(
+                            //               value.dropSelected == null
+                            //                   ? "Select Priority level"
+                            //                   : value.dropSelected!,
+                            //               style: TextStyle(fontSize: 14),
+                            //             ),
+                            //           ),
+                  
+                            //           isExpanded: true,
+                            //           autofocus: false,
+                            //           underline: SizedBox(),
+                            //           elevation: 0,
+                            //           items: value.priorityList
+                            //               .map((item) => DropdownMenuItem<String>(
+                            //                   value: item.lId.toString(),
+                            //                   child: Container(
+                            //                     // width: size.width * 0.2,
+                            //                     child: Padding(
+                            //                       padding: const EdgeInsets.only(
+                            //                           left: 2.0),
+                            //                       child: Text(
+                            //                         item.level.toString(),
+                            //                         style:
+                            //                             TextStyle(fontSize: 14),
+                            //                       ),
+                            //                     ),
+                            //                   )))
+                            //               .toList(),
+                            //           onChanged: (item) {
+                            //             print("clicked");
+                  
+                            //             if (item != null) {
+                            //               selected = item;
+                  
+                            //               print("se;ected---$item");
+                            //               value.setPrioDrop(selected!);
+                            //             }
+                            //           },
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            // ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -429,7 +442,7 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                         Text(
                           "Product Details",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 17, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -443,47 +456,50 @@ class _EnQHistoryDetailsState extends State<EnQHistoryDetails> {
                         onTap: () {
                           // editsheet.showNewItemSheet(context, index);
                         },
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      value.enQhistoryDetail[index].productName
-                                          .toString(),
-                                      style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Icon(
-                                      Icons.delete,
-                                      size: 16,
-                                      color: Colors.red,
-                                    )
-                                  ],
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 8),
-                                  child: Row(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left:9,top: 2.0,right:9),
+                          child: Card(
+                            // color: P_Settings.fillcolor,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left:8.0,right: 8,top:14,bottom: 14),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("Qty  : "),
-                                      Text(
-                                        value.enQhistoryDetail[index].qty
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
+                                      Flexible(
+                                        child: Text(
+                                          // "sdsbdhsbdhszbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                                          value.enQhistoryDetail[index].productName
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: Colors.grey[700],
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
+                                     
                                     ],
                                   ),
-                                )
-                              ],
+                                  Container(
+                                    margin: EdgeInsets.only(top: 8),
+                                    child: Row(
+                                      children: [
+                                        Text("Qty  : "),
+                                        Text(
+                                          value.enQhistoryDetail[index].qty
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),

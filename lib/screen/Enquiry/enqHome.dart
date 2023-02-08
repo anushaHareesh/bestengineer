@@ -20,7 +20,7 @@ class EnqHome extends StatefulWidget {
 
 class _EnqHomeState extends State<EnqHome> {
   String? selected;
-  List<String> area = ["jkdsd", "djsdj"];
+  // List<String> area = ["jkdsd", "djsdj"];
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   List<Widget> drawerOpts = [];
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
@@ -40,6 +40,7 @@ class _EnqHomeState extends State<EnqHome> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromARGB(255, 250, 248, 248),
       key: _key,
       appBar: AppBar(

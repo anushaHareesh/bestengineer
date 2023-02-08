@@ -229,16 +229,14 @@ class ProductController extends ChangeNotifier {
           print("svae cart body---$body");
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
+          print("save cart response----$map");
+
           cartCount = map["cart_count"];
           notifyListeners();
           if (map["err_status"] == 0) {
-            if (event == "0" || event == "2") {
+            if (event == "0") {
               Fluttertoast.showToast(
-                msg: event == "0"
-                    ? "${prodName} Inserted Successfully..."
-                    : event == "2"
-                        ? "${prodName} deleted Successfully..."
-                        : "",
+                msg: "${prodName} Inserted Successfully...",
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 1,
@@ -267,7 +265,6 @@ class ProductController extends ChangeNotifier {
             getbagData(context, event);
           }
 
-          print("save cart response---$res--$map");
           notifyListeners();
 
           /////////////// insert into local db /////////////////////
@@ -573,10 +570,13 @@ class ProductController extends ChangeNotifier {
               enQhistoryMaster.add(item);
             }
 
-            cname.text = enQhistoryMaster[0].companyName.toString().toUpperCase();
+            cname.text =
+                enQhistoryMaster[0].companyName.toString().toUpperCase();
             phone.text = enQhistoryMaster[0].contactNum.toString();
-            landmarked.text = enQhistoryMaster[0].landmark.toString().toUpperCase();
-            cperson.text = enQhistoryMaster[0].ownerName.toString().toUpperCase();
+            landmarked.text =
+                enQhistoryMaster[0].landmark.toString().toUpperCase();
+            cperson.text =
+                enQhistoryMaster[0].ownerName.toString().toUpperCase();
             cinfo.text = enQhistoryMaster[0].custInfo.toString().toUpperCase();
 
             for (var item in hisDeta.detail!) {
@@ -634,6 +634,8 @@ class ProductController extends ChangeNotifier {
             'added_by': "1",
             'branch_id': "1",
           };
+          // isLoading = true;
+          // notifyListeners();
           print("update transaction--body----$body");
           http.Response response = await http.post(
             url,
@@ -642,6 +644,8 @@ class ProductController extends ChangeNotifier {
 
           var map = jsonDecode(response.body);
           print("update transaction------$map");
+          // isLoading = false;
+          // notifyListeners();
 
           if (map["flag"] == 0) {
             getEnqhistoryData(context, "", fdate, tdate);

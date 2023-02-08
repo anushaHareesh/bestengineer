@@ -8,6 +8,7 @@ import 'package:bestengineer/screen/Enquiry/productList.dart';
 import 'package:bestengineer/widgets/alertCommon/customerPopup.dart';
 import 'package:bestengineer/widgets/bottomsheets/newItemSheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flash/flash.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,7 @@ class _EnqDashboardState extends State<EnqDashboard>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       bottomNavigationBar: SizedBox(
           height: 50,
           child: InkWell(
@@ -128,13 +130,17 @@ class _EnqDashboardState extends State<EnqDashboard>
                       ),
                       InkWell(
                         onTap: () {
-                          Provider.of<Controller>(context, listen: false)
-                              .setSelectedCustomer(false);
-                          value.dropSelected = null;
-                          cusPopup.buildcusPopupDialog(
-                            context,
-                            size,
-                          );
+                          if (value.selected == null) {
+                            _showCustomFlash();
+                          } else {
+                            Provider.of<Controller>(context, listen: false)
+                                .setSelectedCustomer(false);
+                            value.dropSelected = null;
+                            cusPopup.buildcusPopupDialog(
+                              context,
+                              size,
+                            );
+                          }
                         },
                         child: CircleAvatar(
                           radius: 14,
@@ -387,34 +393,36 @@ class _EnqDashboardState extends State<EnqDashboard>
                             ],
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.business,
-                                size: 18,
-                                color: Colors.green,
-                              ),
-                              // Text(
-                              //   "Info",
-                              //   style: TextStyle(
-                              //       color: Colors.grey[500], fontSize: 14),
-                              // ),
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                width: size.width * 0.6,
-                                child: Text(
-                                  value.address.toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontWeight: FontWeight.w500),
+                        value.address == null || value.address!.isEmpty
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.business,
+                                      size: 18,
+                                      color: Colors.green,
+                                    ),
+                                    // Text(
+                                    //   "Info",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500], fontSize: 14),
+                                    // ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 8),
+                                      width: size.width * 0.6,
+                                      child: Text(
+                                        value.address.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Colors.grey[700],
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
                         Container(
                           margin: EdgeInsets.only(top: 5),
                           child: Row(
@@ -441,32 +449,34 @@ class _EnqDashboardState extends State<EnqDashboard>
                             ],
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.place,
-                                size: 18,
-                                color: Colors.red,
-                              ),
-                              // Text(
-                              //   "Landmark",
-                              //   style: TextStyle(
-                              //       color: Colors.grey[500], fontSize: 14),
-                              // ),
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                child: Text(
-                                  value.landmark.toString(),
-                                  style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontWeight: FontWeight.w500),
+                        value.landmark == null || value.landmark!.isEmpty
+                            ? Container()
+                            : Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.place,
+                                      size: 18,
+                                      color: Colors.red,
+                                    ),
+                                    // Text(
+                                    //   "Landmark",
+                                    //   style: TextStyle(
+                                    //       color: Colors.grey[500], fontSize: 14),
+                                    // ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 8),
+                                      child: Text(
+                                        value.landmark.toString(),
+                                        style: TextStyle(
+                                            color: Colors.grey[700],
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.all(8),
                         )
@@ -621,4 +631,35 @@ class _EnqDashboardState extends State<EnqDashboard>
   //     ),
   //   );
   // }
+
+  void _showCustomFlash({FlashBehavior style = FlashBehavior.fixed}) {
+    showFlash(
+      context: context,
+      duration: const Duration(seconds: 3),
+      persistent: true,
+      builder: (_, controller) {
+        return Flash(
+          controller: controller,
+          // backgroundColor: Colors.white,
+          // brightness: Brightness.light,
+          // barrierColor: Colors.black38,
+          barrierDismissible: true,
+          behavior: style,
+          position: FlashPosition.top,
+          backgroundGradient: LinearGradient(
+            colors: [P_Settings.loginPagetheme, P_Settings.fillcolor],
+          ),
+          child: FlashBar(
+            // title: Text('Hey User!'),
+            content: Text('Please Choose an Area',style: TextStyle(color: Colors.white,fontSize: 15),),
+            primaryAction: TextButton(
+              onPressed: () {},
+              child: Text('DISMISS',
+                          style: TextStyle(color: Colors.white)),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

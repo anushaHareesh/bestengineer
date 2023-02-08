@@ -15,7 +15,7 @@ class NewItemSheet {
 
     TextEditingController name = TextEditingController();
     TextEditingController desc = TextEditingController();
-
+    Provider.of<ProductController>(context, listen: false).qtyVal = 1;
     String oldDesc;
 
     return showModalBottomSheet<void>(
@@ -52,7 +52,7 @@ class NewItemSheet {
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 14,right: 14,bottom: 8),
+                      margin: EdgeInsets.only(left: 14, right: 14, bottom: 8),
 
                       // transform: Matrix4.translationValues(0.0, -13.0, 0.0),
                       height: size.height * 0.05,
@@ -62,8 +62,8 @@ class NewItemSheet {
                         //     value.customContainerShow ? false : true,
                         controller: name,
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           hintText: "ItemName",
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -83,7 +83,7 @@ class NewItemSheet {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 14,right: 14),
+                      margin: EdgeInsets.only(left: 14, right: 14),
                       child: TextField(
                         onChanged: (val) {
                           print("val----$val");
@@ -110,7 +110,7 @@ class NewItemSheet {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 7.0, right: 7,top: 3),
+                      padding: EdgeInsets.only(left: 7.0, right: 7, top: 3),
                       child: ListTile(
                         visualDensity:
                             VisualDensity(horizontal: 0, vertical: -3),
@@ -202,7 +202,7 @@ class NewItemSheet {
                               onPressed: () {
                                 value.addDeletebagItem(
                                     name.text,
-                                    name.text,
+                                    "0",
                                     value.qtyVal.toString(),
                                     desc.text,
                                     "0",

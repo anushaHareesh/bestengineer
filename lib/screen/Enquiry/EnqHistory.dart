@@ -167,7 +167,7 @@ class _EnQHistoryState extends State<EnQHistory> {
               Divider(),
               value.isLoading
                   ? Container(
-                      height: size.height * 0.67,
+                      height: size.height * 0.2,
                       child: SpinKitCircle(
                         color: P_Settings.loginPagetheme,
                       ),
@@ -214,25 +214,46 @@ class _EnQHistoryState extends State<EnQHistory> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            "Code   : ",
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          Flexible(
-                                            child: Container(
-                                              margin: EdgeInsets.only(left: 10),
-                                              child: Text(
+                                          // Text(
+                                          //   "Code   : ",
+                                          //   style:
+                                          //       TextStyle(color: Colors.grey),
+                                          // ),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 0),
+                                            child: Text(
+                                              "${[
                                                 value.enQhistoryList[index]
                                                     .enqCode
+                                                    .toString()
+                                              ]}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.grey[700],
+                                                  fontSize: 17),
+                                            ),
+                                          ),
+
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Added on : ",
+                                                style: TextStyle(
+                                                    color: Colors.grey),
+                                              ),
+                                              Text(
+                                                value.enQhistoryList[index]
+                                                    .addedOn
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[700],
-                                                    fontSize: 17),
+                                                    fontSize: 15),
                                               ),
-                                            ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -263,26 +284,26 @@ class _EnQHistoryState extends State<EnQHistory> {
                                         ],
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "Added on : ",
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          Text(
-                                            value.enQhistoryList[index].addedOn
-                                                .toString(),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red,
-                                                fontSize: 15),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(top: 8.0),
+                                    //   child: Row(
+                                    //     children: [
+                                    //       Text(
+                                    //         "Added on : ",
+                                    //         style:
+                                    //             TextStyle(color: Colors.grey),
+                                    //       ),
+                                    //       Text(
+                                    //         value.enQhistoryList[index].addedOn
+                                    //             .toString(),
+                                    //         style: TextStyle(
+                                    //             fontWeight: FontWeight.bold,
+                                    //              color: Colors.grey[700],
+                                    //             fontSize: 15),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
                                     Divider(),
                                     InkWell(
                                       onTap: () {
@@ -318,7 +339,12 @@ class _EnQHistoryState extends State<EnQHistory> {
                                         children: [
                                           Row(
                                             children: [
-                                              Text("Remove"),
+                                              Text(
+                                                "Remove",
+                                                style: TextStyle(
+                                                  color: Colors.red,
+                                                ),
+                                              ),
                                               Icon(
                                                 Icons.close,
                                                 color: Colors.red,
@@ -347,16 +373,26 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                                   index]
                                                               .enqId
                                                               .toString(),
+                                                          enqCode: value
+                                                              .enQhistoryList[
+                                                                  index]
+                                                              .enqCode
+                                                              .toString(),
                                                         )),
                                               );
                                             },
                                             child: Row(
                                               children: [
-                                                Text("View"),
+                                                Text(
+                                                  "View",
+                                                  style: TextStyle(
+                                                    color: Colors.green,
+                                                  ),
+                                                ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 8.0),
+                                                          left: 6.0),
                                                   child: Image.asset(
                                                     "assets/eye.png",
                                                     height: 23,

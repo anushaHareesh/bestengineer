@@ -7,6 +7,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class CustomerPopup {
+  ValueNotifier<bool> visiblename = ValueNotifier(false);
+  ValueNotifier<bool> visibleph = ValueNotifier(false);
+
   TextEditingController name = TextEditingController();
   TextEditingController adress = TextEditingController();
   TextEditingController phone = TextEditingController();
@@ -24,7 +27,7 @@ class CustomerPopup {
     name.clear();
     adress.clear();
     phone.clear();
-    landmark.clear;
+    landmark.clear();
     contact_person.clear();
     return showDialog(
         useSafeArea: true,
@@ -133,11 +136,15 @@ class CustomerPopup {
                                 // Provider.of<Controller>(context, listen: false)
                                 //     .customerControllerSale = fieldText;
                                 return Container(
-                                  height: size.height * 0.05,
+                                  // height: size.height * 0.05,
                                   child: TextFormField(
                                     // validator: (text) {
                                     //   if (text == null || text.isEmpty) {
-                                    //     return 'Please Enter Customer Name';
+                                    //     visible.value = true;
+                                    //     return visible.value.toString();
+                                    //     // return 'Please Enter Phone Number';
+                                    //   } else {
+                                    //     visible.value = false;
                                     //   }
                                     //   return null;
                                     // },
@@ -145,19 +152,21 @@ class CustomerPopup {
                                     //     bottom: topInsets + size.height * 0.4),
                                     onChanged: (value) {
                                       name.text = fieldText.text;
+                                      visiblename.value = false;
+
                                       Provider.of<Controller>(context,
                                               listen: false)
                                           .setSelectedCustomer(false);
                                     },
                                     // scrollPadding: EdgeInsets.only(
                                     //     top: 500,),
-                                    maxLines: 1,
+                                    maxLines: null,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       fillColor: Colors.white54,
                                       filled: true,
                                       contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 8),
+                                          horizontal: 0, vertical: 14),
                                       prefixIcon: Icon(Icons.person),
                                       hintText: 'Customer',
                                       hintStyle: TextStyle(fontSize: 14),
@@ -346,26 +355,51 @@ class CustomerPopup {
                             //     ? Container()
                             //     : value.newCustomer
                             //         ?
-
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ValueListenableBuilder(
+                                      valueListenable: visiblename,
+                                      builder: (BuildContext context, bool v,
+                                          Widget? child) {
+                                        return Visibility(
+                                          visible: v,
+                                          child: Text(
+                                            "Please choose a  Customer",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        );
+                                      }),
+                                ],
+                              ),
+                            ),
                             Column(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
-                                    // transform:
-                                    //     Matrix4.translationValues(0.0, -19.0, 0.0),
-                                    height: size.height * 0.05,
+                                    // margin:
+                                    //     EdgeInsets.only(left: 6, right: 6),
                                     child: TextField(
-                                      style: TextStyle(color: Colors.grey[800]),
-                                      // readOnly:
-                                      //     value.customContainerShow ? false : true,
                                       controller: adress,
+                                      onChanged: (val) {
+                                        print("val----$val");
+                                        // if (val != oldDesc) {
+                                        //   // Provider.of<Controller>(context,
+                                        //   //         listen: false)
+                                        //   //     .setaddNewItem(true);
+                                        // }
+                                      },
+                                      style: TextStyle(color: Colors.grey[800]),
+                                      // controller: value.desc[index],
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         fillColor: Colors.white54,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 8),
+                                            horizontal: 0, vertical: 14),
                                         prefixIcon: Icon(Icons.info),
                                         hintText: "Customer Info",
                                         hintStyle: TextStyle(fontSize: 14),
@@ -374,13 +408,38 @@ class CustomerPopup {
                                       maxLines: null,
                                     ),
                                   ),
+                                  //  Container(
+                                  //   // transform:
+                                  //   //     Matrix4.translationValues(0.0, -19.0, 0.0),
+                                  //   // height: size.height * 0.05,
+                                  //   child: TextField(
+                                  //     style: TextStyle(color: Colors.grey[800]),
+                                  //     // readOnly:
+                                  //     //     value.customContainerShow ? false : true,
+                                  //     controller: adress,
+                                  //     decoration: InputDecoration(
+                                  //       border: InputBorder.none,
+                                  //       fillColor: Colors.white54,
+                                  //       filled: true,
+                                  //       contentPadding: EdgeInsets.symmetric(
+                                  //           horizontal: 0, vertical: 8),
+                                  //       prefixIcon: Icon(Icons.info),
+                                  //       hintText: "Customer Info",
+                                  //       hintStyle: TextStyle(fontSize: 14),
+                                  //     ),
+                                  //     keyboardType: TextInputType.multiline,
+                                  //     maxLines: null,
+
+                                  //     expands: true,
+                                  //   ),
+                                  // ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
                                     // transform:
                                     //     Matrix4.translationValues(0.0, -13.0, 0.0),
-                                    height: size.height * 0.05,
+                                    // height: size.height * 0.05,
 
                                     child: TextField(
                                       controller: landmark,
@@ -390,7 +449,7 @@ class CustomerPopup {
                                         fillColor: Colors.white54,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 8),
+                                            horizontal: 0, vertical: 14),
                                         prefixIcon: Icon(Icons.place_outlined),
                                         hintText: "Landmark",
                                         hintStyle: TextStyle(fontSize: 14),
@@ -404,7 +463,7 @@ class CustomerPopup {
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
                                     // transform: Matrix4.translationValues(0.0, 0, 0.0),
-                                    height: size.height * 0.05,
+                                    // height: size.height * 0.05,
                                     child: TextField(
                                       controller: contact_person,
                                       style: TextStyle(color: Colors.grey[800]),
@@ -413,7 +472,7 @@ class CustomerPopup {
                                         fillColor: Colors.white54,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 8),
+                                            horizontal: 0, vertical: 14),
                                         prefixIcon: Icon(Icons.person),
                                         hintText: "Contact Person",
                                         hintStyle: TextStyle(fontSize: 14),
@@ -427,14 +486,11 @@ class CustomerPopup {
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
                                     // transform: Matrix4.translationValues(0.0, 8, 0.0),
-                                    height: size.height * 0.05,
+                                    // height: size.height * 0.05,
                                     child: TextFormField(
-                                      // validator: (text) {
-                                      //   if (text == null || text.isEmpty) {
-                                      //     return 'Please Enter Phone Number';
-                                      //   }
-                                      //   return null;
-                                      // },
+                                      onChanged: (va) {
+                                        visibleph.value = false;
+                                      },
                                       controller: phone,
                                       style: TextStyle(color: Colors.grey[800]),
                                       decoration: InputDecoration(
@@ -444,17 +500,38 @@ class CustomerPopup {
                                           color: Colors.red,
                                         )),
                                         border: InputBorder.none,
-                                        hintText: "Phone Number",
+                                        hintText: "Contact Number",
                                         hintStyle: TextStyle(fontSize: 14),
                                         fillColor: Colors.white54,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 8),
+                                            horizontal: 0, vertical: 14),
                                         prefixIcon: Icon(Icons.phone),
                                       ),
                                       keyboardType: TextInputType.number,
-                                     
+                                      maxLines: null,
                                     ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      ValueListenableBuilder(
+                                          valueListenable: visibleph,
+                                          builder: (BuildContext context,
+                                              bool v, Widget? child) {
+                                            return Visibility(
+                                              visible: v,
+                                              child: Text(
+                                                "Please Enter Contact Number",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            );
+                                          }),
+                                    ],
                                   ),
                                 ),
                                 Padding(
@@ -533,8 +610,15 @@ class CustomerPopup {
                                             primary: P_Settings.loginPagetheme),
                                         onPressed: value.selectedCustomer
                                             ? () {
-                                                if (_formKey.currentState!
-                                                    .validate()) {
+                                                if (name.text == null ||
+                                                    name.text.isEmpty) {
+                                                  visiblename.value = true;
+                                                } else if (phone.text == null ||
+                                                    phone.text.isEmpty) {
+                                                  visibleph.value = true;
+                                                } else {
+                                                  visibleph.value = false;
+                                                  visiblename.value = false;
                                                   Provider.of<ProductController>(
                                                           context,
                                                           listen: false)
@@ -584,8 +668,17 @@ class CustomerPopup {
                                             primary: Colors.green),
                                         onPressed: () {
                                           print("name.text----${name.text}");
-                                          if (_formKey.currentState!
-                                              .validate()) {
+                                          if (name.text == null ||
+                                              name.text.isEmpty) {
+                                            visiblename.value = true;
+                                          } else if (phone.text == null ||
+                                              phone.text.isEmpty) {
+                                            visibleph.value = true;
+                                          } else {
+                                            visibleph.value = false;
+                                            visiblename.value = false;
+
+                                            print("validate-----");
                                             Provider.of<ProductController>(
                                                     context,
                                                     listen: false)
