@@ -385,7 +385,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                   child: Row(
                                                     children: [
                                                       Text(
-                                                        "Make Quotation",
+                                                        "[Make Quotation]",
                                                         style: TextStyle(
                                                             color: P_Settings
                                                                 .loginPagetheme,

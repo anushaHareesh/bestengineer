@@ -38,7 +38,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.grey[200],
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
@@ -360,7 +360,6 @@ class _DirectQuotationState extends State<DirectQuotation> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              
                               value.rawCalculation(
                                   double.parse(value.rateEdit[index].text),
                                   int.parse(value.quotqty[index].text),
@@ -415,7 +414,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                             margin: EdgeInsets.only(top: 8),
                                             child: Row(
                                               children: [
-                                                Text("Rate  : "),
+                                                Text("Rate    : "),
                                                 Text(
                                                   value.fromApi
                                                       ? '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}'
@@ -436,7 +435,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                             margin: EdgeInsets.only(top: 8),
                                             child: Row(
                                               children: [
-                                                Text("Discount  : "),
+                                                Text("Discount  :       "),
                                                 Text(
                                                   value.disc_amt.toString(),
                                                   style: TextStyle(
@@ -458,7 +457,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                             margin: EdgeInsets.only(top: 8),
                                             child: Row(
                                               children: [
-                                                Text("Qty  : "),
+                                                Text("Qty      : "),
                                                 Text(
                                                   value.quotProdItem[index]
                                                           ["qty"]
@@ -476,9 +475,9 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                             margin: EdgeInsets.only(top: 8),
                                             child: Row(
                                               children: [
-                                                Text("Tax  : "),
+                                                Text("Tax  :   "),
                                                 Text(
-                                                  value.tax.toString(),
+                                                  value.tax.toStringAsFixed(2),
                                                   style: TextStyle(
                                                       // color: Colors.grey,
                                                       fontSize: 17,
