@@ -7,6 +7,7 @@ import 'package:bestengineer/components/networkConnectivity.dart';
 import 'package:bestengineer/model/loginModel.dart';
 import 'package:bestengineer/model/registrationModel.dart';
 import 'package:bestengineer/model/staffDetailsModel.dart';
+import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 
 import 'package:bestengineer/services/dbHelper.dart';
@@ -73,7 +74,7 @@ class RegistrationController extends ChangeNotifier {
 
           if (sof == "1") {
             print("apptype----$appType");
-            if (appType == 'OA') {
+            if (appType == 'BE') {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               /////////////// insert into local db /////////////////////
               late CD dataDetails;
@@ -177,10 +178,10 @@ class RegistrationController extends ChangeNotifier {
         isLoginLoading = false;
         notifyListeners();
 
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => MainDashboard()),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EnqHome()),
+        );
       }
 
       // print("stafff-------${loginModel.staffName}");

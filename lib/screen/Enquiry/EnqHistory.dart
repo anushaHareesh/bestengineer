@@ -1,7 +1,9 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/components/dateFind.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/screen/Enquiry/enqHistDetails.dart';
+import 'package:bestengineer/screen/Quotation/directQuotation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -352,6 +354,49 @@ class _EnQHistoryState extends State<EnQHistory> {
                                               )
                                             ],
                                           ),
+                                          value.enQhistoryList[index]
+                                                      .verify_status ==
+                                                  "0"
+                                              ? TextButton(
+                                                  onPressed: () {
+                                                    Provider.of<QuotationController>(
+                                                            context,
+                                                            listen: false)
+                                                        .getQuotationFromEnqList(
+                                                            context,
+                                                            value
+                                                                .enQhistoryList[
+                                                                    index]
+                                                                .enqId
+                                                                .toString());
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DirectQuotation(
+                                                                enqcode: value
+                                                                    .enQhistoryList[
+                                                                        index]
+                                                                    .enqCode
+                                                                    .toString(),
+                                                              )),
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Make Quotation",
+                                                        style: TextStyle(
+                                                            color: P_Settings
+                                                                .loginPagetheme,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              : Container(),
                                           InkWell(
                                             onTap: () {
                                               Provider.of<ProductController>(

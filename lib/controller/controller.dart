@@ -351,8 +351,8 @@ class Controller extends ChangeNotifier {
           notifyListeners();
           Uri url = Uri.parse("$urlgolabl/save_temp_cust.php");
           Map body = {
-            'staff_id': "1",
-            'branch_id': "1",
+            'staff_id': user_id,
+            'branch_id': branch_id,
             'cust_id': cust_id,
             'company_name': comName,
             "owner_name": owner_name,
@@ -389,10 +389,13 @@ class Controller extends ChangeNotifier {
     BuildContext context,
   ) {
     NetConnection.networkConnection(context).then((value) async {
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
       if (value == true) {
         try {
           Uri url = Uri.parse("$urlgolabl/area_list.php");
-          Map body = {"branch_id": "1"};
+          Map body = {"branch_id": branch_id};
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
           AreaModel regModel = AreaModel.fromJson(map);
@@ -463,8 +466,11 @@ class Controller extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+           SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
           Uri url = Uri.parse("$urlgolabl/priority_list.php");
-          Map body = {"branch_id": "1"};
+          Map body = {"branch_id": branch_id};
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
           PriorityListModel prioModel = PriorityListModel.fromJson(map);
@@ -473,6 +479,33 @@ class Controller extends ChangeNotifier {
           for (var item in prioModel.priorityLevel!) {
             priorityList.add(item);
           }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+/////////////////////////////////////////////////////////
+  gePdfList(BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          Uri url = Uri.parse("$urlgolabl/test_print.php");
+          // Map body = {"branch_id": "1"};
+          http.Response response = await http.post(
+            url,
+          );
+          var map = jsonDecode(response.body);
+          // PriorityListModel prioModel = PriorityListModel.fromJson(map);
+          // print("priority_list-----$map");
+          // priorityList.clear();
+          // for (var item in prioModel.priorityLevel!) {
+          //   priorityList.add(item);
+          // }
           notifyListeners();
         } catch (e) {
           print(e);

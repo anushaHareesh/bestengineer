@@ -3,11 +3,13 @@ import 'package:bestengineer/chatApp/chatLogin.dart';
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
 
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
+import 'package:bestengineer/screen/Enquiry/urltest.dart';
 
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:bestengineer/screen/registration%20and%20login/registration.dart';
@@ -75,6 +77,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => Controller()),
       ChangeNotifierProvider(create: (_) => RegistrationController()),
       ChangeNotifierProvider(create: (_) => ProductController()),
+      ChangeNotifierProvider(create: (_) => QuotationController()),
     ],
     child: MyApp(),
   ));

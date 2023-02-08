@@ -61,8 +61,11 @@ class ProductController extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
           Uri url = Uri.parse("$urlgolabl/product_list.php");
-          Map body = {"branch_id": "1"};
+          Map body = {"branch_id": branch_id};
           isProdLoading = true;
           notifyListeners();
           http.Response response = await http.post(url, body: body);
@@ -215,11 +218,12 @@ class ProductController extends ChangeNotifier {
       if (value == true) {
         try {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          branch_id = prefs.getString("branch_id");
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
           Uri url = Uri.parse("$urlgolabl/save_cart.php");
           Map body = {
-            'staff_id': "1",
-            'branch_id': "1",
+            'staff_id': user_id,
+            'branch_id': branch_id,
             'item_id': itemId,
             'qty': qty,
             "description": description,
@@ -290,8 +294,8 @@ class ProductController extends ChangeNotifier {
           notifyListeners();
           Uri url = Uri.parse("$urlgolabl/cart_list.php");
           Map body = {
-            'staff_id': "1",
-            'branch_id': "1",
+            'staff_id': user_id,
+            'branch_id': branch_id,
           };
           print("cart body-----$body");
           // if (event == "0") {
@@ -336,11 +340,11 @@ class ProductController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////
-  setCustomerName(String custome_id, String name, String address1, String phone,
-      String owner_name1, String landm, String? prio) {
+  setCustomerName(String custome_id2, String name, String address1,
+      String phone, String owner_name1, String landm, String? prio) {
     print(
-        "cus  ---$custome_id-----$name---$address1---$phone----$owner_name1---$landm-$prio");
-    customer_id = custome_id;
+        "cus  ---$custome_id2-----$name---$address1---$phone----$owner_name1---$landm-$prio");
+    customer_id = custome_id2;
     customerName = name;
     address = address1;
     customerPhone = phone;
@@ -394,8 +398,8 @@ class ProductController extends ChangeNotifier {
           "hidden_status": "0",
           "landmark": landmark,
           "priority_level": priority_level,
-          "added_by": "1",
-          "branch_id": "1",
+          "added_by": user_id,
+          "branch_id": branch_id,
           "details": jsonResult
         };
 
@@ -477,15 +481,15 @@ class ProductController extends ChangeNotifier {
       if (value == true) {
         try {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-
+          String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
           print("history------------------$user_id-----");
           Uri url = Uri.parse("$urlgolabl/enquiry_list.php");
           Map body = {
-            'staff_id': "1",
-            "branch_id": "1",
-            'from_date': fromDate,
-            'till_date': tillDate,
+            'staff_id': user_id,
+            "branch_id": branch_id,
+            'from_date': "07-02-2023",
+            'till_date': "08-02-2023",
           };
           print("history body-----$body");
           if (action != "delete") {
@@ -631,8 +635,8 @@ class ProductController extends ChangeNotifier {
           Map body = {
             'enq_id': enqId,
             'event': event,
-            'added_by': "1",
-            'branch_id': "1",
+            'added_by': user_id,
+            'branch_id': branch_id,
           };
           // isLoading = true;
           // notifyListeners();

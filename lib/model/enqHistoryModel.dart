@@ -28,6 +28,7 @@ class EnqList {
   String? companyName;
   String? custId;
   String? addedOn;
+  String? verify_status;
 
   EnqList(
       {this.enqId,
@@ -35,7 +36,7 @@ class EnqList {
       this.ownerName,
       this.companyName,
       this.custId,
-      this.addedOn});
+      this.addedOn,this.verify_status});
 
   EnqList.fromJson(Map<String, dynamic> json) {
     enqId = json['enq_id'];
@@ -44,6 +45,8 @@ class EnqList {
     companyName = json['company_name'];
     custId = json['cust_id'];
     addedOn = json['added_on'];
+    verify_status = json['verify_status'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +57,8 @@ class EnqList {
     data['company_name'] = this.companyName;
     data['cust_id'] = this.custId;
     data['added_on'] = this.addedOn;
+    data['verify_status'] = this.verify_status;
+
     return data;
   }
 }
