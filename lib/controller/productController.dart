@@ -25,6 +25,8 @@ class ProductController extends ChangeNotifier {
   String? owner_name;
   String? landmark;
   String? customer_id;
+  String? te_id;
+
   bool isLoading = false;
   bool isDetailLoading = false;
 
@@ -66,6 +68,8 @@ class ProductController extends ChangeNotifier {
           String? user_id = prefs.getString("user_id");
           Uri url = Uri.parse("$urlgolabl/product_list.php");
           Map body = {"branch_id": branch_id};
+          print("pro body----$body");
+
           isProdLoading = true;
           notifyListeners();
           http.Response response = await http.post(url, body: body);
@@ -212,6 +216,7 @@ class ProductController extends ChangeNotifier {
     String? description,
     String event,
     String cart_id,
+    String te_id,
     BuildContext context,
   ) async {
     NetConnection.networkConnection(context).then((value) async {
@@ -228,7 +233,8 @@ class ProductController extends ChangeNotifier {
             'qty': qty,
             "description": description,
             'event': event,
-            'cart_id': cart_id
+            'cart_id': cart_id,
+            "te_id": te_id
           };
           print("svae cart body---$body");
           http.Response response = await http.post(url, body: body);
@@ -254,7 +260,7 @@ class ProductController extends ChangeNotifier {
           } else {
             if (event == "0") {
               Fluttertoast.showToast(
-                  msg: "Something went wrong...",
+                  msg: "Item already in cart  ...",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
@@ -266,7 +272,7 @@ class ProductController extends ChangeNotifier {
           }
 
           if (event == "2") {
-            getbagData(context, event);
+            getbagData(context, event, te_id);
           }
 
           notifyListeners();
@@ -281,8 +287,8 @@ class ProductController extends ChangeNotifier {
     });
   }
 
-  ///////////////////////////////////////////
-  getbagData(BuildContext context, String event) async {
+  //////////////////////////////////////////////////////////////////
+  getbagData(BuildContext context, String event, String te_id) async {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -296,6 +302,7 @@ class ProductController extends ChangeNotifier {
           Map body = {
             'staff_id': user_id,
             'branch_id': branch_id,
+            "te_id": te_id
           };
           print("cart body-----$body");
           // if (event == "0") {
@@ -340,8 +347,15 @@ class ProductController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////
-  setCustomerName(String custome_id2, String name, String address1,
-      String phone, String owner_name1, String landm, String? prio) {
+  setCustomerName(
+    String custome_id2,
+    String name,
+    String address1,
+    String phone,
+    String owner_name1,
+    String landm,
+    String? prio,
+  ) {
     print(
         "cus  ---$custome_id2-----$name---$address1---$phone----$owner_name1---$landm-$prio");
     customer_id = custome_id2;
@@ -351,7 +365,7 @@ class ProductController extends ChangeNotifier {
     owner_name = owner_name1;
     landmark = landm;
     priority_level = prio;
-
+    // getbagData(context, "0", te_id);
     print(
         "customer data----$customer_id-----$customerName---$address---$customerPhone----$owner_name---$landmark-$prio");
     notifyListeners();
@@ -488,8 +502,8 @@ class ProductController extends ChangeNotifier {
           Map body = {
             'staff_id': user_id,
             "branch_id": branch_id,
-            'from_date': "07-02-2023",
-            'till_date': "08-02-2023",
+            'from_date': fromDate,
+            'till_date': tillDate,
           };
           print("history body-----$body");
           if (action != "delete") {

@@ -29,8 +29,8 @@ class _EnqHomeState extends State<EnqHome> {
     // TODO: implement initState
     super.initState();
     Provider.of<Controller>(context, listen: false).getArea(context);
-    Provider.of<ProductController>(context, listen: false)
-        .getbagData(context, "0");
+    // Provider.of<ProductController>(context, listen: false).getbagData(context,
+    //     "0", Provider.of<Controller>(context, listen: false).dupcustomer_id!);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);

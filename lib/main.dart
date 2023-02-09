@@ -5,6 +5,8 @@ import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
+import 'package:bestengineer/pdftest/pdfhome.dart';
+import 'package:bestengineer/pdftest/tab.dart';
 
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 
@@ -149,7 +151,7 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ),
         ),
-        home: EnqHome()
+        home: PdfHome()
 
         //  AnimatedSplashScreen(
         //   backgroundColor: Colors.black,

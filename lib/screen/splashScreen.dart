@@ -1,4 +1,5 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:bestengineer/screen/registration%20and%20login/registration.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   // return DashboardPage();
                   if (st_uname != null && st_pwd != null) {
                     // return MainDashboard();
-                    return LoginPage();
+                    return EnqHome();
                   } else {
                     return LoginPage();
                   }

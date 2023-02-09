@@ -25,7 +25,6 @@ class _EnqCartState extends State<EnqCart> {
   ItemSlectionBottomsheet itemsheet = ItemSlectionBottomsheet();
   ItemSelectionAlert popup = ItemSelectionAlert();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
-  
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +111,8 @@ class _EnqCartState extends State<EnqCart> {
                                                     _keyLoader, 1);
                                                 value.saveCartDetails(
                                                     _scaffoldKey
-                                                        .currentContext!,"0");
+                                                        .currentContext!,
+                                                    "0");
 
                                                 Provider.of<Controller>(context,
                                                         listen: false)
@@ -263,6 +263,11 @@ class _EnqCartState extends State<EnqCart> {
                                                     "1",
                                                     value.bagList[index]
                                                         ["cart_id"],
+                                                    Provider.of<Controller>(
+                                                            context,
+                                                            listen: false)
+                                                        .dupcustomer_id
+                                                        .toString(),
                                                     context);
                                           },
                                           child: Container(
@@ -319,6 +324,11 @@ class _EnqCartState extends State<EnqCart> {
                                                     "1",
                                                     value.bagList[index]
                                                         ["cart_id"],
+                                                    Provider.of<Controller>(
+                                                            context,
+                                                            listen: false)
+                                                        .dupcustomer_id
+                                                        .toString(),
                                                     context);
                                           },
                                           child: Container(
@@ -371,7 +381,11 @@ class _EnqCartState extends State<EnqCart> {
                                             .toString(),
                                         value.bagList[index]["item_id"]
                                             .toString(),
-                                        index,"cart","","","");
+                                        index,
+                                        "cart",
+                                        "",
+                                        "",
+                                        "");
                                   },
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,

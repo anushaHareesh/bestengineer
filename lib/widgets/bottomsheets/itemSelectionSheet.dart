@@ -231,7 +231,7 @@ class ItemSlectionBottomsheet {
                                     value.qty[index].text,
                                     value.desc[index].text,
                                     "0",
-                                    "0",
+                                    "0",Provider.of<Controller>(context, listen: false).dupcustomer_id.toString(),
                                     context);
                                 FocusManager.instance.primaryFocus!.unfocus();
                                 print("bhdb----${value.res}");

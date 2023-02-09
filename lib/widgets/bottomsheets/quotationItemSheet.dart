@@ -107,49 +107,60 @@ class QuotationItemSheet {
                           ),
                           Spacer(),
                           Container(
-                            width: size.width * 0.1,
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              onSubmitted: (val) {
-                                value.fromApi = false;
-                                value.rawCalculation(
-                                    double.parse(value.rateEdit[index].text),
-                                    int.parse(value.quotqty[index].text),
-                                    double.parse(
-                                        value.discount_prercent[index].text),
-                                    double.parse(
-                                        value.discount_amount[index].text),
-                                    double.parse(map["tax_perc"]),
-                                    0.0,
-                                    "0",
-                                    0,
-                                    index,
-                                    true,
-                                    "rate");
-                              },
-                              textAlign: TextAlign.right,
-                              onTap: () {
-                                value.rateEdit[index].selection = TextSelection(
-                                    baseOffset: 0,
-                                    extentOffset: value
-                                        .rateEdit[index].value.text.length);
-                              },
-                              controller: value.rateEdit[index],
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(0.0),
-                                isDense: true,
-                                // border: InputBorder.none,
-                              ),
-                              minLines: 1,
-                              maxLines: 1,
+                            width: size.width * 0.15,
+                            child: Row(
+                              children: [
+                                // Text("\u{20B9}"),
+                                Expanded(
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    onSubmitted: (val) {
+                                      value.fromApi = false;
+                                      value.rawCalculation(
+                                          double.parse(
+                                              value.rateEdit[index].text),
+                                          int.parse(value.quotqty[index].text),
+                                          double.parse(value
+                                              .discount_prercent[index].text),
+                                          double.parse(value
+                                              .discount_amount[index].text),
+                                          double.parse(map["tax_perc"]),
+                                          0.0,
+                                          "0",
+                                          0,
+                                          index,
+                                          true,
+                                          "rate");
+                                    },
+                                    textAlign: TextAlign.right,
+                                    onTap: () {
+                                      value.rateEdit[index].selection =
+                                          TextSelection(
+                                              baseOffset: 0,
+                                              extentOffset: value
+                                                  .rateEdit[index]
+                                                  .value
+                                                  .text
+                                                  .length);
+                                    },
+                                    controller: value.rateEdit[index],
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(0.0),
+                                      isDense: true,
+                                      // border: InputBorder.none,
+                                    ),
+                                    minLines: 1,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
                             ),
                           )
                         ],
                       ),
                     ),
                     ListTile(
-                      // visualDensity:
-                      //     VisualDensity(horizontal: 0, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                       title: Row(
                         children: [
                           Text(
@@ -268,7 +279,7 @@ class QuotationItemSheet {
                     // Padding(padding: EdgeInsets.all(8)),
 
                     ListTile(
-                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -3),
                       title: Row(
                         children: [
                           Text(
@@ -288,7 +299,7 @@ class QuotationItemSheet {
                       ),
                     ),
                     ListTile(
-                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -3),
                       title: Row(
                         children: [
                           Text(
@@ -308,7 +319,7 @@ class QuotationItemSheet {
                       ),
                     ),
                     ListTile(
-                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -3),
                       title: Row(
                         children: [
                           Text(
@@ -366,7 +377,7 @@ class QuotationItemSheet {
                       ),
                     ),
                     ListTile(
-                      visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -3),
                       title: Row(
                         children: [
                           Text(

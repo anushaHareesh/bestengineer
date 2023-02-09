@@ -206,7 +206,7 @@ class NewItemSheet {
                                     value.qtyVal.toString(),
                                     desc.text,
                                     "0",
-                                    "0",
+                                    "0",Provider.of<Controller>(context, listen: false).dupcustomer_id.toString(),
                                     context);
                                 Navigator.pop(context);
                               },

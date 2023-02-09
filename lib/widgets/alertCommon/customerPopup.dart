@@ -619,6 +619,17 @@ class CustomerPopup {
                                                 } else {
                                                   visibleph.value = false;
                                                   visiblename.value = false;
+                                                  
+                                                  value.saveCustomerInfo(
+                                                    context,
+                                                    custId.toString(),
+                                                    name.text,
+                                                    contact_person.text,
+                                                    phone.text,
+                                                    adress.text,
+                                                    landmark.text,
+                                                  );
+
                                                   Provider.of<ProductController>(
                                                           context,
                                                           listen: false)
@@ -631,20 +642,19 @@ class CustomerPopup {
                                                     landmark.text,
                                                     value.prioId.toString(),
                                                   );
-                                                  value.saveCustomerInfo(
-                                                    context,
-                                                    custId.toString(),
-                                                    name.text,
-                                                    contact_person.text,
-                                                    phone.text,
-                                                    adress.text,
-                                                    landmark.text,
-                                                  );
                                                   name.clear();
                                                   adress.clear();
                                                   contact_person.clear();
                                                   phone.clear();
                                                   landmark.clear();
+                                                  // Provider.of<ProductController>(
+                                                  //         context,
+                                                  //         listen: false)
+                                                  //     .getbagData(
+                                                  //         context,
+                                                  //         "0",
+                                                  //         value
+                                                  //             .dupcustomer_id!);
                                                   Navigator.pop(context);
                                                   FocusManager
                                                       .instance.primaryFocus!
@@ -679,17 +689,7 @@ class CustomerPopup {
                                             visiblename.value = false;
 
                                             print("validate-----");
-                                            Provider.of<ProductController>(
-                                                    context,
-                                                    listen: false)
-                                                .setCustomerName(
-                                                    "0",
-                                                    name.text,
-                                                    adress.text,
-                                                    phone.text,
-                                                    contact_person.text,
-                                                    landmark.text,
-                                                    value.prioId.toString());
+
                                             value.saveCustomerInfo(
                                               context,
                                               "0",
@@ -703,6 +703,25 @@ class CustomerPopup {
                                             adress.clear();
                                             phone.clear();
                                             landmark.clear();
+                                            Provider.of<ProductController>(
+                                                    context,
+                                                    listen: false)
+                                                .setCustomerName(
+                                              "0",
+                                              name.text,
+                                              adress.text,
+                                              phone.text,
+                                              contact_person.text,
+                                              landmark.text,
+                                              value.prioId.toString(),
+                                              // context,
+                                              //         value.dupcustomer_id!);
+                                              // Provider.of<ProductController>(
+                                              //         context,
+                                              //         listen: false)
+                                              //     .getbagData(context, "0",
+                                              // value.dupcustomer_id!
+                                            );
                                             FocusManager.instance.primaryFocus!
                                                 .unfocus();
                                             Navigator.pop(context);

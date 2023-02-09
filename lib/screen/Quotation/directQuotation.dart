@@ -416,17 +416,12 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Rate    : "),
                                                 Text(
-                                                  value.fromApi
-                                                      ? '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}'
-                                                      : '\u{20B9}${value.rateEdit[index].text.toString()}',
-                                                  style: GoogleFonts.aBeeZee(
-                                                    textStyle: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText2,
-                                                    fontSize: 17,
-                                                    // fontWeight: FontWeight.bold,
-                                                    // color: P_Settings.loginPagetheme,
-                                                  ),
+                                                  '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}',
+                                                  style: TextStyle(
+                                                      // color: Colors.grey,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w300),
                                                 ),
                                               ],
                                             ),
@@ -437,12 +432,12 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Discount  :       "),
                                                 Text(
-                                                  value.disc_amt.toString(),
+                                                  "\u{20B9} ${value.disc_amt.toString()}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 17,
+                                                      fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w300),
                                                 ),
                                               ],
                                             ),
@@ -464,9 +459,9 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                       .toString(),
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 17,
+                                                      fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w300),
                                                 ),
                                               ],
                                             ),
@@ -477,12 +472,12 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Tax  :   "),
                                                 Text(
-                                                  value.tax.toStringAsFixed(2),
+                                                  "\u{20B9} ${value.tax.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 17,
+                                                      fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w300),
                                                 ),
                                               ],
                                             ),
@@ -499,12 +494,12 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Gross  : "),
                                                 Text(
-                                                  value.gross.toString(),
+                                                  "\u{20B9} ${value.gross.toString()}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 17,
+                                                      fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.w300),
                                                 ),
                                               ],
                                             ),
@@ -534,9 +529,17 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
-                                          Text("Total Price : "),
+                                          Text("Total Price : ",
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold)),
                                           Text(
-                                              value.net_amt.toStringAsFixed(2)),
+                                            "\u{20B9} ${value.net_amt.toStringAsFixed(2)}",
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ],
                                       )
                                     ],

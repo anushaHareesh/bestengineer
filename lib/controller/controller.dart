@@ -35,6 +35,8 @@ class Controller extends ChangeNotifier {
   String? landmark;
 
   String? customer_id;
+  String? dupcustomer_id;
+
   List<Map<String, dynamic>> enqDataList = [];
   // List<Map<String, dynamic>> productList = [];
   // List<Map<String, dynamic>> customerList = [];
@@ -366,6 +368,7 @@ class Controller extends ChangeNotifier {
           var map = jsonDecode(response.body);
 
           print("customerRespo----$map");
+          dupcustomer_id= map[0]["te_id"];
           customer_id = map[0]["cust_id"];
           customerName = map[0]["company_name"];
           owner_name = map[0]["owner_name"];
@@ -373,6 +376,7 @@ class Controller extends ChangeNotifier {
           landmark = map[0]["landmark"];
           address = map[0]["cust_info"];
           notifyListeners();
+          
           isSavecustomer = false;
           notifyListeners();
         } catch (e) {

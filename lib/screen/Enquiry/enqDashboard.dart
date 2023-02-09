@@ -59,7 +59,11 @@ class _EnqDashboardState extends State<EnqDashboard>
                 snackbar.showSnackbar(context, "Please Choose a Customer", "");
               } else {
                 Provider.of<ProductController>(context, listen: false)
-                    .getbagData(context, "0");
+                    .getbagData(
+                        context,
+                        "0",
+                        Provider.of<Controller>(context, listen: false)
+                            .dupcustomer_id!);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EnqCart()),
@@ -90,16 +94,21 @@ class _EnqDashboardState extends State<EnqDashboard>
                               badgeColor: Colors.red),
                           position:
                               badges.BadgePosition.topEnd(top: -10, end: -22),
-                          badgeContent:
-                              value.isCartLoading || value.customer_id == null
-                                  ? SpinKitChasingDots(
-                                      color: P_Settings.loginPagetheme,
-                                      size: 8,
-                                    )
-                                  : Text(
-                                      value.cartCount.toString(),
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                          badgeContent: value.isCartLoading ||
+                                  value.customer_id == null ||
+                                  value.cartCount == null ||
+                                  Provider.of<Controller>(context,
+                                              listen: false)
+                                          .dupcustomer_id ==
+                                      null
+                              ? SpinKitChasingDots(
+                                  color: P_Settings.loginPagetheme,
+                                  size: 8,
+                                )
+                              : Text(
+                                  value.cartCount.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
                           child: Icon(
                             Icons.shopping_cart,
                             color: Colors.white,
@@ -351,9 +360,167 @@ class _EnqDashboardState extends State<EnqDashboard>
     );
   }
 
+  //////////////////////////////////////////////////////////////////////
+  // Widget customerData(Size size) {
+  //   return Consumer<Controller>(
+  //     builder: (context, value, child) {
+  //       Provider.of<ProductController>(context, listen: false)
+  //           .getbagData(context, "0", value.dupcustomer_id!);
+  //       return Card(
+  //         // margin: EdgeInsets.only(top: 10, right: 16),
+  //         child: Padding(
+  //           padding: const EdgeInsets.only(top: 8.0, bottom: 8),
+  //           child: ListTile(
+  //             title: Row(
+  //               children: [
+  //                 Column(
+  //                   children: [
+  //                     Icon(
+  //                       Icons.person,
+  //                       size: 20,
+  //                       color: Colors.orange,
+  //                     ),
+  //                     Icon(
+  //                       Icons.phone,
+  //                       size: 20,
+  //                       color: Colors.pink,
+  //                     ),
+  //                     // Image.asset(
+  //                     //   "assets/man.png",
+  //                     //   height: size.height * 0.06,
+  //                     // ),
+  //                     // SizedBox(
+  //                     //   height: size.height * 0.005,
+  //                     // ),
+  //                     value.address == null || value.address!.isEmpty
+  //                         ? Container()
+  //                         : Icon(
+  //                             Icons.business,
+  //                             size: 20,
+  //                             color: Colors.green,
+  //                           ),
+  //                     value.landmark == null || value.landmark!.isEmpty
+  //                         ? Container()
+  //                         : Icon(
+  //                             Icons.place,
+  //                             size: 20,
+  //                             color: Colors.red,
+  //                           ),
+  //                     value.owner_name == null || value.owner_name!.isEmpty
+  //                         ? Container()
+  //                         : Icon(
+  //                             Icons.person,
+  //                             size: 20,
+  //                             color: Colors.blue,
+  //                           ),
+  //                     // Text(
+  //                     //   "Contact Info :",
+  //                     //   // value.customerName.toString().toUpperCase(),
+  //                     //   overflow: TextOverflow.ellipsis,
+  //                     //   // value.customerName.toString(),
+  //                     //   style: TextStyle(
+  //                     //       color: Colors.grey[800],
+  //                     //       fontWeight: FontWeight.w500),
+  //                     // ),
+  //                   ],
+  //                 ),
+  //                 Container(
+  //                   margin: EdgeInsets.only(left: 10),
+  //                   child: Column(
+  //                     mainAxisAlignment: MainAxisAlignment.start,
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Container(
+  //                         width: size.width * 0.7,
+  //                         child: Flexible(
+  //                           child: Text(
+  //                             // "Anusha k ghajkkxgvxvzvzvvzvFzFZg",
+  //                             value.customerName.toString().toUpperCase(),
+  //                             overflow: TextOverflow.ellipsis,
+  //                             // value.customerName.toString(),
+  //                             style: TextStyle(
+  //                                 color: Colors.grey[800],
+  //                                 fontSize: 14,
+  //                                 fontWeight: FontWeight.w500),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       Container(
+  //                         width: size.width * 0.7,
+  //                         child: Flexible(
+  //                           child: Text(
+  //                             value.customerPhone.toString(),
+  //                             style: TextStyle(
+  //                                 color: Colors.grey[800],
+  //                                 fontSize: 14,
+  //                                 fontWeight: FontWeight.w500),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       // SizedBox(
+  //                       //   height: size.height * 0.005,
+  //                       // ),
+  //                       value.address == null || value.address!.isEmpty
+  //                           ? Container()
+  //                           : Container(
+  //                               width: size.width * 0.7,
+  //                               child: Flexible(
+  //                                 child: Text(
+  //                                   value.address.toString().toUpperCase(),
+  //                                   overflow: TextOverflow.ellipsis,
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       color: Colors.grey[800],
+  //                                       fontWeight: FontWeight.w500),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                       value.landmark == null || value.landmark!.isEmpty
+  //                           ? Container()
+  //                           : Container(
+  //                               width: size.width * 0.7,
+  //                               child: Flexible(
+  //                                 child: Text(
+  //                                   value.landmark.toString().toUpperCase(),
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       color: Colors.grey[800],
+  //                                       fontWeight: FontWeight.w500),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                       value.owner_name == null || value.owner_name!.isEmpty
+  //                           ? Container()
+  //                           : Container(
+  //                               width: size.width * 0.7,
+  //                               child: Flexible(
+  //                                 child: Text(
+  //                                   value.owner_name.toString().toUpperCase(),
+  //                                   style: TextStyle(
+  //                                       fontSize: 14,
+  //                                       color: Colors.grey[800],
+  //                                       fontWeight: FontWeight.w500),
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+///////////////////////////////////////////////////////////////////////////
   Widget customerData(Size size) {
     return Consumer<Controller>(
       builder: (context, value, child) {
+        Provider.of<ProductController>(context, listen: false)
+            .getbagData(context, "0", value.dupcustomer_id!);
         return Card(
           // margin: EdgeInsets.only(left: 0, right: 16),
           child: ListTile(
@@ -382,11 +549,11 @@ class _EnqDashboardState extends State<EnqDashboard>
                                 margin: EdgeInsets.only(left: 8),
                                 width: size.width * 0.6,
                                 child: Text(
-                                  value.customerName.toString(),
+                                  value.customerName.toString().toUpperCase(),
                                   overflow: TextOverflow.ellipsis,
                                   // value.customerName.toString(),
                                   style: TextStyle(
-                                      color: Colors.grey[700],
+                                      color: Colors.grey[800],
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),
@@ -413,10 +580,10 @@ class _EnqDashboardState extends State<EnqDashboard>
                                       margin: EdgeInsets.only(left: 8),
                                       width: size.width * 0.6,
                                       child: Text(
-                                        value.address.toString(),
+                                        value.address.toString().toUpperCase(),
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.grey[700],
+                                            color: Colors.grey[800],
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ),
@@ -442,7 +609,7 @@ class _EnqDashboardState extends State<EnqDashboard>
                                 child: Text(
                                   value.customerPhone.toString(),
                                   style: TextStyle(
-                                      color: Colors.grey[700],
+                                      color: Colors.grey[800],
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),
@@ -468,12 +635,21 @@ class _EnqDashboardState extends State<EnqDashboard>
                                     Container(
                                       margin: EdgeInsets.only(left: 8),
                                       child: Text(
-                                        value.landmark.toString(),
+                                        value.landmark.toString().toUpperCase(),
                                         style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.w500),
+                                            color: Colors.grey[800],
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
+                                    // Container(
+                                    //   margin: EdgeInsets.only(left: 8),
+                                    //   child: Text(
+                                    //     value.dupcustomer_id.toString(),
+                                    //     style: TextStyle(
+                                    //         color: Colors.grey[700],
+                                    //         fontWeight: FontWeight.w500),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -491,146 +667,6 @@ class _EnqDashboardState extends State<EnqDashboard>
       },
     );
   }
-
-  // Widget customerData(Size size) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 8.0),
-  //     child: Consumer<Controller>(
-  //       builder: (context, value, child) {
-  //         return Stack(
-  //           children: [
-  //             Card(
-  //               margin: EdgeInsets.only(left: 0, right: 16),
-  //               child: ListTile(
-  //                 title: Column(
-  //                   children: [
-  //                     Row(
-  //                       children: [
-  //                         Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Padding(
-  //                               padding: const EdgeInsets.only(
-  //                                   left: 0, top: 8, bottom: 8),
-  //                               child: Row(
-  //                                 children: [
-  //                                   Text(
-  //                                     "Customer Name",
-  //                                     style: TextStyle(
-  //                                         color: Colors.grey[500],
-  //                                         fontSize: 14),
-  //                                   ),
-  //                                   Padding(
-  //                                     padding: const EdgeInsets.only(left: 0),
-  //                                     child: Container(
-  //                                       width: size.width * 0.7,
-  //                                       child: Text(
-  //                                         value.customerName.toString(),
-  //                                         style: TextStyle(
-  //                                             color: Colors.grey[700],
-  //                                             fontWeight: FontWeight.w500),
-  //                                       ),
-  //                                     ),
-  //                                   ),
-  //                                 ],
-  //                               ),
-  //                             ),
-  //                             Padding(
-  //                               padding: const EdgeInsets.only(left: 8.0),
-  //                               child: Row(
-  //                                 children: [
-  //                                   Text(
-  //                                     "Customer Info",
-  //                                     style: TextStyle(
-  //                                         color: Colors.grey[500],
-  //                                         fontSize: 14),
-  //                                   ),
-  //                                   Padding(
-  //                                     padding: const EdgeInsets.only(left: 0),
-  //                                     child: Text(
-  //                                       value.address.toString(),
-  //                                       style: TextStyle(
-  //                                           color: Colors.grey[700],
-  //                                           fontWeight: FontWeight.w500),
-  //                                     ),
-  //                                   ),
-  //                                 ],
-  //                               ),
-  //                             ),
-  //                             Padding(
-  //                               padding:
-  //                                   const EdgeInsets.only(left: 8.0, top: 8),
-  //                               child: Row(
-  //                                 children: [
-  //                                   Text(
-  //                                     "Phone number",
-  //                                     style: TextStyle(
-  //                                         color: Colors.grey[500],
-  //                                         fontSize: 14),
-  //                                   ),
-  //                                   Padding(
-  //                                     padding: const EdgeInsets.only(left: 0),
-  //                                     child: Text(
-  //                                       value.customerPhone.toString(),
-  //                                       style: TextStyle(
-  //                                           color: Colors.grey[700],
-  //                                           fontWeight: FontWeight.w500),
-  //                                     ),
-  //                                   ),
-  //                                 ],
-  //                               ),
-  //                             ),
-  //                             Padding(
-  //                               padding:
-  //                                   const EdgeInsets.only(left: 8.0, top: 8),
-  //                               child: Row(
-  //                                 children: [
-  //                                   Text(
-  //                                     "Landmark",
-  //                                     style: TextStyle(
-  //                                         color: Colors.grey[500],
-  //                                         fontSize: 14),
-  //                                   ),
-  //                                   Padding(
-  //                                     padding: const EdgeInsets.only(left: 0),
-  //                                     child: Text(
-  //                                       value.landmark.toString(),
-  //                                       style: TextStyle(
-  //                                           color: Colors.grey[700],
-  //                                           fontWeight: FontWeight.w500),
-  //                                     ),
-  //                                   ),
-  //                                 ],
-  //                               ),
-  //                             ),
-  //                             Padding(
-  //                               padding: const EdgeInsets.all(8),
-  //                             )
-  //                           ],
-  //                         )
-  //                       ],
-  //                     ),
-  //                     Row()
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //             // Positioned(
-  //             //     top: 32,
-  //             //     child: CircleAvatar(
-  //             //       backgroundImage: AssetImage("assets/man.png"),
-  //             //       backgroundColor: Colors.transparent,
-  //             //       radius: 30,
-  //             //       // child: Icon(
-  //             //       //   Icons.person,
-  //             //       // ),
-  //             //     )),
-  //           ],
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
 
   void _showCustomFlash({FlashBehavior style = FlashBehavior.fixed}) {
     showFlash(
@@ -651,11 +687,13 @@ class _EnqDashboardState extends State<EnqDashboard>
           ),
           child: FlashBar(
             // title: Text('Hey User!'),
-            content: Text('Please Choose an Area',style: TextStyle(color: Colors.white,fontSize: 15),),
+            content: Text(
+              'Please Choose an Area',
+              style: TextStyle(color: Colors.white, fontSize: 15),
+            ),
             primaryAction: TextButton(
               onPressed: () {},
-              child: Text('DISMISS',
-                          style: TextStyle(color: Colors.white)),
+              child: Text('DISMISS', style: TextStyle(color: Colors.white)),
             ),
           ),
         );
