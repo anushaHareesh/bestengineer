@@ -50,11 +50,11 @@ class _EnQHistoryState extends State<EnQHistory> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: Text("Enquiry History"),
-        backgroundColor: P_Settings.loginPagetheme,
-      ),
+      backgroundColor: Colors.grey[200],
+      // appBar: AppBar(
+      //   title: Text("Enquiry History"),
+      //   backgroundColor: P_Settings.loginPagetheme,
+      // ),
       body: SingleChildScrollView(
         physics: ScrollPhysics(),
         child: Consumer<ProductController>(

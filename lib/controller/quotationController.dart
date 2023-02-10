@@ -8,13 +8,16 @@ import 'package:http/http.dart' as http;
 
 class QuotationController extends ChangeNotifier {
   String urlgolabl = Globaldata.apiglobal;
-  TextEditingController cname = TextEditingController();
-  TextEditingController cperson = TextEditingController();
+ String? customer_name;
+  String? c_person;
+  String? phone;
+  String? cus_info;
+  String? priority;
+  String? landmarked;
   String? color1;
-  TextEditingController phone = TextEditingController();
+
   bool fromApi=true;
-  TextEditingController cinfo = TextEditingController();
-  TextEditingController landmarked = TextEditingController();
+
 
   // String? phone;
 
@@ -168,11 +171,12 @@ class QuotationController extends ChangeNotifier {
           var map = jsonDecode(response.body);
           print("quot------$map");
 
-          cname.text = map["master"][0]["company_name"];
-          cinfo.text = map["master"][0]["cust_info"];
-          phone.text = map["master"][0]["contact_num"];
-          cperson.text = map["master"][0]["owner_name"];
-          landmarked.text = map["master"][0]["landmark"];
+          customer_name = map["master"][0]["company_name"];
+          cus_info = map["master"][0]["cust_info"];
+          phone = map["master"][0]["contact_num"];
+          c_person = map["master"][0]["owner_name"];
+          landmarked = map["master"][0]["landmark"];
+          color1 = map["master"][0]["l_color"];
           color1 = map["master"][0]["l_color"];
 
           quotProdItem.clear();

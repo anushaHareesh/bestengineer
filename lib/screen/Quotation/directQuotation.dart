@@ -71,279 +71,210 @@ class _DirectQuotationState extends State<DirectQuotation> {
                 builder: (context, value, child) {
                   return Column(
                     children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 0, top: 12, left: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Customer Details",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: Card(
-                          color: P_Settings.fillcolor,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8, bottom: 20, top: 8),
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                            shape: RoundedRectangleBorder(
+                              // side: BorderSide(
+                              //     color: P_Settings.loginPagetheme),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8, bottom: 18, top: 8),
+                              child: Column(
+                                children: [
+                                  Row(
                                     children: [
-                                      Text(
-                                        "Customer Details ",
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Company Name :",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[600]),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: size.height * 0.05,
-                                  margin: EdgeInsets.only(
-                                      left: 9, right: 9, top: 10),
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    controller: value.cname,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: P_Settings.whiteColor,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 8),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Contact Person :",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[600]),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: size.height * 0.05,
-                                  margin: EdgeInsets.only(
-                                      left: 9, right: 9, top: 10),
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    controller: value.cperson,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: P_Settings.whiteColor,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 8),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Contact Num :",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[600]),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: size.height * 0.05,
-                                  margin: EdgeInsets.only(
-                                      left: 9, right: 9, top: 10),
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    controller: value.phone,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: P_Settings.whiteColor,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 8),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Customer Info :",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[600]),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  // height: size.height * 0.05,
-                                  margin: EdgeInsets.only(
-                                      left: 9, right: 9, top: 10),
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    controller: value.cinfo,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: P_Settings.whiteColor,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 8),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 8),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Landmark :",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey[600]),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: size.height * 0.05,
-                                  margin: EdgeInsets.only(
-                                      left: 9, right: 9, top: 10),
-                                  child: TextFormField(
-                                    readOnly: true,
-                                    controller: value.landmarked,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: P_Settings.whiteColor,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 8),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey), //<-- SEE HERE
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(top: 8),
-                                      child: Row(
+                                      Column(
                                         children: [
-                                          Text(
-                                            "Priority :",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey[600]),
+                                          Image.asset(
+                                            "assets/man.png",
+                                            height: size.height * 0.09,
                                           )
                                         ],
                                       ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                          left: 9, right: 9, top: 10),
-                                      height: size.height * 0.04,
-                                      width: size.width * 0.09,
-                                      decoration: BoxDecoration(
-                                          color: parseColor(
-                                              value.color1.toString())),
-                                    )
-                                    // Container(
-                                    //   height: size.height * 0.05,
-                                    //   margin: EdgeInsets.only(
-                                    //       left: 9, right: 9, top: 10),
-                                    //   child: TextFormField(
-                                    //     readOnly: true,
-                                    //     controller: value.landmarked,
-                                    //     decoration: InputDecoration(
-                                    //       filled: true,
-                                    //       fillColor: P_Settings.whiteColor,
-                                    //       contentPadding: EdgeInsets.symmetric(
-                                    //           horizontal: 10, vertical: 8),
-                                    //       focusedBorder: OutlineInputBorder(
-                                    //         borderSide: BorderSide(
-                                    //             width: 1,
-                                    //             color: Colors.grey), //<-- SEE HERE
-                                    //       ),
-                                    //       enabledBorder: OutlineInputBorder(
-                                    //         borderSide: BorderSide(
-                                    //             width: 1,
-                                    //             color: Colors.grey), //<-- SEE HERE
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: size.width * 0.6,
+                                              child: Text(
+                                                value.customer_name
+                                                    .toString()
+                                                    .toUpperCase(),
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Text(
+                                                value.phone.toString(),
+                                                style: TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    fontSize: 16),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(),
+                                  Column(
+                                    children: [
+                                      value.cus_info == null ||
+                                              value.cus_info!.isEmpty
+                                          ? Container()
+                                          : Row(
+                                              children: [
+                                                Icon(Icons.business,
+                                                    color: Colors.orange,
+                                                    size: 13),
+                                                SizedBox(
+                                                  width: size.width * 0.02,
+                                                ),
+                                                Text(
+                                                  "Customer Info :",
+                                                  style:
+                                                      TextStyle(fontSize: 15),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
+                                                  child: Container(
+                                                    width: size.width * 0.6,
+                                                    child: Text(
+                                                      value.cus_info.toString(),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      // value.cus_info.toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                      value.landmarked == null ||
+                                              value.landmarked!.isEmpty
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.place,
+                                                      color: Colors.red,
+                                                      size: 13),
+                                                  SizedBox(
+                                                    width: size.width * 0.02,
+                                                  ),
+                                                  Text(
+                                                    "Landmark    :",
+                                                    style:
+                                                        TextStyle(fontSize: 15),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0),
+                                                    child: Container(
+                                                      width: size.width * 0.6,
+                                                      child: Text(
+                                                        value.landmarked
+                                                            .toString(),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                      value.c_person == null ||
+                                              value.c_person!.isEmpty
+                                          ? Container()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.person,
+                                                      color: Colors.blue,
+                                                      size: 13),
+                                                  SizedBox(
+                                                    width: size.width * 0.02,
+                                                  ),
+                                                  Text(
+                                                    "Contact Person :",
+                                                    style:
+                                                        TextStyle(fontSize: 15),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0),
+                                                    child: Container(
+                                                      width: size.width * 0.6,
+                                                      child: Text(
+                                                        value.c_person
+                                                            .toString(),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )),
                       ),
                       Container(
-                        margin: EdgeInsets.only(bottom: 8, top: 8),
+                        margin: EdgeInsets.only(bottom: 8, top: 2, left: 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               "Product Details",
@@ -382,10 +313,17 @@ class _DirectQuotationState extends State<DirectQuotation> {
                               padding: const EdgeInsets.only(
                                   left: 9, top: 2.0, right: 9),
                               child: Card(
-                                // color: P_Settings.fillcolor,
+                                shape: RoundedRectangleBorder(
+                                  // side: BorderSide(
+                                  //     color: P_Settings.loginPagetheme),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8, top: 14, bottom: 14),
+                                      left: 12.0,
+                                      right: 12,
+                                      top: 14,
+                                      bottom: 14),
                                   child: Column(
                                     children: [
                                       Row(
@@ -419,7 +357,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}',
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -435,7 +373,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   "\u{20B9} ${value.disc_amt.toString()}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -459,7 +397,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                       .toString(),
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -475,7 +413,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   "\u{20B9} ${value.tax.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -497,7 +435,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   "\u{20B9} ${value.gross.toString()}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 16,
+                                                      fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -537,7 +475,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                             "\u{20B9} ${value.net_amt.toStringAsFixed(2)}",
                                             style: TextStyle(
                                                 color: Colors.red,
-                                                fontSize: 16,
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ],

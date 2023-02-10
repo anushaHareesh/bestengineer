@@ -7,9 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/controller.dart';
 import 'package:badges/badges.dart' as badges;
+
+import '../Dashboard/executiveDash.dart';
 
 class EnqHome extends StatefulWidget {
   const EnqHome({super.key});
@@ -20,7 +23,8 @@ class EnqHome extends StatefulWidget {
 
 class _EnqHomeState extends State<EnqHome> {
   String? selected;
-  // List<String> area = ["jkdsd", "djsdj"];
+  int _selectedIndex = 0;
+  String? staffName;
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   List<Widget> drawerOpts = [];
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
@@ -28,12 +32,34 @@ class _EnqHomeState extends State<EnqHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Provider.of<Controller>(context, listen: false).getMenu(context);
     Provider.of<Controller>(context, listen: false).getArea(context);
-    // Provider.of<ProductController>(context, listen: false).getbagData(context,
-    //     "0", Provider.of<Controller>(context, listen: false).dupcustomer_id!);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
+  }
+
+  _onSelectItem(String? menu) {
+    if (!mounted) return;
+    print("menu----$menu");
+    if (this.mounted) {
+      setState(() {
+        Provider.of<Controller>(context, listen: false).menu_index = menu!;
+      });
+    }
+    Navigator.of(context).pop(); // close the drawer
+  }
+
+  _getDrawerItemWidget(String? pos) {
+    print("pos---${pos}");
+    switch (pos) {
+      case "E":
+        return EnqDashboard();
+      case "EL":
+        return EnQHistory();
+      case "dash":
+        return ExecutiveDashBoard();
+    }
   }
 
   @override
@@ -43,169 +69,151 @@ class _EnqHomeState extends State<EnqHome> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromARGB(255, 250, 248, 248),
       key: _key,
-      appBar: AppBar(
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 8),
-            child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EnQHistory()),
-                  );
-                },
-                child: Icon(
-                  Icons.history,
-                  size: 20,
-                  color: Colors.red,
-                )),
-          ),
-          InkWell(
-            onTap: () {
-              buildPopupDialog(context, size);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: Consumer<Controller>(
-                builder: (context, value, child) {
-                  return Row(
-                    // mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Icon(
-                        Icons.place,
-                        size: 17,
-                        color: Colors.red,
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        value.selected == null
-                            ? "Choose Area"
-                            : value.selected.toString(),
-                        style: TextStyle(fontSize: 14, color: Colors.grey[800]),
-                      ),
-                    ],
-                  );
-                },
+      appBar: Provider.of<Controller>(context, listen: false).menu_index ==
+              "dash"
+          ? AppBar(
+              backgroundColor: P_Settings.loginPagetheme,
+              elevation: 0,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(),
               ),
-            ),
-          ),
-        ],
-        backgroundColor: P_Settings.whiteColor,
-        elevation: 1,
-        leading: Builder(
-          builder: (context) => Consumer<Controller>(
-            builder: (context, value, child) {
-              return IconButton(
-                  icon: new Icon(Icons.menu, color: Colors.grey[800]),
-                  onPressed: () async {
-                    drawerOpts.clear();
-                    for (var i = 0;
-                        i < 5;
-                        // Provider.of<Controller>(context, listen: false)
-                        //     .customMenuList
-                        //     .length;
-                        i++) {
-                      // var d =Provider.of<Controller>(context, listen: false).drawerItems[i];
-
-                      drawerOpts.add(Consumer<Controller>(
-                        builder: (context, value, child) {
-                          // print(
-                          //     "menulist[menu]-------${value.menuList[i]["menu_name"]}");
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8, top: 10, bottom: 8),
-                            child: InkWell(
-                              onTap: () async {
-                                // alertDialoge(
-                                //     context,
-                                //     size,
-                                //     value.customMenuList[i].date_criteria!,
-                                //     value.customMenuList[i].tabName!);
-
-                                _key.currentState!.closeDrawer();
-                              },
-                              child: Row(
+            )
+          : AppBar(
+              actions: [
+                Provider.of<Controller>(context, listen: false).menu_index ==
+                        "EL"
+                    ? Container()
+                    : Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EnQHistory()),
+                              );
+                            },
+                            child: Icon(
+                              Icons.history,
+                              size: 20,
+                              color: Colors.red,
+                            )),
+                      ),
+                Provider.of<Controller>(context, listen: false).menu_index ==
+                        "EL"
+                    ? Container()
+                    : InkWell(
+                        onTap: () {
+                          buildPopupDialog(context, size);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 12.0),
+                          child: Consumer<Controller>(
+                            builder: (context, value, child) {
+                              return Row(
+                                // mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
+                                  Icon(
+                                    Icons.place,
+                                    size: 17,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
                                   Text(
-                                    "jdsd",
-                                    // value.customMenuList[i].tabName!
-                                    //     .toUpperCase(),
-                                    style: GoogleFonts.aBeeZee(
-                                      fontWeight: FontWeight.w500,
-                                      textStyle:
-                                          Theme.of(context).textTheme.bodyText2,
-                                      fontSize: 17,
-                                    ),
+                                    value.selected == null
+                                        ? "Choose Area"
+                                        : value.selected.toString(),
+                                    style: TextStyle(
+                                        fontSize: 14, color: Colors.grey[800]),
                                   ),
                                 ],
-                              ),
-                            ),
-                          );
-                        },
-                      ));
-                    }
-                    _key.currentState!.openDrawer();
-                  });
-            },
-          ),
-        ),
-      ),
-      // bottomNavigationBar: SizedBox(
-      //     height: 50,
-      //     child: InkWell(
-      //       onTap: () {
-      //         Provider.of<ProductController>(context, listen: false)
-      //             .getbagData(context, "0");
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => EnqCart()),
-      //         );
-      //       },
-      //       child: Container(
-      //         color: P_Settings.loginPagetheme,
-      //         child: Consumer<ProductController>(
-      //           builder: (context, value, child) {
-      //             return Row(
-      //               mainAxisAlignment: MainAxisAlignment.center,
-      //               children: [
-      //                 Text(
-      //                   "View Data",
-      //                   style: TextStyle(
-      //                       fontSize: 16,
-      //                       fontWeight: FontWeight.bold,
-      //                       color: P_Settings.whiteColor),
-      //                 ),
-      //                 SizedBox(
-      //                   width: size.width * 0.04,
-      //                 ),
-      //                 badges.Badge(
-      //                     badgeStyle: badges.BadgeStyle(
-      //                         // badgeGradient: badges.BadgeGradient.radial(colors: Colors.primaries),
-      //                         shape: badges.BadgeShape.circle,
-      //                         badgeColor: Colors.red),
-      //                     position:
-      //                         badges.BadgePosition.topEnd(top: -10, end: -22),
-      //                     badgeContent: value.isCartLoading
-      //                         ? SpinKitChasingDots(
-      //                             color: P_Settings.loginPagetheme,
-      //                             size: 8,
-      //                           )
-      //                         : Text(
-      //                             value.cartCount.toString(),
-      //                             style: TextStyle(color: Colors.white),
-      //                           ),
-      //                     child: Icon(
-      //                       Icons.shopping_cart,
-      //                       color: Colors.white,
-      //                     ))
-      //               ],
-      //             );
-      //           },
-      //         ),
-      //       ),
-      //     )),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+              ],
+              backgroundColor:
+                  Provider.of<Controller>(context, listen: false).menu_index ==
+                          "EL"
+                      ? P_Settings.loginPagetheme
+                      : P_Settings.whiteColor,
+              elevation: 1,
+              leading: Builder(
+                builder: (context) => Consumer<Controller>(
+                  builder: (context, value, child) {
+                    return IconButton(
+                        icon: new Icon(Icons.menu,
+                            color:
+                                Provider.of<Controller>(context, listen: false)
+                                            .menu_index ==
+                                        "EL"
+                                    ? P_Settings.whiteColor
+                                    : Colors.grey[800]),
+                        onPressed: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          staffName = await prefs.getString("staff_name");
+                          drawerOpts.clear();
+                          for (var i = 0;
+                              i <
+                                  Provider.of<Controller>(context,
+                                          listen: false)
+                                      .menuList
+                                      .length;
+                              i++) {
+                            // var d =Provider.of<Controller>(context, listen: false).drawerItems[i];
+
+                            drawerOpts.add(Consumer<Controller>(
+                              builder: (context, value, child) {
+                                // print(
+                                //     "menulist[menu]-------${value.menuList[i]["menu_name"]}");
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8, top: 10, bottom: 0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _onSelectItem(
+                                          value.menuList[i]["prefix"]);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            // Icon(
+                                            //   Icons.history,
+                                            //   // color: Colors.red,
+                                            // ),
+                                            Container(
+                                              child: Text(
+                                                value.menuList[i]["menu_name"],
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 17),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Icon(Icons.arrow_forward)
+                                          ],
+                                        ),
+                                        Divider(),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ));
+                          }
+                          _key.currentState!.openDrawer();
+                        });
+                  },
+                ),
+              ),
+            ),
+
       drawer: Consumer<Controller>(
         builder: (context, value, child) {
           return Drawer(
@@ -216,68 +224,60 @@ class _EnqHomeState extends State<EnqHome> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: size.height * 0.045,
+                        height: size.height * 0.035,
                       ),
                       Container(
-                        height: size.height * 0.1,
-                        width: size.width * 1,
-                        color: P_Settings.loginPagetheme,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              height: size.height * 0.07,
-                              width: size.width * 0.03,
+                        width: double.infinity,
+                        height: size.height * 0.17,
+                        child: DrawerHeader(
+                            decoration: BoxDecoration(
+                              color: P_Settings.loginPagetheme,
                             ),
-                            Icon(
-                              Icons.list_outlined,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: size.width * 0.01),
-                            Text(
-                              "Menus",
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
-                            ),
-                          ],
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius: 30,
+                                  backgroundImage: AssetImage("assets/man.png"),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    staffName.toString(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _onSelectItem("dash");
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                // margin: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  "Dashboard",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17),
+                                ),
+                              ),
+                              Spacer(),
+                              Icon(Icons.arrow_forward)
+                            ],
+                          ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 13,
-                        ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(
-                      //       left: 8.0, right: 8, top: 13, bottom: 8),
-                      //   child: InkWell(
-                      //     onTap: () {
-                      //       String br;
-                      //       if (value.brId == null) {
-                      //         br = "0";
-                      //       } else {
-                      //         br = value.brId!;
-                      //       }
-                      //       Provider.of<Controller>(context, listen: false)
-                      //           .loadReportData(
-                      //               context,
-                      //               value.tabId.toString(),
-                      //               value.fromDate.toString(),
-                      //               value.todate.toString(),
-                      //               br);
-                      //       Provider.of<Controller>(context, listen: false)
-                      //           .setMenuClick(false);
-                      //       Navigator.pop(_key.currentContext!);
-                      //     },
-                      //     child: Row(
-                      //       children: [
-                      //         Text(
-                      //           "DASHBOARD",
-                      //           style: TextStyle(fontSize: 17),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
+                      Divider(),
                       Column(children: drawerOpts),
                     ],
                   ),
@@ -287,11 +287,13 @@ class _EnqHomeState extends State<EnqHome> {
           );
         },
       ),
-      body: Consumer<Controller>(
-        builder: (context, value, child) {
-          return customContainer();
-        },
-      ),
+      body: _getDrawerItemWidget(
+          Provider.of<Controller>(context, listen: false).menu_index),
+      // body: Consumer<Controller>(
+      //   builder: (context, value, child) {
+      //     return customContainer();
+      //   },
+      // ),
     );
   }
 

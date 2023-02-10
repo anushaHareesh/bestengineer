@@ -17,7 +17,7 @@ class Controller extends ChangeNotifier {
   String? selected;
   bool selectedCustomer = true;
   bool addNewItem = false;
-
+  String? menu_index;
   bool? arrowButtonclicked;
   TextEditingController searchcontroller = TextEditingController();
   bool isSearchLoading = false;
@@ -50,6 +50,7 @@ class Controller extends ChangeNotifier {
   List<PriorityLevel> priorityList = [];
 
   List<Map<String, dynamic>> customerList = [];
+  List<Map<String, dynamic>> menuList = [];
 
   ///////////////////////////////////////////////////////////////////////
 
@@ -342,7 +343,7 @@ class Controller extends ChangeNotifier {
   //   });
   // }
   saveCustomerInfo(BuildContext context, String cust_id, String comName,
-      String owner_name, String phone, String cust_info, String landmark2) {
+      String owner_name1, String phone, String cust_info, String landmark2) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -357,7 +358,7 @@ class Controller extends ChangeNotifier {
             'branch_id': branch_id,
             'cust_id': cust_id,
             'company_name': comName,
-            "owner_name": owner_name,
+            "owner_name": owner_name1,
             'phone_1': phone,
             'cust_info': cust_info,
             'landmark': landmark2
@@ -368,7 +369,7 @@ class Controller extends ChangeNotifier {
           var map = jsonDecode(response.body);
 
           print("customerRespo----$map");
-          dupcustomer_id= map[0]["te_id"];
+          dupcustomer_id = map[0]["te_id"];
           customer_id = map[0]["cust_id"];
           customerName = map[0]["company_name"];
           owner_name = map[0]["owner_name"];
@@ -376,7 +377,7 @@ class Controller extends ChangeNotifier {
           landmark = map[0]["landmark"];
           address = map[0]["cust_info"];
           notifyListeners();
-          
+
           isSavecustomer = false;
           notifyListeners();
         } catch (e) {
@@ -393,9 +394,9 @@ class Controller extends ChangeNotifier {
     BuildContext context,
   ) {
     NetConnection.networkConnection(context).then((value) async {
-       SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? branch_id = prefs.getString("branch_id");
-          String? user_id = prefs.getString("user_id");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? branch_id = prefs.getString("branch_id");
+      String? user_id = prefs.getString("user_id");
       if (value == true) {
         try {
           Uri url = Uri.parse("$urlgolabl/area_list.php");
@@ -470,7 +471,7 @@ class Controller extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
-           SharedPreferences prefs = await SharedPreferences.getInstance();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
           Uri url = Uri.parse("$urlgolabl/priority_list.php");
@@ -510,6 +511,43 @@ class Controller extends ChangeNotifier {
           // for (var item in prioModel.priorityLevel!) {
           //   priorityList.add(item);
           // }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////
+  getMenu(
+    BuildContext context,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          isSavecustomer = true;
+          notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/get_menu.php");
+          Map body = {
+            'staff_id': user_id,
+            'branch_id': branch_id,
+          };
+          print("menu body--$body");
+
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          menuList.clear();
+          for (var item in map) {
+            menuList.add(item);
+          }
+          print("menu res--$map");
+          isSavecustomer = false;
           notifyListeners();
         } catch (e) {
           print(e);

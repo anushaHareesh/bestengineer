@@ -10,43 +10,367 @@ import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ExportPdf {
-  List<Map<String, dynamic>> list = [
-    // {"id": "id", "name": "name"},
-    {"id": "a123", "name": "anuhsa"},
-    {"id": "a345", "name": "akhil"},
-    {"id": "a101", "name": "apu"},
-    {"id": "a122", "name": "graha"},
+  final headers = ["id", "name"];
+  var report = [
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    },
+    {
+      "sno": 1,
+      "pname": "abc",
+      "qty": "10",
+      "rate": "200",
+      "gstp": "18%",
+      "gst": "120",
+      "discp": "10%",
+      "disc": "100",
+      "net": "300"
+    }
   ];
 
-  final headers = ["id", "name"];
-  var report = {
-    "id": 1,
-    "type": "my type",
-    "name": "Report 1",
-    "client_name": "John",
-    "website": "john.com",
-    "creation_time": "2019-03-12T22:00:00.000Z",
-    "items": [
-      {
-        "id": 1,
-        "report_id": 1,
-        "place": "Kitchen",
-        "type": "sometype",
-        "producer": "somepro",
-        "serial_number": "123123",
-        "next_check_date": "2019-03-19",
-        "test_result": "Verified",
-        "comments": "some comments"
-      }
-    ]
-  };
-
-  List<String> li = ["id", "name"];
   DateTime now = DateTime.now();
   List<pw.Widget> widgets = [];
+///////////////////////////////////////////////////////
+  Future<Uint8List> makePdf() async {
+    var list = (report as List)
+        .map((item) => pw.TableRow(children: [
+              pw.Container(
+                alignment: pw.Alignment.centerLeft,
+                child: pw.Text(item['sno'].toString(),
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+              pw.Container(
+                  width: 10,
+                  alignment: pw.Alignment.centerLeft,
+                  margin: pw.EdgeInsets.only(left: 4),
+                  child: pw.Flexible(
+                    child: pw.Text(item['pname'].toString(),
+                        style: pw.TextStyle(color: PdfColors.grey800)),
+                  )),
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                margin: pw.EdgeInsets.only(right: 4),
+                child: pw.Text(item['qty'],
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                margin: pw.EdgeInsets.only(right: 4),
+                child: pw.Text(item['rate'],
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                margin: pw.EdgeInsets.only(right: 4),
+                child: pw.Text(item['gstp'],
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                margin: pw.EdgeInsets.only(right: 4),
+                child: pw.Text(item['gst'],
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                margin: pw.EdgeInsets.only(right: 4),
+                child: pw.Text(item['discp'],
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                margin: pw.EdgeInsets.only(right: 4),
+                child: pw.Text(item['disc'],
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                margin: pw.EdgeInsets.only(right: 4),
+                child: pw.Text(item['net'],
+                    style: pw.TextStyle(color: PdfColors.grey800)),
+              ),
+            ]))
+        .toList();
+    list.insert(
+        0,
+        pw.TableRow(children: [
+          pw.Container(alignment: pw.Alignment.center, child: pw.Text("S No")),
+          pw.Container(
+              alignment: pw.Alignment.center, child: pw.Text("PRODUCT NAME")),
+          pw.Container(alignment: pw.Alignment.center, child: pw.Text("QTY")),
+          pw.Container(alignment: pw.Alignment.center, child: pw.Text("RATE")),
+          pw.Container(alignment: pw.Alignment.center, child: pw.Text("GST%")),
+          pw.Container(alignment: pw.Alignment.center, child: pw.Text("GST")),
+          pw.Container(alignment: pw.Alignment.center, child: pw.Text("DISC%")),
+          pw.Container(alignment: pw.Alignment.center, child: pw.Text("DISC")),
+          pw.Container(
+              alignment: pw.Alignment.center, child: pw.Text("NET AMT")),
 
-  Future<Uint8List> makePdf(Invoice invoice) async {
-    var list = (report['items'] as List)
+          //...
+        ]));
+
+    final pdf = pw.Document();
+    final image = await imageFromAssetBundle('assets/noImg.png');
+    final headrText = pw.Row(
+      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+      children: [
+        pw.SizedBox(
+          height: 120,
+          width: 120,
+          child: pw.Image(
+            image,
+          ),
+        ),
+        pw.Column(
+          mainAxisAlignment: pw.MainAxisAlignment.start,
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Text("BEST ENGINEERS LTD",
+                style: pw.TextStyle(
+                    fontSize: 30,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.red)),
+            pw.Text("Attention to: Anushaa"),
+            pw.Text("znckxjnckjxznckx"),
+          ],
+          // crossAxisAlignment: pw.CrossAxisAlignment.start,
+        ),
+        pw.Divider(thickness: 2, color: PdfColors.red)
+      ],
+    );
+    widgets.add(headrText);
+
+    final sized = pw.SizedBox(height: 20);
+    widgets.add(sized);
+
+    final quotHead =
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
+      pw.Text("QUOTATION",
+          style: pw.TextStyle(
+            fontSize: 20,
+          ))
+    ]);
+    widgets.add(quotHead);
+    widgets.add(sized);
+
+    final quotaAddr =
+        pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
+      pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        mainAxisAlignment: pw.MainAxisAlignment.start,
+        children: [
+          pw.Row(children: [
+            pw.Text('Quotation No    : ',
+                style:
+                    pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold)),
+            pw.Text('213',
+                style: pw.TextStyle(
+                  fontSize: 12,
+                ))
+          ]),
+          pw.Row(children: [
+            pw.Text('Customer          : ',
+                style:
+                    pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold)),
+            pw.Text('ANUSHA K',
+                style: pw.TextStyle(
+                  fontSize: 10,
+                ))
+          ]),
+          pw.Row(
+            children: [
+              pw.Text('Address            : ',
+                  style: pw.TextStyle(
+                      fontSize: 10, fontWeight: pw.FontWeight.bold)),
+              pw.Text('KANNUR THAVAKAARAA',
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                  ))
+            ],
+          ),
+        ],
+      ),
+      pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          mainAxisAlignment: pw.MainAxisAlignment.start,
+          children: [
+            pw.Row(children: [
+              pw.Text('Date      : ',
+                  style: pw.TextStyle(
+                      fontSize: 10, fontWeight: pw.FontWeight.bold)),
+              pw.Text('20-11-2023',
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                  ))
+            ]),
+            pw.Row(children: [
+              pw.Text('Phone   : ',
+                  style: pw.TextStyle(
+                      fontSize: 10, fontWeight: pw.FontWeight.bold)),
+              pw.Text('9061259261',
+                  style: pw.TextStyle(
+                    fontSize: 12,
+                  ))
+            ]),
+            // pw.Row(
+            //   children: [
+            //     pw.Text('Address  : ',
+            //         style: pw.TextStyle(
+            //             fontSize: 10, fontWeight: pw.FontWeight.bold)),
+            //     pw.Text('KANNUR THAVAKAARAA',
+            //         style: pw.TextStyle(
+            //           fontSize: 12,
+            //         ))
+            //   ],
+            // ),
+          ])
+    ]);
+
+    widgets.add(quotaAddr);
+    widgets.add(sized);
+    final tab = pw.SizedBox(
+        height: 600,
+        child: pw.Table(
+            border: pw.TableBorder(
+                verticalInside: pw.BorderSide(),
+                bottom: pw.BorderSide(),
+                top: pw.BorderSide(),
+                left: pw.BorderSide(),
+                right: pw.BorderSide()),
+            children: list));
+
+    // final tab = pw.Table.fromTextArray(
+    //     headers: headers, data: data, cellAlignment: pw.Alignment.bottomRight);
+    widgets.add(tab);
+
+    // widgets.add(sized);
+    // final termHead = pw.Row(children: [pw.Text("Terms & Conditions")]);
+    // widgets.add(termHead);
+
+    // final terDetail = pw.Row(
+    //     children: [pw.Text("TERMS AND CONDITIONS  : TRAVELLING CHARGE EXTRA")]);
+    // widgets.add(termHead);
+    // widgets.add(terDetail);
+    // final sum = pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+    //   pw.Text("GrandTotal  : "),
+    //   pw.Text("228888 "),
+    // ]);
+    // widgets.add(sum);
+    pdf.addPage(pw.MultiPage(
+      //  crossAxisAlignment: pw.CrossAxisAlignment.center,
+      footer: (context) {
+        return pw.Column(children: [
+          pw.Row(children: [pw.Text("Terms & Conditions")]),
+          pw.Row(children: [
+            pw.Text("TERMS AND CONDITIONS  : TRAVELLING CHARGE EXTRA")
+          ])
+        ]);
+      },
+      build: (context) => widgets,
+    ));
+    return pdf.save();
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  Future<File> savePdf() async {
+    var list = (report as List)
         .map((item) => pw.TableRow(children: [
               pw.Container(
                 alignment: pw.Alignment.centerLeft,
@@ -82,8 +406,8 @@ class ExportPdf {
       children: [
         pw.Column(
           children: [
-            pw.Text("Attention to: ${invoice.customer}"),
-            pw.Text(invoice.address),
+            pw.Text("Attention to: Anushaa"),
+            pw.Text("znckxjnckjxznckx"),
           ],
           crossAxisAlignment: pw.CrossAxisAlignment.start,
         ),
@@ -110,107 +434,6 @@ class ExportPdf {
     pdf.addPage(pw.MultiPage(
       build: (context) => widgets,
     ));
-    return pdf.save();
-  }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  Future<File> savePdf(Invoice invoice) async {
-    final pdf = pw.Document();
-    final image = await imageFromAssetBundle('assets/noImg.png');
-    final headrText = pw.Row(
-      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-      children: [
-        pw.Column(
-          children: [
-            pw.Text("Attention to: ${invoice.customer}"),
-            pw.Text(invoice.address),
-          ],
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-        ),
-        pw.SizedBox(
-          height: 150,
-          width: 150,
-          child: pw.Image(
-            image,
-          ),
-        )
-      ],
-    );
-    widgets.add(headrText);
-    for (int i = 0; i < 4; i++) {
-      widgets.add(
-        pw.Text(
-          'Heading',
-          style: pw.TextStyle(
-            fontSize: 25,
-            fontWeight: pw.FontWeight.bold,
-          ),
-        ),
-      );
-      widgets.add(pw.SizedBox(height: 5));
-      widgets.add(
-        pw.Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed accumsan augue, ut tincidunt lectus. Vestibulum venenatis euismod eros suscipit rhoncus. Sed vulputate congue turpis ut cursus. Proin sollicitudin nulla vel nisi vulputate sagittis. Morbi neque mauris, auctor id posuere eu, egestas porttitor justo. Donec tempus egestas lorem in convallis. Quisque fermentum, augue ut facilisis pretium, risus dolor viverra est, ac consequat tellus risus vitae sapien. ',
-          style: const pw.TextStyle(color: PdfColors.grey),
-        ),
-      );
-      widgets.add(pw.SizedBox(height: 10));
-    }
-
-    final tab = pw.Table(
-      border: pw.TableBorder.all(color: PdfColors.black),
-      children: [
-        // The first row just contains a phrase 'INVOICE FOR PAYMENT'
-        pw.TableRow(
-          children: [
-            pw.Padding(
-              child: pw.Text(
-                'INVOICE FOR PAYMENT',
-                textAlign: pw.TextAlign.center,
-              ),
-              padding: pw.EdgeInsets.all(20),
-            ),
-          ],
-        ),
-
-        ...invoice.items.map(
-          (e) => pw.TableRow(
-            children: [
-              pw.Expanded(
-                child: pw.Text(e.description),
-                flex: 2,
-              ),
-              pw.Expanded(
-                child: pw.Text("\$${e.cost}"),
-                flex: 1,
-              )
-            ],
-          ),
-        ),
-
-        pw.TableRow(
-          children: [
-            pw.Text('TAX', textAlign: pw.TextAlign.right),
-            pw.Text('\$${(invoice.totalCost() * 0.1).toStringAsFixed(2)}'),
-          ],
-        ),
-        // Show the total
-        pw.TableRow(
-          children: [
-            pw.Text('TOTAL', textAlign: pw.TextAlign.right),
-            pw.Text("\$${invoice.totalCost()}"),
-          ],
-        )
-      ],
-    );
-    widgets.add(tab);
-    pdf.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        build: (context) => widgets, //here goes the widgets list
-      ),
-    );
 
     return savedocument(name: "m$now.pdf", pdf: pdf);
   }

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class CustomerPopup {
   ValueNotifier<bool> visiblename = ValueNotifier(false);
   ValueNotifier<bool> visibleph = ValueNotifier(false);
-
+  ValueNotifier<bool> validph = ValueNotifier(false);
   TextEditingController name = TextEditingController();
   TextEditingController adress = TextEditingController();
   TextEditingController phone = TextEditingController();
@@ -24,6 +24,9 @@ class CustomerPopup {
     BuildContext context,
     Size size,
   ) {
+    validph.value = false;
+    visiblename.value = false;
+    visibleph.value = false;
     name.clear();
     adress.clear();
     phone.clear();
@@ -534,6 +537,27 @@ class CustomerPopup {
                                     ],
                                   ),
                                 ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      ValueListenableBuilder(
+                                          valueListenable: validph,
+                                          builder: (BuildContext context,
+                                              bool v, Widget? child) {
+                                            return Visibility(
+                                              visible: v,
+                                              child: Text(
+                                                "Please Enter Valid Phone Number",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              ),
+                                            );
+                                          }),
+                                    ],
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Container(
@@ -616,10 +640,14 @@ class CustomerPopup {
                                                 } else if (phone.text == null ||
                                                     phone.text.isEmpty) {
                                                   visibleph.value = true;
+                                                } else if (phone.text.length !=
+                                                    10) {
+                                                  validph.value = true;
                                                 } else {
+                                                  validph.value = false;
                                                   visibleph.value = false;
                                                   visiblename.value = false;
-                                                  
+
                                                   value.saveCustomerInfo(
                                                     context,
                                                     custId.toString(),
@@ -684,7 +712,10 @@ class CustomerPopup {
                                           } else if (phone.text == null ||
                                               phone.text.isEmpty) {
                                             visibleph.value = true;
+                                          } else if (phone.text.length != 10) {
+                                            validph.value = true;
                                           } else {
+                                            validph.value=false;
                                             visibleph.value = false;
                                             visiblename.value = false;
 

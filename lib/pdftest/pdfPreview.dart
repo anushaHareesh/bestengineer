@@ -7,8 +7,8 @@ import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PdfPreviewPage extends StatelessWidget {
-  final Invoice invoice;
-  PdfPreviewPage({Key? key, required this.invoice}) : super(key: key);
+  // final Invoice invoice;
+  // PdfPreviewPage({Key? key, required this.invoice}) : super(key: key);
   ExportPdf export = ExportPdf();
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class PdfPreviewPage extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () async {
-                final pdffile = await export.savePdf(invoice);
+                final pdffile = await export.savePdf();
                 ExportPdf.sendFile(pdffile);
               },
               icon: Icon(Icons.share))
@@ -26,7 +26,7 @@ class PdfPreviewPage extends StatelessWidget {
       ),
       body: PdfPreview(
         useActions: false,
-        build: (context) => export.makePdf(invoice),
+        build: (context) => export.makePdf(),
       ),
     );
   }

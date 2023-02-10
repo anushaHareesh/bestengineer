@@ -1,12 +1,9 @@
-
-
-
-
+import 'package:bestengineer/pdftest/inv%20pdf/fileH.dart';
+import 'package:bestengineer/pdftest/inv%20pdf/pdfAp.dart';
 import 'package:bestengineer/pdftest/pdfModel.dart';
+import 'package:bestengineer/pdftest/pdfPreview.dart';
 import 'package:bestengineer/pdftest/pdfdetail.dart';
 import 'package:flutter/material.dart';
-
-
 
 class PdfHome extends StatefulWidget {
   const PdfHome({super.key});
@@ -55,24 +52,35 @@ class _PdfHomeState extends State<PdfHome> {
       appBar: AppBar(
         title: Text('Invoices'),
       ),
-      body: ListView(
-        children: [
-          ...invoices.map(
-            (e) => ListTile(
-              // title: Text(e.name),
-              subtitle: Text(e.customer),
-              trailing: Text('\$${e.totalCost().toStringAsFixed(2)}'),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (builder) => DetailPage(invoice: e),
-                  ),
-                );
-              },
-            ),
-          )
-        ],
-      ),
+      body: Column(children: [
+        ElevatedButton(
+            onPressed: () async {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => PdfPreviewPage(),
+                ),
+              );
+            },
+            child: Text("pdf"))
+      ]),
+      // body: ListView(
+      //   children: [
+      //     ...invoices.map(
+      //       (e) => ListTile(
+      //         // title: Text(e.name),
+      //         subtitle: Text(e.customer),
+      //         trailing: Text('\$${e.totalCost().toStringAsFixed(2)}'),
+      //         onTap: () {
+      //           Navigator.of(context).push(
+      //             MaterialPageRoute(
+      //               builder: (builder) => DetailPage(invoice: e),
+      //             ),
+      //           );
+      //         },
+      //       ),
+      //     )
+      // ],
+      // ),
     );
   }
 }

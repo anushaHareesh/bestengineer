@@ -521,148 +521,143 @@ class _EnqDashboardState extends State<EnqDashboard>
       builder: (context, value, child) {
         Provider.of<ProductController>(context, listen: false)
             .getbagData(context, "0", value.dupcustomer_id!);
-        return Card(
-          // margin: EdgeInsets.only(left: 0, right: 16),
-          child: ListTile(
-            title: Column(
-              children: [
-                Row(
+        return Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Card(
+              shape: RoundedRectangleBorder(
+                // side: BorderSide(
+                //     color: P_Settings.loginPagetheme),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      children: [
+                        Column(
+                          children: [
+                            Image.asset(
+                              "assets/man.png",
+                              height: size.height * 0.09,
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                value.customerName.toString().toUpperCase(),
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(value.customerPhone.toString(),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w500)),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Row(
+                          alignment: Alignment.centerLeft,
+                          // width: size.width*0.4,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.person,
-                                size: 18,
-                                color: Colors.blue,
-                              ),
-                              // Text(
-                              //   "Name",
-                              //   style: TextStyle(
-                              //       color: Colors.grey[500], fontSize: 14),
-                              // ),
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                width: size.width * 0.6,
-                                child: Text(
-                                  value.customerName.toString().toUpperCase(),
-                                  overflow: TextOverflow.ellipsis,
-                                  // value.customerName.toString(),
-                                  style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
+                              value.address == null || value.address!.isEmpty
+                                  ? Container()
+                                  : Icon(Icons.business,
+                                      color: Colors.orange, size: 13),
+                              value.landmark == null || value.landmark!.isEmpty
+                                  ? Container()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Icon(Icons.place,
+                                          color: Colors.red, size: 13),
+                                    ),
+                              value.owner_name == null ||
+                                      value.owner_name!.isEmpty
+                                  ? Container()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Icon(Icons.person,
+                                          color: Colors.blue, size: 13),
+                                    )
                             ],
                           ),
                         ),
-                        value.address == null || value.address!.isEmpty
-                            ? Container()
-                            : Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.business,
-                                      size: 18,
-                                      color: Colors.green,
-                                    ),
-                                    // Text(
-                                    //   "Info",
-                                    //   style: TextStyle(
-                                    //       color: Colors.grey[500], fontSize: 14),
-                                    // ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 8),
-                                      width: size.width * 0.6,
-                                      child: Text(
-                                        value.address.toString().toUpperCase(),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                         Container(
-                          margin: EdgeInsets.only(top: 5),
-                          child: Row(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.only(left: 8),
+                          width: size.width * 0.3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.phone,
-                                size: 18,
-                                color: Colors.orange,
-                              ),
-                              // Text(
-                              //   "Phone",
-                              //   style: TextStyle(
-                              //       color: Colors.grey[500], fontSize: 14),
-                              // ),
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                child: Text(
-                                  value.customerPhone.toString(),
-                                  style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
+                              value.address == null || value.address!.isEmpty
+                                  ? Container()
+                                  : Text("Customer Info :"),
+                              value.landmark == null || value.landmark!.isEmpty
+                                  ? Container()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text("Landmark  :"),
+                                    ),
+                              value.owner_name == null ||
+                                      value.owner_name!.isEmpty
+                                  ? Container()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text("Contact  Person :"),
+                                    )
                             ],
                           ),
                         ),
-                        value.landmark == null || value.landmark!.isEmpty
-                            ? Container()
-                            : Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.place,
-                                      size: 18,
-                                      color: Colors.red,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              value.address == null || value.address!.isEmpty
+                                  ? Container()
+                                  : Text(value.address.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15)),
+                              value.landmark == null || value.landmark!.isEmpty
+                                  ? Container()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(value.landmark.toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15)),
                                     ),
-                                    // Text(
-                                    //   "Landmark",
-                                    //   style: TextStyle(
-                                    //       color: Colors.grey[500], fontSize: 14),
-                                    // ),
-                                    Container(
-                                      margin: EdgeInsets.only(left: 8),
-                                      child: Text(
-                                        value.landmark.toString().toUpperCase(),
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontWeight: FontWeight.w600),
-                                      ),
+                              value.owner_name == null ||
+                                      value.owner_name!.isEmpty
+                                  ? Container()
+                                  : Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(value.owner_name.toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15)),
                                     ),
-                                    // Container(
-                                    //   margin: EdgeInsets.only(left: 8),
-                                    //   child: Text(
-                                    //     value.dupcustomer_id.toString(),
-                                    //     style: TextStyle(
-                                    //         color: Colors.grey[700],
-                                    //         fontWeight: FontWeight.w500),
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                              ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
+                            ],
+                          ),
                         )
                       ],
                     )
                   ],
                 ),
-              ],
-            ),
-          ),
+              )),
         );
       },
     );
