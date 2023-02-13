@@ -15,11 +15,13 @@ class DeletePopup {
       String type,
       String enqId,
       String fdtae,
-      String tdate) {
+      String tdate,
+      String? reason) {
     return showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext ctx) {
+          // FocusManager.instance.primaryFocus!.unfocus();
           return new AlertDialog(
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,7 +41,7 @@ class DeletePopup {
                           onPressed: () {
                             if (type == "history") {
                               value.updateHistory(
-                                  context, "2", enqId, fdtae, tdate);
+                                  context, "2", enqId, fdtae, tdate, reason);
                             } else {
                               value.addDeletebagItem(
                                 itemName,

@@ -670,11 +670,11 @@ class CustomerPopup {
                                                     landmark.text,
                                                     value.prioId.toString(),
                                                   );
-                                                  name.clear();
-                                                  adress.clear();
-                                                  contact_person.clear();
-                                                  phone.clear();
-                                                  landmark.clear();
+                                                  // name.clear();
+                                                  // adress.clear();
+                                                  // contact_person.clear();
+                                                  // phone.clear();
+                                                  // landmark.clear();
                                                   // Provider.of<ProductController>(
                                                   //         context,
                                                   //         listen: false)
@@ -719,7 +719,7 @@ class CustomerPopup {
                                             visibleph.value = false;
                                             visiblename.value = false;
 
-                                            print("validate-----");
+                                            print("validate---${name.text}--${contact_person.text}-------${phone.text}---${adress.text}----${landmark.text}");
 
                                             value.saveCustomerInfo(
                                               context,
@@ -730,10 +730,10 @@ class CustomerPopup {
                                               adress.text,
                                               landmark.text,
                                             );
-                                            name.clear();
-                                            adress.clear();
-                                            phone.clear();
-                                            landmark.clear();
+                                            // name.clear();
+                                            // adress.clear();
+                                            // phone.clear();
+                                            // landmark.clear();
                                             Provider.of<ProductController>(
                                                     context,
                                                     listen: false)

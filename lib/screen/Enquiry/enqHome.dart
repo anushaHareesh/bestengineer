@@ -32,7 +32,7 @@ class _EnqHomeState extends State<EnqHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<Controller>(context, listen: false).getMenu(context);
+    // Provider.of<Controller>(context, listen: false).getMenu(context);
     Provider.of<Controller>(context, listen: false).getArea(context);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
@@ -53,10 +53,24 @@ class _EnqHomeState extends State<EnqHome> {
   _getDrawerItemWidget(String? pos) {
     print("pos---${pos}");
     switch (pos) {
-      case "E":
-        return EnqDashboard();
+      case "E": 
+        {
+          Provider.of<Controller>(context, listen: false).getArea(context);
+          Provider.of<Controller>(context, listen: false)
+              .gePriorityList(context);
+          Provider.of<ProductController>(context, listen: false)
+              .geProductList(context);
+          return EnqDashboard();
+        }
       case "EL":
-        return EnQHistory();
+        {
+          Provider.of<ProductController>(context, listen: false)
+              .getEnqhistoryData(
+            context,
+            "",
+          );
+          return EnQHistory();
+        }
       case "dash":
         return ExecutiveDashBoard();
     }
@@ -153,6 +167,8 @@ class _EnqHomeState extends State<EnqHome> {
                                     ? P_Settings.whiteColor
                                     : Colors.grey[800]),
                         onPressed: () async {
+                          Provider.of<Controller>(context, listen: false)
+                              .getMenu(context);
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           staffName = await prefs.getString("staff_name");
@@ -196,7 +212,11 @@ class _EnqHomeState extends State<EnqHome> {
                                               ),
                                             ),
                                             Spacer(),
-                                            Icon(Icons.arrow_forward)
+                                            Image.asset(
+                                              "assets/right.png",
+                                              height: 28,
+                                              color: Colors.grey[700],
+                                            )
                                           ],
                                         ),
                                         Divider(),
@@ -258,7 +278,8 @@ class _EnqHomeState extends State<EnqHome> {
                           _onSelectItem("dash");
                         },
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8, top: 8),
                           child: Row(
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -272,7 +293,8 @@ class _EnqHomeState extends State<EnqHome> {
                                 ),
                               ),
                               Spacer(),
-                              Icon(Icons.arrow_forward)
+                              Image.asset("assets/right.png",
+                                  height: 28, color: Colors.grey[700])
                             ],
                           ),
                         ),

@@ -45,6 +45,7 @@ class Controller extends ChangeNotifier {
   List<bool> addButton = [];
   String? dropSelected;
   String? prioId;
+  bool isMenuLoading = false;
 
   List<AreaList> area_list = [];
   List<PriorityLevel> priorityList = [];
@@ -531,7 +532,8 @@ class Controller extends ChangeNotifier {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
-          isSavecustomer = true;
+          isMenuLoading = true;
+
           notifyListeners();
           Uri url = Uri.parse("$urlgolabl/get_menu.php");
           Map body = {
@@ -546,8 +548,9 @@ class Controller extends ChangeNotifier {
           for (var item in map) {
             menuList.add(item);
           }
+          notifyListeners();
           print("menu res--$map");
-          isSavecustomer = false;
+          isMenuLoading = false;
           notifyListeners();
         } catch (e) {
           print(e);

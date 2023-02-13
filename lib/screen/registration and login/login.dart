@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/commonColor.dart';
+import '../../controller/controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -105,6 +106,8 @@ class _LoginPageState extends State<LoginPage> {
                                             listen: false)
                                         .getLogin(controller1.text,
                                             controller2.text, context);
+                                    //  Provider.of<Controller>(context,
+                                    //         listen: false).getMenu(context);
                                     // result = await MystockDB.instance.selectStaff(
                                     //     controller1.text, controller2.text);
 

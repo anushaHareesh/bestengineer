@@ -4,13 +4,15 @@ class LoginModel {
   String? branchId;
   String? branchName;
   String? branchPrefix;
+  String? qt_pre;
+
 
   LoginModel(
       {this.userId,
       this.staffName,
       this.branchId,
       this.branchName,
-      this.branchPrefix});
+      this.branchPrefix,this.qt_pre});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
@@ -18,6 +20,8 @@ class LoginModel {
     branchId = json['branch_id'];
     branchName = json['branch_name'];
     branchPrefix = json['branch_prefix'];
+    qt_pre = json['qt_pre'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -27,6 +31,8 @@ class LoginModel {
     data['branch_id'] = this.branchId;
     data['branch_name'] = this.branchName;
     data['branch_prefix'] = this.branchPrefix;
+    data['qt_pre'] = this.qt_pre;
+
     return data;
   }
 }

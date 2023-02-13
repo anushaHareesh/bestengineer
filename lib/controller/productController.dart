@@ -488,8 +488,7 @@ class ProductController extends ChangeNotifier {
   getEnqhistoryData(
     BuildContext context,
     String action,
-    String fromDate,
-    String tillDate,
+   
   ) async {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
@@ -502,8 +501,8 @@ class ProductController extends ChangeNotifier {
           Map body = {
             'staff_id': user_id,
             "branch_id": branch_id,
-            'from_date': fromDate,
-            'till_date': tillDate,
+            // 'from_date': fromDate,
+            // 'till_date': tillDate,
           };
           print("history body-----$body");
           if (action != "delete") {
@@ -635,7 +634,7 @@ class ProductController extends ChangeNotifier {
 
   ////////////////////////////////////////////////////////////
   updateHistory(BuildContext context, String event, String enqId, String fdate,
-      String tdate) async {
+      String tdate, String? reason) async {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -651,6 +650,7 @@ class ProductController extends ChangeNotifier {
             'event': event,
             'added_by': user_id,
             'branch_id': branch_id,
+            "remark": reason
           };
           // isLoading = true;
           // notifyListeners();
@@ -666,7 +666,7 @@ class ProductController extends ChangeNotifier {
           // notifyListeners();
 
           if (map["flag"] == 0) {
-            getEnqhistoryData(context, "", fdate, tdate);
+            getEnqhistoryData(context, "",);
           }
           /////////////// insert into local db /////////////////////
         } catch (e) {

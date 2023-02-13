@@ -1,10 +1,13 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/controller/controller.dart';
+import 'package:bestengineer/controller/registrationController.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:bestengineer/screen/registration%20and%20login/registration.dart';
 import 'package:flutter/material.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -46,7 +49,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (cid != null) {
                   // return DashboardPage();
                   if (st_uname != null && st_pwd != null) {
-                    // return MainDashboard();
+                    Provider.of<Controller>(context,
+                                            listen: false).getMenu(context);
                     return EnqHome();
                   } else {
                     return LoginPage();

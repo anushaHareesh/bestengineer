@@ -4,6 +4,7 @@ import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/screen/Enquiry/enqHistDetails.dart';
 import 'package:bestengineer/screen/Quotation/directQuotation.dart';
+import 'package:bestengineer/widgets/bottomsheets/removereason.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,8 +42,8 @@ class _EnQHistoryState extends State<EnQHistory> {
     Provider.of<ProductController>(context, listen: false).getEnqhistoryData(
       context,
       "",
-      s[0],
-      s[0],
+      // s[0],
+      // s[0],
     );
   }
 
@@ -60,127 +61,140 @@ class _EnQHistoryState extends State<EnQHistory> {
         child: Consumer<ProductController>(
           builder: (context, value, child) {
             return Column(children: [
-              Container(
-                height: size.height * 0.08,
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0, bottom: 8),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton(
-                        onPressed: () {
-                          // String df;
-                          // String tf;
-                          dateFind.selectDateFind(context, "from date");
-                          // if (value.fromDate == null) {
-                          //   df = todaydate.toString();
-                          // } else {
-                          //   df = value.fromDate.toString();
-                          // }
-                          // if (value.todate == null) {
-                          //   tf = todaydate.toString();
-                          // } else {
-                          //   tf = value.todate.toString();
-                          // }
-                          // Provider.of<Controller>(context, listen: false)
-                          //     .historyData(context, splitted[0], "",
-                          //         df, tf);
-                        },
-                        icon: Icon(
-                          Icons.calendar_month,
-                          // color: P_Settings.loginPagetheme,
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: Text(
-                        value.fromDate == null
-                            ? todaydate.toString()
-                            : value.fromDate.toString(),
-                        style: TextStyle(
+                    Text(
+                      "Enquiry List",
+                      style: TextStyle(
+                          fontSize: 19,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          dateFind.selectDateFind(context, "to date");
-                        },
-                        icon: Icon(Icons.calendar_month)),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: Text(
-                        value.todate == null
-                            ? todaydate.toString()
-                            : value.todate.toString(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                        child: Container(
-                      height: size.height * 0.05,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: P_Settings.loginPagetheme,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(2), // <-- Radius
-                            ),
-                          ),
-                          onPressed: () {
-                            String df;
-                            String tf;
-
-                            if (value.fromDate == null) {
-                              df = todaydate.toString();
-                            } else {
-                              df = value.fromDate.toString();
-                            }
-                            if (value.todate == null) {
-                              tf = todaydate.toString();
-                            } else {
-                              tf = value.todate.toString();
-                            }
-
-                            Provider.of<ProductController>(context,
-                                    listen: false)
-                                .getEnqhistoryData(
-                              context,
-                              "",
-                              df,
-                              tf,
-                            );
-                          },
-                          child: Text(
-                            "Apply",
-                            style: GoogleFonts.aBeeZee(
-                              textStyle: Theme.of(context).textTheme.bodyText2,
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: P_Settings.whiteColor,
-                            ),
-                          )),
-                    ))
+                          color: P_Settings.loginPagetheme),
+                    )
                   ],
                 ),
-                // dropDownCustom(size,""),
               ),
-              Divider(),
+              // Container(
+              //   height: size.height * 0.08,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: [
+              //       IconButton(
+              //           onPressed: () {
+              //             // String df;
+              //             // String tf;
+              //             dateFind.selectDateFind(context, "from date");
+              //             // if (value.fromDate == null) {
+              //             //   df = todaydate.toString();
+              //             // } else {
+              //             //   df = value.fromDate.toString();
+              //             // }
+              //             // if (value.todate == null) {
+              //             //   tf = todaydate.toString();
+              //             // } else {
+              //             //   tf = value.todate.toString();
+              //             // }
+              //             // Provider.of<Controller>(context, listen: false)
+              //             //     .historyData(context, splitted[0], "",
+              //             //         df, tf);
+              //           },
+              //           icon: Icon(
+              //             Icons.calendar_month,
+              //             // color: P_Settings.loginPagetheme,
+              //           )),
+              //       Padding(
+              //         padding: const EdgeInsets.only(right: 10.0),
+              //         child: Text(
+              //           value.fromDate == null
+              //               ? todaydate.toString()
+              //               : value.fromDate.toString(),
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             color: Colors.grey[700],
+              //           ),
+              //         ),
+              //       ),
+              //       IconButton(
+              //           onPressed: () {
+              //             dateFind.selectDateFind(context, "to date");
+              //           },
+              //           icon: Icon(Icons.calendar_month)),
+              //       Padding(
+              //         padding: const EdgeInsets.only(right: 10.0),
+              //         child: Text(
+              //           value.todate == null
+              //               ? todaydate.toString()
+              //               : value.todate.toString(),
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             color: Colors.grey[700],
+              //           ),
+              //         ),
+              //       ),
+              //       Flexible(
+              //           child: Container(
+              //         height: size.height * 0.05,
+              //         child: ElevatedButton(
+              //             style: ElevatedButton.styleFrom(
+              //               primary: P_Settings.loginPagetheme,
+              //               shape: RoundedRectangleBorder(
+              //                 borderRadius:
+              //                     BorderRadius.circular(2), // <-- Radius
+              //               ),
+              //             ),
+              //             onPressed: () {
+              //               String df;
+              //               String tf;
+
+              //               if (value.fromDate == null) {
+              //                 df = todaydate.toString();
+              //               } else {
+              //                 df = value.fromDate.toString();
+              //               }
+              //               if (value.todate == null) {
+              //                 tf = todaydate.toString();
+              //               } else {
+              //                 tf = value.todate.toString();
+              //               }
+
+              //               Provider.of<ProductController>(context,
+              //                       listen: false)
+              //                   .getEnqhistoryData(
+              //                 context,
+              //                 "",
+              //                 df,
+              //                 tf,
+              //               );
+              //             },
+              //             child: Text(
+              //               "Apply",
+              //               style: GoogleFonts.aBeeZee(
+              //                 textStyle: Theme.of(context).textTheme.bodyText2,
+              //                 fontSize: 17,
+              //                 fontWeight: FontWeight.bold,
+              //                 color: P_Settings.whiteColor,
+              //               ),
+              //             )),
+              //       ))
+              //     ],
+              //   ),
+              //   // dropDownCustom(size,""),
+              // ),
+              // Divider(),
               value.isLoading
                   ? Container(
-                      height: size.height * 0.2,
+                      height: size.height * 0.8,
                       child: SpinKitCircle(
                         color: P_Settings.loginPagetheme,
                       ),
                     )
                   : value.enQhistoryList.length == 0
-                      ? Center(
-                          child: Container(
-                            height: size.height * 0.2,
-                            child: Lottie.asset("assets/historyjson.json",
-                                height: size.height * 0.3),
-                          ),
+                      ? Container(
+                          height: size.height * 0.16,
+                          child: Lottie.asset("assets/hist.json",
+                              height: size.height * 0.3),
                         )
                       : ListView.builder(
                           shrinkWrap: true,
@@ -322,18 +336,10 @@ class _EnQHistoryState extends State<EnQHistory> {
                                         } else {
                                           tf = value.todate.toString();
                                         }
-                                        deletepopup.builddeletePopupDialog(
-                                            context,
-                                            value.enQhistoryList[index].enqCode
-                                                .toString(),
-                                            value.enQhistoryList[index].enqId
-                                                .toString(),
-                                            index,
-                                            "history",
-                                            value.enQhistoryList[index].enqId
-                                                .toString(),
-                                            df,
-                                            tf);
+
+                                        RemoveReason reason = RemoveReason();
+                                        reason.showDeleteReasonSheet(
+                                            context, index);
                                       },
                                       child: Row(
                                         mainAxisAlignment:
@@ -378,6 +384,11 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                                     .enQhistoryList[
                                                                         index]
                                                                     .enqCode
+                                                                    .toString(),
+                                                                enqId: value
+                                                                    .enQhistoryList[
+                                                                        index]
+                                                                    .enqId
                                                                     .toString(),
                                                               )),
                                                     );

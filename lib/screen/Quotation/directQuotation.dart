@@ -4,23 +4,29 @@ import 'package:bestengineer/widgets/bottomsheets/enqItemEdit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/bottomsheets/quotationItemSheet.dart';
+import '../../widgets/bottomsheets/remarksheet.dart';
 
 class DirectQuotation extends StatefulWidget {
   String enqcode;
+  String enqId;
 
-  DirectQuotation({required this.enqcode});
+  DirectQuotation({required this.enqcode, required this.enqId});
 
   @override
   State<DirectQuotation> createState() => _DirectQuotationState();
 }
 
 class _DirectQuotationState extends State<DirectQuotation> {
-  //  EnqDataEditsheet editsheet = EnqDataEditsheet();
+  String? sdate;
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? selected;
+  DateTime now = DateTime.now();
   QuotationItemSheet editsheet = QuotationItemSheet();
   Color parseColor(String color) {
     print("Colorrrrr...$color");
@@ -35,15 +41,99 @@ class _DirectQuotationState extends State<DirectQuotation> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sdate = DateFormat('dd-MM-yyyy').format(now);
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.grey[200],
       key: _scaffoldKey,
+      bottomNavigationBar: Container(
+        height: size.height * 0.06,
+        child: Consumer<QuotationController>(
+          builder: (context, value, child) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () {
+                    RemarkSheet remark = RemarkSheet();
+                    remark.showRemarkSheet(_scaffoldKey.currentContext!, sdate!,
+                        widget.enqId, _scaffoldKey, _keyLoader);
+                  },
+                  child: Container(
+                    // height: size.height*0.3,
+                    width: size.width * 0.45,
+                    color: P_Settings.loginPagetheme,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              "Make Quotation",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: P_Settings.whiteColor),
+                            ),
+                          ),
+                          Icon(
+                            Icons.picture_as_pdf,
+                            color: Colors.white,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: size.height * 0.3,
+                    color: Colors.yellow,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Total :",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: P_Settings.loginPagetheme),
+                        ),
+                        value.isDetailLoading
+                            ? SpinKitThreeBounce(
+                                color: P_Settings.loginPagetheme,
+                                size: 12,
+                              )
+                            : Text(
+                                "\u{20B9}${value.total.toStringAsFixed(2)}",
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
       appBar: AppBar(
         title: Text(
           widget.enqcode.toString(),
-          style: TextStyle(color: Colors.grey[700]),
+          style: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 17,
+              fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
             onPressed: () {
@@ -51,7 +141,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
             },
             icon: Icon(
               Icons.arrow_back,
-              color: Colors.grey,
+              color: Colors.grey[700],
             )),
         backgroundColor: P_Settings.whiteColor,
       ),
@@ -71,6 +161,36 @@ class _DirectQuotationState extends State<DirectQuotation> {
                 builder: (context, value, child) {
                   return Column(
                     children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                          bottom: 6,
+                          top: 6,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Icon(
+                              Icons.date_range,
+                              color: Colors.red,
+                            ),
+                            // Text(
+                            //   " Date",
+                            //   style: TextStyle(
+                            //       fontSize: 17, fontWeight: FontWeight.bold),
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.only(left:8.0),
+                              child: Text(
+                                sdate.toString(),
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    // fontWeight: FontWeight.bold,
+                                    color: Colors.green,fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Container(
                         margin: EdgeInsets.only(bottom: 0, top: 12, left: 10),
                         child: Row(
@@ -289,6 +409,15 @@ class _DirectQuotationState extends State<DirectQuotation> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: value.quotProdItem.length,
                         itemBuilder: (context, index) {
+                          double tdiscamt = double.parse(
+                              value.quotProdItem[index]["disc_amt"]);
+                          double t = double.parse(
+                              value.quotProdItem[index]["tax_amt"]);
+                          double tnet = double.parse(
+                              value.quotProdItem[index]["net_total"]);
+                          double gt =
+                              double.parse(value.quotProdItem[index]["gross"]);
+
                           return InkWell(
                             onTap: () {
                               value.rawCalculation(
@@ -311,7 +440,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 9, top: 2.0, right: 9),
+                                  left: 6, top: 2.0, right: 6),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   // side: BorderSide(
@@ -370,7 +499,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Discount  :       "),
                                                 Text(
-                                                  "\u{20B9} ${value.disc_amt.toString()}",
+                                                  "\u{20B9} ${tdiscamt.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
                                                       fontSize: 14,
@@ -410,7 +539,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Tax  :   "),
                                                 Text(
-                                                  "\u{20B9} ${value.tax.toStringAsFixed(2)}",
+                                                  "\u{20B9} ${t.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
                                                       fontSize: 14,
@@ -432,7 +561,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Gross  : "),
                                                 Text(
-                                                  "\u{20B9} ${value.gross.toString()}",
+                                                  "\u{20B9} ${gt.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
                                                       fontSize: 14,
@@ -472,7 +601,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   color: Colors.red,
                                                   fontWeight: FontWeight.bold)),
                                           Text(
-                                            "\u{20B9} ${value.net_amt.toStringAsFixed(2)}",
+                                            "\u{20B9} ${tnet.toStringAsFixed(2)}",
                                             style: TextStyle(
                                                 color: Colors.red,
                                                 fontSize: 14,

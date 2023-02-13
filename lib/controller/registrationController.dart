@@ -18,6 +18,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationController extends ChangeNotifier {
+ 
+
   bool isLoading = false;
   bool isLoginLoading = false;
   StaffDetails staffModel = StaffDetails();
@@ -28,6 +30,8 @@ class RegistrationController extends ChangeNotifier {
   String? cname;
   String? sof;
   int? qtyinc;
+  String? uid;
+  String? bId;
   List<CD> c_d = [];
   String? firstMenu;
 ///////////////////////////////////////////////////////////////////
@@ -170,6 +174,8 @@ class RegistrationController extends ChangeNotifier {
           loginModel = LoginModel.fromJson(item);
           prefs.setString("user_id", loginModel.userId!);
           prefs.setString("branch_id", loginModel.branchId!);
+          prefs.setString("qt_pre", loginModel.qt_pre!);
+
           prefs.setString("staff_name", loginModel.staffName!);
           prefs.setString("branch_name", loginModel.branchName!);
           prefs.setString("branch_prefix", loginModel.branchPrefix!);
@@ -231,48 +237,5 @@ class RegistrationController extends ChangeNotifier {
   }
 
 //////////////////////////////////////////////////////////////////////////////
-  // getMenuAPi(String company_code, String fp, String apk_key,
-  //     BuildContext context) async {
-  //   var res;
-  //   NetConnection.networkConnection(context).then((value) async {
-  //     if (value == true) {
-  //       print("company_code---fp-${company_code}---${fp}..${apk_key}");
-
-  //       try {
-  //         Uri url = Uri.parse("https://trafiqerp.in/order/fj/get_menu.php");
-  //         Map body = {
-  //           'apk_key': apk_key,
-  //           'company_code': company_code,
-  //           'fingerprint': fp,
-  //         };
-  //         print("body.........$body");
-  //         http.Response response = await http.post(
-  //           url,
-  //           body: body,
-  //         );
-
-  //         print("bodymenuuuuuu ${body}");
-  //         var map = jsonDecode(response.body);
-  //         print("map menu ${map}");
-  //         SideMenu sidemenuModel = SideMenu.fromJson(map);
-  //         firstMenu = sidemenuModel.first;
-  //         print("menuitem----${sidemenuModel.menu![0].menu_name}");
-  //         print("firstMenu----$firstMenu");
-  //         SharedPreferences prefs = await SharedPreferences.getInstance();
-  //         prefs.setString("firstMenu", firstMenu!);
-  //         for (var menuItem in sidemenuModel.menu!) {
-  //           print("menuitem----${menuItem.menu_name}");
-  //           // res = await MystockDB.instance
-  //           //     .insertMenuTable(menuItem.menu_index!, menuItem.menu_name!);
-  //           // menuList.add(menuItem);
-  //         }
-  //         print("insertion----$res");
-  //         notifyListeners();
-  //       } catch (e) {
-  //         print(e);
-  //         return null;
-  //       }
-  //     }
-  //   });
-  // }
+ 
 }

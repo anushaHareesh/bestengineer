@@ -30,6 +30,7 @@ class _EnqCartState extends State<EnqCart> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: P_Settings.whiteColor,
       key: _scaffoldKey,
       appBar: AppBar(
         leading: IconButton(
@@ -175,6 +176,16 @@ class _EnqCartState extends State<EnqCart> {
         child: Consumer<ProductController>(
           builder: (context, value, child) {
             return Card(
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                  // side: BorderSide(
+                  //   color: P_Settings.fillcolor,
+                  // ),
+                  // borderRadius: BorderRadius.only(
+                  //     bottomLeft: Radius.circular(20),
+                  //     topLeft: Radius.circular(70),
+                  //     topRight: Radius.circular(20))
+                  ),
               child: Column(
                 children: [
                   Row(
@@ -383,6 +394,7 @@ class _EnqCartState extends State<EnqCart> {
                                             .toString(),
                                         index,
                                         "cart",
+                                        "",
                                         "",
                                         "",
                                         "");

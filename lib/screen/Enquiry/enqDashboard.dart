@@ -597,7 +597,7 @@ class _EnqDashboardState extends State<EnqDashboard>
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.only(left: 8),
+                          margin: EdgeInsets.only(left: 4),
                           width: size.width * 0.3,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

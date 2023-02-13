@@ -6,7 +6,10 @@ import 'package:provider/provider.dart';
 import '../../components/commonColor.dart';
 
 class QuotationItemSheet {
+  ValueNotifier<bool> rateError = ValueNotifier(false);
+  TextEditingController desc = TextEditingController();
   showItemSheet(BuildContext context, int index, Map map) {
+    rateError.value = false;
     Size size = MediaQuery.of(context).size;
 
     String oldDesc;
@@ -39,7 +42,9 @@ class QuotationItemSheet {
                       children: [
                         IconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              if (rateError.value == false) {
+                                Navigator.pop(context);
+                              }
                             },
                             icon: Icon(Icons.close)),
                       ],
@@ -115,22 +120,31 @@ class QuotationItemSheet {
                                   child: TextField(
                                     keyboardType: TextInputType.number,
                                     onSubmitted: (val) {
-                                      value.fromApi = false;
-                                      value.rawCalculation(
-                                          double.parse(
-                                              value.rateEdit[index].text),
-                                          int.parse(value.quotqty[index].text),
-                                          double.parse(value
-                                              .discount_prercent[index].text),
-                                          double.parse(value
-                                              .discount_amount[index].text),
-                                          double.parse(map["tax_perc"]),
-                                          0.0,
-                                          "0",
-                                          0,
-                                          index,
-                                          true,
-                                          "rate");
+                                      double rateval = double.parse(val);
+                                      if (rateval <
+                                          double.parse(value.quotProdItem[index]
+                                              ["base_rate"])) {
+                                        rateError.value = true;
+                                      } else {
+                                        rateError.value = false;
+                                        value.rawCalculation(
+                                            double.parse(
+                                                value.rateEdit[index].text),
+                                            int.parse(
+                                                value.quotqty[index].text),
+                                            double.parse(value
+                                                .discount_prercent[index].text),
+                                            double.parse(value
+                                                .discount_amount[index].text),
+                                            double.parse(map["tax_perc"]),
+                                            0.0,
+                                            "0",
+                                            0,
+                                            index,
+                                            true,
+                                            "rate");
+                                      }
+                                      // value.fromApi = false;
                                     },
                                     textAlign: TextAlign.right,
                                     onTap: () {
@@ -277,7 +291,26 @@ class QuotationItemSheet {
                       ),
                     ),
                     // Padding(padding: EdgeInsets.all(8)),
-
+                    ListTile(
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+                      title: Row(
+                        children: [
+                          Text(
+                            "Gross",
+                            style: GoogleFonts.aBeeZee(
+                              textStyle: Theme.of(context).textTheme.bodyText2,
+                              fontSize: 17,
+                              // fontWeight: FontWeight.bold,
+                              // color: P_Settings.loginPagetheme,
+                            ),
+                          ),
+                          Spacer(),
+                          Container(
+                            child: Text(value.gross.toStringAsFixed(2)),
+                          )
+                        ],
+                      ),
+                    ),
                     ListTile(
                       visualDensity: VisualDensity(horizontal: 0, vertical: -3),
                       title: Row(
@@ -434,7 +467,36 @@ class QuotationItemSheet {
                         ],
                       ),
                     ),
-                    Divider(),
+                    Container(
+                      margin: EdgeInsets.only(left: 14, right: 14),
+                      child: TextField(
+                        onChanged: (val) {
+                          print("val----$val");
+                        },
+                        style: TextStyle(color: Colors.grey[500]),
+                        controller: desc,
+                        decoration: InputDecoration(
+                          hintText: "Description",
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 172, 170, 170)), //<-- SEE HERE
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 1,
+                                color: Color.fromARGB(
+                                    255, 172, 170, 170)), //<-- SEE HERE
+                          ),
+                        ),
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                      ),
+                    ),
+                    Divider(
+                      thickness: 1,
+                    ),
                     ListTile(
                       visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                       title: Row(
@@ -450,17 +512,37 @@ class QuotationItemSheet {
                           ),
                           Spacer(),
                           Container(
-                            child: Text(value.net_amt.toStringAsFixed(2)),
+                            child: Text(
+                              "\u{20B9}${value.net_amt.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           )
                         ],
                       ),
                     ),
-
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: ValueListenableBuilder(
+                          valueListenable: rateError,
+                          builder:
+                              (BuildContext context, bool v, Widget? child) {
+                            return Visibility(
+                              visible: v,
+                              child: Text(
+                                "Rate should be greater than base rate!!!",
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 16),
+                              ),
+                            );
+                          }),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          // width: size.width * 0.3,
+                          width: size.width * 0.3,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: P_Settings.loginPagetheme
@@ -470,10 +552,27 @@ class QuotationItemSheet {
 
                                   ),
                               onPressed: () async {
-                                FocusManager.instance.primaryFocus!.unfocus();
-                                // print("bhdb----${value.res}");
+                                if (rateError.value == false) {
+                                  Provider.of<QuotationController>(context,
+                                          listen: false)
+                                      .updateQuotationData(
+                                          context,
+                                          "0",
+                                          map["product_id"],
+                                          value.quotqty[index].text,
+                                          map["enq_id"],
+                                          value.rateEdit[index].text,
+                                          map["tax_perc"],
+                                          value.tax.toString(),
+                                          value.discount_prercent[index].text,
+                                          value.discount_amount[index].text,
+                                          value.net_amt.toString(),
+                                          value.gross.toString());
+                                  FocusManager.instance.primaryFocus!.unfocus();
+                                  // print("bhdb----${value.res}");
 
-                                Navigator.pop(context);
+                                  Navigator.pop(context);
+                                }
                               },
                               child: Text(
                                 "Apply",

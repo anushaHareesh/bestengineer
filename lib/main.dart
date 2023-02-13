@@ -31,7 +31,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// company Key------GHAEH4ULOTOA
+// company Key------BS12KNRVBGBE
 
 void requestPermission() async {
   var status = await Permission.storage.status;
@@ -153,7 +153,7 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ),
         ),
-        home: PdfHome()
+        home: SplashScreen()
 
         //  AnimatedSplashScreen(
         //   backgroundColor: Colors.black,
