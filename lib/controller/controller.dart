@@ -24,7 +24,7 @@ class Controller extends ChangeNotifier {
   bool isSaveLoading = false;
   bool isSavecustomer = false;
 
-  String? todate;
+  // String? todate;
   String urlgolabl = Globaldata.apiglobal;
   bool isLoading = false;
   bool isListLoading = false;
@@ -544,6 +544,7 @@ class Controller extends ChangeNotifier {
 
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
+          menu_index = map[0]["prefix"];
           menuList.clear();
           for (var item in map) {
             menuList.add(item);

@@ -27,7 +27,7 @@ class _EnQHistoryState extends State<EnQHistory> {
   DateTime now = DateTime.now();
   List<String> s = [];
   String? todaydate;
-  DeletePopup deletepopup = DeletePopup();
+  // DeletePopup deletepopup = DeletePopup();
   @override
   void initState() {
     // TODO: implement initState
@@ -61,21 +61,21 @@ class _EnQHistoryState extends State<EnQHistory> {
         child: Consumer<ProductController>(
           builder: (context, value, child) {
             return Column(children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Enquiry List",
-                      style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          color: P_Settings.loginPagetheme),
-                    )
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 8.0, bottom: 8),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text(
+              //         "Enquiry List",
+              //         style: TextStyle(
+              //             fontSize: 19,
+              //             fontWeight: FontWeight.bold,
+              //             color: P_Settings.loginPagetheme),
+              //       )
+              //     ],
+              //   ),
+              // ),
               // Container(
               //   height: size.height * 0.08,
               //   child: Row(
@@ -221,7 +221,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[700],
-                                                    fontSize: 15)),
+                                                    fontSize: 14)),
                                           ),
                                         ),
                                       ],
@@ -249,7 +249,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.grey[700],
-                                                  fontSize: 17),
+                                                  fontSize: 13),
                                             ),
                                           ),
 
@@ -258,6 +258,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                               Text(
                                                 "Added on : ",
                                                 style: TextStyle(
+                                                  fontSize: 13,
                                                     color: Colors.grey),
                                               ),
                                               Text(
@@ -267,7 +268,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[700],
-                                                    fontSize: 15),
+                                                    fontSize: 13),
                                               ),
                                             ],
                                           ),
@@ -281,7 +282,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                           Text(
                                             "Contact Person  : ",
                                             style:
-                                                TextStyle(color: Colors.grey),
+                                                TextStyle(color: Colors.grey,fontSize: 13),
                                           ),
                                           Flexible(
                                             child: Container(
@@ -293,7 +294,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[700],
-                                                    fontSize: 17),
+                                                    fontSize: 13),
                                               ),
                                             ),
                                           ),
@@ -350,61 +351,66 @@ class _EnQHistoryState extends State<EnQHistory> {
                                               Text(
                                                 "Remove",
                                                 style: TextStyle(
+                                                  fontSize: 13,
                                                   color: Colors.red,
                                                 ),
                                               ),
                                               Icon(
                                                 Icons.close,
                                                 color: Colors.red,
-                                                size: 17,
+                                                size: 14,
                                               )
                                             ],
                                           ),
                                           value.enQhistoryList[index]
                                                       .verify_status ==
                                                   "0"
-                                              ? TextButton(
-                                                  onPressed: () {
-                                                    Provider.of<QuotationController>(
-                                                            context,
-                                                            listen: false)
-                                                        .getQuotationFromEnqList(
-                                                            context,
-                                                            value
-                                                                .enQhistoryList[
-                                                                    index]
-                                                                .enqId
-                                                                .toString());
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              DirectQuotation(
-                                                                enqcode: value
-                                                                    .enQhistoryList[
-                                                                        index]
-                                                                    .enqCode
-                                                                    .toString(),
-                                                                enqId: value
-                                                                    .enQhistoryList[
-                                                                        index]
-                                                                    .enqId
-                                                                    .toString(),
-                                                              )),
-                                                    );
-                                                  },
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        "[Make Quotation]",
-                                                        style: TextStyle(
-                                                            color: P_Settings
-                                                                .loginPagetheme,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ],
+                                              ? Container(
+                                                  height: size.height * 0.05,
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Provider.of<QuotationController>(
+                                                              context,
+                                                              listen: false)
+                                                          .getQuotationFromEnqList(
+                                                              context,
+                                                              value
+                                                                  .enQhistoryList[
+                                                                      index]
+                                                                  .enqId
+                                                                  .toString());
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                DirectQuotation(
+                                                                  enqcode: value
+                                                                      .enQhistoryList[
+                                                                          index]
+                                                                      .enqCode
+                                                                      .toString(),
+                                                                  enqId: value
+                                                                      .enQhistoryList[
+                                                                          index]
+                                                                      .enqId
+                                                                      .toString(),
+                                                                )),
+                                                      );
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          "[Make Quotation]",
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              color: P_Settings
+                                                                  .loginPagetheme,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 )
                                               : Container(),
@@ -442,6 +448,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                 Text(
                                                   "View",
                                                   style: TextStyle(
+                                                    fontSize: 14,
                                                     color: Colors.green,
                                                   ),
                                                 ),
@@ -451,7 +458,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                                           left: 6.0),
                                                   child: Image.asset(
                                                     "assets/eye.png",
-                                                    height: 23,
+                                                    height: 20,
                                                     color: Colors.green,
                                                   ),
                                                 )

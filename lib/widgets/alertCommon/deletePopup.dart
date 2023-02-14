@@ -42,6 +42,7 @@ class DeletePopup {
                             if (type == "history") {
                               value.updateHistory(
                                   context, "2", enqId, fdtae, tdate, reason);
+                            } else if (type == "quotation") {
                             } else {
                               value.addDeletebagItem(
                                 itemName,

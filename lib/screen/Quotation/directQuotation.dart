@@ -102,7 +102,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                         Text(
                           "Total :",
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: P_Settings.loginPagetheme),
                         ),
@@ -114,7 +114,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                             : Text(
                                 "\u{20B9}${value.total.toStringAsFixed(2)}",
                                 style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.red),
                               ),
@@ -179,20 +179,21 @@ class _DirectQuotationState extends State<DirectQuotation> {
                             //       fontSize: 17, fontWeight: FontWeight.bold),
                             // ),
                             Padding(
-                              padding: const EdgeInsets.only(left:8.0),
+                              padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
                                 sdate.toString(),
                                 style: TextStyle(
                                     fontSize: 17,
                                     // fontWeight: FontWeight.bold,
-                                    color: Colors.green,fontStyle: FontStyle.italic),
+                                    color: Colors.green,
+                                    fontStyle: FontStyle.italic),
                               ),
                             ),
                           ],
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(bottom: 0, top: 12, left: 10),
+                        margin: EdgeInsets.only(bottom: 0, top: 8, left: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -244,7 +245,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                     .toUpperCase(),
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
@@ -256,7 +257,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                 value.phone.toString(),
                                                 style: TextStyle(
                                                     fontStyle: FontStyle.italic,
-                                                    fontSize: 16),
+                                                    fontSize: 14),
                                               ),
                                             )
                                           ],
@@ -288,7 +289,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                       const EdgeInsets.only(
                                                           left: 8.0),
                                                   child: Container(
-                                                    width: size.width * 0.6,
+                                                    width: size.width * 0.53,
                                                     child: Text(
                                                       value.cus_info.toString(),
                                                       overflow:
@@ -327,7 +328,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                         const EdgeInsets.only(
                                                             left: 8.0),
                                                     child: Container(
-                                                      width: size.width * 0.6,
+                                                      width: size.width * 0.53,
                                                       child: Text(
                                                         value.landmarked
                                                             .toString(),
@@ -368,7 +369,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                         const EdgeInsets.only(
                                                             left: 8.0),
                                                     child: Container(
-                                                      width: size.width * 0.6,
+                                                      width: size.width * 0.51,
                                                       child: Text(
                                                         value.c_person
                                                             .toString(),
@@ -467,7 +468,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   .toString(),
                                               style: TextStyle(
                                                   color: Colors.grey[700],
-                                                  fontSize: 14,
+                                                  fontSize: 13,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
@@ -486,7 +487,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}',
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -502,7 +503,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   "\u{20B9} ${tdiscamt.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -526,7 +527,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                       .toString(),
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -542,7 +543,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   "\u{20B9} ${t.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -564,7 +565,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                                   "\u{20B9} ${gt.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       // color: Colors.grey,
-                                                      fontSize: 14,
+                                                      fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.w300),
                                                 ),
@@ -604,7 +605,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                             "\u{20B9} ${tnet.toStringAsFixed(2)}",
                                             style: TextStyle(
                                                 color: Colors.red,
-                                                fontSize: 14,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ],

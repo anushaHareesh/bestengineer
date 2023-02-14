@@ -449,7 +449,9 @@ class QuotationController extends ChangeNotifier {
   }
 
   ////////////////////////////////////////////////////////////////////////
-  getQuotationList(BuildContext context, String qutation_id) {
+  getQuotationList(
+    BuildContext context,
+  ) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -458,19 +460,19 @@ class QuotationController extends ChangeNotifier {
           String? user_id = prefs.getString("user_id");
           String? qutation_id1 = prefs.getString("qutation_id");
           notifyListeners();
-          Uri url = Uri.parse("$urlgolabl/get_menu.php");
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/get_qutation_list.php");
           Map body = {
             'staff_id': user_id,
-            'branch_id': branch_id,
           };
-          print("pdf body----$body");
+          print("qutationlist b----$body");
           isQuotLoading = true;
           notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
-          print("map ----$map");
+          print("qutationlist map ----$map");
           quotationList.clear();
-          for (var item in map) {
+          for (var item in map["master"]) {
             quotationList.add(item);
           }
           isQuotLoading = false;

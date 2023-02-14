@@ -1,5 +1,3 @@
-
-
 import 'package:bestengineer/pdftest/pdfExport.dart';
 import 'package:bestengineer/pdftest/pdfModel.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +12,7 @@ class PdfPreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back)),
         title: Text('PDF Preview'),
         actions: [
           IconButton(

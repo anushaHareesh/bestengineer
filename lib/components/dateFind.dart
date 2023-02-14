@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
-
 import 'package:provider/provider.dart';
 
 import '../controller/controller.dart';
@@ -56,7 +55,6 @@ class DateFind {
         fromDate = DateFormat('dd-MM-yyyy').format(defaultDate);
       }
     }
-
     print("fromdate-----$fromDate---$toDate");
     // Provider.of<Controller>(context, listen: false).fromDate=fromDate;
     if (fromDate != null && toDate != null) {
@@ -64,7 +62,7 @@ class DateFind {
           .setDate(fromDate!, toDate!);
     }
     toDate = toDate == null
-        ? Provider.of<Controller>(context, listen: false).todate.toString()
+        ? Provider.of<ProductController>(context, listen: false).todate.toString()
         : toDate.toString();
   }
 }

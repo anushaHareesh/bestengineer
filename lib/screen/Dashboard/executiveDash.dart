@@ -142,7 +142,7 @@ class _ExecutiveDashBoardState extends State<ExecutiveDashBoard> {
                     ],
                   ),
                   SizedBox(
-                    height: size.height * 0.02,
+                    height: size.height * 0.00,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
