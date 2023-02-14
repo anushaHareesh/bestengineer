@@ -20,6 +20,8 @@ class QuotatationListScreen extends StatefulWidget {
 class _QuotatationListScreenState extends State<QuotatationListScreen> {
   DateFind dateFind = DateFind();
   DateTime now = DateTime.now();
+  DateTime currentDate = DateTime.now();
+
   List<String> s = [];
   String? todaydate;
   String? date;
@@ -28,9 +30,9 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
-    todaydate = DateFormat('dd-MM-yyyy').format(now);
-    s = date!.split(" ");
+    // date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
+    date = DateFormat('dd-MM-yyyy').format(now);
+    // s = date!.split(" ");
   }
 
   @override
@@ -199,27 +201,26 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                           color: Colors.grey[600],
                                         ),
                                       ),
-                                      Consumer<ProductController>(
+                                      Consumer<QuotationController>(
                                         builder: (context, value, child) {
                                           return Row(
                                             children: [
                                               InkWell(
-                                                onTap: () {
-                                                  dateFind.selectDateFind(
-                                                      context, "to date");
+                                                onTap: () async {
+                                                  _selectDate(context,index);
+                                                  // dateFind.selectDateFind(
+                                                  //     context, "to date");
                                                 },
-                                                child: Icon(
-                                                    Icons.calendar_month,
-                                                    color: Colors.blue,
-                                                    size: 17),
+                                                child:
+                                                    Icon(Icons.calendar_month,
+                                                        // color: Colors.blue,
+                                                        size: 17),
                                               ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 10.0),
                                                 child: Text(
-                                                  value.todate == null
-                                                      ? todaydate.toString()
-                                                      : value.todate.toString(),
+                                                  value.qtScheduldate[index].toString(),
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.bold,
@@ -297,5 +298,27 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context,int index) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2050),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+              data: ThemeData.light().copyWith(
+                colorScheme: ColorScheme.light()
+                    .copyWith(primary: P_Settings.loginPagetheme),
+              ),
+              child: child!);
+        });
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        // date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
+        date = DateFormat('dd-MM-yyyy').format(pickedDate);
+          Provider.of<QuotationController>(context, listen: false).setScheduledDate(index,date!);
+      });
   }
 }

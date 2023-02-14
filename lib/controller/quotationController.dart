@@ -21,7 +21,7 @@ class QuotationController extends ChangeNotifier {
   String? landmarked;
   String? color1;
   String? cust_id;
-
+  List<String> qtScheduldate = [];
   double total = 0.0;
   double stotal_qty = 0.0;
   double s_total_taxable = 0.0;
@@ -449,9 +449,7 @@ class QuotationController extends ChangeNotifier {
   }
 
   ////////////////////////////////////////////////////////////////////////
-  getQuotationList(
-    BuildContext context,
-  ) {
+  getQuotationList(BuildContext context, String sdate) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -475,6 +473,8 @@ class QuotationController extends ChangeNotifier {
           for (var item in map["master"]) {
             quotationList.add(item);
           }
+          qtScheduldate = List.generate(quotationList.length, (index) => sdate);
+
           isQuotLoading = false;
           notifyListeners();
         } catch (e) {
@@ -484,5 +484,11 @@ class QuotationController extends ChangeNotifier {
         }
       }
     });
+  }
+
+  ///////////////////////////////////////////////////////////
+  setScheduledDate(int index, String date) async {
+    qtScheduldate[index] = date;
+    notifyListeners();
   }
 }

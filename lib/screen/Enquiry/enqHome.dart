@@ -11,6 +11,7 @@ import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,10 @@ class EnqHome extends StatefulWidget {
 
 class _EnqHomeState extends State<EnqHome> {
   bool val = true;
-
+  DateTime now = DateTime.now();
+  List<String> s = [];
+  String? todaydate;
+  String? date;
   String? selected;
   int _selectedIndex = 0;
   String? staffName;
@@ -40,6 +44,9 @@ class _EnqHomeState extends State<EnqHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
+    todaydate = DateFormat('dd-MM-yyyy').format(now);
+    s = date!.split(" ");
     Provider.of<Controller>(context, listen: false).getMenu(context);
     Provider.of<Controller>(context, listen: false).getArea(context);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
@@ -84,7 +91,7 @@ class _EnqHomeState extends State<EnqHome> {
       case "QL":
         {
           Provider.of<QuotationController>(context, listen: false)
-              .getQuotationList(context);
+              .getQuotationList(context, todaydate!);
           return QuotatationListScreen();
         }
 
@@ -124,7 +131,8 @@ class _EnqHomeState extends State<EnqHome> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Color.fromARGB(255, 250, 248, 248),
         key: _key,
-        appBar: Provider.of<Controller>(context, listen: false).menu_index == "DL"
+        appBar: Provider.of<Controller>(context, listen: false).menu_index ==
+                "DL"
             ? AppBar(
                 backgroundColor: P_Settings.loginPagetheme,
                 elevation: 0,
@@ -186,7 +194,8 @@ class _EnqHomeState extends State<EnqHome> {
                                           ? "Choose Area"
                                           : value.selected.toString(),
                                       style: TextStyle(
-                                          fontSize: 14, color: Colors.grey[800]),
+                                          fontSize: 14,
+                                          color: Colors.grey[800]),
                                     ),
                                   ],
                                 );
@@ -195,34 +204,41 @@ class _EnqHomeState extends State<EnqHome> {
                           ),
                         ),
                 ],
-                title: Text( Provider.of<Controller>(context, listen: false)
+                title: Text(
+                  Provider.of<Controller>(context, listen: false).menu_index ==
+                          "QL"
+                      ? "Quotation List"
+                      : Provider.of<Controller>(context, listen: false)
                                   .menu_index ==
-                              "QL"?"Quotation List":
-                              
-                              Provider.of<Controller>(context, listen: false)
-                                  .menu_index ==
-                              "EL"?"Enquiry List":"",style: TextStyle(fontSize: 15),),
-                backgroundColor:
-                    Provider.of<Controller>(context, listen: false).menu_index ==
-                            "EL" ||  Provider.of<Controller>(context, listen: false)
-                                  .menu_index ==
-                              "QL"
-                        ? P_Settings.loginPagetheme
-                        : P_Settings.whiteColor,
+                              "EL"
+                          ? "Enquiry List"
+                          : "",
+                  style: TextStyle(fontSize: 15),
+                ),
+                backgroundColor: Provider.of<Controller>(context, listen: false)
+                                .menu_index ==
+                            "EL" ||
+                        Provider.of<Controller>(context, listen: false)
+                                .menu_index ==
+                            "QL"
+                    ? P_Settings.loginPagetheme
+                    : P_Settings.whiteColor,
                 elevation: 1,
                 leading: Builder(
                   builder: (context) => Consumer<Controller>(
                     builder: (context, value, child) {
                       return IconButton(
                           icon: new Icon(Icons.menu,
-                              color:
-                                  Provider.of<Controller>(context, listen: false)
+                              color: Provider.of<Controller>(context,
+                                                  listen: false)
                                               .menu_index ==
-                                          "EL" ||  Provider.of<Controller>(context, listen: false)
-                                  .menu_index ==
-                              "QL"
-                                      ? P_Settings.whiteColor
-                                      : Colors.grey[800]),
+                                          "EL" ||
+                                      Provider.of<Controller>(context,
+                                                  listen: false)
+                                              .menu_index ==
+                                          "QL"
+                                  ? P_Settings.whiteColor
+                                  : Colors.grey[800]),
                           onPressed: () async {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
@@ -236,14 +252,17 @@ class _EnqHomeState extends State<EnqHome> {
                                         .length;
                                 i++) {
                               // var d =Provider.of<Controller>(context, listen: false).drawerItems[i];
-    
+
                               drawerOpts.add(Consumer<Controller>(
                                 builder: (context, value, child) {
                                   // print(
                                   //     "menulist[menu]-------${value.menuList[i]["menu_name"]}");
                                   return Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 8.0, right: 8, top: 10, bottom: 0),
+                                        left: 8.0,
+                                        right: 8,
+                                        top: 10,
+                                        bottom: 0),
                                     child: InkWell(
                                       onTap: () {
                                         _onSelectItem(
@@ -260,9 +279,11 @@ class _EnqHomeState extends State<EnqHome> {
                                               // ),
                                               Container(
                                                 child: Text(
-                                                  value.menuList[i]["menu_name"],
+                                                  value.menuList[i]
+                                                      ["menu_name"],
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       fontSize: 17),
                                                 ),
                                               ),
@@ -288,7 +309,7 @@ class _EnqHomeState extends State<EnqHome> {
                   ),
                 ),
               ),
-    
+
         drawer: Consumer<Controller>(
           builder: (context, value, child) {
             return Drawer(
@@ -313,7 +334,8 @@ class _EnqHomeState extends State<EnqHome> {
                                   CircleAvatar(
                                     backgroundColor: Colors.transparent,
                                     radius: 30,
-                                    backgroundImage: AssetImage("assets/man.png"),
+                                    backgroundImage:
+                                        AssetImage("assets/man.png"),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
