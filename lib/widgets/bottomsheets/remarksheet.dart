@@ -5,8 +5,13 @@ import 'package:provider/provider.dart';
 
 class RemarkSheet {
   TextEditingController remark = TextEditingController();
-  showRemarkSheet(BuildContext context, String sdate, String enq_id,
-      GlobalKey<ScaffoldState> _scaffoldKey, GlobalKey<State> _keyLoader) {
+  showRemarkSheet(
+      BuildContext context,
+      String sdate,
+      String enq_id,
+      GlobalKey<ScaffoldState> _scaffoldKey,
+      GlobalKey<State> _keyLoader,
+      String type,String rwId) {
     Size size = MediaQuery.of(context).size;
     return showModalBottomSheet<void>(
       isScrollControlled: true,
@@ -87,12 +92,24 @@ class RemarkSheet {
                           style: ElevatedButton.styleFrom(
                               primary: P_Settings.loginPagetheme),
                           onPressed: () {
+                            String hiddenstatus;
+                            if (type == "edit") {
+                              hiddenstatus = "1";
+                            } else {
+                              hiddenstatus = "0";
+                            }
                             Navigator.of(_scaffoldKey.currentContext!).pop();
                             showDailogue(context, true, _keyLoader, 1);
                             Provider.of<QuotationController>(context,
                                     listen: false)
-                                .saveQuotation(_scaffoldKey.currentContext!,
-                                    remark.text, sdate, "0", enq_id);
+                                .saveQuotation(
+                                    _scaffoldKey.currentContext!,
+                                    remark.text,
+                                    sdate,
+                                    rwId,
+                                    enq_id,
+                                    type,
+                                    hiddenstatus);
                           },
                           child: Text(
                             "Apply",

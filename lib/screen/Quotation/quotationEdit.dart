@@ -1,26 +1,23 @@
 import 'package:bestengineer/components/commonColor.dart';
-import 'package:bestengineer/controller/quotationController.dart';
-import 'package:bestengineer/widgets/bottomsheets/enqItemEdit.dart';
+import 'package:bestengineer/widgets/bottomsheets/quotationItemSheet.dart';
+import 'package:bestengineer/widgets/bottomsheets/remarksheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../widgets/bottomsheets/quotationItemSheet.dart';
-import '../../widgets/bottomsheets/remarksheet.dart';
+import '../../controller/quotationController.dart';
 
-class DirectQuotation extends StatefulWidget {
-  String enqcode;
-  String enqId;
-
-  DirectQuotation({required this.enqcode, required this.enqId});
+class QuotationEditScreen extends StatefulWidget {
+  String? row_id;
+  String? enqId;
+  QuotationEditScreen({required this.row_id, required this.enqId});
 
   @override
-  State<DirectQuotation> createState() => _DirectQuotationState();
+  State<QuotationEditScreen> createState() => _QuotationEditScreenState();
 }
 
-class _DirectQuotationState extends State<DirectQuotation> {
+class _QuotationEditScreenState extends State<QuotationEditScreen> {
   String? sdate;
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
@@ -63,8 +60,14 @@ class _DirectQuotationState extends State<DirectQuotation> {
                 InkWell(
                   onTap: () {
                     RemarkSheet remark = RemarkSheet();
-                    remark.showRemarkSheet(_scaffoldKey.currentContext!, sdate!,
-                        widget.enqId, _scaffoldKey, _keyLoader,"add","");
+                    remark.showRemarkSheet(
+                        _scaffoldKey.currentContext!,
+                        sdate!,
+                        widget.enqId!,
+                        _scaffoldKey,
+                        _keyLoader,
+                        "edit",
+                        widget.row_id!);
                   },
                   child: Container(
                     // height: size.height*0.3,
@@ -129,7 +132,8 @@ class _DirectQuotationState extends State<DirectQuotation> {
       ),
       appBar: AppBar(
         title: Text(
-          widget.enqcode.toString(),
+          "",
+          // widget.enqcode.toString(),
           style: TextStyle(
               color: Colors.grey[700],
               fontSize: 17,
@@ -149,7 +153,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
         physics: ScrollPhysics(),
         child: Consumer<QuotationController>(
           builder: (context, value, child) {
-            if (value.isDetailLoading) {
+            if (value.isQuotEditLoading) {
               return Container(
                 height: size.height * 0.8,
                 child: SpinKitCircle(
@@ -408,16 +412,16 @@ class _DirectQuotationState extends State<DirectQuotation> {
                       ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: value.quotProdItem.length,
+                        itemCount: value.quotationEditList.length,
                         itemBuilder: (context, index) {
                           double tdiscamt = double.parse(
-                              value.quotProdItem[index]["disc_amt"]);
+                              value.quotationEditList[index]["disc_amt"]);
                           double t = double.parse(
-                              value.quotProdItem[index]["tax_amt"]);
+                              value.quotationEditList[index]["tax_amt"]);
                           double tnet = double.parse(
-                              value.quotProdItem[index]["net_total"]);
-                          double gt =
-                              double.parse(value.quotProdItem[index]["gross"]);
+                              value.quotationEditList[index]["net_total"]);
+                          double gt = double.parse(
+                              value.quotationEditList[index]["gross"]);
 
                           return InkWell(
                             onTap: () {
@@ -428,8 +432,8 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                       value.discount_prercent[index].text),
                                   double.parse(
                                       value.discount_amount[index].text),
-                                  double.parse(
-                                      value.quotProdItem[index]["tax_perc"]),
+                                  double.parse(value.quotationEditList[index]
+                                      ["tax_perc"]),
                                   0.0,
                                   "0",
                                   0,
@@ -437,7 +441,12 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                   true,
                                   "");
                               editsheet.showItemSheet(
-                                  context, index, value.quotProdItem[index],"add","","");
+                                  context,
+                                  index,
+                                  value.quotationEditList[index],
+                                  "edit",
+                                  value.enId!,
+                                  widget.row_id.toString());
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -463,7 +472,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                           Flexible(
                                             child: Text(
                                               // "sdsbdhsbdhszbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-                                              value.quotProdItem[index]
+                                              value.quotationEditList[index]
                                                       ["product_name"]
                                                   .toString(),
                                               style: TextStyle(
@@ -484,7 +493,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Rate    : "),
                                                 Text(
-                                                  '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}',
+                                                  '\u{20B9}${value.quotationEditList[index]["l_rate"].toString()}',
                                                   style: TextStyle(
                                                       // color: Colors.grey,
                                                       fontSize: 13,
@@ -522,7 +531,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 Text("Qty      : "),
                                                 Text(
-                                                  value.quotProdItem[index]
+                                                  value.quotationEditList[index]
                                                           ["qty"]
                                                       .toString(),
                                                   style: TextStyle(

@@ -13,9 +13,15 @@ import '../screen/Quotation/pdfPrev.dart';
 
 class QuotationController extends ChangeNotifier {
   String urlgolabl = Globaldata.apiglobal;
+  String? enId;
   String? customer_name;
+  String? company_pin;
+  String? phone2;
+  String? qt_date;
+  String? s_reference;
   String? c_person;
   String? phone;
+  bool isQuotEditLoading = false;
   String? cus_info;
   String? priority;
   String? landmarked;
@@ -54,6 +60,7 @@ class QuotationController extends ChangeNotifier {
 
   List<Map<String, dynamic>> quotProdItem = [];
   List<Map<String, dynamic>> quotationList = [];
+  List<Map<String, dynamic>> quotationEditList = [];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   String rawCalculation(
@@ -70,8 +77,7 @@ class QuotationController extends ChangeNotifier {
       String? disCalc) {
     flag = false;
 
-    print(
-        "attribute----$rate----$qty--$tax_per--$disc_per------$disc_amount----$cess_per--$method--$disCalc -");
+    print("attribute----$rate----$qty--  cccc  $tax_per---");
     if (method == "0") {
       /////////////////////////////////method=="0" - excluisive , method=1 - inclusive
       taxable_rate = rate;
@@ -184,6 +190,8 @@ class QuotationController extends ChangeNotifier {
           print("quot------$map");
           priority = map["master"][0]["priority"];
           cust_id = map["master"][0]["cust_id"];
+          company_pin = map["master"][0]["company_pin"];
+          phone2 = map["master"][0]["phone_2"];
 
           customer_name = map["master"][0]["company_name"];
           cus_info = map["master"][0]["cust_info"];
@@ -251,7 +259,9 @@ class QuotationController extends ChangeNotifier {
       String disc_per,
       String disc_amt,
       String net_total,
-      String gross) async {
+      String gross,
+      String type,
+      String row_id) async {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -291,8 +301,11 @@ class QuotationController extends ChangeNotifier {
           // jsonDecode(response.body);
 
           print("update quot------${map}");
-
-          getQuotationFromEnqList(context, enq_id);
+          if (type == "add") {
+            getQuotationFromEnqList(context, enq_id);
+          } else if (type == "edit") {
+            quotationEdit(context, row_id, enq_id);
+          }
 
           /////////////// insert into local db /////////////////////
         } catch (e) {
@@ -306,7 +319,7 @@ class QuotationController extends ChangeNotifier {
 
   /////////////////////////////////////////////////////////////////////////
   saveQuotation(BuildContext context, String? remark, String sdate, String rwid,
-      String enq_id) async {
+      String enq_id, String type, String hiddenstatus) async {
     List<Map<String, dynamic>> jsonResult = [];
     Map<String, dynamic> itemmap = {};
     Map<String, dynamic> resultmmap = {};
@@ -323,31 +336,58 @@ class QuotationController extends ChangeNotifier {
 
         jsonResult.clear();
         itemmap.clear();
-
-        for (var i = 0; i < quotProdItem.length; i++) {
-          var itemmap = {
-            "product_id": quotProdItem[i]["product_id"],
-            "product_name": quotProdItem[i]["product_name"],
-            "description": quotProdItem[i]["product_info"],
-            "qty": quotProdItem[i]["product_name"],
-            "rate": quotProdItem[i]["l_rate"],
-            "tax": quotProdItem[i]["tax_amt"],
-            "amount": quotProdItem[i]["gross"],
-            "discount_perc": quotProdItem[i]["disc"],
-            "discount_amount": quotProdItem[i]["disc_amt"],
-            "net_rate": quotProdItem[i]["net_total"],
-          };
-          jsonResult.add(itemmap);
+        if (type == "add") {
+          print("xjdjkfhjd------$quotProdItem");
+          for (var i = 0; i < quotProdItem.length; i++) {
+            var itemmap = {
+              "product_id": quotProdItem[i]["product_id"],
+              "product_name": quotProdItem[i]["product_name"],
+              "description": quotProdItem[i]["product_info"],
+              "qty": quotProdItem[i]["qty"],
+              "rate": quotProdItem[i]["l_rate"],
+              "tax": quotProdItem[i]["tax_amt"],
+              "tax_perc": quotProdItem[i]["tax_perc"],
+              "amount": quotProdItem[i]["gross"],
+              "discount_perc": quotProdItem[i]["disc"],
+              "discount_amount": quotProdItem[i]["disc_amt"],
+              "net_rate": quotProdItem[i]["net_total"],
+            };
+            jsonResult.add(itemmap);
+          }
+        } else if (type == "edit") {
+          print("save ediot quot quotationEditList-----$quotationEditList");
+          for (var i = 0; i < quotationEditList.length; i++) {
+            var itemmap = {
+              "product_id": quotationEditList[i]["product_id"],
+              "product_name": quotationEditList[i]["product_name"],
+              "description": quotationEditList[i]["product_info"],
+              "qty": quotationEditList[i]["qty"],
+              "rate": quotationEditList[i]["l_rate"],
+              "tax": quotationEditList[i]["tax_amt"],
+              "tax_perc": quotationEditList[i]["tax_perc"],
+              "amount": quotationEditList[i]["gross"],
+              "discount_perc": quotationEditList[i]["disc"],
+              "discount_amount": quotationEditList[i]["disc_amt"],
+              "net_rate": quotationEditList[i]["net_total"],
+            };
+            jsonResult.add(itemmap);
+          }
         }
+
         print("jsonResult----$jsonResult");
         Map masterMap = {
+          "company_add1": cus_info,
+          "phone_1": phone,
+          "phone_2": phone2,
+          "company_pin": company_pin,
+          "owner_name": c_person,
           "enq_id": enq_id,
           "s_customer_id": cust_id,
           "s_customer_name": customer_name,
           "s_invoice_date": sdate,
           "s_reference": remark,
           "l_id": priority,
-          "hidden_status": "0",
+          "hidden_status": hiddenstatus,
           "tot_qty": stotal_qty,
           "s_total_dicount": s_total_disc,
           "s_total_taxable": s_total_taxable,
@@ -357,9 +397,9 @@ class QuotationController extends ChangeNotifier {
           "branch_id": branch_id,
           "dflag": "1",
           "qt_pre": qt_pre,
+          "tnc": [],
           "details": jsonResult
         };
-
         print("resultmap----$masterMap");
         // var body = {'json_data': masterMap};
         // print("body-----$body");
@@ -374,6 +414,7 @@ class QuotationController extends ChangeNotifier {
         );
         var map = jsonDecode(response.body);
         print("quot map----$map");
+
         prefs.setString("qutation_id", map["qutation_id"].toString());
         return showDialog(
             context: context,
@@ -490,5 +531,85 @@ class QuotationController extends ChangeNotifier {
   setScheduledDate(int index, String date) async {
     qtScheduldate[index] = date;
     notifyListeners();
+  }
+
+  //////////////////////////////////////////////////////////////
+  quotationEdit(BuildContext context, String row_id, String enqId) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+          notifyListeners();
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/edit_qutation_master.php");
+          Map body = {
+            'row_id': row_id,
+            "enq_id": enqId,
+          };
+          print("qutationlistedit  b----$body");
+          isQuotEditLoading = true;
+          notifyListeners();
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("qutationliseditttt map ----$map");
+          priority = map["master"][0]["priority"];
+          cust_id = map["master"][0]["s_customer_id"];
+          company_pin = map["master"][0]["company_pin"];
+          phone2 = map["master"][0]["phone_2"];
+          customer_name = map["master"][0]["customer_name"];
+          cus_info = map["master"][0]["company_add1"];
+          phone = map["master"][0]["phone_1"];
+          c_person = map["master"][0]["owner_name"];
+          s_reference = map["master"][0]["s_reference"];
+          qt_date = map["master"][0]["qt_date"];
+          enId = map["master"][0]["enq_id"];
+          color1 = map["master"][0]["l_color"];
+
+          quotationEditList.clear();
+
+          for (var item in map["details"]) {
+            quotationEditList.add(item);
+          }
+          print("details--------$quotationEditList");
+
+          rateEdit = List.generate(
+              quotationEditList.length, (index) => TextEditingController());
+          quotqty = List.generate(
+              quotationEditList.length, (index) => TextEditingController());
+          discount_prercent = List.generate(
+              quotationEditList.length, (index) => TextEditingController());
+          discount_amount = List.generate(
+              quotationEditList.length, (index) => TextEditingController());
+          total = 0.0;
+          s_total_disc = 0.0;
+          s_total_taxable = 0.0;
+          stotal_qty = 0.0;
+
+          print("quotProdItem----$quotationEditList");
+          for (int i = 0; i < quotationEditList.length; i++) {
+            rateEdit[i].text = quotationEditList[i]["l_rate"];
+            quotqty[i].text = quotationEditList[i]["qty"];
+            // rateEdit[i].text = quotProdItem[i]["l_rate"];
+            discount_prercent[i].text = quotationEditList[i]["disc"];
+            discount_amount[i].text = quotationEditList[i]["disc_amt"];
+            total = total + double.parse(quotationEditList[i]["net_total"]);
+            s_total_disc =
+                s_total_disc + double.parse(quotationEditList[i]["disc_amt"]);
+            stotal_qty = stotal_qty + double.parse(quotationEditList[i]["qty"]);
+            s_total_taxable =
+                s_total_taxable + double.parse(quotationEditList[i]["tax_amt"]);
+          }
+          isQuotEditLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
   }
 }

@@ -6,9 +6,12 @@ import 'package:provider/provider.dart';
 import '../../components/commonColor.dart';
 
 class QuotationItemSheet {
+  String? enqId;
+
   ValueNotifier<bool> rateError = ValueNotifier(false);
   TextEditingController desc = TextEditingController();
-  showItemSheet(BuildContext context, int index, Map map) {
+  showItemSheet(
+      BuildContext context, int index, Map map, String type, String enid,String row_id) {
     rateError.value = false;
     Size size = MediaQuery.of(context).size;
 
@@ -122,8 +125,9 @@ class QuotationItemSheet {
                                     onSubmitted: (val) {
                                       double rateval = double.parse(val);
                                       if (rateval <
-                                          double.parse(value.quotProdItem[index]
-                                              ["base_rate"])) {
+                                          double.parse(
+                                              value.quotationEditList[index]
+                                                  ["base_rate"])) {
                                         rateError.value = true;
                                       } else {
                                         rateError.value = false;
@@ -553,21 +557,28 @@ class QuotationItemSheet {
                                   ),
                               onPressed: () async {
                                 if (rateError.value == false) {
+                                  if (type == "edit") {
+                                    enqId = enid;
+                                  } else if (type == "add") {
+                                    enqId = map["enq_id"];
+                                  }
                                   Provider.of<QuotationController>(context,
                                           listen: false)
                                       .updateQuotationData(
-                                          context,
-                                          "0",
-                                          map["product_id"],
-                                          value.quotqty[index].text,
-                                          map["enq_id"],
-                                          value.rateEdit[index].text,
-                                          map["tax_perc"],
-                                          value.tax.toString(),
-                                          value.discount_prercent[index].text,
-                                          value.discount_amount[index].text,
-                                          value.net_amt.toString(),
-                                          value.gross.toString());
+                                    context,
+                                    "0",
+                                    map["product_id"],
+                                    value.quotqty[index].text,
+                                    enqId.toString(),
+                                    value.rateEdit[index].text,
+                                    map["tax_perc"],
+                                    value.tax.toString(),
+                                    value.discount_prercent[index].text,
+                                    value.discount_amount[index].text,
+                                    value.net_amt.toString(),
+                                    value.gross.toString(),
+                                    type,row_id
+                                  );
                                   FocusManager.instance.primaryFocus!.unfocus();
                                   // print("bhdb----${value.res}");
 

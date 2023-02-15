@@ -18,19 +18,22 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationController extends ChangeNotifier {
- 
-
+  bool isMenuLoading = false;
+  String? staff_name;
   bool isLoading = false;
   bool isLoginLoading = false;
   StaffDetails staffModel = StaffDetails();
   String urlgolabl = Globaldata.apiglobal;
   ExternalDir externalDir = ExternalDir();
+  String? menu_index;
   String? fp;
   String? cid;
   String? cname;
   String? sof;
   int? qtyinc;
   String? uid;
+  List<Map<String, dynamic>> menuList = [];
+  String? appType;
   String? bId;
   List<CD> c_d = [];
   String? firstMenu;
@@ -41,12 +44,14 @@ class RegistrationController extends ChangeNotifier {
       String phoneno,
       String deviceinfo,
       BuildContext context) async {
+  
     NetConnection.networkConnection(context).then((value) async {
       print("Text fp...$fingerprints---$company_code---$phoneno---$deviceinfo");
       print("company_code.........$company_code");
-      // String dsd="helloo";
-      String appType = company_code.substring(10, 12);
-      print("apptytpe----$appType");
+      if (company_code.length >= 0) {
+        appType = company_code.substring(10, 12);
+        print("apptytpe----$appType");
+      }
       if (value == true) {
         try {
           Uri url =
@@ -183,7 +188,7 @@ class RegistrationController extends ChangeNotifier {
 
         isLoginLoading = false;
         notifyListeners();
-
+        getMenu(context);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => EnqHome()),
@@ -237,5 +242,56 @@ class RegistrationController extends ChangeNotifier {
   }
 
 //////////////////////////////////////////////////////////////////////////////
- 
+  getMenu(
+    BuildContext context,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          isMenuLoading = true;
+
+          notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/get_menu.php");
+          Map body = {
+            'staff_id': user_id,
+            'branch_id': branch_id,
+          };
+          print("menu body--$body");
+
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+
+          menu_index = map[0]["menu_index"];
+          notifyListeners();
+
+          menuList.clear();
+          for (var item in map) {
+            menuList.add(item);
+          }
+          notifyListeners();
+          print("menu res--$map");
+          isMenuLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////
+  userDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? staff_nam = prefs.getString("staff_name");
+    String? branch_nam = prefs.getString("branch_name");
+
+    staff_name = staff_nam;
+
+    notifyListeners();
+  }
 }

@@ -49,8 +49,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (cid != null) {
                   // return DashboardPage();
                   if (st_uname != null && st_pwd != null) {
-                    // Provider.of<Controller>(context,
-                    //                         listen: false).getMenu(context);
                     return EnqHome();
                   } else {
                     return LoginPage();
@@ -79,9 +77,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Provider.of<Controller>(context, listen: false).fetchMenusFromMenuTable();
-    // Provider.of<Controller>(context, listen: false)
-    //     .verifyRegistration(context, "splash");
+    Provider.of<RegistrationController>(context, listen: false)
+        .getMenu(context);
     shared();
     navigate();
   }

@@ -17,7 +17,6 @@ class Controller extends ChangeNotifier {
   String? selected;
   bool selectedCustomer = true;
   bool addNewItem = false;
-  String? menu_index;
   bool? arrowButtonclicked;
   TextEditingController searchcontroller = TextEditingController();
   bool isSearchLoading = false;
@@ -45,13 +44,11 @@ class Controller extends ChangeNotifier {
   List<bool> addButton = [];
   String? dropSelected;
   String? prioId;
-  bool isMenuLoading = false;
 
   List<AreaList> area_list = [];
   List<PriorityLevel> priorityList = [];
 
   List<Map<String, dynamic>> customerList = [];
-  List<Map<String, dynamic>> menuList = [];
 
   ///////////////////////////////////////////////////////////////////////
 
@@ -523,42 +520,5 @@ class Controller extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////////////////
-  getMenu(
-    BuildContext context,
-  ) {
-    NetConnection.networkConnection(context).then((value) async {
-      if (value == true) {
-        try {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? branch_id = prefs.getString("branch_id");
-          String? user_id = prefs.getString("user_id");
-          isMenuLoading = true;
-
-          notifyListeners();
-          Uri url = Uri.parse("$urlgolabl/get_menu.php");
-          Map body = {
-            'staff_id': user_id,
-            'branch_id': branch_id,
-          };
-          print("menu body--$body");
-
-          http.Response response = await http.post(url, body: body);
-          var map = jsonDecode(response.body);
-          menu_index = map[0]["prefix"];
-          menuList.clear();
-          for (var item in map) {
-            menuList.add(item);
-          }
-          notifyListeners();
-          print("menu res--$map");
-          isMenuLoading = false;
-          notifyListeners();
-        } catch (e) {
-          print(e);
-          // return null;
-          return [];
-        }
-      }
-    });
-  }
+  
 }
