@@ -20,10 +20,12 @@ class QuotationEditScreen extends StatefulWidget {
 class _QuotationEditScreenState extends State<QuotationEditScreen> {
   String? sdate;
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
-
+  String? date;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? selected;
   DateTime now = DateTime.now();
+  DateTime currentDate = DateTime.now();
+
   QuotationItemSheet editsheet = QuotationItemSheet();
   Color parseColor(String color) {
     print("Colorrrrr...$color");
@@ -62,7 +64,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                     RemarkSheet remark = RemarkSheet();
                     remark.showRemarkSheet(
                         _scaffoldKey.currentContext!,
-                        sdate!,
+                        value.qt_date!,
                         widget.enqId!,
                         _scaffoldKey,
                         _keyLoader,
@@ -173,9 +175,14 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(
-                              Icons.date_range,
-                              color: Colors.red,
+                            InkWell(
+                              onTap: (){
+                                _selectDate(context);
+                              },
+                              child: Icon(
+                                Icons.date_range,
+                                color: Colors.red,
+                              ),
                             ),
                             // Text(
                             //   " Date",
@@ -185,7 +192,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
-                                sdate.toString(),
+                                value.qt_date.toString(),
                                 style: TextStyle(
                                     fontSize: 17,
                                     // fontWeight: FontWeight.bold,
@@ -643,5 +650,28 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context,) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2050),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+              data: ThemeData.light().copyWith(
+                colorScheme: ColorScheme.light()
+                    .copyWith(primary: P_Settings.loginPagetheme),
+              ),
+              child: child!);
+        });
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        // date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
+        date = DateFormat('dd-MM-yyyy').format(pickedDate);
+        Provider.of<QuotationController>(context, listen: false)
+            .setQtDate(date!);
+      });
   }
 }

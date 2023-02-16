@@ -11,7 +11,8 @@ class RemarkSheet {
       String enq_id,
       GlobalKey<ScaffoldState> _scaffoldKey,
       GlobalKey<State> _keyLoader,
-      String type,String rwId) {
+      String type,
+      String rwId) {
     Size size = MediaQuery.of(context).size;
     return showModalBottomSheet<void>(
       isScrollControlled: true,

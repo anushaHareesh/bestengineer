@@ -44,7 +44,6 @@ class RegistrationController extends ChangeNotifier {
       String phoneno,
       String deviceinfo,
       BuildContext context) async {
-  
     NetConnection.networkConnection(context).then((value) async {
       print("Text fp...$fingerprints---$company_code---$phoneno---$deviceinfo");
       print("company_code.........$company_code");
@@ -185,14 +184,8 @@ class RegistrationController extends ChangeNotifier {
           prefs.setString("branch_name", loginModel.branchName!);
           prefs.setString("branch_prefix", loginModel.branchPrefix!);
         }
-
-        isLoginLoading = false;
-        notifyListeners();
         getMenu(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => EnqHome()),
-        );
+
       }
 
       // print("stafff-------${loginModel.staffName}");
@@ -273,6 +266,15 @@ class RegistrationController extends ChangeNotifier {
           }
           notifyListeners();
           print("menu res--$map");
+          if (menuList.length > 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EnqHome()),
+            );
+          }
+          
+        isLoginLoading = false;
+        notifyListeners();
           isMenuLoading = false;
           notifyListeners();
         } catch (e) {

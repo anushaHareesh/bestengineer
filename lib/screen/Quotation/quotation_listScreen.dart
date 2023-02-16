@@ -376,7 +376,13 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                   children: [
                                     InkWell(
                                       onTap: () async {
-                                        _selectDate(context, index);
+                                        _selectDate(
+                                          context,
+                                          index,
+                                          value.quotationList[index]["enq_id"],
+                                          value.quotationList[index]
+                                              ["s_invoice_id"],
+                                        );
                                         // dateFind.selectDateFind(
                                         //     context, "to date");
                                       },
@@ -462,9 +468,9 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                             onTap: () {
                               DeleteQuotation quot = DeleteQuotation();
                               quot.showdeleteQuotSheet(
-                                context,
-                                value.quotationList[index]["qt_no"],
-                              );
+                                  context,
+                                  value.quotationList[index]["qt_no"],
+                                  value.quotationList[index]["s_invoice_id"]);
                             },
                             child: Row(
                               children: [
@@ -492,7 +498,9 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => QuotationEditScreen(
                                           row_id: value.quotationList[index]
-                                              ["s_invoice_id"],enqId: value.quotationList[index]["enq_id"],
+                                              ["s_invoice_id"],
+                                          enqId: value.quotationList[index]
+                                              ["enq_id"],
                                         )),
                               );
                             },
@@ -523,7 +531,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context, int index) async {
+  Future<void> _selectDate(
+      BuildContext context, int index, String enqId, String invId) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
@@ -542,7 +551,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
         // date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
         date = DateFormat('dd-MM-yyyy').format(pickedDate);
         Provider.of<QuotationController>(context, listen: false)
-            .setScheduledDate(index, date!);
+            .setScheduledDate(index, date!, context, enqId, invId);
       });
   }
 }

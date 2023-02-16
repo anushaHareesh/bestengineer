@@ -27,11 +27,16 @@ class Controller extends ChangeNotifier {
   String urlgolabl = Globaldata.apiglobal;
   bool isLoading = false;
   bool isListLoading = false;
+  bool isDahboardLoading=false;
   String? customerName;
   String? address;
   String? customerPhone;
   String? owner_name;
   String? landmark;
+  String? enqCount;
+  String? quotationCount;
+  String? verifedEnqCount;
+  String? scheduleCount;
 
   String? customer_id;
   String? dupcustomer_id;
@@ -519,6 +524,40 @@ class Controller extends ChangeNotifier {
     });
   }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+  getDashboardValues(BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          Uri url = Uri.parse("$urlgolabl/dashboard_list.php");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          Map body = {"staff_id": user_id};
+          isDahboardLoading=true;
+          notifyListeners();
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("dahsboard map------$map");
+          enqCount = map["enq_cnt"];
+          quotationCount = map["qtn_cnt"];
+          scheduleCount = map["schdule_cnt"];
+          verifedEnqCount = map["verify_cnt"];
+          isDahboardLoading=false;
+          notifyListeners();
+          // PriorityListModel prioModel = PriorityListModel.fromJson(map);
+          // print("priority_list-----$map");
+          // priorityList.clear();
+          // for (var item in prioModel.priorityLevel!) {
+          //   priorityList.add(item);
+          // }
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
   ///////////////////////////////////////////////////////////////
-  
 }

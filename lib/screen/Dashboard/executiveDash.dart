@@ -1,6 +1,9 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
+import '../../controller/controller.dart';
 import 'curveCli.dart';
 
 class ExecutiveDashBoard extends StatefulWidget {
@@ -30,230 +33,267 @@ class _ExecutiveDashBoardState extends State<ExecutiveDashBoard> {
             ),
             Positioned(
               top: 60,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Consumer<Controller>(
+                builder: (context, value, child) {
+                  return Column(
                     children: [
-                      Container(
-                        height: size.height * 0.28,
-                        width: size.width * 0.45,
-                        child: Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: size.height * 0.07,
-                                width: size.width * 0.2,
-                                child: Image.asset(
-                                  "assets/enquiry.png",
-                                  // fit: BoxFit.cover,
-                                ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: size.height * 0.28,
+                            width: size.width * 0.45,
+                            child: Card(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: size.height * 0.07,
+                                    width: size.width * 0.2,
+                                    child: Image.asset(
+                                      "assets/enquiry.png",
+                                      // fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Enquiry",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        value.isDahboardLoading
+                                            ? SpinKitThreeBounce(
+                                                color:
+                                                    P_Settings.loginPagetheme,
+                                                size: 13)
+                                            : Text(
+                                                value.enqCount.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 26,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: P_Settings
+                                                        .loginPagetheme),
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Enquiry",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(20.0), //<-- SEE HERE
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "0",
-                                      style: TextStyle(
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold,
-                                          color: P_Settings.loginPagetheme),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), //<-- SEE HERE
-                          ),
-                        ),
+                          Container(
+                            height: size.height * 0.28,
+                            width: size.width * 0.45,
+                            child: Card(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: size.height * 0.07,
+                                    width: size.width * 0.2,
+                                    child: Image.asset(
+                                      "assets/quot.png",
+                                      // fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Quotation",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        value.isDahboardLoading
+                                            ? SpinKitThreeBounce(
+                                                color:
+                                                    P_Settings.loginPagetheme,
+                                                size: 13)
+                                            : Text(
+                                                value.quotationCount.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 26,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: P_Settings
+                                                        .loginPagetheme),
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(20.0), //<-- SEE HERE
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      Container(
-                        height: size.height * 0.28,
-                        width: size.width * 0.45,
-                        child: Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: size.height * 0.07,
-                                width: size.width * 0.2,
-                                child: Image.asset(
-                                  "assets/quot.png",
-                                  // fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Quotation",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "0",
-                                      style: TextStyle(
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold,
-                                          color: P_Settings.loginPagetheme),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), //<-- SEE HERE
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: size.height * 0.00,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        height: size.height * 0.28,
-                        width: size.width * 0.45,
-                        child: Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: size.height * 0.07,
-                                width: size.width * 0.2,
-                                child: Image.asset(
-                                  "assets/files.png",
-                                  // fit: BoxFit.cover,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Verified Enquiry",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "0",
-                                      style: TextStyle(
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold,
-                                          color: P_Settings.loginPagetheme),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), //<-- SEE HERE
-                          ),
-                        ),
+                      SizedBox(
+                        height: size.height * 0.00,
                       ),
-                      Container(
-                        height: size.height * 0.28,
-                        width: size.width * 0.45,
-                        child: Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: size.height * 0.07,
-                                width: size.width * 0.2,
-                                child: Image.asset(
-                                  "assets/calendar.png",
-                                  // fit: BoxFit.cover,
-                                ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: size.height * 0.28,
+                            width: size.width * 0.45,
+                            child: Card(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: size.height * 0.07,
+                                    width: size.width * 0.2,
+                                    child: Image.asset(
+                                      "assets/files.png",
+                                      // fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Verified Enquiry",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        value.isDahboardLoading
+                                            ? SpinKitThreeBounce(
+                                                color:
+                                                    P_Settings.loginPagetheme,
+                                                size: 13)
+                                            : Text(
+                                                value.verifedEnqCount
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 26,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: P_Settings
+                                                        .loginPagetheme),
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Schedule",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(20.0), //<-- SEE HERE
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "0",
-                                      style: TextStyle(
-                                          fontSize: 26,
-                                          fontWeight: FontWeight.bold,
-                                          color: P_Settings.loginPagetheme),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), //<-- SEE HERE
-                          ),
-                        ),
-                      )
+                          Container(
+                            height: size.height * 0.28,
+                            width: size.width * 0.45,
+                            child: Card(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: size.height * 0.07,
+                                    width: size.width * 0.2,
+                                    child: Image.asset(
+                                      "assets/calendar.png",
+                                      // fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Schedule",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        value.isDahboardLoading
+                                            ? SpinKitThreeBounce(
+                                                color:
+                                                    P_Settings.loginPagetheme,
+                                                size: 13)
+                                            : Text(
+                                                value.scheduleCount.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 26,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: P_Settings
+                                                        .loginPagetheme),
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(20.0), //<-- SEE HERE
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ],

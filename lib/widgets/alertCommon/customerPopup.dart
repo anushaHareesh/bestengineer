@@ -166,7 +166,7 @@ class CustomerPopup {
                                     maxLines: null,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      fillColor: Colors.white54,
+                                      fillColor: Colors.white,
                                       filled: true,
                                       contentPadding: EdgeInsets.symmetric(
                                           horizontal: 0, vertical: 14),
@@ -399,7 +399,7 @@ class CustomerPopup {
                                       // controller: value.desc[index],
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        fillColor: Colors.white54,
+                                        fillColor: Colors.white,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
                                             horizontal: 0, vertical: 14),
@@ -449,7 +449,7 @@ class CustomerPopup {
                                       style: TextStyle(color: Colors.grey[800]),
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        fillColor: Colors.white54,
+                                        fillColor: Colors.white,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
                                             horizontal: 0, vertical: 14),
@@ -472,7 +472,7 @@ class CustomerPopup {
                                       style: TextStyle(color: Colors.grey[800]),
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        fillColor: Colors.white54,
+                                        fillColor: Colors.white,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
                                             horizontal: 0, vertical: 14),
@@ -505,7 +505,7 @@ class CustomerPopup {
                                         border: InputBorder.none,
                                         hintText: "Contact Number",
                                         hintStyle: TextStyle(fontSize: 14),
-                                        fillColor: Colors.white54,
+                                        fillColor: Colors.white,
                                         filled: true,
                                         contentPadding: EdgeInsets.symmetric(
                                             horizontal: 0, vertical: 14),
@@ -564,7 +564,7 @@ class CustomerPopup {
                                     // color: Colors.grey[200],
                                     height: size.height * 0.05,
                                     decoration: BoxDecoration(
-                                      color: Colors.white54, //<-- SEE HERE
+                                      color: Colors.white, //<-- SEE HERE
                                     ),
                                     child: ButtonTheme(
                                       alignedDropdown: true,
@@ -715,11 +715,12 @@ class CustomerPopup {
                                           } else if (phone.text.length != 10) {
                                             validph.value = true;
                                           } else {
-                                            validph.value=false;
+                                            validph.value = false;
                                             visibleph.value = false;
                                             visiblename.value = false;
 
-                                            print("validate---${name.text}--${contact_person.text}-------${phone.text}---${adress.text}----${landmark.text}");
+                                            print(
+                                                "validate---${name.text}--${contact_person.text}-------${phone.text}---${adress.text}----${landmark.text}");
 
                                             value.saveCustomerInfo(
                                               context,

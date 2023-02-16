@@ -12,119 +12,10 @@ import 'package:share_plus/share_plus.dart';
 class PdFSave {
   DateTime now = DateTime.now();
 
-  var report = [
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    },
-    {
-      "sno": 1,
-      "pname": "abzxbsmzxdbzsdnsmdnsmdnsm,d,smd,sd,smd,zsndmsndnsdnc",
-      "qty": "10",
-      "rate": "200",
-      "gstp": "18%",
-      "gst": "120",
-      "discp": "10%",
-      "disc": "100",
-      "net": "300"
-    }
-  ];
-  Future<File> savepdf() async {
+  Future<File> savepdf(
+      List<Map<String, dynamic>> detailPdf,
+      List<Map<String, dynamic>> masterPdf,
+      List<Map<String, dynamic>> termsList) async {
     final pdf = Document();
     final image = await imageFromAssetBundle('assets/noImg.png');
 
@@ -133,14 +24,13 @@ class PdFSave {
         buildHeader(image),
         buildQuotationHeading(),
         SizedBox(height: 0.1 * PdfPageFormat.cm),
-        buildCustomerData(),
+        buildCustomerData(masterPdf),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
-        buildInvoice(report),
+        buildInvoice(detailPdf),
         Divider(),
-        buildTotal(report),
+        buildTotal(detailPdf),
       ],
-      footer: (context) => buildFooter(
-          "NJADJASDJASDJASJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ"),
+      footer: (context) => buildFooter(termsList),
     ));
 
     return downloadDoc(name: "m$now.pdf", pdf: pdf);
@@ -191,7 +81,7 @@ class PdFSave {
     ]));
   }
 
-  Widget buildCustomerData() {
+  Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
     return Container(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -203,7 +93,7 @@ class PdFSave {
               Text('Quotation No    : ',
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(
-                '213',
+                masterPdf[0]["s_invoice_no"],
                 style: TextStyle(
                   fontSize: 12,
                 ),
@@ -212,7 +102,7 @@ class PdFSave {
             Row(children: [
               Text('Customer          : ',
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-              Text('ANUSHA K',
+              Text(masterPdf[0]["s_customer_name"],
                   style: TextStyle(
                     fontSize: 10,
                   ))
@@ -222,7 +112,7 @@ class PdFSave {
                 Text('Address            : ',
                     style:
                         TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-                Text('KANNUR THAVAKAARAA',
+                Text(masterPdf[0]["company_add1"],
                     style: TextStyle(
                       fontSize: 12,
                     ))
@@ -237,7 +127,7 @@ class PdFSave {
               Text('Date      : ',
                   style:
                       pw.TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-              Text('20-11-2023',
+              Text(masterPdf[0]["qdate"],
                   style: TextStyle(
                     fontSize: 12,
                   ))
@@ -245,7 +135,16 @@ class PdFSave {
             Row(children: [
               Text('Phone   : ',
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-              Text('9061259261',
+              Text(masterPdf[0]["phone_1"],
+                  style: TextStyle(
+                    fontSize: 12,
+                  ))
+            ]),
+
+            Row(children: [
+              Text('Mobile   : ',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+              Text(masterPdf[0]["phone_2"],
                   style: TextStyle(
                     fontSize: 12,
                   ))
@@ -266,6 +165,7 @@ class PdFSave {
   }
 
   Widget buildInvoice(List<Map<String, dynamic>> list) {
+    int i = 0;
     final headers = [
       'Sl No',
       'Product Name',
@@ -276,29 +176,42 @@ class PdFSave {
       'GST',
       'Net Amt',
     ];
-    final data = report.map((item) {
+    final data = list.map((item) {
       print("sdjsjkh----${item["qty"].runtimeType}");
+      i = i + 1;
 
-      double amt = double.parse(item["qty"].toString()) *
-          double.parse(item["rate"].toString());
       // double total = double.parse(item["qty"]) * item["rate"] ;
 
       return [
-        item["sno"],
-        item["pname"],
+        i,
+        item["product_name"],
         item["qty"],
         item["rate"],
-        amt,
-        item["gstp"],
-        item["gst"],
-        item["net"],
+        item["amount"],
+        item["tax_perc"],
+        item["tax"],
+        item["net_rate"],
       ];
     }).toList();
 
     return Table.fromTextArray(
       headers: headers,
       data: data,
-      border: null,
+      border: TableBorder(
+        left: BorderSide(),
+        right: BorderSide(),
+        top: BorderSide(),
+        bottom: BorderSide(),
+        verticalInside: BorderSide(),
+        // left: pw.BorderSide(style: pw.BorderStyle.solid),
+        horizontalInside: BorderSide(
+          style: BorderStyle.solid,
+        ),
+        // verticalInside: pw.BorderSide(
+        //   style: pw.BorderStyle.solid,
+        // ),
+      ),
+      // border: null,
       headerStyle: TextStyle(fontWeight: FontWeight.bold),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 30,
@@ -329,7 +242,7 @@ class PdFSave {
   static Widget buildTotal(List<Map<String, dynamic>> list) {
     double sum = 0.0;
     for (int i = 0; i < list.length; i++) {
-      sum = double.parse(list[i]["net"]) + sum;
+      sum = double.parse(list[i]["net_rate"]) + sum;
     }
 
     return Container(
@@ -384,12 +297,13 @@ class PdFSave {
   }
 
   //////////////////////////////////////////////////////////////////
-  static Widget buildFooter(String terms) => Column(
+  static Widget buildFooter(List<Map<String, dynamic>> listterms) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Terms And Conditions', value: terms),
+          buildSimpleText(
+              title: listterms[0]["t_head"], value: listterms[0]["t_detail"]),
           // SizedBox(height: 1 * PdfPageFormat.mm),
           // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
         ],
@@ -400,14 +314,24 @@ class PdFSave {
     required String value,
   }) {
     final style = TextStyle(fontWeight: FontWeight.bold);
-
-    return Row(
-      children: [
-        Text(title, style: style),
-        SizedBox(width: 2 * PdfPageFormat.mm),
-        Flexible(child: Text(value)),
-      ],
-    );
+    return Column(children: [
+      Row(
+        children: [
+          Text(title, style: TextStyle(fontSize: 10)),
+          SizedBox(width: 10),
+          Flexible(
+              child: Text(value,
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    fontSize: 9,
+                  ))),
+        ],
+      ),
+      // Divider(endIndent: 330),
+      // Row(children: [
+      //   Flexible(child: Text(value)),
+      // ])
+    ]);
   }
 
   /////////////////////////////////////////////////

@@ -258,7 +258,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                                               Text(
                                                 "Added on : ",
                                                 style: TextStyle(
-                                                  fontSize: 13,
+                                                    fontSize: 13,
                                                     color: Colors.grey),
                                               ),
                                               Text(
@@ -281,8 +281,9 @@ class _EnQHistoryState extends State<EnQHistory> {
                                         children: [
                                           Text(
                                             "Contact Person  : ",
-                                            style:
-                                                TextStyle(color: Colors.grey,fontSize: 13),
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 13),
                                           ),
                                           Flexible(
                                             child: Container(
@@ -290,7 +291,8 @@ class _EnQHistoryState extends State<EnQHistory> {
                                               child: Text(
                                                 value.enQhistoryList[index]
                                                     .ownerName
-                                                    .toString(),
+                                                    .toString()
+                                                    .toUpperCase(),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.grey[700],

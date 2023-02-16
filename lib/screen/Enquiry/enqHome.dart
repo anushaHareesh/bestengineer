@@ -49,10 +49,10 @@ class _EnqHomeState extends State<EnqHome> {
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
     Provider.of<RegistrationController>(context, listen: false).userDetails();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    Provider.of<RegistrationController>(context, listen: false)
-        .getMenu(context);
-    // });
+    Provider.of<Controller>(context, listen: false).getArea(context);
+    Provider.of<Controller>(context, listen: false).gePriorityList(context);
+    Provider.of<ProductController>(context, listen: false)
+        .geProductList(context);
   }
 
   _onSelectItem(String? menu) {
@@ -72,14 +72,13 @@ class _EnqHomeState extends State<EnqHome> {
 
     switch (pos) {
       case "D1":
-        return ExecutiveDashBoard();
+        {
+          Provider.of<Controller>(context, listen: false)
+              .getDashboardValues(context);
+          return ExecutiveDashBoard();
+        }
       case "E1":
         {
-          Provider.of<Controller>(context, listen: false).getArea(context);
-          Provider.of<Controller>(context, listen: false)
-              .gePriorityList(context);
-          Provider.of<ProductController>(context, listen: false)
-              .geProductList(context);
           return EnqDashboard();
         }
       case "E2":
@@ -95,7 +94,9 @@ class _EnqHomeState extends State<EnqHome> {
       case "Q1":
         {
           Provider.of<QuotationController>(context, listen: false)
-              .getQuotationList(context, todaydate!);
+              .getQuotationList(
+            context,
+          );
           return QuotatationListScreen();
         }
 
@@ -201,30 +202,30 @@ class _EnqHomeState extends State<EnqHome> {
               )
             : AppBar(
                 actions: [
-                  Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "E2" ||
-                          Provider.of<RegistrationController>(context,
-                                      listen: false)
-                                  .menu_index ==
-                              "Q1"
-                      ? Container()
-                      : Container(
-                          margin: EdgeInsets.only(right: 8),
-                          child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EnQHistory()),
-                                );
-                              },
-                              child: Icon(
-                                Icons.history,
-                                size: 20,
-                                color: Colors.red,
-                              )),
-                        ),
+                  // Provider.of<RegistrationController>(context, listen: false)
+                  //                 .menu_index ==
+                  //             "E2" ||
+                  //         Provider.of<RegistrationController>(context,
+                  //                     listen: false)
+                  //                 .menu_index ==
+                  //             "Q1"
+                  //     ? Container()
+                  //     : Container(
+                  //         margin: EdgeInsets.only(right: 8),
+                  //         child: InkWell(
+                  //             onTap: () {
+                  //               Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                     builder: (context) => EnQHistory()),
+                  //               );
+                  //             },
+                  //             child: Icon(
+                  //               Icons.history,
+                  //               size: 20,
+                  //               color: Colors.red,
+                  //             )),
+                  //       ),
                   Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "E2" ||
@@ -271,17 +272,17 @@ class _EnqHomeState extends State<EnqHome> {
                   Provider.of<RegistrationController>(context, listen: false)
                               .menu_index ==
                           "Q1"
-                      ? "Quotation List"
+                      ? "QUOTATION LIST"
                       : Provider.of<RegistrationController>(context,
                                       listen: false)
                                   .menu_index ==
                               "E2"
-                          ? "Enquiry List"
+                          ? "ENQUIRY LIST"
                           : Provider.of<RegistrationController>(context,
                                           listen: false)
                                       .menu_index ==
                                   "E1"
-                              ? "Enquiry"
+                              ? "ENQUIRY"
                               : "",
                   style: TextStyle(fontSize: 15),
                 ),
@@ -309,78 +310,78 @@ class _EnqHomeState extends State<EnqHome> {
                                 : Colors.grey[800]));
                   },
                 ),
-                //   leading: Builder(
-                //     builder: (context) => Consumer<RegistrationController>(
-                //       builder: (context, value, child) {
-                //         return IconButton(
-                //             icon: new Icon(Icons.menu,
-                //                 color: value.menu_index == "E2" ||
-                //                         value.menu_index == "Q1"
-                //                     ? P_Settings.whiteColor
-                //                     : Colors.grey[800]),
-                //             onPressed: () async {
-                //               SharedPreferences prefs =
-                //                   await SharedPreferences.getInstance();
-                //               staffName = await prefs.getString("staff_name");
-                //               drawerOpts.clear();
-                //               for (var i = 0; i < value.menuList.length; i++) {
-                //                 // var d =Provider.of<Controller>(context, listen: false).drawerItems[i];
+                // leading: Builder(
+                //   builder: (context) => Consumer<RegistrationController>(
+                //     builder: (context, value, child) {
+                //       return IconButton(
+                //           icon: new Icon(Icons.menu,
+                //               color: value.menu_index == "E2" ||
+                //                       value.menu_index == "Q1"
+                //                   ? P_Settings.whiteColor
+                //                   : Colors.grey[800]),
+                //           onPressed: () async {
+                //             SharedPreferences prefs =
+                //                 await SharedPreferences.getInstance();
+                //             staffName = await prefs.getString("staff_name");
+                //             drawerOpts.clear();
+                //             for (var i = 0; i < value.menuList.length; i++) {
+                //               // var d =Provider.of<Controller>(context, listen: false).drawerItems[i];
 
-                //                 drawerOpts.add(Consumer<RegistrationController>(
-                //                   builder: (context, value, child) {
-                //                     // print(
-                //                     //     "menulist[menu]-------${value.menuList[i]["menu_name"]}");
-                //                     return Padding(
-                //                       padding: const EdgeInsets.only(
-                //                           left: 8.0,
-                //                           right: 8,
-                //                           top: 10,
-                //                           bottom: 0),
-                //                       child: InkWell(
-                //                         onTap: () {
-                //                           _onSelectItem(
-                //                               value.menuList[i]["menu_index"]);
-                //                         },
-                //                         child: Column(
-                //                           children: [
-                //                             Row(
-                //                               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //                               children: [
-                //                                 // Icon(
-                //                                 //   Icons.history,
-                //                                 //   // color: Colors.red,
-                //                                 // ),
-                //                                 Container(
-                //                                   child: Text(
-                //                                     value.menuList[i]
-                //                                         ["menu_name"],
-                //                                     style: TextStyle(
-                //                                         fontWeight:
-                //                                             FontWeight.w500,
-                //                                         fontSize: 17),
-                //                                   ),
+                //               drawerOpts.add(Consumer<RegistrationController>(
+                //                 builder: (context, value, child) {
+                //                   // print(
+                //                   //     "menulist[menu]-------${value.menuList[i]["menu_name"]}");
+                //                   return Padding(
+                //                     padding: const EdgeInsets.only(
+                //                         left: 8.0,
+                //                         right: 8,
+                //                         top: 10,
+                //                         bottom: 0),
+                //                     child: InkWell(
+                //                       onTap: () {
+                //                         _onSelectItem(
+                //                             value.menuList[i]["menu_index"]);
+                //                       },
+                //                       child: Column(
+                //                         children: [
+                //                           Row(
+                //                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //                             children: [
+                //                               // Icon(
+                //                               //   Icons.history,
+                //                               //   // color: Colors.red,
+                //                               // ),
+                //                               Container(
+                //                                 child: Text(
+                //                                   value.menuList[i]
+                //                                       ["menu_name"],
+                //                                   style: TextStyle(
+                //                                       fontWeight:
+                //                                           FontWeight.w500,
+                //                                       fontSize: 17),
                 //                                 ),
-                //                                 Spacer(),
-                //                                 Image.asset(
-                //                                   "assets/right.png",
-                //                                   height: 28,
-                //                                   color: Colors.grey[700],
-                //                                 )
-                //                               ],
-                //                             ),
-                //                             Divider(),
-                //                           ],
-                //                         ),
+                //                               ),
+                //                               Spacer(),
+                //                               Image.asset(
+                //                                 "assets/right.png",
+                //                                 height: 28,
+                //                                 color: Colors.grey[700],
+                //                               )
+                //                             ],
+                //                           ),
+                //                           Divider(),
+                //                         ],
                 //                       ),
-                //                     );
-                //                   },
-                //                 ));
-                //               }
-                //               _key.currentState!.openDrawer();
-                //             });
-                //       },
-                //     ),
+                //                     ),
+                //                   );
+                //                 },
+                //               ));
+                //             }
+                //             _key.currentState!.openDrawer();
+                //           });
+                //     },
                 //   ),
+                // ),
               ),
 
         drawer: Consumer<Controller>(

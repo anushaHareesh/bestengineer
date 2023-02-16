@@ -5,6 +5,7 @@ import 'package:bestengineer/components/globaldata.dart';
 import 'package:bestengineer/components/networkConnectivity.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,10 @@ import 'package:http/http.dart' as http;
 import '../screen/Quotation/pdfPrev.dart';
 
 class QuotationController extends ChangeNotifier {
+  String? todaydate;
+  int? sivd;
+  String? dealerselected;
+  DateTime now = DateTime.now();
   String urlgolabl = Globaldata.apiglobal;
   String? enId;
   String? customer_name;
@@ -33,6 +38,7 @@ class QuotationController extends ChangeNotifier {
   double s_total_taxable = 0.0;
   double s_total_disc = 0.0;
   bool fromApi = true;
+  bool isPdfLoading = false;
 
   bool isQuotLoading = false;
 
@@ -59,6 +65,10 @@ class QuotationController extends ChangeNotifier {
   bool flag = false;
 
   List<Map<String, dynamic>> quotProdItem = [];
+  List<Map<String, dynamic>> masterPdf = [];
+  List<Map<String, dynamic>> detailPdf = [];
+  List<Map<String, dynamic>> termsPdf = [];
+  List<Map<String, dynamic>> dealerList = [];
   List<Map<String, dynamic>> quotationList = [];
   List<Map<String, dynamic>> quotationEditList = [];
 
@@ -192,7 +202,6 @@ class QuotationController extends ChangeNotifier {
           cust_id = map["master"][0]["cust_id"];
           company_pin = map["master"][0]["company_pin"];
           phone2 = map["master"][0]["phone_2"];
-
           customer_name = map["master"][0]["company_name"];
           cus_info = map["master"][0]["cust_info"];
           phone = map["master"][0]["contact_num"];
@@ -414,7 +423,7 @@ class QuotationController extends ChangeNotifier {
         );
         var map = jsonDecode(response.body);
         print("quot map----$map");
-
+        sivd = map["qutation_id"];
         prefs.setString("qutation_id", map["qutation_id"].toString());
         return showDialog(
             context: context,
@@ -459,26 +468,35 @@ class QuotationController extends ChangeNotifier {
   }
 
   /////////////////////////////////////////////////
-  createPdf(BuildContext context, String qutation_id) {
+  getPdfData(BuildContext context, String invoice_id) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? branch_id = prefs.getString("branch_id");
-          String? user_id = prefs.getString("user_id");
-          String? qutation_id1 = prefs.getString("qutation_id");
-          notifyListeners();
-          Uri url = Uri.parse("$urlgolabl/get_menu.php");
+          Uri url = Uri.parse("$urlgolabl/print_data.php");
           Map body = {
-            'staff_id': user_id,
-            'branch_id': branch_id,
-            'qutation_id': qutation_id1
+            's_invoice_id': invoice_id,
           };
           print("pdf body----$body");
-
+          isPdfLoading = true;
+          notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
-          print("map ----$map");
+          print("pdf map ----$map");
+          masterPdf.clear();
+          for (var item in map["master"]) {
+            masterPdf.add(item);
+          }
+          detailPdf.clear();
+          for (var item in map["details"]) {
+            detailPdf.add(item);
+          }
+
+          termsPdf.clear();
+          for (var item in map["terms_condtions"]) {
+            termsPdf.add(item);
+          }
+          isPdfLoading = false;
+          notifyListeners();
           notifyListeners();
         } catch (e) {
           print(e);
@@ -490,10 +508,13 @@ class QuotationController extends ChangeNotifier {
   }
 
   ////////////////////////////////////////////////////////////////////////
-  getQuotationList(BuildContext context, String sdate) {
+  getQuotationList(
+    BuildContext context,
+  ) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+          todaydate = DateFormat('dd-MM-yyyy').format(now);
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
@@ -509,12 +530,24 @@ class QuotationController extends ChangeNotifier {
           notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
-          print("qutationlist map ----$map");
           quotationList.clear();
           for (var item in map["master"]) {
             quotationList.add(item);
           }
-          qtScheduldate = List.generate(quotationList.length, (index) => sdate);
+          dealerList.clear();
+          for (var item in map["dealer"]) {
+            dealerList.add(item);
+          }
+          print("qutationlist map ----$quotationList");
+          qtScheduldate = List.generate(quotationList.length, (index) => "");
+
+          for (int i = 0; i < quotationList.length; i++) {
+            if (quotationList[i]["sdate"] == "00-00-0000") {
+              qtScheduldate[i] = todaydate.toString();
+            } else {
+              qtScheduldate[i] = quotationList[i]["sdate"];
+            }
+          }
 
           isQuotLoading = false;
           notifyListeners();
@@ -528,8 +561,16 @@ class QuotationController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////////////
-  setScheduledDate(int index, String date) async {
+  setScheduledDate(int index, String date, BuildContext context, String enq_id,
+      String invId) async {
     qtScheduldate[index] = date;
+    notifyListeners();
+    saveNextScheduleDate(
+      qtScheduldate[index],
+      invId,
+      enq_id,
+      context,
+    );
     notifyListeners();
   }
 
@@ -604,6 +645,134 @@ class QuotationController extends ChangeNotifier {
           }
           isQuotEditLoading = false;
           notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+///////////////////////////////////////////////////
+  setQtDate(String da) {
+    qt_date = da;
+    notifyListeners();
+  }
+
+////////////////////////////////////////////////
+  saveNextScheduleDate(
+      String date, String inv_id, String enq_id, BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          notifyListeners();
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/save_next_schedule.php");
+          Map body = {
+            'staff_id': user_id,
+            "staff_name": staff_nam,
+            "added_by": user_id,
+            "s_invoice_id": inv_id,
+            "next_date": date,
+            "enq_id": enq_id,
+          };
+
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+          if (map["flag"] == 0) {
+            getQuotationList(
+              context,
+            );
+          }
+          // quotationList.clear();
+          // for (var item in map["master"]) {
+          //   quotationList.add(item);
+          // }
+          print("save_next_schedule ----$map");
+
+          // isQuotLoading = false;
+          // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  /////////////////////////////////////////////
+  setDealerDrop(String s) {
+    for (int i = 0; i < dealerList.length; i++) {
+      if (dealerList[i]["customer_id"] == s) {
+        dealerselected = dealerList[i]["company_name"];
+      }
+    }
+    print("s------$s");
+    notifyListeners();
+  }
+
+  deleteQuotation(BuildContext context, String? dealerName, String? dealerId,
+      String remark, String invId) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          notifyListeners();
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/remove_qutation.php");
+          Map body = {
+            'staff_id': user_id,
+            "dealer_name": dealerName,
+            "dealer_id": dealerId,
+            "added_by": user_id,
+            "s_invoice_id": invId,
+            "cancel_remark": remark
+          };
+
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+          if (map["flag"] == 0) {
+            getQuotationList(
+              context,
+            );
+          }
+          // quotationList.clear();
+          // for (var item in map["master"]) {
+          //   quotationList.add(item);
+          // }
+          print("dealerCance ----$map");
+
+          // isQuotLoading = false;
+          // notifyListeners();
         } catch (e) {
           print(e);
           // return null;

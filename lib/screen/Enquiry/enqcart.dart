@@ -202,7 +202,7 @@ class _EnqCartState extends State<EnqCart> {
                               Radius.circular(20),
                             )),
                             child: Image.asset(
-                              "assets/burger.jpg",
+                              "assets/noImg.png",
                               height: 90,
                               width: 80,
                               fit: BoxFit.cover,

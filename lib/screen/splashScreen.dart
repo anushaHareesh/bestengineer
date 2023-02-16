@@ -29,18 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
       st_uname = prefs.getString("st_uname");
       st_pwd = prefs.getString("st_pwd");
 
-      // print("st-----$st_uname---$st_pwd");
-      // print("continueClicked $continueClicked");
-
-      // if (com_cid != null) {
-      //   Provider.of<Controller>(context, listen: false).cid = com_cid;
-      // }
-      // if (firstMenu != null) {
-      //   Provider.of<Controller>(context, listen: false).menu_index = firstMenu;
-      //   print(Provider.of<Controller>(context, listen: false).menu_index);
-      // }
-      // print("versof----$versof");
-
       Navigator.push(
           context,
           PageRouteBuilder(
@@ -62,6 +50,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
   shared() async {
     var status = await Permission.storage.status;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cid = prefs.getString("cid");
+    st_uname = prefs.getString("st_uname");
+    st_pwd = prefs.getString("st_pwd");
+    if (st_uname != null && st_pwd != null) {
+      print("jujuuuu");
+
+      Provider.of<RegistrationController>(context, listen: false)
+          .getMenu(context);
+
+      if (Provider.of<RegistrationController>(context, listen: false)
+              .isMenuLoading ==
+          false) {
+        navigate();
+      }
+    } else {
+      print("kjxjkxd");
+      navigate();
+    }
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // fp = prefs.getString("fp");
     // print("fingerPrint......$fp");
@@ -77,10 +84,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<RegistrationController>(context, listen: false)
-        .getMenu(context);
+    // Provider.of<RegistrationController>(context, listen: false)
+    //     .getMenu(context);
     shared();
-    navigate();
+    //  navigate();
+    // if (Provider.of<RegistrationController>(context, listen: false)
+    //         .isMenuLoading ==
+    //     false) {
+    //   navigate();
+    // }
   }
 
   @override
