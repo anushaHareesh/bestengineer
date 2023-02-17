@@ -327,7 +327,7 @@ class QuotationController extends ChangeNotifier {
   }
 
   /////////////////////////////////////////////////////////////////////////
-  saveQuotation(BuildContext context, String? remark, String sdate, String rwid,
+  saveQuotation(BuildContext context, String? remark, String sdate, int rwid,
       String enq_id, String type, String hiddenstatus) async {
     List<Map<String, dynamic>> jsonResult = [];
     Map<String, dynamic> itemmap = {};
@@ -423,6 +423,7 @@ class QuotationController extends ChangeNotifier {
         );
         var map = jsonDecode(response.body);
         print("quot map----$map");
+        print("fgfg-------${map["qutation_id"].runtimeType}");
         sivd = map["qutation_id"];
         prefs.setString("qutation_id", map["qutation_id"].toString());
         return showDialog(

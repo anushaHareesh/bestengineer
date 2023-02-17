@@ -27,7 +27,7 @@ class Controller extends ChangeNotifier {
   String urlgolabl = Globaldata.apiglobal;
   bool isLoading = false;
   bool isListLoading = false;
-  bool isDahboardLoading=false;
+  bool isDahboardLoading = false;
   String? customerName;
   String? address;
   String? customerPhone;
@@ -50,7 +50,7 @@ class Controller extends ChangeNotifier {
   String? dropSelected;
   String? prioId;
 
-  List<AreaList> area_list = [];
+  List<Map<String, dynamic>> area_list = [];
   List<PriorityLevel> priorityList = [];
 
   List<Map<String, dynamic>> customerList = [];
@@ -406,10 +406,10 @@ class Controller extends ChangeNotifier {
           Map body = {"branch_id": branch_id};
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
-          AreaModel regModel = AreaModel.fromJson(map);
+          // AreaModel regModel = AreaModel.fromJson(map);
           print("areaList-----$map");
           area_list.clear();
-          for (var item in regModel.areaList!) {
+          for (var item in map["area"]) {
             area_list.add(item);
           }
 
@@ -426,8 +426,8 @@ class Controller extends ChangeNotifier {
   //////////////////////////////////////////////////
   setDropdowndata(String s) {
     for (int i = 0; i < area_list.length; i++) {
-      if (area_list[i].areaId == s) {
-        selected = area_list[i].areaName;
+      if (area_list[i]["area_id"] == s) {
+        selected = area_list[i]["area_name"];
       }
     }
     print("s------$s");
@@ -452,6 +452,7 @@ class Controller extends ChangeNotifier {
         try {
           Uri url = Uri.parse("$urlgolabl/customer_list.php");
           Map body = {"area": areaId};
+          print("area----$body");
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
           print("customerList-----$map");
@@ -534,7 +535,7 @@ class Controller extends ChangeNotifier {
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
           Map body = {"staff_id": user_id};
-          isDahboardLoading=true;
+          isDahboardLoading = true;
           notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
@@ -543,7 +544,7 @@ class Controller extends ChangeNotifier {
           quotationCount = map["qtn_cnt"];
           scheduleCount = map["schdule_cnt"];
           verifedEnqCount = map["verify_cnt"];
-          isDahboardLoading=false;
+          isDahboardLoading = false;
           notifyListeners();
           // PriorityListModel prioModel = PriorityListModel.fromJson(map);
           // print("priority_list-----$map");

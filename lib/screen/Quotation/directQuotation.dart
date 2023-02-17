@@ -64,7 +64,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                   onTap: () {
                     RemarkSheet remark = RemarkSheet();
                     remark.showRemarkSheet(_scaffoldKey.currentContext!, sdate!,
-                        widget.enqId, _scaffoldKey, _keyLoader,"add","");
+                        widget.enqId, _scaffoldKey, _keyLoader,"add","0");
                   },
                   child: Container(
                     // height: size.height*0.3,

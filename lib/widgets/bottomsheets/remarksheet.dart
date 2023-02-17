@@ -13,6 +13,7 @@ class RemarkSheet {
       GlobalKey<State> _keyLoader,
       String type,
       String rwId) {
+        print("rwId------$rwId----${rwId.runtimeType}");
     Size size = MediaQuery.of(context).size;
     return showModalBottomSheet<void>(
       isScrollControlled: true,
@@ -107,7 +108,7 @@ class RemarkSheet {
                                     _scaffoldKey.currentContext!,
                                     remark.text,
                                     sdate,
-                                    rwId,
+                                    int.parse(rwId),
                                     enq_id,
                                     type,
                                     hiddenstatus);

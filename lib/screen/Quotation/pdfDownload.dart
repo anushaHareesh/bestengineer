@@ -1,125 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:share_plus/share_plus.dart';
 
-class PdfQuotation {
-  // var report = [
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   },
-  //   {
-  //     "sno": 1,
-  //     "pname": "abzxbsmzxdbzsdnsmdnsmdnsm,d,smd,sd,smd,zsndmsndnsdnc",
-  //     "qty": "10",
-  //     "rate": "200",
-  //     "gstp": "18%",
-  //     "gst": "120",
-  //     "discp": "10%",
-  //     "disc": "100",
-  //     "net": "300"
-  //   }
-  // ];
-  Future<Uint8List> generate(
+class PdfDownload {
+  DateTime now = DateTime.now();
+
+  Future<File> downLoadpdf(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList) async {
@@ -134,16 +28,16 @@ class PdfQuotation {
         buildCustomerData(masterPdf),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildInvoice(detailPdf),
-        // Divider(),
-        SizedBox(height: 5),
-
+        Divider(),
         buildTotal(detailPdf),
       ],
       header: (context) => buildHeader(image),
       footer: (context) => buildFooter(termsList),
     ));
-
-    return pdf.save();
+    String inv = masterPdf[0]["s_invoice_no"];
+    // return savedocument(name: "m$now.pdf", pdf: pdf);
+    // return downloadDoc(name: "$inv.pdf", pdf: pdf);
+    return downloadDoc(name: "vegaPdf.pdf", pdf: pdf);
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -164,9 +58,9 @@ class PdfQuotation {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("BEST MACHINETOOLS PVT LTD",
+              Text("BEST ENGINEERS PVT LTD",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 25,
                       fontWeight: pw.FontWeight.bold,
                       color: PdfColors.red)),
               Text("Attention to: Anushaa"),
@@ -186,7 +80,7 @@ class PdfQuotation {
         child: Column(children: [
       Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text("QUOTATION", style: TextStyle(fontSize: 16))]),
+          children: [Text("QUOTATION", style: TextStyle(fontSize: 18))]),
       Divider(color: PdfColors.black, thickness: 1, indent: 180, endIndent: 180)
     ]));
   }
@@ -475,5 +369,63 @@ class PdfQuotation {
       //   Flexible(child: Text(value)),
       // ])
     ]);
+  }
+
+  /////////////////////////////////////////////////
+  Future<File> savedocument(
+      {required String name, required pw.Document pdf}) async {
+    // final bytes = pdf.save();
+
+    final dir = await getApplicationDocumentsDirectory();
+
+    final file = File('${dir.path}/${name}');
+
+    await file.writeAsBytes(await pdf.save());
+    // sendFile(file);
+    return file;
+  }
+  // Future<File> savedocument(
+  //     {required String name, required pw.Document pdf}) async {
+  //   // final bytes = pdf.save();
+
+  //   final dir = await getApplicationDocumentsDirectory();
+
+  //   final file = File('${dir.path}/${name}');
+
+  //   await file.writeAsBytes(await pdf.save());
+  //   // sendFile(file);
+  //   return file;
+  // }
+
+///////////////////////////////////////////////////////////////////////////
+  static Future sendFile(File file) async {
+    final url = file.path;
+    Share.shareXFiles([XFile(url)]);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  Future<File> downloadDoc(
+      {required String name, required pw.Document pdf}) async {
+    Directory? extDir = await getExternalStorageDirectory();
+    String dirPath = '${extDir!.path}/BestPDF';
+    print("dirPath----$dirPath");
+    dirPath =
+        dirPath.replaceAll("Android/data/com.example.bestengineer/files/", "");
+    print("dir----$dirPath");
+    Directory folder = Directory(dirPath);
+    if (await folder.exists()) {
+      print("Folder exists");
+    } else {
+      try {
+        await folder.create(recursive: true);
+      } catch (e) {}
+    }
+    // await Directory(dirPath).create(recursive: true);
+
+    final file = File('${dirPath}/${name}');
+    print("file---------$file");
+    await file.writeAsBytes(await pdf.save());
+    
+    return file;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
@@ -21,7 +22,7 @@ class PdFSave {
 
     pdf.addPage(MultiPage(
       build: (context) => [
-        buildHeader(image),
+        // buildHeader(image),
         buildQuotationHeading(),
         SizedBox(height: 0.1 * PdfPageFormat.cm),
         buildCustomerData(masterPdf),
@@ -30,10 +31,13 @@ class PdFSave {
         Divider(),
         buildTotal(detailPdf),
       ],
+      header: (context) => buildHeader(image),
       footer: (context) => buildFooter(termsList),
     ));
-
-    return downloadDoc(name: "m$now.pdf", pdf: pdf);
+    String inv = masterPdf[0]["s_invoice_no"];
+    return savedocument(name: "vegaPdf.pdf", pdf: pdf);
+    // return downloadDoc(name: "$inv.pdf", pdf: pdf);
+    // return downloadDoc(name: "$inv.pdf", pdf: pdf);
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -176,11 +180,36 @@ class PdFSave {
       'GST',
       'Net Amt',
     ];
+    //  final data;
+    // if (list.length < 30) {
+    //    data = list.map((item) {
+    //     print("sdjsjkh----${item["qty"].runtimeType}");
+    //     i = i + 1;
+
+    //     // double total = double.parse(item["qty"]) * item["rate"] ;
+    //     double netrate = double.parse(item["net_rate"]);
+
+    //     return [
+    //       i,
+    //       item["product_name"],
+    //       item["qty"],
+    //       item["rate"],
+    //       item["amount"],
+    //       item["tax_perc"],
+    //       item["tax"],
+    //       netrate.toStringAsFixed(2),
+    //     ];
+    //   }).toList();
+    // }else{
+
+    // }
+
     final data = list.map((item) {
       print("sdjsjkh----${item["qty"].runtimeType}");
       i = i + 1;
 
       // double total = double.parse(item["qty"]) * item["rate"] ;
+      double netrate = double.parse(item["net_rate"]);
 
       return [
         i,
@@ -190,29 +219,37 @@ class PdFSave {
         item["amount"],
         item["tax_perc"],
         item["tax"],
-        item["net_rate"],
+        netrate.toStringAsFixed(2),
       ];
     }).toList();
 
     return Table.fromTextArray(
       headers: headers,
       data: data,
+      tableWidth: TableWidth.max,
       border: TableBorder(
-        left: BorderSide(),
-        right: BorderSide(),
-        top: BorderSide(),
-        bottom: BorderSide(),
-        verticalInside: BorderSide(),
+        left: BorderSide(
+          color: PdfColors.grey,
+        ),
+        right: BorderSide(
+          color: PdfColors.grey,
+        ),
+        // top: BorderSide(
+        //   color: PdfColors.grey,
+        // ),
+        bottom: BorderSide(
+          color: PdfColors.grey,
+        ),
+        // verticalInside: BorderSide(),
         // left: pw.BorderSide(style: pw.BorderStyle.solid),
-        horizontalInside: BorderSide(
+        horizontalInside: BorderSide.none,
+        verticalInside: BorderSide(
+          color: PdfColors.grey,
           style: BorderStyle.solid,
         ),
-        // verticalInside: pw.BorderSide(
-        //   style: pw.BorderStyle.solid,
-        // ),
       ),
-      // border: null,
       headerStyle: TextStyle(fontWeight: FontWeight.bold),
+      cellStyle: TextStyle(fontSize: 10),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 30,
       columnWidths: {
@@ -335,6 +372,18 @@ class PdFSave {
   }
 
   /////////////////////////////////////////////////
+  Future<File> savedocument(
+      {required String name, required pw.Document pdf}) async {
+    // final bytes = pdf.save();
+
+    final dir = await getApplicationDocumentsDirectory();
+
+    final file = File('${dir.path}/${name}');
+    print("file----$file");
+    await file.writeAsBytes(await pdf.save());
+    // sendFile(file);
+    return file;
+  }
   // Future<File> savedocument(
   //     {required String name, required pw.Document pdf}) async {
   //   // final bytes = pdf.save();
@@ -366,7 +415,7 @@ class PdFSave {
     // File('${dirPath}/ nxnc.txt').create(recursive: true);
 
     final file = File('${dirPath}/${name}');
-
+    print("file---------$file");
     await file.writeAsBytes(await pdf.save());
     return file;
   }

@@ -128,7 +128,7 @@ class ExportPdf {
   List<pw.Widget> widgets = [];
 ///////////////////////////////////////////////////////
   Future<Uint8List> makePdf() async {
-    var list = (report as List)
+    var  list = (report as List)
         .map((item) => pw.TableRow(children: [
               pw.Container(
                 alignment: pw.Alignment.centerLeft,

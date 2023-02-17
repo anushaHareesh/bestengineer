@@ -79,6 +79,9 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "E1":
         {
+          Provider.of<Controller>(context, listen: false).getArea(context);
+          Provider.of<Controller>(context, listen: false)
+              .gePriorityList(context);
           return EnqDashboard();
         }
       case "E2":
@@ -561,11 +564,11 @@ class _EnqHomeState extends State<EnqHome> {
                         elevation: 0,
                         items: value.area_list
                             .map((item) => DropdownMenuItem<String>(
-                                value: item.areaId.toString(),
+                                value: item["area_id"],
                                 child: Container(
                                   width: size.width * 0.4,
                                   child: Text(
-                                    item.areaName.toString(),
+                                    item["area_name"],
                                     style: TextStyle(fontSize: 14),
                                   ),
                                 )))

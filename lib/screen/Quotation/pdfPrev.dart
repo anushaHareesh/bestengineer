@@ -5,6 +5,7 @@ import 'package:bestengineer/pdftest/pdfExport.dart';
 import 'package:bestengineer/pdftest/pdfModel.dart';
 import 'package:bestengineer/screen/Enquiry/enqDashboard.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
+import 'package:bestengineer/screen/Quotation/pdfDownload.dart';
 import 'package:bestengineer/screen/Quotation/pdfQuotation.dart';
 import 'package:bestengineer/screen/Quotation/pdfsave.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class PdfPreviewPage extends StatefulWidget {
 
 class _PdfPreviewPageState extends State<PdfPreviewPage> {
   PdfQuotation quotation1 = PdfQuotation();
-
+  PdfDownload dwnload = PdfDownload();
   PdFSave pdfSave = PdFSave();
 
   DateTime now = DateTime.now();
@@ -57,27 +58,46 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
         backgroundColor: P_Settings.loginPagetheme,
         title: Text('PDF Preview'),
         actions: [
-          // Consumer<QuotationController>(
-          //   builder: (context, value, child) {
-          //     return IconButton(
-          //       onPressed: () async {
-          //         final pdffile = await pdfSave.savepdf(value.detailPdf, value.masterPdf, value.termsPdf);
-          //         print("pdffile----$pdffile");
-          //         PdFSave.sendFile(pdffile);
-          //       },
-          //       icon: Icon(Icons.share));
-          //   },
-           
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 12.0),
-          //   child: IconButton(
-          //       onPressed: () async {
-          //         // final pdffile = await pdfSave.savepdf();
-          //         // PdFSave.downloadDoc("m$now.pdf");
-          //       },
-          //       icon: Icon(Icons.download)),
-          // )
+          Consumer<QuotationController>(
+            builder: (context, value, child) {
+              return IconButton(
+                  onPressed: () async {
+                    final pdffile = await pdfSave.savepdf(
+                        value.detailPdf, value.masterPdf, value.termsPdf);
+                    print("pdffile----$pdffile");
+                    PdFSave.sendFile(pdffile);
+                  },
+                  icon: Icon(Icons.share));
+            },
+          ),
+          Consumer<QuotationController>(
+            builder: (context, value, child) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 12.0),
+                child: IconButton(
+                  onPressed: () async {
+                    final pdffile = await dwnload.downLoadpdf(
+                        value.detailPdf, value.masterPdf, value.termsPdf);
+                    print("kjxnzx-------$pdffile");
+                    final snackBar = SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: const Text(
+                        'Pdf downloaded to BestPDF folder',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: (Colors.black),
+                      // action: SnackBarAction(
+                      //   label: 'dismiss',
+                      //   onPressed: () {},
+                      // ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  icon: Icon(Icons.download),
+                ),
+              );
+            },
+          )
         ],
       ),
       body: Consumer<QuotationController>(
