@@ -17,12 +17,12 @@ import 'package:badges/badges.dart' as badges;
 import '../../widgets/alertCommon/itemSelectionAlert.dart';
 import '../../widgets/bottomsheets/itemSelectionSheet.dart';
 
-class EnqDashboard extends StatefulWidget {
+class EnquiryScreen extends StatefulWidget {
   @override
-  State<EnqDashboard> createState() => _EnqDashboardState();
+  State<EnquiryScreen> createState() => _EnquiryScreenState();
 }
 
-class _EnqDashboardState extends State<EnqDashboard>
+class _EnquiryScreenState extends State<EnquiryScreen>
     with SingleTickerProviderStateMixin {
   // Duration? animationDuration;
   CustomerPopup cusPopup = CustomerPopup();

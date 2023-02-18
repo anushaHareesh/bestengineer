@@ -5,7 +5,7 @@ import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
 import 'package:bestengineer/screen/Enquiry/EnqHistory.dart';
-import 'package:bestengineer/screen/Enquiry/enqDashboard.dart';
+import 'package:bestengineer/screen/Enquiry/enquiryScreen.dart';
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
 import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
@@ -45,6 +45,7 @@ class _EnqHomeState extends State<EnqHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
@@ -53,6 +54,8 @@ class _EnqHomeState extends State<EnqHome> {
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
+
+   
   }
 
   _onSelectItem(String? menu) {
@@ -82,7 +85,7 @@ class _EnqHomeState extends State<EnqHome> {
           Provider.of<Controller>(context, listen: false).getArea(context);
           Provider.of<Controller>(context, listen: false)
               .gePriorityList(context);
-          return EnqDashboard();
+          return EnquiryScreen();
         }
       case "E2":
         {
@@ -523,7 +526,7 @@ class _EnqHomeState extends State<EnqHome> {
   Widget customContainer() {
     return Consumer<Controller>(
       builder: (context, value, child) {
-        return EnqDashboard();
+        return EnquiryScreen();
 
         // return SingleChildScrollView(
         //   // physics: NeverScrollableScrollPhysics(),
@@ -649,4 +652,5 @@ class _EnqHomeState extends State<EnqHome> {
       },
     );
   }
+
 }

@@ -3,7 +3,7 @@ import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/pdftest/pdfExport.dart';
 
 import 'package:bestengineer/pdftest/pdfModel.dart';
-import 'package:bestengineer/screen/Enquiry/enqDashboard.dart';
+import 'package:bestengineer/screen/Enquiry/enquiryScreen.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/Quotation/pdfDownload.dart';
 import 'package:bestengineer/screen/Quotation/pdfQuotation.dart';

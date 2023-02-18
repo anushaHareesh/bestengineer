@@ -590,6 +590,7 @@ class QuotationController extends ChangeNotifier {
           Map body = {
             'row_id': row_id,
             "enq_id": enqId,
+            "usergroup":""
           };
           print("qutationlistedit  b----$body");
           isQuotEditLoading = true;

@@ -313,7 +313,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 hintText: hinttext.toString()),
             validator: (text) {
               if (text == null || text.isEmpty) {
-                return 'Please Enter ${hinttext}';
+                if (text == null || text.isEmpty) {
+                  return 'Please Enter ${hinttext}';
+                } else if (type == "phone" && text.length != 10) {
+                  return 'Please Enter Valid Phone No ';
+                }
               }
               return null;
             },

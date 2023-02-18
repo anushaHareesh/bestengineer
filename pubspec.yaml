@@ -74,6 +74,7 @@ dependencies:
   fluttertoast: ^8.0.9
   pdf: ^3.8.3
   flash: ^2.0.3+1
+  awesome_dialog: ^3.0.2
   printing: ^5.9.3
   open_filex: ^4.3.2
   share_plus: ^4.0.3
