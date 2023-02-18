@@ -44,12 +44,13 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Provider.of<QuotationController>(context, listen: false)
-                  .quotationList
-                  .length ==
-              0
-          ? Colors.white
-          : Colors.grey[200],
+      backgroundColor: Colors.white,
+      // backgroundColor: Provider.of<QuotationController>(context, listen: false)
+      //             .quotationList
+      //             .length ==
+      //         0
+      //     ? Colors.white
+      //     : Colors.grey[200],
       // appBar: AppBar(
       //   backgroundColor: P_Settings.loginPagetheme,
       // ),
@@ -303,8 +304,9 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
         return Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8, top: 5),
           child: ExpansionTileCard(
-            baseColor: P_Settings.whiteColor,
-            expandedColor: P_Settings.whiteColor,
+            elevation: 3,
+            baseColor: Color.fromARGB(255, 248, 246, 246),
+            expandedColor: Color.fromARGB(255, 248, 246, 246),
             // key: cardA,
             leading: CircleAvatar(child: Image.asset("assets/man.png")),
             title: Text(value.quotationList[index]["cname"]),
