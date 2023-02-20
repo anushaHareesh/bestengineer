@@ -45,7 +45,7 @@ class _EnqHomeState extends State<EnqHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+   
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
@@ -54,8 +54,6 @@ class _EnqHomeState extends State<EnqHome> {
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
-
-   
   }
 
   _onSelectItem(String? menu) {
@@ -78,6 +76,7 @@ class _EnqHomeState extends State<EnqHome> {
         {
           Provider.of<Controller>(context, listen: false)
               .getDashboardValues(context);
+
           return ExecutiveDashBoard();
         }
       case "E1":
@@ -652,5 +651,4 @@ class _EnqHomeState extends State<EnqHome> {
       },
     );
   }
-
 }

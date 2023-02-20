@@ -1,5 +1,6 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
@@ -59,7 +60,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
       Provider.of<RegistrationController>(context, listen: false)
           .getMenu(context);
-
+      Provider.of<QuotationController>(context, listen: false).getScheduleList(
+        context,
+      );
       if (Provider.of<RegistrationController>(context, listen: false)
               .isMenuLoading ==
           false) {

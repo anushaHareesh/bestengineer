@@ -34,10 +34,11 @@ class PdfDownload {
       header: (context) => buildHeader(image),
       footer: (context) => buildFooter(termsList),
     ));
-    String inv = masterPdf[0]["s_invoice_no"];
+    String inv = masterPdf[0]["s_customer_name"];
+
     // return savedocument(name: "m$now.pdf", pdf: pdf);
     // return downloadDoc(name: "$inv.pdf", pdf: pdf);
-    return downloadDoc(name: "vegaPdf.pdf", pdf: pdf);
+    return downloadDoc(name: "$inv.pdf", pdf: pdf);
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +202,7 @@ class PdfDownload {
     //     ];
     //   }).toList();
     // }else{
-      
+
     // }
 
     final data = list.map((item) {
@@ -216,7 +217,7 @@ class PdfDownload {
         item["product_name"],
         item["qty"],
         item["rate"],
-        item["amount"],  
+        item["amount"],
         item["tax_perc"],
         item["tax"],
         netrate.toStringAsFixed(2),
@@ -354,7 +355,8 @@ class PdfDownload {
     return Column(children: [
       Row(
         children: [
-          Text(title, style: TextStyle(fontSize: 10)),
+          Text(title,
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
           SizedBox(width: 10),
           Flexible(
               child: Text(value,
@@ -412,20 +414,19 @@ class PdfDownload {
     dirPath =
         dirPath.replaceAll("Android/data/com.example.bestengineer/files/", "");
     print("dir----$dirPath");
-    Directory folder = Directory(dirPath);
-    if (await folder.exists()) {
-      print("Folder exists");
-    } else {
-      try {
-        await folder.create(recursive: true);
-      } catch (e) {}
-    }
-    // await Directory(dirPath).create(recursive: true);
+    // Directory folder = Directory(dirPath);
+    // if (await folder.exists()) {
+    //   print("Folder exists");
+    // } else {
+    //   try {
+    //     await folder.create(recursive: true);
+    //   } catch (e) {}
+    // }
+    await Directory(dirPath).create(recursive: true);
 
     final file = File('${dirPath}/${name}');
     print("file---------$file");
     await file.writeAsBytes(await pdf.save());
-    
     return file;
   }
 }

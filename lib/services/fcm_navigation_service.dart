@@ -1,4 +1,5 @@
 
+import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ class FcmNavigationService {
   Future<dynamic> navigateToPage() {
     return Navigator.of(navigatorKey.currentContext!).push(
       MaterialPageRoute(
-        builder: (context) =>  LoginPage(),
+        builder: (context) =>  EnqHome(),
       ),
     );
 

@@ -307,7 +307,7 @@ class PdfQuotation {
     //     ];
     //   }).toList();
     // }else{
-      
+
     // }
 
     final data = list.map((item) {
@@ -322,7 +322,7 @@ class PdfQuotation {
         item["product_name"],
         item["qty"],
         item["rate"],
-        item["amount"],  
+        item["amount"],
         item["tax_perc"],
         item["tax"],
         netrate.toStringAsFixed(2),
@@ -460,7 +460,7 @@ class PdfQuotation {
     return Column(children: [
       Row(
         children: [
-          Text(title, style: TextStyle(fontSize: 10)),
+          Text(title, style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold)),
           SizedBox(width: 10),
           Flexible(
               child: Text(value,

@@ -34,8 +34,8 @@ class PdFSave {
       header: (context) => buildHeader(image),
       footer: (context) => buildFooter(termsList),
     ));
-    String inv = masterPdf[0]["s_invoice_no"];
-    return savedocument(name: "vegaPdf.pdf", pdf: pdf);
+    String inv = masterPdf[0]["s_customer_name"];
+    return savedocument(name: "$inv.pdf", pdf: pdf);
     // return downloadDoc(name: "$inv.pdf", pdf: pdf);
     // return downloadDoc(name: "$inv.pdf", pdf: pdf);
   }
@@ -354,7 +354,7 @@ class PdFSave {
     return Column(children: [
       Row(
         children: [
-          Text(title, style: TextStyle(fontSize: 10)),
+          Text(title, style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold)),
           SizedBox(width: 10),
           Flexible(
               child: Text(value,

@@ -1,5 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/controller/quotationController.dart';
+import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -22,14 +24,19 @@ class _ExecutiveDashBoardState extends State<ExecutiveDashBoard> {
       headerAnimationLoop: false,
       animType: AnimType.bottomSlide,
       title: 'Reminder',
-      desc: 'Hy ksjkjdskjdsdjk',
+      desc:
+          'You have ${Provider.of<QuotationController>(context, listen: false).scheduleListCount} schedules on tomorrow',
       buttonsTextStyle: const TextStyle(color: Colors.black),
       showCloseIcon: true,
       btnCancelOnPress: () {
         Navigator.pop(context);
       },
       btnOkOnPress: () {
-        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScheduleListScreen()),
+        );
+        // Navigator.pop(context);
       },
     ).show();
     // ScaffoldMessenger.of(context).showSnackBar(
@@ -102,8 +109,14 @@ class _ExecutiveDashBoardState extends State<ExecutiveDashBoard> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print(
+        "zxzx--${Provider.of<QuotationController>(context, listen: false).scheduleListCount}");
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      customNotification();
+      if (Provider.of<QuotationController>(context, listen: false)
+              .scheduleListCount >
+          0) {
+        customNotification();
+      }
     });
   }
 

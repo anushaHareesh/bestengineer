@@ -14,7 +14,9 @@ import '../screen/Quotation/pdfPrev.dart';
 
 class QuotationController extends ChangeNotifier {
   String? todaydate;
+  int scheduleListCount = 0;
   int? sivd;
+  bool isSchedulelIstLoadind=false;
   String? dealerselected;
   DateTime now = DateTime.now();
   String urlgolabl = Globaldata.apiglobal;
@@ -71,6 +73,7 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> dealerList = [];
   List<Map<String, dynamic>> quotationList = [];
   List<Map<String, dynamic>> quotationEditList = [];
+  List<Map<String, dynamic>> scheduleList = [];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   String rawCalculation(
@@ -487,6 +490,7 @@ class QuotationController extends ChangeNotifier {
           for (var item in map["master"]) {
             masterPdf.add(item);
           }
+          print("masrerrr---$masterPdf");
           detailPdf.clear();
           for (var item in map["details"]) {
             detailPdf.add(item);
@@ -587,11 +591,7 @@ class QuotationController extends ChangeNotifier {
           notifyListeners();
           Uri url = Uri.parse(
               "https://trafiqerp.in/webapp/beste/common_api/edit_qutation_master.php");
-          Map body = {
-            'row_id': row_id,
-            "enq_id": enqId,
-            "usergroup":""
-          };
+          Map body = {'row_id': row_id, "enq_id": enqId, "usergroup": ""};
           print("qutationlistedit  b----$body");
           isQuotEditLoading = true;
           notifyListeners();
@@ -729,6 +729,7 @@ class QuotationController extends ChangeNotifier {
     notifyListeners();
   }
 
+//////////////////////////////////////////////////////////////////////////////////////
   deleteQuotation(BuildContext context, String? dealerName, String? dealerId,
       String remark, String invId) {
     NetConnection.networkConnection(context).then((value) async {
@@ -775,6 +776,54 @@ class QuotationController extends ChangeNotifier {
 
           // isQuotLoading = false;
           // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ////////////////////////////////////////////////////////////////////
+  getScheduleList(
+    BuildContext context,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          Uri url = Uri.parse("$urlgolabl/get_schedule.php");
+          Map body = {
+            'staff_id': user_id,
+          };
+
+          print("schedule list jjj body----$body");
+          isSchedulelIstLoadind=true;
+          notifyListeners();          
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          scheduleListCount = map.length;
+          notifyListeners();
+
+          print("schedule list-------$map");
+          scheduleList.clear();
+          for (var item in map) {
+            scheduleList.add(item);
+          }
+          isSchedulelIstLoadind=false;
+          notifyListeners();   
+          print("count------$scheduleListCount");
+          notifyListeners();
         } catch (e) {
           print(e);
           // return null;

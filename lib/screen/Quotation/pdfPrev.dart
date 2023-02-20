@@ -76,8 +76,9 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
                 padding: const EdgeInsets.only(left: 12.0),
                 child: IconButton(
                   onPressed: () async {
+                  
                     final pdffile = await dwnload.downLoadpdf(
-                        value.detailPdf, value.masterPdf, value.termsPdf);
+                        value.detailPdf, value.masterPdf, value.termsPdf,);
                     print("kjxnzx-------$pdffile");
                     final snackBar = SnackBar(
                       duration: Duration(seconds: 2),

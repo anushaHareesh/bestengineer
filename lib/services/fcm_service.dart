@@ -60,6 +60,7 @@ class FcmService {
     // Set the background messaging handler early on, as a named top-level function
     try {
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      
     } catch (_) {}
   }
 
@@ -81,6 +82,7 @@ class FcmService {
       sound: true,
     );
   }
+  
 
   _foregroundNotification() async {
     try {
