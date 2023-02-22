@@ -20,7 +20,7 @@ class PdFSave {
     final pdf = Document();
     final image = await imageFromAssetBundle('assets/noImg.png');
 
-    pdf.addPage(MultiPage(
+ pdf.addPage(MultiPage(
       build: (context) => [
         // buildHeader(image),
         buildQuotationHeading(),
@@ -28,7 +28,9 @@ class PdFSave {
         buildCustomerData(masterPdf),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildInvoice(detailPdf),
-        Divider(),
+        // Divider(),
+        SizedBox(height: 5),
+
         buildTotal(detailPdf),
       ],
       header: (context) => buildHeader(image),
@@ -41,7 +43,7 @@ class PdFSave {
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
-  Widget buildHeader(ImageProvider image) {
+   Widget buildHeader(ImageProvider image) {
     return Container(
         child: Column(children: [
       Row(
@@ -58,9 +60,9 @@ class PdFSave {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("BEST ENGINEERS PVT LTD",
+              Text("BEST MACHINETOOLS PVT LTD",
                   style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 24,
                       fontWeight: pw.FontWeight.bold,
                       color: PdfColors.red)),
               Text("Attention to: Anushaa"),
@@ -85,7 +87,7 @@ class PdFSave {
     ]));
   }
 
-  Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
+    Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
     return Container(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -168,7 +170,7 @@ class PdFSave {
     ]));
   }
 
-  Widget buildInvoice(List<Map<String, dynamic>> list) {
+   Widget buildInvoice(List<Map<String, dynamic>> list) {
     int i = 0;
     final headers = [
       'Sl No',
@@ -176,6 +178,7 @@ class PdFSave {
       'Qty',
       'Rate',
       'Amt',
+      'Disc',
       'GST%',
       'GST',
       'Net Amt',
@@ -217,6 +220,7 @@ class PdFSave {
         item["qty"],
         item["rate"],
         item["amount"],
+        item["discount_amount"],
         item["tax_perc"],
         item["tax"],
         netrate.toStringAsFixed(2),
@@ -253,14 +257,15 @@ class PdFSave {
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 30,
       columnWidths: {
-        0: FixedColumnWidth(50),
-        1: FixedColumnWidth(110),
-        2: FixedColumnWidth(50),
-        3: FixedColumnWidth(70),
-        4: FixedColumnWidth(70),
-        5: FixedColumnWidth(60),
-        6: FixedColumnWidth(60),
-        7: FixedColumnWidth(80),
+        // 0: FixedColumnWidth(50),
+        // 1: FixedColumnWidth(110),
+        // 2: FixedColumnWidth(50),
+        // 3: FixedColumnWidth(70),
+        // 4: FixedColumnWidth(70),
+        // 5: FixedColumnWidth(60),
+        // 6: FixedColumnWidth(60),
+        // 7: FixedColumnWidth(60),
+        // 8: FixedColumnWidth(80),
       },
       cellAlignments: {
         0: Alignment.centerLeft,
@@ -271,9 +276,11 @@ class PdFSave {
         5: Alignment.centerRight,
         6: Alignment.centerRight,
         7: Alignment.centerRight,
+        8: Alignment.centerRight,
       },
     );
   }
+
 
   ////////////////////////////////////////////////////
   static Widget buildTotal(List<Map<String, dynamic>> list) {
@@ -294,7 +301,7 @@ class PdFSave {
               children: [
                 buildText(
                   title: 'Grand total',
-                  value: sum,
+                  value: sum.toStringAsFixed(2),
                   unite: true,
                 ),
 
@@ -313,9 +320,9 @@ class PdFSave {
   }
 
   ////////////////////////////////////////////////////
-  static buildText({
+   static buildText({
     required String title,
-    required double value,
+    required String value,
     double width = double.infinity,
     TextStyle? titleStyle,
     bool unite = false,
@@ -354,7 +361,8 @@ class PdFSave {
     return Column(children: [
       Row(
         children: [
-          Text(title, style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold)),
+          Text(title,
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
           SizedBox(width: 10),
           Flexible(
               child: Text(value,

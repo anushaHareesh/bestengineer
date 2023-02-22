@@ -18,7 +18,11 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationController extends ChangeNotifier {
+  bool scheduleOpend = false;
   bool isMenuLoading = false;
+  int scheduleListCount = 0;
+  List<Map<String, dynamic>> scheduleList = [];
+  bool isSchedulelIstLoadind = false;
   String? staff_name;
   bool isLoading = false;
   bool isLoginLoading = false;
@@ -185,7 +189,6 @@ class RegistrationController extends ChangeNotifier {
           prefs.setString("branch_prefix", loginModel.branchPrefix!);
         }
         getMenu(context);
-
       }
 
       // print("stafff-------${loginModel.staffName}");
@@ -265,16 +268,17 @@ class RegistrationController extends ChangeNotifier {
             menuList.add(item);
           }
           notifyListeners();
+          getScheduleList(context);
           print("menu res--$map");
-          if (menuList.length > 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => EnqHome()),
-            );
-          }
-          
-        isLoginLoading = false;
-        notifyListeners();
+          // if (menuList.length > 0) {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(builder: (context) => EnqHome()),
+          //   );
+          // }
+
+          isLoginLoading = false;
+          notifyListeners();
           isMenuLoading = false;
           notifyListeners();
         } catch (e) {
@@ -295,5 +299,57 @@ class RegistrationController extends ChangeNotifier {
     staff_name = staff_nam;
 
     notifyListeners();
+  }
+
+/////////////////////////////////////////////////////////////////////
+  getScheduleList(
+    BuildContext context,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          Uri url = Uri.parse("$urlgolabl/get_schedule.php");
+          Map body = {
+            'staff_id': user_id,
+          };
+
+          print("schedule list jjj body----$body");
+          isSchedulelIstLoadind = true;
+          notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          scheduleListCount = map.length;
+          notifyListeners();
+
+          print("schedule list-------$map");
+          scheduleList.clear();
+          for (var item in map) {
+            scheduleList.add(item);
+          }
+          isSchedulelIstLoadind = false;
+          notifyListeners();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EnqHome(rebuild: true,)),
+          );
+          print("count------$scheduleListCount");
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/pdftest/pdfExport.dart';
@@ -43,78 +45,117 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EnqHome(
-                            type: "return from quataion",
-                          )));
-            },
-            icon: Icon(Icons.arrow_back)),
-        backgroundColor: P_Settings.loginPagetheme,
-        title: Text('PDF Preview'),
-        actions: [
-          Consumer<QuotationController>(
-            builder: (context, value, child) {
-              return IconButton(
-                  onPressed: () async {
-                    final pdffile = await pdfSave.savepdf(
-                        value.detailPdf, value.masterPdf, value.termsPdf);
-                    print("pdffile----$pdffile");
-                    PdFSave.sendFile(pdffile);
-                  },
-                  icon: Icon(Icons.share));
-            },
-          ),
-          Consumer<QuotationController>(
-            builder: (context, value, child) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: IconButton(
-                  onPressed: () async {
-                  
-                    final pdffile = await dwnload.downLoadpdf(
-                        value.detailPdf, value.masterPdf, value.termsPdf,);
-                    print("kjxnzx-------$pdffile");
-                    final snackBar = SnackBar(
-                      duration: Duration(seconds: 2),
-                      content: const Text(
-                        'Pdf downloaded to BestPDF folder',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: (Colors.black),
-                      // action: SnackBarAction(
-                      //   label: 'dismiss',
-                      //   onPressed: () {},
-                      // ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
-                  icon: Icon(Icons.download),
-                ),
+    return WillPopScope(
+      onWillPop: () => _onBackPressed(context),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EnqHome(
+                              type: "return from quataion",
+                              rebuild: false,
+                            )));
+              },
+              icon: Icon(Icons.arrow_back)),
+          backgroundColor: P_Settings.loginPagetheme,
+          title: Text('PDF Preview'),
+          actions: [
+            Consumer<QuotationController>(
+              builder: (context, value, child) {
+                return IconButton(
+                    onPressed: () async {
+                      final pdffile = await pdfSave.savepdf(
+                          value.detailPdf, value.masterPdf, value.termsPdf);
+                      print("pdffile----$pdffile");
+                      PdFSave.sendFile(pdffile);
+                    },
+                    icon: Icon(Icons.share));
+              },
+            ),
+            Consumer<QuotationController>(
+              builder: (context, value, child) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  child: IconButton(
+                    onPressed: () async {
+                      final pdffile = await dwnload.downLoadpdf(
+                        value.detailPdf,
+                        value.masterPdf,
+                        value.termsPdf,
+                      );
+                      print("kjxnzx-------$pdffile");
+                      final snackBar = SnackBar(
+                        duration: Duration(seconds: 2),
+                        content: const Text(
+                          'Pdf downloaded to BestPDF folder',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: (Colors.black),
+                        // action: SnackBarAction(
+                        //   label: 'dismiss',
+                        //   onPressed: () {},
+                        // ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                    icon: Icon(Icons.download),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+        body: Consumer<QuotationController>(
+          builder: (context, value, child) {
+            if (value.isPdfLoading) {
+              return SpinKitCircle(
+                color: P_Settings.loginPagetheme,
               );
-            },
-          )
-        ],
+            } else {
+              return PdfPreview(
+                  useActions: false,
+                  build: (context) => quotation1.generate(
+                      value.detailPdf, value.masterPdf, value.termsPdf));
+            }
+          },
+        ),
       ),
-      body: Consumer<QuotationController>(
-        builder: (context, value, child) {
-          if (value.isPdfLoading) {
-            return SpinKitCircle(
-              color: P_Settings.loginPagetheme,
-            );
-          } else {
-            return PdfPreview(
-                useActions: false,
-                build: (context) => quotation1.generate(
-                    value.detailPdf, value.masterPdf, value.termsPdf));
-          }
-        },
-      ),
+    );
+  }
+
+  Future<bool> _onBackPressed(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: const Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Do you want to exit from this app'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                exit(0);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

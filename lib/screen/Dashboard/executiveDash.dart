@@ -1,6 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/quotationController.dart';
+import 'package:bestengineer/controller/registrationController.dart';
+import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -17,113 +19,21 @@ class ExecutiveDashBoard extends StatefulWidget {
 }
 
 class _ExecutiveDashBoardState extends State<ExecutiveDashBoard> {
-  customNotification() {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.noHeader,
-      headerAnimationLoop: false,
-      animType: AnimType.bottomSlide,
-      title: 'Reminder',
-      desc:
-          'You have ${Provider.of<QuotationController>(context, listen: false).scheduleListCount} schedules on tomorrow',
-      buttonsTextStyle: const TextStyle(color: Colors.black),
-      showCloseIcon: true,
-      btnCancelOnPress: () {
-        Navigator.pop(context);
-      },
-      btnOkOnPress: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ScheduleListScreen()),
-        );
-        // Navigator.pop(context);
-      },
-    ).show();
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     action: SnackBarAction(
-    //       label: 'Dissmiss',
-    //       textColor: Colors.red,
-    //       onPressed: () {
-    //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    //       },
-    //     ),
-    //     // margin: EdgeInsets.only(bottom: 100.0),
-    //     backgroundColor: Colors.transparent,
-    //     behavior: SnackBarBehavior.floating,
-    //     elevation: 0,
-    //     content: Stack(
-    //       children: [
-    //         Container(
-    //           height: 60,
-    //           decoration: BoxDecoration(
-    //               color: Color.fromARGB(255, 190, 132, 6),
-    //               borderRadius: BorderRadius.all(Radius.circular(15))),
-    //           child: Padding(
-    //             padding: const EdgeInsets.all(8.0),
-    //             child: Row(
-    //               children: [
-    //                 SizedBox(width: 50),
-    //                 Expanded(
-    //                   child: Column(
-    //                     crossAxisAlignment: CrossAxisAlignment.start,
-    //                     children: [
-    //                       Text(
-    //                         "hellooo haiiii",
-    //                         style: TextStyle(
-    //                             fontSize: 16,
-    //                             fontWeight: FontWeight.bold,
-    //                             color: Colors.white),
-    //                         maxLines: 2,
-    //                         overflow: TextOverflow.ellipsis,
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //         Positioned(
-    //             bottom: 15,
-    //             left: 12,
-    //             child: ClipRRect(
-    //               clipBehavior: Clip.none,
-    //               child: Stack(children: [
-    //                 Image.asset(
-    //                   "assets/chat.png",
-    //                   height: 29,
-    //                   width: 28,
-    //                 )
-    //               ]),
-    //               borderRadius:
-    //                   BorderRadius.only(bottomLeft: Radius.circular(20)),
-    //             ))
-    //       ],
-    //     ),
-    //   ),
-    // );
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(
-        "zxzx--${Provider.of<QuotationController>(context, listen: false).scheduleListCount}");
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Provider.of<QuotationController>(context, listen: false)
-              .scheduleListCount >
-          0) {
-        customNotification();
-      }
-    });
+
+    print("2 times-----");
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.grey[200],
       body: SafeArea(
           child: SingleChildScrollView(

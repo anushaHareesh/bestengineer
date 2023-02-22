@@ -1,13 +1,16 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/quotationController.dart';
+import 'package:bestengineer/controller/registrationController.dart';
+import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class ScheduleListScreen extends StatefulWidget {
-  const ScheduleListScreen({super.key});
+  String type;
+  ScheduleListScreen({required this.type});
 
   @override
   State<ScheduleListScreen> createState() => _ScheduleListScreenState();
@@ -17,11 +20,22 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: P_Settings.loginPagetheme,
-        title: Text("Shedule List"),
-      ),
-      body: Consumer<QuotationController>(
+      appBar: widget.type == "from menu"
+          ? null
+          : AppBar(
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              EnqHome(type: "from scheduleList",rebuild: false,)));
+                },
+                icon: Icon(Icons.arrow_back)),
+            backgroundColor: P_Settings.loginPagetheme,
+            title: Text("Shedule List"),
+          ),
+      body: Consumer<RegistrationController>(
         builder: (context, value, child) {
           if (value.isSchedulelIstLoadind) {
             return SpinKitCircle(

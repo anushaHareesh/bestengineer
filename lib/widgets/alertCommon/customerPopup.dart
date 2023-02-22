@@ -214,79 +214,74 @@ class CustomerPopup {
                                 return Align(
                                   alignment: Alignment.topLeft,
                                   child: Material(
-                                    child: Expanded(
-                                      // width: 400,
-                                      // height: size.height * 0.3,
-                                      // color: Colors.grey[200],
-                                      child: Container(
-                                        width: 300,
-                                        color: Colors.grey[200],
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.all(10.0),
-                                          itemCount: options.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            final Map<String, dynamic> option =
-                                                options.elementAt(index);
-                                            return Column(
-                                              children: [
-                                                ListTile(
-                                                  // tileColor: Colors.amber,
-                                                  onTap: () {
-                                                    onSelected(option);
-                                                    print(
-                                                        "optionaid------$option");
+                                    // width: 400,
+                                    // height: size.height * 0.3,
+                                    // color: Colors.grey[200],
+                                    child: Container(
+                                      width: 300,
+                                      color: Colors.grey[200],
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.all(10.0),
+                                        itemCount: options.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          final Map<String, dynamic> option =
+                                              options.elementAt(index);
+                                          return Column(
+                                            children: [
+                                              ListTile(
+                                                // tileColor: Colors.amber,
+                                                onTap: () {
+                                                  onSelected(option);
+                                                  print(
+                                                      "optionaid------$option");
 
-                                                    name.text =
-                                                        option["company_name"]
-                                                            .toString();
-                                                    adress.text =
-                                                        option["company_add1"]
-                                                            .toString();
-                                                    phone.text =
-                                                        option["phone_1"]
-                                                            .toString();
-                                                    landmark.text =
-                                                        option["landmark"]
-                                                            .toString();
-                                                    contact_person.text =
-                                                        option["owner_name"]
-                                                            .toString();
-                                                    custId =
-                                                        option["customer_id"]
-                                                            .toString();
-                                                    // value.dropSelected =
-                                                    //     option["priority"]
-                                                    //         .toString();
-                                                  },
-                                                  title: Text(
+                                                  name.text =
                                                       option["company_name"]
-                                                          .toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.black)),
-                                                  subtitle: Text(
-                                                    option["phone_1"]
+                                                          .toString();
+                                                  adress.text =
+                                                      option["company_add1"]
+                                                          .toString();
+                                                  phone.text = option["phone_1"]
+                                                      .toString();
+                                                  landmark.text =
+                                                      option["landmark"]
+                                                          .toString();
+                                                  contact_person.text =
+                                                      option["owner_name"]
+                                                          .toString();
+                                                  custId = option["customer_id"]
+                                                      .toString();
+                                                  // value.dropSelected =
+                                                  //     option["priority"]
+                                                  //         .toString();
+                                                },
+                                                title: Text(
+                                                    option["company_name"]
                                                         .toString(),
-                                                  ),
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.black)),
+                                                subtitle: Text(
+                                                  option["phone_1"].toString(),
                                                 ),
-                                                Divider()
-                                              ],
-                                            );
+                                              ),
+                                              Divider()
+                                            ],
+                                          );
 
-                                            // return GestureDetector(
-                                            //   onTap: () {
-                                            //     onSelected(option);
-                                            //   },
-                                            //   child: ListTile(
-                                            //     title: Text(option.name,
-                                            //         style: const TextStyle(
-                                            //             color: Colors.white)),
-                                            //   ),
-                                            // );
-                                          },
-                                        ),
+                                          // return GestureDetector(
+                                          //   onTap: () {
+                                          //     onSelected(option);
+                                          //   },
+                                          //   child: ListTile(
+                                          //     title: Text(option.name,
+                                          //         style: const TextStyle(
+                                          //             color: Colors.white)),
+                                          //   ),
+                                          // );
+                                        },
                                       ),
                                     ),
                                   ),
@@ -704,61 +699,66 @@ class CustomerPopup {
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             primary: Colors.green),
-                                        onPressed: () {
-                                          print("name.text----${name.text}");
-                                          if (name.text == null ||
-                                              name.text.isEmpty) {
-                                            visiblename.value = true;
-                                          } else if (phone.text == null ||
-                                              phone.text.isEmpty) {
-                                            visibleph.value = true;
-                                          } else if (phone.text.length != 10) {
-                                            validph.value = true;
-                                          } else {
-                                            validph.value = false;
-                                            visibleph.value = false;
-                                            visiblename.value = false;
+                                        onPressed: value.selectedCustomer
+                                            ? null
+                                            : () {
+                                                print(
+                                                    "name.text----${name.text}");
+                                                if (name.text == null ||
+                                                    name.text.isEmpty) {
+                                                  visiblename.value = true;
+                                                } else if (phone.text == null ||
+                                                    phone.text.isEmpty) {
+                                                  visibleph.value = true;
+                                                } else if (phone.text.length !=
+                                                    10) {
+                                                  validph.value = true;
+                                                } else {
+                                                  validph.value = false;
+                                                  visibleph.value = false;
+                                                  visiblename.value = false;
 
-                                            print(
-                                                "validate---${name.text}--${contact_person.text}-------${phone.text}---${adress.text}----${landmark.text}");
+                                                  print(
+                                                      "validate---${name.text}--${contact_person.text}-------${phone.text}---${adress.text}----${landmark.text}");
 
-                                            value.saveCustomerInfo(
-                                              context,
-                                              "0",
-                                              name.text,
-                                              contact_person.text,
-                                              phone.text,
-                                              adress.text,
-                                              landmark.text,
-                                            );
-                                            // name.clear();
-                                            // adress.clear();
-                                            // phone.clear();
-                                            // landmark.clear();
-                                            Provider.of<ProductController>(
+                                                  value.saveCustomerInfo(
                                                     context,
-                                                    listen: false)
-                                                .setCustomerName(
-                                              "0",
-                                              name.text,
-                                              adress.text,
-                                              phone.text,
-                                              contact_person.text,
-                                              landmark.text,
-                                              value.prioId.toString(),
-                                              // context,
-                                              //         value.dupcustomer_id!);
-                                              // Provider.of<ProductController>(
-                                              //         context,
-                                              //         listen: false)
-                                              //     .getbagData(context, "0",
-                                              // value.dupcustomer_id!
-                                            );
-                                            FocusManager.instance.primaryFocus!
-                                                .unfocus();
-                                            Navigator.pop(context);
-                                          }
-                                        },
+                                                    "0",
+                                                    name.text,
+                                                    contact_person.text,
+                                                    phone.text,
+                                                    adress.text,
+                                                    landmark.text,
+                                                  );
+                                                  // name.clear();
+                                                  // adress.clear();
+                                                  // phone.clear();
+                                                  // landmark.clear();
+                                                  Provider.of<ProductController>(
+                                                          context,
+                                                          listen: false)
+                                                      .setCustomerName(
+                                                    "0",
+                                                    name.text,
+                                                    adress.text,
+                                                    phone.text,
+                                                    contact_person.text,
+                                                    landmark.text,
+                                                    value.prioId.toString(),
+                                                    // context,
+                                                    //         value.dupcustomer_id!);
+                                                    // Provider.of<ProductController>(
+                                                    //         context,
+                                                    //         listen: false)
+                                                    //     .getbagData(context, "0",
+                                                    // value.dupcustomer_id!
+                                                  );
+                                                  FocusManager
+                                                      .instance.primaryFocus!
+                                                      .unfocus();
+                                                  Navigator.pop(context);
+                                                }
+                                              },
                                         child: Text(
                                           "New Customer",
                                           style: TextStyle(fontSize: 18),

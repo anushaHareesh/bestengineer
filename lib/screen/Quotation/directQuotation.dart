@@ -64,7 +64,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                   onTap: () {
                     RemarkSheet remark = RemarkSheet();
                     remark.showRemarkSheet(_scaffoldKey.currentContext!, sdate!,
-                        widget.enqId, _scaffoldKey, _keyLoader,"add","0");
+                        widget.enqId, _scaffoldKey, _keyLoader, "add", "0");
                   },
                   child: Container(
                     // height: size.height*0.3,
@@ -436,8 +436,8 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                   index,
                                   true,
                                   "");
-                              editsheet.showItemSheet(
-                                  context, index, value.quotProdItem[index],"add","","");
+                              editsheet.showItemSheet(context, index,
+                                  value.quotProdItem[index], "add", "", "");
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(

@@ -62,8 +62,8 @@ void requestPermission() async {
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the , such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-  
+  // await Firebase.initializeApp();
+await Firebase.initializeApp();
   debugPrint('Handling a background message ${message.messageId}');
 }
 
@@ -72,6 +72,7 @@ void main() async {
   await Firebase.initializeApp();
   //final token = await FcmService().getFirebaseTokken();
   FcmService().initialize();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

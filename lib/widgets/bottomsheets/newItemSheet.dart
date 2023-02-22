@@ -200,6 +200,7 @@ class NewItemSheet {
 
                                   ),
                               onPressed: () {
+                                
                                 value.addDeletebagItem(
                                     name.text,
                                     "0",

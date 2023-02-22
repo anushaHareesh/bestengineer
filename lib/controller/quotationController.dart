@@ -14,9 +14,9 @@ import '../screen/Quotation/pdfPrev.dart';
 
 class QuotationController extends ChangeNotifier {
   String? todaydate;
-  int scheduleListCount = 0;
   int? sivd;
-  bool isSchedulelIstLoadind=false;
+  bool isQuotSearch = false;
+  bool isSchedulelIstLoadind = false;
   String? dealerselected;
   DateTime now = DateTime.now();
   String urlgolabl = Globaldata.apiglobal;
@@ -72,8 +72,9 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> termsPdf = [];
   List<Map<String, dynamic>> dealerList = [];
   List<Map<String, dynamic>> quotationList = [];
+  List<Map<String, dynamic>> newquotationList = [];
+
   List<Map<String, dynamic>> quotationEditList = [];
-  List<Map<String, dynamic>> scheduleList = [];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   String rawCalculation(
@@ -535,6 +536,9 @@ class QuotationController extends ChangeNotifier {
           notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
+
+          print("qutationlistllllll ----$map");
+
           quotationList.clear();
           for (var item in map["master"]) {
             quotationList.add(item);
@@ -570,6 +574,7 @@ class QuotationController extends ChangeNotifier {
       String invId) async {
     qtScheduldate[index] = date;
     notifyListeners();
+    print("jxkjjjj---${qtScheduldate[index]}");
     saveNextScheduleDate(
       qtScheduldate[index],
       invId,
@@ -687,6 +692,8 @@ class QuotationController extends ChangeNotifier {
             "enq_id": enq_id,
           };
 
+          print("save schedue----$body");
+
           var jsonEnc = jsonEncode(body);
           print("jsonEnc--$jsonEnc");
           // isQuotLoading = true;
@@ -785,51 +792,30 @@ class QuotationController extends ChangeNotifier {
     });
   }
 
-  ////////////////////////////////////////////////////////////////////
-  getScheduleList(
-    BuildContext context,
-  ) {
-    NetConnection.networkConnection(context).then((value) async {
-      if (value == true) {
-        try {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? branch_id = prefs.getString("branch_id");
-          String? user_id = prefs.getString("user_id");
-          String? qutation_id1 = prefs.getString("qutation_id");
-
-          String? staff_nam = prefs.getString("staff_name");
-
-          Uri url = Uri.parse("$urlgolabl/get_schedule.php");
-          Map body = {
-            'staff_id': user_id,
-          };
-
-          print("schedule list jjj body----$body");
-          isSchedulelIstLoadind=true;
-          notifyListeners();          
-          http.Response response = await http.post(
-            url,
-            body: body,
-          );
-          var map = jsonDecode(response.body);
-          scheduleListCount = map.length;
-          notifyListeners();
-
-          print("schedule list-------$map");
-          scheduleList.clear();
-          for (var item in map) {
-            scheduleList.add(item);
-          }
-          isSchedulelIstLoadind=false;
-          notifyListeners();   
-          print("count------$scheduleListCount");
-          notifyListeners();
-        } catch (e) {
-          print(e);
-          // return null;
-          return [];
-        }
-      }
+/////////////////////////////////////////////////////////////////////
+  searchQuotationList(String item) {
+    print("quo--$item--$quotationList");
+    newquotationList.clear();
+    quotationList.forEach((list) {
+      if (list["cname"].contains(item) || list["qt_no"].contains(item) ) newquotationList.add(list);
     });
+    qtScheduldate = List.generate(newquotationList.length, (index) => "");
+
+    for (int i = 0; i < newquotationList.length; i++) {
+      if (newquotationList[i]["sdate"] == "00-00-0000") {
+        qtScheduldate[i] = todaydate.toString();
+      } else {
+        qtScheduldate[i] = newquotationList[i]["sdate"];
+      }
+    }
+
+    print("newquot----$newquotationList");
+    notifyListeners();
   }
+
+  setQuotSearch(bool val) {
+    isQuotSearch = val;
+    notifyListeners();
+  }
+  ////////////////////////////////////////////////////////////////////
 }

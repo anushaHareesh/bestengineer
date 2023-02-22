@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
@@ -8,6 +9,8 @@ import 'package:bestengineer/screen/Enquiry/EnqHistory.dart';
 import 'package:bestengineer/screen/Enquiry/enquiryScreen.dart';
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
 import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
+import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
+import 'package:bestengineer/screen/Quotation/test.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -23,7 +26,8 @@ import '../Dashboard/executiveDash.dart';
 
 class EnqHome extends StatefulWidget {
   String? type;
-  EnqHome({this.type});
+  final bool rebuild;
+  EnqHome({this.type, required this.rebuild});
 
   @override
   State<EnqHome> createState() => _EnqHomeState();
@@ -40,20 +44,137 @@ class _EnqHomeState extends State<EnqHome> {
   String? staffName;
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   List<Widget> drawerOpts = [];
-  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+  // final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+  customNotification() {
+    print("fhjzklfkdx");
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.noHeader,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      // title: 'Reminder',
+      descTextStyle: TextStyle(fontSize: 18),
+      desc:
+          'You have ${Provider.of<RegistrationController>(context, listen: false).scheduleListCount} schedules on tomorrow !!! ',
+      buttonsTextStyle: const TextStyle(color: Colors.black),
+      showCloseIcon: true,
+      // btnCancelOnPress: () {
+      //   // Navigator.pushReplacement(
+      //   //     context, MaterialPageRoute(builder: (context) => EnqHome(type:"from scheduleList")));
+      //   Navigator.pop(_scaffoldKey.currentContext!);
+      // },
+      btnOkOnPress: () {
+        Provider.of<RegistrationController>(context, listen: false)
+            .scheduleOpend = true;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ScheduleListScreen(
+                    type: "from not",
+                  )),
+        );
+        // Navigator.pop(context);
+      },
+    ).show();
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     action: SnackBarAction(
+    //       label: 'Dissmiss',
+    //       textColor: Colors.red,
+    //       onPressed: () {
+    //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    //       },
+    //     ),
+    //     // margin: EdgeInsets.only(bottom: 100.0),
+    //     backgroundColor: Colors.transparent,
+    //     behavior: SnackBarBehavior.floating,
+    //     elevation: 0,
+    //     content: Stack(
+    //       children: [
+    //         Container(
+    //           height: 60,
+    //           decoration: BoxDecoration(
+    //               color: Color.fromARGB(255, 190, 132, 6),
+    //               borderRadius: BorderRadius.all(Radius.circular(15))),
+    //           child: Padding(
+    //             padding: const EdgeInsets.all(8.0),
+    //             child: Row(
+    //               children: [
+    //                 SizedBox(width: 50),
+    //                 Expanded(
+    //                   child: Column(
+    //                     crossAxisAlignment: CrossAxisAlignment.start,
+    //                     children: [
+    //                       Text(
+    //                         "hellooo haiiii",
+    //                         style: TextStyle(
+    //                             fontSize: 16,
+    //                             fontWeight: FontWeight.bold,
+    //                             color: Colors.white),
+    //                         maxLines: 2,
+    //                         overflow: TextOverflow.ellipsis,
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //         Positioned(
+    //             bottom: 15,
+    //             left: 12,
+    //             child: ClipRRect(
+    //               clipBehavior: Clip.none,
+    //               child: Stack(children: [
+    //                 Image.asset(
+    //                   "assets/chat.png",
+    //                   height: 29,
+    //                   width: 28,
+    //                 )
+    //               ]),
+    //               borderRadius:
+    //                   BorderRadius.only(bottomLeft: Radius.circular(20)),
+    //             ))
+    //       ],
+    //     ),
+    //   ),
+    // );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-   
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
+    print(
+        "zxzx--${Provider.of<RegistrationController>(context, listen: false).scheduleListCount}");
+    Provider.of<Controller>(context, listen: false).getArea(context);
+
     Provider.of<RegistrationController>(context, listen: false).userDetails();
     Provider.of<Controller>(context, listen: false).getArea(context);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
+    if (widget.rebuild) {
+      int i = 0;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        print(
+            "kjfs---${Provider.of<RegistrationController>(context, listen: false).scheduleOpend}");
+        if (Provider.of<RegistrationController>(context, listen: false)
+                    .scheduleListCount >
+                0 &&
+            Provider.of<RegistrationController>(context, listen: false)
+                    .scheduleOpend ==
+                false &&
+            i == 0) {
+          customNotification();
+          i = i + 1;
+        }
+      });
+    }
   }
 
   _onSelectItem(String? menu) {
@@ -81,9 +202,10 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "E1":
         {
-          Provider.of<Controller>(context, listen: false).getArea(context);
-          Provider.of<Controller>(context, listen: false)
-              .gePriorityList(context);
+          // Provider.of<Controller>(context, listen: false)
+          //     .gePriorityList(context);
+          // Provider.of<ProductController>(context, listen: false)
+          //     .geProductList(context);
           return EnquiryScreen();
         }
       case "E2":
@@ -102,7 +224,18 @@ class _EnqHomeState extends State<EnqHome> {
               .getQuotationList(
             context,
           );
+
           return QuotatationListScreen();
+        }
+      case "SL1":
+        {
+          // Provider.of<RegistrationController>(context, listen: false)
+          //     .getScheduleList(
+          //   context,
+          // );
+          return ScheduleListScreen(
+            type: "from menu",
+          );
         }
 
       // case "logout":
@@ -116,22 +249,22 @@ class _EnqHomeState extends State<EnqHome> {
     await prefs.remove('st_pwd');
     return Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
-    print('Pressed');
   }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    if (widget.type == "return from quataion") {
-      print("from cart");
-      if (val) {
-        Provider.of<RegistrationController>(context, listen: false).menu_index =
-            "E1";
-        val = false;
-      }
-    }
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  //   if (widget.type == "return from quataion" ||
+  //       widget.type == "from scheduleList") {
+  //     print("from cart");
+  //     if (val) {
+  //       Provider.of<RegistrationController>(context, listen: false).menu_index =
+  //           "D1";
+  //       val = false;
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +370,11 @@ class _EnqHomeState extends State<EnqHome> {
                           Provider.of<RegistrationController>(context,
                                       listen: false)
                                   .menu_index ==
-                              "Q1"
+                              "Q1" ||
+                          Provider.of<RegistrationController>(context,
+                                      listen: false)
+                                  .menu_index ==
+                              "SL1"
                       ? Container()
                       : InkWell(
                           onTap: () {
@@ -288,7 +425,12 @@ class _EnqHomeState extends State<EnqHome> {
                                       .menu_index ==
                                   "E1"
                               ? "ENQUIRY"
-                              : "",
+                              : Provider.of<RegistrationController>(context,
+                                              listen: false)
+                                          .menu_index ==
+                                      "SL1"
+                                  ? "SCHEDULE LIST"
+                                  : "",
                   style: TextStyle(fontSize: 15),
                 ),
                 backgroundColor:
@@ -298,7 +440,11 @@ class _EnqHomeState extends State<EnqHome> {
                             Provider.of<RegistrationController>(context,
                                         listen: false)
                                     .menu_index ==
-                                "Q1"
+                                "Q1" ||
+                            Provider.of<RegistrationController>(context,
+                                        listen: false)
+                                    .menu_index ==
+                                "SL1"
                         ? P_Settings.loginPagetheme
                         : P_Settings.whiteColor,
                 elevation: 1,
@@ -310,7 +456,8 @@ class _EnqHomeState extends State<EnqHome> {
                         },
                         icon: Icon(Icons.menu,
                             color: value.menu_index == "E2" ||
-                                    value.menu_index == "Q1"
+                                    value.menu_index == "Q1" ||
+                                    value.menu_index == "SL1"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },

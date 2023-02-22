@@ -10,8 +10,8 @@ class QuotationItemSheet {
 
   ValueNotifier<bool> rateError = ValueNotifier(false);
   TextEditingController desc = TextEditingController();
-  showItemSheet(
-      BuildContext context, int index, Map map, String type, String enid,String row_id) {
+  showItemSheet(BuildContext context, int index, Map map, String type,
+      String enid, String row_id) {
     rateError.value = false;
     Size size = MediaQuery.of(context).size;
 
@@ -124,30 +124,60 @@ class QuotationItemSheet {
                                     keyboardType: TextInputType.number,
                                     onSubmitted: (val) {
                                       double rateval = double.parse(val);
-                                      if (rateval <
-                                          double.parse(
-                                              value.quotationEditList[index]
-                                                  ["base_rate"])) {
-                                        rateError.value = true;
-                                      } else {
-                                        rateError.value = false;
-                                        value.rawCalculation(
+                                      if (type == "add") {
+                                        if (rateval <
                                             double.parse(
-                                                value.rateEdit[index].text),
-                                            int.parse(
-                                                value.quotqty[index].text),
-                                            double.parse(value
-                                                .discount_prercent[index].text),
-                                            double.parse(value
-                                                .discount_amount[index].text),
-                                            double.parse(map["tax_perc"]),
-                                            0.0,
-                                            "0",
-                                            0,
-                                            index,
-                                            true,
-                                            "rate");
+                                                value.quotProdItem[index]
+                                                    ["base_rate"])) {
+                                          rateError.value = true;
+                                        } else {
+                                          rateError.value = false;
+                                          value.rawCalculation(
+                                              double.parse(
+                                                  value.rateEdit[index].text),
+                                              int.parse(
+                                                  value.quotqty[index].text),
+                                              double.parse(value
+                                                  .discount_prercent[index]
+                                                  .text),
+                                              double.parse(value
+                                                  .discount_amount[index].text),
+                                              double.parse(map["tax_perc"]),
+                                              0.0,
+                                              "0",
+                                              0,
+                                              index,
+                                              true,
+                                              "rate");
+                                        }
+                                      } else if (type == "edit") {
+                                        if (rateval <
+                                            double.parse(
+                                                value.quotationEditList[index]
+                                                    ["base_rate"])) {
+                                          rateError.value = true;
+                                        } else {
+                                          rateError.value = false;
+                                          value.rawCalculation(
+                                              double.parse(
+                                                  value.rateEdit[index].text),
+                                              int.parse(
+                                                  value.quotqty[index].text),
+                                              double.parse(value
+                                                  .discount_prercent[index]
+                                                  .text),
+                                              double.parse(value
+                                                  .discount_amount[index].text),
+                                              double.parse(map["tax_perc"]),
+                                              0.0,
+                                              "0",
+                                              0,
+                                              index,
+                                              true,
+                                              "rate");
+                                        }
                                       }
+
                                       // value.fromApi = false;
                                     },
                                     textAlign: TextAlign.right,
@@ -565,20 +595,20 @@ class QuotationItemSheet {
                                   Provider.of<QuotationController>(context,
                                           listen: false)
                                       .updateQuotationData(
-                                    context,
-                                    "0",
-                                    map["product_id"],
-                                    value.quotqty[index].text,
-                                    enqId.toString(),
-                                    value.rateEdit[index].text,
-                                    map["tax_perc"],
-                                    value.tax.toString(),
-                                    value.discount_prercent[index].text,
-                                    value.discount_amount[index].text,
-                                    value.net_amt.toString(),
-                                    value.gross.toString(),
-                                    type,row_id
-                                  );
+                                          context,
+                                          "0",
+                                          map["product_id"],
+                                          value.quotqty[index].text,
+                                          enqId.toString(),
+                                          value.rateEdit[index].text,
+                                          map["tax_perc"],
+                                          value.tax.toString(),
+                                          value.discount_prercent[index].text,
+                                          value.discount_amount[index].text,
+                                          value.net_amt.toString(),
+                                          value.gross.toString(),
+                                          type,
+                                          row_id);
                                   FocusManager.instance.primaryFocus!.unfocus();
                                   // print("bhdb----${value.res}");
 

@@ -62,7 +62,7 @@ class DeletePopup {
                           },
                           child: Text("Ok")),
                       Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
+                        padding: const EdgeInsets.only(left: 8.0), 
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: P_Settings.loginPagetheme),

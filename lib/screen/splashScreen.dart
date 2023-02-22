@@ -38,7 +38,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (cid != null) {
                   // return DashboardPage();
                   if (st_uname != null && st_pwd != null) {
-                    return EnqHome();
+                    print("fhhh");
+                    return EnqHome(rebuild: true,);
                   } else {
                     return LoginPage();
                   }
@@ -60,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       Provider.of<RegistrationController>(context, listen: false)
           .getMenu(context);
-      Provider.of<QuotationController>(context, listen: false).getScheduleList(
+      Provider.of<RegistrationController>(context, listen: false).getScheduleList(
         context,
       );
       if (Provider.of<RegistrationController>(context, listen: false)

@@ -16,7 +16,7 @@ import '../model/enqHisDetailsModel.dart';
 class ProductController extends ChangeNotifier {
   String? branch_id;
   String? todate;
-
+  bool isEnqSearch = false;
   String? fromDate;
   String? priority_level;
   String? customerName;
@@ -44,6 +44,8 @@ class ProductController extends ChangeNotifier {
   List<TextEditingController> cartQty = [];
   List<Map<String, dynamic>> bagList = [];
   List<EnqList> enQhistoryList = [];
+  List<EnqList> newenQhistoryList = [];
+
   List<Master> enQhistoryMaster = [];
   List<Detail> enQhistoryDetail = [];
   TextEditingController cname = TextEditingController();
@@ -222,6 +224,7 @@ class ProductController extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+          print("klxjkx----$prodName");
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
@@ -233,6 +236,7 @@ class ProductController extends ChangeNotifier {
             'qty': qty,
             "description": description,
             'event': event,
+            'item_name': prodName,
             'cart_id': cart_id,
             "te_id": te_id
           };
@@ -448,7 +452,7 @@ class ProductController extends ChangeNotifier {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EnqHome(),
+                    builder: (context) => EnqHome(rebuild: false),
                   ),
                 );
                 // }
@@ -488,7 +492,6 @@ class ProductController extends ChangeNotifier {
   getEnqhistoryData(
     BuildContext context,
     String action,
-   
   ) async {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
@@ -666,7 +669,10 @@ class ProductController extends ChangeNotifier {
           // notifyListeners();
 
           if (map["flag"] == 0) {
-            getEnqhistoryData(context, "",);
+            getEnqhistoryData(
+              context,
+              "",
+            );
           }
           /////////////// insert into local db /////////////////////
         } catch (e) {
@@ -676,5 +682,24 @@ class ProductController extends ChangeNotifier {
         }
       }
     });
+  }
+
+////////////////////////////////////////////////////////////////////
+  searchEnqList(String item) {
+    print("jks----$enQhistoryList");
+
+    newenQhistoryList.clear();
+    enQhistoryList.forEach((list) {
+      if (list.companyName!.contains(item) || list.enqCode!.contains(item))
+        newenQhistoryList.add(list);
+    });
+    print("neww ----------$newenQhistoryList");
+    notifyListeners();
+  }
+
+  //////////////
+  setEnqSearch(bool val) {
+    isEnqSearch = val;
+    notifyListeners();
   }
 }
