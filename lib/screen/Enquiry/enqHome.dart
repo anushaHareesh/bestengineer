@@ -23,11 +23,15 @@ import '../../controller/controller.dart';
 import 'package:badges/badges.dart' as badges;
 
 import '../Dashboard/executiveDash.dart';
+import '../Dashboard/searchAutocomplete.dart';
+import '../Quotation/statusMonitoringQuotation.dart';
 
 class EnqHome extends StatefulWidget {
   String? type;
-  final bool rebuild;
-  EnqHome({this.type, required this.rebuild});
+
+  EnqHome({
+    this.type,
+  });
 
   @override
   State<EnqHome> createState() => _EnqHomeState();
@@ -35,6 +39,10 @@ class EnqHome extends StatefulWidget {
 
 class _EnqHomeState extends State<EnqHome> {
   bool val = true;
+  Icon actionIcon = Icon(Icons.search);
+  TextEditingController _controller = TextEditingController();
+  Widget? appBarTitle;
+
   DateTime now = DateTime.now();
   List<String> s = [];
   String? todaydate;
@@ -43,13 +51,14 @@ class _EnqHomeState extends State<EnqHome> {
   int _selectedIndex = 0;
   String? staffName;
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
   List<Widget> drawerOpts = [];
   // final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   customNotification() {
     print("fhjzklfkdx");
     AwesomeDialog(
       context: context,
-      dialogType: DialogType.noHeader,
+      dialogType: DialogType.info,
       headerAnimationLoop: false,
       animType: AnimType.bottomSlide,
       // title: 'Reminder',
@@ -76,105 +85,72 @@ class _EnqHomeState extends State<EnqHome> {
         // Navigator.pop(context);
       },
     ).show();
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     action: SnackBarAction(
-    //       label: 'Dissmiss',
-    //       textColor: Colors.red,
-    //       onPressed: () {
-    //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    //       },
-    //     ),
-    //     // margin: EdgeInsets.only(bottom: 100.0),
-    //     backgroundColor: Colors.transparent,
-    //     behavior: SnackBarBehavior.floating,
-    //     elevation: 0,
-    //     content: Stack(
-    //       children: [
-    //         Container(
-    //           height: 60,
-    //           decoration: BoxDecoration(
-    //               color: Color.fromARGB(255, 190, 132, 6),
-    //               borderRadius: BorderRadius.all(Radius.circular(15))),
-    //           child: Padding(
-    //             padding: const EdgeInsets.all(8.0),
-    //             child: Row(
-    //               children: [
-    //                 SizedBox(width: 50),
-    //                 Expanded(
-    //                   child: Column(
-    //                     crossAxisAlignment: CrossAxisAlignment.start,
-    //                     children: [
-    //                       Text(
-    //                         "hellooo haiiii",
-    //                         style: TextStyle(
-    //                             fontSize: 16,
-    //                             fontWeight: FontWeight.bold,
-    //                             color: Colors.white),
-    //                         maxLines: 2,
-    //                         overflow: TextOverflow.ellipsis,
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //         Positioned(
-    //             bottom: 15,
-    //             left: 12,
-    //             child: ClipRRect(
-    //               clipBehavior: Clip.none,
-    //               child: Stack(children: [
-    //                 Image.asset(
-    //                   "assets/chat.png",
-    //                   height: 29,
-    //                   width: 28,
-    //                 )
-    //               ]),
-    //               borderRadius:
-    //                   BorderRadius.only(bottomLeft: Radius.circular(20)),
-    //             ))
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
+
+  String searchKey = "";
+  List<Map<String, dynamic>>? newList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (!mounted) return;
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
+
+    appBarTitle = Text("");
+
     print(
         "zxzx--${Provider.of<RegistrationController>(context, listen: false).scheduleListCount}");
     Provider.of<Controller>(context, listen: false).getArea(context);
-
     Provider.of<RegistrationController>(context, listen: false).userDetails();
-    Provider.of<Controller>(context, listen: false).getArea(context);
+    Provider.of<QuotationController>(context, listen: false)
+        .getQuotationList(context);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
-    if (widget.rebuild) {
-      int i = 0;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        print(
-            "kjfs---${Provider.of<RegistrationController>(context, listen: false).scheduleOpend}");
-        if (Provider.of<RegistrationController>(context, listen: false)
-                    .scheduleListCount >
-                0 &&
-            Provider.of<RegistrationController>(context, listen: false)
-                    .scheduleOpend ==
-                false &&
-            i == 0) {
-          customNotification();
-          i = i + 1;
-        }
-      });
-    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print(
+          "kjfs---${Provider.of<RegistrationController>(context, listen: false).scheduleOpend}");
+      if (Provider.of<RegistrationController>(context, listen: false)
+                  .scheduleListCount >
+              0 &&
+          Provider.of<RegistrationController>(context, listen: false)
+                  .scheduleOpend ==
+              false) {
+        customNotification();
+      }
+    });
+  }
+
+  bool visible = false;
+
+  void togle() {
+    setState(() {
+      visible = !visible;
+    });
+  }
+
+  onChangedValue(String value) {
+    print("value inside function ---${value}");
+    setState(() {
+      searchKey = value;
+      // if (value.isEmpty) {
+      //   Provider.of<Controller>(context, listen: false).setIssearch(false);
+      //   _controller.clear();
+      // } else {
+      //   Provider.of<Controller>(context, listen: false).setIssearch(true);
+      //   // _controller.clear();
+      //   newList = Provider.of<Controller>(context, listen: false)
+      //       .productList!
+      //       .where((code) => code["product_code"]
+      //           .toUpperCase()
+      //           .startsWith(value.toUpperCase()))
+      //       .toList();
+      // }
+    });
   }
 
   _onSelectItem(String? menu) {
@@ -195,6 +171,7 @@ class _EnqHomeState extends State<EnqHome> {
     switch (pos) {
       case "D1":
         {
+          print("d111----");
           Provider.of<Controller>(context, listen: false)
               .getDashboardValues(context);
 
@@ -331,12 +308,91 @@ class _EnqHomeState extends State<EnqHome> {
                     .menu_index ==
                 "D1"
             ? AppBar(
+                title: appBarTitle,
                 backgroundColor: P_Settings.loginPagetheme,
                 elevation: 0,
                 flexibleSpace: Container(
                   decoration: BoxDecoration(),
                 ),
-                actions: [],
+                actions: [
+                  IconButton(
+                    icon: actionIcon,
+                    onPressed: () {
+                      // togle();
+                      togle();
+                      // setState(() {
+                      if (this.actionIcon.icon == Icons.search) {
+                        _controller.clear();
+                        this.actionIcon = Icon(Icons.close);
+                        this.appBarTitle = SearchAutoComplete();
+
+                        // TextField(
+                        //     controller: _controller,
+                        //     style: new TextStyle(
+                        //       color: Colors.white,
+                        //     ),
+                        //     decoration: InputDecoration(
+                        //       prefixIcon:
+                        //           Icon(Icons.search, color: Colors.white),
+                        //       hintText: "Search...cxzcxzxz",
+                        //       hintStyle: TextStyle(color: Colors.white),
+                        //     ),
+                        //     onChanged: ((value) {
+                        //       // print(value);
+                        //       onChangedValue(value);
+                        //     }),
+                        //     cursorColor: Colors.black);
+                      } else {
+                        if (this.actionIcon.icon == Icons.close) {
+                          this.actionIcon = Icon(Icons.search);
+                          this.appBarTitle = Text("");
+                          // Provider.of<Controller>(context, listen: false)
+                          //     .setIssearch(false);
+                        }
+                      }
+                      // });
+                    },
+                  ),
+                  Visibility(
+                    visible: visible,
+                    child: IconButton(
+                        onPressed: () {
+                          togle();
+                          this.actionIcon = Icon(Icons.search);
+                          this.appBarTitle = Text("");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => QuotationStatusMonitoring(
+                                  title: Provider.of<Controller>(context,
+                                          listen: false)
+                                      .searchQotSelected
+                                      .toString()),
+                            ),
+                          );
+                          // // setState(() {
+                          // //   isSearch = true;
+                          // // });
+                          // Provider.of<Controller>(context, listen: false)
+                          //     .productDetails(
+                          //         _controller.text, "0", "0", context, "1");
+                          // if (Provider.of<Controller>(context, listen: false)
+                          //         .isSearch ==
+                          //     true) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => ProductDetails(
+                          //           // itemName: Provider.of<Controller>(context, listen: false).productList![index]["cat_name"],
+                          //           // colorid: Provider.of<Controller>(context, listen: false).productList![index]["color_ids"],
+                          //           ),
+                          //     ),
+                          //   );
+                          // }
+                        },
+                        icon: Icon(Icons.done)),
+                  )
+                ],
               )
             : AppBar(
                 actions: [
@@ -535,7 +591,6 @@ class _EnqHomeState extends State<EnqHome> {
                 //   ),
                 // ),
               ),
-
         drawer: Consumer<Controller>(
           builder: (context, value, child) {
             return Drawer(
@@ -649,38 +704,10 @@ class _EnqHomeState extends State<EnqHome> {
             );
           },
         ),
-        body:
-            //  Provider.of<RegistrationController>(context, listen: false)
-            //         .isMenuLoading
-            //     ? SpinKitCircle(
-            //         color: P_Settings.loginPagetheme,
-            //       )
-            //     :
-
-            _getDrawerItemWidget(
-                Provider.of<RegistrationController>(context, listen: false)
-                    .menu_index),
-        // body: Consumer<Controller>(
-        //   builder: (context, value, child) {
-        //     return customContainer();
-        //   },
-        // ),
+        body: _getDrawerItemWidget(
+            Provider.of<RegistrationController>(context, listen: false)
+                .menu_index),
       ),
-    );
-  }
-
-  Widget customContainer() {
-    return Consumer<Controller>(
-      builder: (context, value, child) {
-        return EnquiryScreen();
-
-        // return SingleChildScrollView(
-        //   // physics: NeverScrollableScrollPhysics(),
-        //   child: Container(
-        //     child: value.menuClick ? CustomReport() : TabbarBodyView(),
-        //   ),
-        // );
-      },
     );
   }
 

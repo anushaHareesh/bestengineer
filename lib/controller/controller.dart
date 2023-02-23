@@ -11,9 +11,11 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/customerListModel.dart';
+import '../screen/Quotation/statusMonitoringQuotation.dart';
 import '../services/dbHelper.dart';
 
 class Controller extends ChangeNotifier {
+  String?  searchQotSelected;
   String? selected;
   bool selectedCustomer = true;
   bool addNewItem = false;
@@ -28,6 +30,8 @@ class Controller extends ChangeNotifier {
   bool isLoading = false;
   bool isListLoading = false;
   bool isDahboardLoading = false;
+  bool isStatusMon = false;
+
   String? customerName;
   String? address;
   String? customerPhone;
@@ -51,6 +55,8 @@ class Controller extends ChangeNotifier {
   String? prioId;
 
   List<Map<String, dynamic>> area_list = [];
+  List<Map<String, dynamic>> statusMon = [];
+
   List<PriorityLevel> priorityList = [];
 
   List<Map<String, dynamic>> customerList = [];
@@ -560,6 +566,43 @@ class Controller extends ChangeNotifier {
       }
     });
   }
+
   ///////////////////////////////////////////////////////////////
-  ///
+  getQuotationSearchList(BuildContext context, String s_invoice_id) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/series_details.php/");
+
+          Map body = {"s_invoice_id": s_invoice_id};
+          print("bjd---$body");
+          isStatusMon = true;
+          notifyListeners();
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("status monitoring----$map");
+          statusMon.clear();
+          for (var item in map["log"]) {
+            statusMon.add(item);
+          }
+
+          print("len--------${statusMon.length}");
+          isStatusMon = false;
+          notifyListeners();
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => QuotationStatusMonitoring(),
+          //   ),
+          // );
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
 }

@@ -21,13 +21,7 @@ class ExecutiveDashBoard extends StatefulWidget {
 class _ExecutiveDashBoardState extends State<ExecutiveDashBoard> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    print("2 times-----");
-  }
+ 
 
   @override
   Widget build(BuildContext context) {

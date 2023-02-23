@@ -10,6 +10,7 @@ class NetConnection {
     } else if (connectivityResult == ConnectivityResult.wifi) {
       return true;
     } else if (connectivityResult == ConnectivityResult.none) {
+      print("noneeeee");
       final snackBar = SnackBar(
         content: Text('No internet connection'),
         action: SnackBarAction(

@@ -452,7 +452,7 @@ class ProductController extends ChangeNotifier {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EnqHome(rebuild: false),
+                    builder: (context) => EnqHome(),
                   ),
                 );
                 // }

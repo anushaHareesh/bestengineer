@@ -56,7 +56,7 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
                     MaterialPageRoute(
                         builder: (context) => EnqHome(
                               type: "return from quataion",
-                              rebuild: false,
+                            
                             )));
               },
               icon: Icon(Icons.arrow_back)),

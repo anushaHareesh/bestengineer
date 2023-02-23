@@ -5,9 +5,11 @@ import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
+import 'package:bestengineer/gmap/multipleMarker.dart';
 import 'package:bestengineer/pdftest/pdfhome.dart';
 
 import 'package:bestengineer/pdftest/tab.dart';
+import 'package:bestengineer/screen/Dashboard/searchAutocomplete.dart';
 
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 
@@ -63,7 +65,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the , such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   // await Firebase.initializeApp();
-await Firebase.initializeApp();
+  await Firebase.initializeApp();
   debugPrint('Handling a background message ${message.messageId}');
 }
 
@@ -127,9 +129,11 @@ class _MyAppState extends State<MyApp> {
     email = prefs.getString("email");
   }
 
+  final GlobalKey<NavigatorState> _navigator = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        navigatorKey: _navigator,
         builder: EasyLoading.init(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

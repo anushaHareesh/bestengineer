@@ -340,7 +340,7 @@ class RegistrationController extends ChangeNotifier {
           notifyListeners();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EnqHome(rebuild: true,)),
+            MaterialPageRoute(builder: (context) => EnqHome()),
           );
           print("count------$scheduleListCount");
           notifyListeners();

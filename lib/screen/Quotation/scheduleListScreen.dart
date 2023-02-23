@@ -23,18 +23,20 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
       appBar: widget.type == "from menu"
           ? null
           : AppBar(
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              EnqHome(type: "from scheduleList",rebuild: false,)));
-                },
-                icon: Icon(Icons.arrow_back)),
-            backgroundColor: P_Settings.loginPagetheme,
-            title: Text("Shedule List"),
-          ),
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EnqHome(
+                                  type: "from scheduleList",
+                                 
+                                )));
+                  },
+                  icon: Icon(Icons.arrow_back)),
+              backgroundColor: P_Settings.loginPagetheme,
+              title: Text("Shedule List"),
+            ),
       body: Consumer<RegistrationController>(
         builder: (context, value, child) {
           if (value.isSchedulelIstLoadind) {
@@ -42,8 +44,8 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
               color: P_Settings.loginPagetheme,
             );
           } else if (value.scheduleList.length == 0) {
-            return Container(
-              child: Lottie.asset("assets/noData.json"),
+            return Center(
+              child: Lottie.asset("assets/noData.json", height: 200),
             );
           } else {
             return Padding(

@@ -10,7 +10,7 @@ class FcmNavigationService {
   Future<dynamic> navigateToPage() {
     return Navigator.of(navigatorKey.currentContext!).push(
       MaterialPageRoute(
-        builder: (context) =>  EnqHome(rebuild: false),
+        builder: (context) =>  EnqHome(),
       ),
     );
 

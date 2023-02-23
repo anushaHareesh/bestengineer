@@ -38,8 +38,10 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     super.initState();
     // date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     date = DateFormat('dd-MM-yyyy').format(now);
-    Provider.of<QuotationController>(context, listen: false)
-        .setQuotSearch(false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<QuotationController>(context, listen: false)
+          .setQuotSearch(false);
+    });
   }
 
   @override
