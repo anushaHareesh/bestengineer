@@ -8,6 +8,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../../widgets/bottomsheets/visitedRemarkSheet.dart';
+
 class ScheduleListScreen extends StatefulWidget {
   String type;
   ScheduleListScreen({required this.type});
@@ -30,7 +32,6 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                         MaterialPageRoute(
                             builder: (context) => EnqHome(
                                   type: "from scheduleList",
-                                 
                                 )));
                   },
                   icon: Icon(Icons.arrow_back)),
@@ -239,7 +240,29 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                                       )
                                     ],
                                   ),
-                                )
+                                ), 
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    VisitedRemarkSheet visited =
+                                        VisitedRemarkSheet();
+                                    visited.showRemarkSheet(
+                                      context,
+                                    );
+                                  },
+                                  child: Text("Visited"))
+                              // TextButton(
+                              //     style: ElevatedButton.styleFrom(
+                              //         primary: P_Settings.loginPagetheme),
+                              //     onPressed: () {
+                              //       VisitedRemarkSheet visited=VisitedRemarkSheet();
+                              //       visited.showRemarkSheet(context, );
+                              //     },
+                              //     child: Text("Visited")),
+                            ],
+                          )
                         ],
                       ),
                     ),

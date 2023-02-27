@@ -128,7 +128,7 @@ class ExportPdf {
   List<pw.Widget> widgets = [];
 ///////////////////////////////////////////////////////
   Future<Uint8List> makePdf() async {
-    var  list = (report as List)
+    var list = (report as List)
         .map((item) => pw.TableRow(children: [
               pw.Container(
                 alignment: pw.Alignment.centerLeft,
@@ -352,7 +352,9 @@ class ExportPdf {
     //   pw.Text("228888 "),
     // ]);
     // widgets.add(sum);
-    pdf.addPage(pw.MultiPage(
+    pdf.addPage(
+      pw.MultiPage(
+        
       //  crossAxisAlignment: pw.CrossAxisAlignment.center,
       footer: (context) {
         return pw.Column(children: [

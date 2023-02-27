@@ -337,11 +337,15 @@ class RegistrationController extends ChangeNotifier {
             scheduleList.add(item);
           }
           isSchedulelIstLoadind = false;
-          notifyListeners();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => EnqHome()),
-          );
+          notifyListeners(); 
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (Context) {
+            return EnqHome();
+          }), (route) => false);
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => EnqHome()),
+          // );
           print("count------$scheduleListCount");
           notifyListeners();
         } catch (e) {

@@ -228,20 +228,20 @@ class _EnqHomeState extends State<EnqHome> {
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   // TODO: implement didChangeDependencies
-  //   super.didChangeDependencies();
-  //   if (widget.type == "return from quataion" ||
-  //       widget.type == "from scheduleList") {
-  //     print("from cart");
-  //     if (val) {
-  //       Provider.of<RegistrationController>(context, listen: false).menu_index =
-  //           "D1";
-  //       val = false;
-  //     }
-  //   }
-  // }
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (widget.type == "return from quataion" ||
+        widget.type == "from scheduleList") {
+      print("from cart");
+      if (val) {
+        Provider.of<RegistrationController>(context, listen: false).menu_index =
+            "D1";
+        val = false;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

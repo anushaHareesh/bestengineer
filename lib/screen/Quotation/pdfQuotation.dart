@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfQuotation {
-  Future<Uint8List> generate(
+  generate(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList) async {
@@ -16,7 +19,9 @@ class PdfQuotation {
 
     pdf.addPage(MultiPage(
       build: (context) => [
+        // imageSet(image, detailPdf, masterPdf, termsList),
         // buildHeader(image),
+
         buildQuotationHeading(),
         SizedBox(height: 0.1 * PdfPageFormat.cm),
         buildCustomerData(masterPdf),
@@ -31,10 +36,58 @@ class PdfQuotation {
       footer: (context) => buildFooter(termsList),
     ));
 
+    // final List<int> bytes = await pdf.save();
+
+    // saveAndLaunchFile(bytes, "inv2.pdf");
     return pdf.save();
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
+  Widget imageSet(
+      ImageProvider image,
+      List<Map<String, dynamic>> detailPdf,
+      List<Map<String, dynamic>> masterPdf,
+      List<Map<String, dynamic>> termsList) {
+    return Expanded(
+        child: Stack(children: [
+      Container(
+        height: 800,
+        width: 900,
+        child: Image(image),
+      ),
+      Container(
+        child: buildQuotationHeading(),
+      ),
+      Positioned(
+        top: 40,
+        child: Container(
+          child: buildCustomerData(masterPdf),
+        ),
+      ),
+      Positioned(
+        top: 50,
+        right: 0,
+        left: 0,
+        // bottom: 0,
+        child: Container(
+          child: buildInvoice(detailPdf),
+        ),
+      ),
+
+      //
+      // buildTotal(detailPdf),
+      // Positioned(
+      //   top: 100,
+      //   child: Container(
+      //     child: buildTotal(detailPdf),
+      //   ),
+      // ),
+    ]));
+
+    // return Container(height: double.infinity, child: Image(image));
+  }
+
+/////////////////////
   Widget buildHeader(ImageProvider image) {
     return Container(
         child: Column(children: [
@@ -163,6 +216,7 @@ class PdfQuotation {
   }
 
   Widget buildInvoice(List<Map<String, dynamic>> list) {
+    print("kjgkjf------$list");
     int i = 0;
     final headers = [
       'Sl No',
@@ -175,36 +229,13 @@ class PdfQuotation {
       'GST',
       'Net Amt',
     ];
-    //  final data;
-    // if (list.length < 30) {
-    //    data = list.map((item) {
-    //     print("sdjsjkh----${item["qty"].runtimeType}");
-    //     i = i + 1;
-
-    //     // double total = double.parse(item["qty"]) * item["rate"] ;
-    //     double netrate = double.parse(item["net_rate"]);
-
-    //     return [
-    //       i,
-    //       item["product_name"],
-    //       item["qty"],
-    //       item["rate"],
-    //       item["amount"],
-    //       item["tax_perc"],
-    //       item["tax"],
-    //       netrate.toStringAsFixed(2),
-    //     ];
-    //   }).toList();
-    // }else{
-
-    // }
 
     final data = list.map((item) {
       print("sdjsjkh----${item["qty"].runtimeType}");
       i = i + 1;
 
       // double total = double.parse(item["qty"]) * item["rate"] ;
-      double netrate = double.parse(item["net_rate"]);
+      double netrate = double.parse(item["net_rate"]!);
 
       return [
         i,
@@ -369,4 +400,11 @@ class PdfQuotation {
       // ])
     ]);
   }
+
+  // Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
+  //   final path = (await getExternalStorageDirectory())!.path;
+  //   final file = File('$path/$fileName');
+  //   await file.writeAsBytes(bytes, flush: true);
+  //   OpenFilex.open('$path/$fileName');
+  // }
 }

@@ -58,12 +58,7 @@ class _EnQHistoryState extends State<EnQHistory> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
-      backgroundColor: Provider.of<ProductController>(context, listen: false)
-                  .enQhistoryList
-                  .length ==
-              0
-          ? Colors.white
-          : Colors.grey[200],
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(
@@ -92,9 +87,9 @@ class _EnQHistoryState extends State<EnQHistory> {
                   suffixIcon: IconButton(
                     icon: new Icon(Icons.cancel),
                     onPressed: () {
-                        Provider.of<ProductController>(context, listen: false)
-                      .setEnqSearch(false);
-                      _controller.clear();  
+                      Provider.of<ProductController>(context, listen: false)
+                          .setEnqSearch(false);
+                      _controller.clear();
                     },
                   ),
                   filled: true,
@@ -124,19 +119,21 @@ class _EnQHistoryState extends State<EnQHistory> {
                             child: Lottie.asset("assets/noData.json",
                                 width: size.width * 0.45),
                           ))
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: value.isEnqSearch
-                              ? value.newenQhistoryList.length
-                              : value.enQhistoryList.length,
-                          itemBuilder: (context, index) {
-                            if (value.isEnqSearch) {
-                              return searchbuildCard(size, index);
-                            } else {
-                              return buildCard(size, index);
-                            }
-                          },
+                      : Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: value.isEnqSearch
+                                ? value.newenQhistoryList.length
+                                : value.enQhistoryList.length,
+                            itemBuilder: (context, index) {
+                              if (value.isEnqSearch) {
+                                return searchbuildCard(size, index);
+                              } else {
+                                return buildCard(size, index);
+                              }
+                            },
+                          ),
                         );
             },
           ),
@@ -149,6 +146,8 @@ class _EnQHistoryState extends State<EnQHistory> {
     return Consumer<ProductController>(
       builder: (context, value, child) {
         return Card(
+          elevation: 3,
+          color: Colors.grey[100],
           child: ListTile(
             title: Column(
               children: [

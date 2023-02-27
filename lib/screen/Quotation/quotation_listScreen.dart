@@ -114,7 +114,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                 );
               } else if (value.quotationList.length == 0 ||
                   value.isQuotSearch && value.newquotationList.length == 0) {
-                return Center(
+                return Container(
+                    height: size.height * 0.7,
                   child: Lottie.asset(
                     "assets/noData.json",
                     width: size.width * 0.45,

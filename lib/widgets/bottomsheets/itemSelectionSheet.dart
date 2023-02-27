@@ -17,7 +17,7 @@ class ItemSlectionBottomsheet {
     Size size = MediaQuery.of(context).size;
     print(" uuuu---$index---${list.description}");
     String oldDesc;
-    // oldDesc = list["description"];
+
     return showModalBottomSheet<void>(
       isScrollControlled: true,
       context: context,
@@ -28,6 +28,13 @@ class ItemSlectionBottomsheet {
             topRight: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
+        Provider.of<ProductController>(context, listen: false)
+                .desc[index]
+                .text =
+            Provider.of<ProductController>(context, listen: false)
+                .productList[index]
+                .description
+                .toString();
         return Consumer<ProductController>(builder: (context, value, child) {
           // value.qty[index].text=qty.toString();
 
@@ -231,7 +238,11 @@ class ItemSlectionBottomsheet {
                                     value.qty[index].text,
                                     value.desc[index].text,
                                     "0",
-                                    "0",Provider.of<Controller>(context, listen: false).dupcustomer_id.toString(),
+                                    "0",
+                                    Provider.of<Controller>(context,
+                                            listen: false)
+                                        .dupcustomer_id
+                                        .toString(),
                                     context);
                                 FocusManager.instance.primaryFocus!.unfocus();
                                 print("bhdb----${value.res}");

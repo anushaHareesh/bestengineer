@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bestengineer/chatApp/chatLogin.dart';
 
 import 'package:bestengineer/components/commonColor.dart';
@@ -22,6 +24,9 @@ import 'package:bestengineer/screen/splashScreen.dart';
 import 'package:bestengineer/screen/testLoc.dart';
 
 import 'package:bestengineer/services/fcm_service.dart';
+import 'package:bestengineer/syncPdf/syncPdfHome.dart';
+import 'package:bestengineer/testPages/audioRecordeTest.dart';
+import 'package:bestengineer/testPages/uploadImage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +85,10 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   requestPermission();
+  // ByteData data =
+  //     await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
+  // SecurityContext.defaultContext
+  //     .setTrustedCertificatesBytes(data.buffer.asUint8List());
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => Controller()),
@@ -159,7 +168,7 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ),
         ),
-        home: SplashScreen()
+        home: CreatePdfWidget()
 
         //  AnimatedSplashScreen(
         //   backgroundColor: Colors.black,

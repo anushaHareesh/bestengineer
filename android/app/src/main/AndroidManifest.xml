@@ -18,6 +18,8 @@
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         android:preserveLegacyExternalStorage="true">
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"          
+               android:value="high_importance_channel" />
          <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyCAHoGJbrt8Kg2LEwkqKBUzPCNDUaNtTEc"/>
         <activity

@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../screen/Quotation/pdfPrev.dart';
+import '../screen/Quotation/pdfQuotation.dart';
 
 class QuotationController extends ChangeNotifier {
   String? todaydate;
@@ -441,6 +442,8 @@ class QuotationController extends ChangeNotifier {
                 Navigator.of(ct).pop(true);
 
                 if (map["flag"] == 0) {
+                  // getPdfData(context, sivd.toString());
+               
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -477,6 +480,7 @@ class QuotationController extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+          PdfQuotation quotation1 = PdfQuotation();
           Uri url = Uri.parse("$urlgolabl/print_data.php");
           Map body = {
             's_invoice_id': invoice_id,
@@ -501,6 +505,7 @@ class QuotationController extends ChangeNotifier {
           for (var item in map["terms_condtions"]) {
             termsPdf.add(item);
           }
+          quotation1.generate(detailPdf, masterPdf, termsPdf);
           isPdfLoading = false;
           notifyListeners();
           notifyListeners();
@@ -797,7 +802,8 @@ class QuotationController extends ChangeNotifier {
     print("quo--$item--$quotationList");
     newquotationList.clear();
     quotationList.forEach((list) {
-      if (list["cname"].contains(item) || list["qt_no"].contains(item) ) newquotationList.add(list);
+      if (list["cname"].contains(item) || list["qt_no"].contains(item))
+        newquotationList.add(list);
     });
     qtScheduldate = List.generate(newquotationList.length, (index) => "");
 
