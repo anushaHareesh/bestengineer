@@ -5,6 +5,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
@@ -43,7 +44,9 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
                 backgroundColor: Colors.lightBlue,
                 disabledForegroundColor: Colors.grey,
               ),
-              onPressed: generateInvoice,
+              onPressed: () {
+                _createPDFAndDownload("sfjhsdjdh", "saggg");
+              },
               child: const Text('Generate PDF'),
             ),
             TextButton(
@@ -61,6 +64,80 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
     );
   }
 
+  Future<void> _createPDFAndDownload(
+      String? dataToAdd, String? fileName) async {
+    var imgBytes =
+        (await rootBundle.load("assets/noImg.png")).buffer.asUint8List();
+    final PdfDocument document = PdfDocument();
+
+    PdfPage page = document.pages.add();
+
+    document.pageSettings.size = PdfPageSize.a4;
+
+    final PdfPageTemplateElement headerTemplate =
+        PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
+    Size pageSize = page.getClientSize();
+
+    headerTemplate.graphics.drawImage(
+        PdfBitmap(imgBytes),
+        Rect.fromLTWH(0, 0, page.getClientSize().width,
+            page.getClientSize().height * 0.4));
+
+    document.template.top = headerTemplate;
+    
+
+    final PdfGrid grid = getGrid();
+    final PdfLayoutResult result = drawHeader(page, pageSize, grid);
+    grid.draw(
+        page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
+
+    PdfGraphics graphics = page.graphics;
+
+    double x = pageSize.width / 2;
+
+    double y = pageSize.height / 2;
+
+    graphics.save();
+
+    graphics.translateTransform(x, y);
+
+    graphics.setTransparency(0.25);
+
+    graphics.rotateTransform(-40);
+
+    graphics.drawImage(PdfBitmap(imgBytes), Rect.fromLTWH(0, 0, 40, 50));
+
+    graphics.restore();
+
+    List<int> bytes = await document.save();
+    final folderName = "Management";
+    final subdirectory = "Docs";
+    final _fileName = fileName.toString();
+    final path = Directory("storage/emulated/0/$folderName/");
+    final path2 = Directory("storage/emulated/0/$folderName/$subdirectory/");
+    File fileDef =
+        File("storage/emulated/0/$folderName//$subdirectory/$_fileName.pdf");
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    if ((await path.exists())) {
+      if ((await path2.exists())) {
+        await fileDef.writeAsBytes(bytes, flush: true);
+      }
+
+      // showToast("File Location " + path2.path);
+    } else {
+      await path.create();
+      await path2.create();
+      fileDef.writeAsBytes(bytes, flush: true);
+      // showToast("File Location " + path2.path);
+    }
+
+    document.dispose();
+  }
+
+/////////////////////////////////////////////////////////////////////////////////
   Future<void> generateInvoice() async {
     //Create a PDF document.
     final PdfDocument document = PdfDocument();
@@ -161,20 +238,24 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
         page: page, bounds: Rect.fromLTWH(0, result.bounds.bottom + 40, 0, 0))!;
 
     //Draw grand total.
-    page.graphics.drawString('Grand Total',
-        PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold),
-        bounds: Rect.fromLTWH(
-            quantityCellBounds!.left,
-            result.bounds.bottom + 10,
-            quantityCellBounds!.width,
-            quantityCellBounds!.height));
-    page.graphics.drawString(getTotalAmount(grid).toString(),
-        PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold),
-        bounds: Rect.fromLTWH(
-            totalPriceCellBounds!.left,
-            result.bounds.bottom + 10,
-            totalPriceCellBounds!.width,
-            totalPriceCellBounds!.height));
+    page.graphics.drawString(
+      'Grand Total',
+      PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold),
+      // bounds: Rect.fromLTWH(
+      //     quantityCellBounds!.left,
+      //     result.bounds.bottom + 10,
+      //     quantityCellBounds!.width,
+      //     quantityCellBounds!.height)
+    );
+    page.graphics.drawString(
+      getTotalAmount(grid).toString(),
+      PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold),
+      // bounds: Rect.fromLTWH(
+      //     totalPriceCellBounds!.left,
+      //     result.bounds.bottom + 10,
+      //     totalPriceCellBounds!.width,
+      //     totalPriceCellBounds!.height)
+    );
   }
 
   //Draw the invoice footer data.
@@ -234,7 +315,7 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
     addProducts('LJ-0192', 'Long-Sleeve Logo Jersey,M', 49.99, 4, 199.96, grid);
     addProducts('FK-5136', 'ML Fork', 175.49, 6, 1052.94, grid);
     addProducts('HL-U509', 'Sports-100 Helmet,Black', 34.99, 1, 34.99, grid);
-       addProducts('CA-1098', 'AWC Logo Cap', 8.99, 2, 17.98, grid);
+    addProducts('CA-1098', 'AWC Logo Cap', 8.99, 2, 17.98, grid);
     addProducts('LJ-0192', 'Long-Sleeve Logo Jersey,M', 49.99, 3, 149.97, grid);
     addProducts('So-B909-M', 'Mountain Bike Socks,M', 9.5, 2, 19, grid);
     addProducts('LJ-0192', 'Long-Sleeve Logo Jersey,M', 49.99, 4, 199.96, grid);
@@ -267,6 +348,7 @@ class _CreatePdfState extends State<CreatePdfStatefulWidget> {
       int quantity, double total, PdfGrid grid) {
     final PdfGridRow row = grid.rows.add();
     row.cells[0].value = productId;
+    row.cells[0].stringFormat.alignment = PdfTextAlignment.center;
     row.cells[1].value = productName;
     row.cells[2].value = price.toString();
     row.cells[3].value = quantity.toString();

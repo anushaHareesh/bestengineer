@@ -24,6 +24,7 @@ import 'package:bestengineer/screen/splashScreen.dart';
 import 'package:bestengineer/screen/testLoc.dart';
 
 import 'package:bestengineer/services/fcm_service.dart';
+import 'package:bestengineer/syncPdf/simplesync.dart';
 import 'package:bestengineer/syncPdf/syncPdfHome.dart';
 import 'package:bestengineer/testPages/audioRecordeTest.dart';
 import 'package:bestengineer/testPages/uploadImage.dart';
@@ -168,7 +169,7 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ),
         ),
-        home: CreatePdfWidget()
+        home: SplashScreen()
 
         //  AnimatedSplashScreen(
         //   backgroundColor: Colors.black,

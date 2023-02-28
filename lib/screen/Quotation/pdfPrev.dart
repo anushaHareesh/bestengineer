@@ -66,11 +66,11 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
           backgroundColor: P_Settings.loginPagetheme,
           title: Text('PDF Preview'),
           actions: [
-            IconButton(
-                onPressed: () {
-                  _addWatermarkToPDF();
-                },
-                icon: Icon(Icons.abc)),
+            // IconButton(
+            //     onPressed: () {
+            //       _addWatermarkToPDF();
+            //     },
+            //     icon: Icon(Icons.abc)),
             Consumer<QuotationController>(
               builder: (context, value, child) {
                 return IconButton(

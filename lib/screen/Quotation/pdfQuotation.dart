@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:image_watermark/image_watermark.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -10,7 +11,7 @@ import 'package:printing/printing.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfQuotation {
-  generate(
+  Future<Uint8List> generate(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList) async {
@@ -20,16 +21,27 @@ class PdfQuotation {
     pdf.addPage(MultiPage(
       build: (context) => [
         // imageSet(image, detailPdf, masterPdf, termsList),
-        // buildHeader(image),
+        // SizedBox(
+        //   height: 0.4 * PdfPageFormat.cm,
+        //   child: Watermark(child: Image(image)),
+        //   // child: Watermark(
+        //   //     child: Text("Conhshgsjshdj"), angle: 0, fit: BoxFit.contain),
+        // ),
 
         buildQuotationHeading(),
         SizedBox(height: 0.1 * PdfPageFormat.cm),
         buildCustomerData(masterPdf),
+
+        SizedBox(
+          height: 0.4 * PdfPageFormat.cm,
+          child: Watermark(child: Image(image), angle: 0, fit: BoxFit.contain),
+          // child: Watermark(
+          //     child: Text("Conhshgsjshdj"), angle: 0, fit: BoxFit.contain),
+        ),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildInvoice(detailPdf),
         // Divider(),
         SizedBox(height: 5),
-
         buildTotal(detailPdf),
       ],
       header: (context) => buildHeader(image),
