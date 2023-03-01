@@ -368,57 +368,56 @@ class _EnqCartState extends State<EnqCart> {
                               height: size.height * 0.006,
                             ),
 
-                            value.bagList[index]["s_rate_1"] == null
-                                ? Container()
-                                : Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Text(
+                                //   "Rate   : ",
+                                //   style: TextStyle(
+                                //     fontSize: 15,
+                                //   ),
+                                // ),
+                                value.bagList[index]["s_rate_1"] == null
+                                    ? Container()
+                                    : Text(
+                                        '\u{20B9}${value.bagList[index]["s_rate_1"]}',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.grey[600],
+                                          fontWeight: FontWeight.w600,
+                                        )),
+                                InkWell(
+                                  onTap: () {
+                                    deletePopup.builddeletePopupDialog(
+                                        context,
+                                        value.bagList[index]["item_name"]
+                                            .toString(),
+                                        value.bagList[index]["item_id"]
+                                            .toString(),
+                                        index,
+                                        "cart",
+                                        "",
+                                        "",
+                                        "",
+                                        "");
+                                  },
+                                  child: Row(
+                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      // Text(
-                                      //   "Rate   : ",
-                                      //   style: TextStyle(
-                                      //     fontSize: 15,
-                                      //   ),
-                                      // ),
                                       Text(
-                                          '\u{20B9}${value.bagList[index]["s_rate_1"]}',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey[600],
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                      InkWell(
-                                        onTap: () {
-                                          deletePopup.builddeletePopupDialog(
-                                              context,
-                                              value.bagList[index]["item_name"]
-                                                  .toString(),
-                                              value.bagList[index]["item_id"]
-                                                  .toString(),
-                                              index,
-                                              "cart",
-                                              "",
-                                              "",
-                                              "",
-                                              "");
-                                        },
-                                        child: Row(
-                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Remove",
-                                              style: TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                  color: Colors.red,
-                                                  fontSize: 15),
-                                            ),
-                                            Icon(Icons.close,
-                                                color: Colors.red, size: 18)
-                                          ],
-                                        ),
+                                        "Remove",
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            color: Colors.red,
+                                            fontSize: 15),
                                       ),
+                                      Icon(Icons.close,
+                                          color: Colors.red, size: 18)
                                     ],
                                   ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),

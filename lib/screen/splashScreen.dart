@@ -75,10 +75,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
       Provider.of<RegistrationController>(context, listen: false)
           .getMenu(context);
-      // Provider.of<RegistrationController>(context, listen: false)
-      //     .getScheduleList(
-      //   context,
-      // );
+      Provider.of<RegistrationController>(context, listen: false)
+          .getScheduleList(
+        context,
+      );
       if (Provider.of<RegistrationController>(context, listen: false)
               .isMenuLoading ==
           false) {

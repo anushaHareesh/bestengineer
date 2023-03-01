@@ -124,6 +124,7 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
               );
             } else {
               return PdfPreview(
+                
                   useActions: false,
                   build: (context) => quotation1.generate(
                       value.detailPdf, value.masterPdf, value.termsPdf));

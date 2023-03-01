@@ -242,7 +242,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                                     onPressed: value.adddNewItem
                                         ? () {
                                             itemBottom.showNewItemSheet(
-                                              context,
+                                              context,value.val.toString()
                                             );
                                           }
                                         : null,

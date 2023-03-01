@@ -18,6 +18,7 @@ class ProductController extends ChangeNotifier {
   String? todate;
   bool isEnqSearch = false;
   String? fromDate;
+  String? val;
   String? priority_level;
   String? customerName;
   String? address;
@@ -116,6 +117,7 @@ class ProductController extends ChangeNotifier {
       if (value == true) {
         try {
           print("itemNaem----$itemName");
+
           Uri url = Uri.parse("$urlgolabl/search_products_list.php");
           Map body = {"item_name": itemName};
           isnewlistLoading = true;
@@ -133,6 +135,8 @@ class ProductController extends ChangeNotifier {
             newList.add(prModel);
           }
           if (newList.length == 0) {
+            val = itemName;
+            // notifyListeners();
             adddNewItem = true;
             notifyListeners();
           } else {

@@ -10,14 +10,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class NewItemSheet {
-  showNewItemSheet(BuildContext context) {
+  showNewItemSheet(BuildContext context,String prodName) {
     Size size = MediaQuery.of(context).size;
 
     TextEditingController name = TextEditingController();
     TextEditingController desc = TextEditingController();
     Provider.of<ProductController>(context, listen: false).qtyVal = 1;
     String oldDesc;
-
+    name.text=prodName;
     return showModalBottomSheet<void>(
       isScrollControlled: true,
       context: context,
@@ -200,14 +200,17 @@ class NewItemSheet {
 
                                   ),
                               onPressed: () {
-                                
                                 value.addDeletebagItem(
                                     name.text,
                                     "0",
                                     value.qtyVal.toString(),
                                     desc.text,
                                     "0",
-                                    "0",Provider.of<Controller>(context, listen: false).dupcustomer_id.toString(),
+                                    "0",
+                                    Provider.of<Controller>(context,
+                                            listen: false)
+                                        .dupcustomer_id
+                                        .toString(),
                                     context);
                                 Navigator.pop(context);
                               },

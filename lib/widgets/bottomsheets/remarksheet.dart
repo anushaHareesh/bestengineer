@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RemarkSheet {
+  String? selected;
+  ValueNotifier<bool> visible = ValueNotifier(false);
+
   TextEditingController remark = TextEditingController();
+
   showRemarkSheet(
       BuildContext context,
       String sdate,
@@ -13,7 +17,7 @@ class RemarkSheet {
       GlobalKey<State> _keyLoader,
       String type,
       String rwId) {
-        print("rwId------$rwId----${rwId.runtimeType}");
+    print("rwId------$rwId----${rwId.runtimeType}");
     Size size = MediaQuery.of(context).size;
     return showModalBottomSheet<void>(
       isScrollControlled: true,
@@ -26,8 +30,6 @@ class RemarkSheet {
       ),
       builder: (BuildContext mycontext) {
         return Consumer<QuotationController>(builder: (context, value, child) {
-          // value.qty[index].text=qty.toString();
-
           return SingleChildScrollView(
             child: Center(
               child: Padding(
@@ -54,14 +56,69 @@ class RemarkSheet {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Remark  :",
+                            "Remark Sheet",
                             style: TextStyle(fontSize: 20),
                           )
                         ],
                       ),
                     ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Color.fromARGB(255, 163, 163, 163)),
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        // width: size.width * 0.4,
+                        height: size.height * 0.05,
+                        child: ButtonTheme(
+                          alignedDropdown: true,
+                          child: DropdownButton<String>(
+                            // value: selected,
+                            // isDense: true,
+                            hint: Text(
+                              value.branchselected == null
+                                  ? "Select Branch.."
+                                  : value.branchselected!,
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            isExpanded: true,
+                            autofocus: false,
+                            underline: SizedBox(),
+                            elevation: 0,
+                            items: value.branchList
+                                .map((item) => DropdownMenuItem<String>(
+                                    value: item["id"].toString(),
+                                    child: Container(
+                                      width: size.width * 0.4,
+                                      child: Text(
+                                        item["value"].toString(),
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    )))
+                                .toList(),
+                            onChanged: (item) {
+                              print("clicked");
+
+                              if (item != null) {
+                                visible.value = false;
+
+                                print("clicked------$item");
+                                selected = item;
+                                Provider.of<QuotationController>(context,
+                                        listen: false)
+                                    .setBranchDrop(selected!);
+                                // print("se;ected---$item");
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
                     Container(
-                      margin: EdgeInsets.only(left: 14, right: 14),
+                      margin: EdgeInsets.only(left: 14, right: 14,top:8),
                       child: TextField(
                         onChanged: (val) {
                           print("val----$val");
@@ -69,7 +126,8 @@ class RemarkSheet {
                         style: TextStyle(color: Colors.grey[800]),
                         controller: remark,
                         decoration: InputDecoration(
-                          // hintText: "Reason ........",
+                          hintText: "Enter Remark here..",
+                          hintStyle: TextStyle(fontSize: 14),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 1,
@@ -87,6 +145,28 @@ class RemarkSheet {
                         maxLines: null,
                       ),
                     ),
+                    
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, left: 17),
+                      child: ValueListenableBuilder(
+                          valueListenable: visible,
+                          builder:
+                              (BuildContext context, bool v, Widget? child) {
+                            print("value===${visible.value}");
+                            return Visibility(
+                              visible: v,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Select Branch!!!",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 8),
                       width: size.width * 0.3,
@@ -100,18 +180,24 @@ class RemarkSheet {
                             } else {
                               hiddenstatus = "0";
                             }
-                            Navigator.of(_scaffoldKey.currentContext!).pop();
-                            showDailogue(context, true, _keyLoader, 1);
-                            Provider.of<QuotationController>(context,
-                                    listen: false)
-                                .saveQuotation(
-                                    _scaffoldKey.currentContext!,
-                                    remark.text,
-                                    sdate,
-                                    int.parse(rwId),
-                                    enq_id,
-                                    type,
-                                    hiddenstatus);
+                            if (value.branchselected == null) {
+                              visible.value = true;
+                            } else {
+                              visible.value = false;
+
+                              Navigator.of(_scaffoldKey.currentContext!).pop();
+                              showDailogue(context, true, _keyLoader, 1);
+                              Provider.of<QuotationController>(context,
+                                      listen: false)
+                                  .saveQuotation(
+                                      _scaffoldKey.currentContext!,
+                                      remark.text,
+                                      sdate,
+                                      int.parse(rwId),
+                                      enq_id,
+                                      type,
+                                      hiddenstatus);
+                            }
                           },
                           child: Text(
                             "Apply",

@@ -62,6 +62,8 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                 InkWell(
                   onTap: () {
                     RemarkSheet remark = RemarkSheet();
+                    Provider.of<QuotationController>(context, listen: false)
+                        .branchselected = null;
                     remark.showRemarkSheet(
                         _scaffoldKey.currentContext!,
                         value.qt_date!,
@@ -176,7 +178,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 _selectDate(context);
                               },
                               child: Icon(
@@ -652,7 +654,9 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context,) async {
+  Future<void> _selectDate(
+    BuildContext context,
+  ) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
