@@ -16,25 +16,57 @@ class PdFSave {
   Future<File> savepdf(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
-      List<Map<String, dynamic>> termsList) async {
+      List<Map<String, dynamic>> termsList,
+      String br) async {
     final pdf = Document();
-    final image = await imageFromAssetBundle('assets/noImg.png');
+    final headerimage;
+    final footerimage;
+    if (br == "0") {
+      headerimage = await imageFromAssetBundle('assets/kannur_header.png');
+      footerimage = await imageFromAssetBundle('assets/kannur_footer.png');
+    } else {
+      headerimage = await imageFromAssetBundle('assets/kozhikod_header.png');
+      footerimage = await imageFromAssetBundle('assets/kozhikod_footer.png');
+    }
 
- pdf.addPage(MultiPage(
+  pdf.addPage(MultiPage(
+      pageFormat:
+          PdfPageFormat.a4.applyMargin(left: 0, top: 0, right: 0, bottom: 0),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+      //  pageFormat: PdfPageFormat(8 * PdfPageFormat.cm, 20 * PdfPageFormat.cm, marginAll: 0.5 * PdfPageFormat.cm),
       build: (context) => [
-        // buildHeader(image),
+        // imageSet(image, detailPdf, masterPdf, termsList),
+        // SizedBox(
+        //   height: 0.4 * PdfPageFormat.cm,
+        //   child: Watermark(child: Image(image)),
+        //   // child: Watermark(
+        //   //     child: Text("Conhshgsjshdj"), angle: 0, fit: BoxFit.contain),
+        // ),
+        // waterMark(headerimage),
         buildQuotationHeading(),
         SizedBox(height: 0.1 * PdfPageFormat.cm),
         buildCustomerData(masterPdf),
+
+        // SizedBox(
+        //   height: 0.4 * PdfPageFormat.cm,
+        //   child: Watermark(child: Image(image), angle: 0, fit: BoxFit.contain),
+        //   // child: Watermark(
+        //   //     child: Text("Conhshgsjshdj"), angle: 0, fit: BoxFit.contain),
+        // ),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildInvoice(detailPdf),
         // Divider(),
         SizedBox(height: 5),
-
         buildTotal(detailPdf),
       ],
-      header: (context) => buildHeader(image),
-      footer: (context) => buildFooter(termsList),
+
+      header: (
+        context,
+      ) {
+        return buildHeader(headerimage);
+      },
+      footer: (context) => buildFooter(termsList, footerimage),
     ));
     String inv = masterPdf[0]["s_customer_name"];
     return savedocument(name: "$inv.pdf", pdf: pdf);
@@ -43,7 +75,7 @@ class PdFSave {
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
-   Widget buildHeader(ImageProvider image) {
+  Widget buildHeader(ImageProvider image) {
     return Container(
         child: Column(children: [
       Row(
@@ -87,7 +119,7 @@ class PdFSave {
     ]));
   }
 
-    Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
+  Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
     return Container(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -170,7 +202,8 @@ class PdFSave {
     ]));
   }
 
-   Widget buildInvoice(List<Map<String, dynamic>> list) {
+  Widget buildInvoice(List<Map<String, dynamic>> list) {
+    print("kjgkjf------$list");
     int i = 0;
     final headers = [
       'Sl No',
@@ -183,36 +216,13 @@ class PdFSave {
       'GST',
       'Net Amt',
     ];
-    //  final data;
-    // if (list.length < 30) {
-    //    data = list.map((item) {
-    //     print("sdjsjkh----${item["qty"].runtimeType}");
-    //     i = i + 1;
-
-    //     // double total = double.parse(item["qty"]) * item["rate"] ;
-    //     double netrate = double.parse(item["net_rate"]);
-
-    //     return [
-    //       i,
-    //       item["product_name"],
-    //       item["qty"],
-    //       item["rate"],
-    //       item["amount"],
-    //       item["tax_perc"],
-    //       item["tax"],
-    //       netrate.toStringAsFixed(2),
-    //     ];
-    //   }).toList();
-    // }else{
-
-    // }
 
     final data = list.map((item) {
       print("sdjsjkh----${item["qty"].runtimeType}");
       i = i + 1;
 
       // double total = double.parse(item["qty"]) * item["rate"] ;
-      double netrate = double.parse(item["net_rate"]);
+      double netrate = double.parse(item["net_rate"]!);
 
       return [
         i,
@@ -252,13 +262,13 @@ class PdFSave {
           style: BorderStyle.solid,
         ),
       ),
-      headerStyle: TextStyle(fontWeight: FontWeight.bold),
-      cellStyle: TextStyle(fontSize: 10),
+      headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+      cellStyle: TextStyle(fontSize: 8),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 30,
       columnWidths: {
         // 0: FixedColumnWidth(50),
-        // 1: FixedColumnWidth(110),
+        1: FixedColumnWidth(110),
         // 2: FixedColumnWidth(50),
         // 3: FixedColumnWidth(70),
         // 4: FixedColumnWidth(70),
@@ -280,7 +290,6 @@ class PdFSave {
       },
     );
   }
-
 
   ////////////////////////////////////////////////////
   static Widget buildTotal(List<Map<String, dynamic>> list) {
@@ -320,7 +329,7 @@ class PdFSave {
   }
 
   ////////////////////////////////////////////////////
-   static buildText({
+  static buildText({
     required String title,
     required String value,
     double width = double.infinity,
@@ -341,15 +350,23 @@ class PdFSave {
   }
 
   //////////////////////////////////////////////////////////////////
-  static Widget buildFooter(List<Map<String, dynamic>> listterms) => Column(
+  static Widget buildFooter(
+          List<Map<String, dynamic>> listterms, ImageProvider image) =>
+      Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Divider(),
+          // Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
           buildSimpleText(
               title: listterms[0]["t_head"], value: listterms[0]["t_detail"]),
           // SizedBox(height: 1 * PdfPageFormat.mm),
           // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
+
+          Container(
+              color: PdfColors.red,
+              width: 800,
+              // height:160,
+              child: Image(image, fit: BoxFit.contain))
         ],
       );
 //////////////////////////////////////////////////////////////////////
@@ -362,13 +379,13 @@ class PdFSave {
       Row(
         children: [
           Text(title,
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 7, fontWeight: FontWeight.bold)),
           SizedBox(width: 10),
           Flexible(
               child: Text(value,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 6,
                   ))),
         ],
       ),

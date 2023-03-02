@@ -240,7 +240,7 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                                       )
                                     ],
                                   ),
-                                ), 
+                                ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [

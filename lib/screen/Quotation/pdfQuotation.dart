@@ -14,11 +14,25 @@ class PdfQuotation {
   Future<Uint8List> generate(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
-      List<Map<String, dynamic>> termsList) async {
+      List<Map<String, dynamic>> termsList,
+      String br) async {
     final pdf = Document();
-    final image = await imageFromAssetBundle('assets/noImg.png');
+    final headerimage;
+    final footerimage;
+    if (br == "0") {
+      headerimage = await imageFromAssetBundle('assets/kannur_header.png');
+      footerimage = await imageFromAssetBundle('assets/kannur_footer.png');
+    } else {
+      headerimage = await imageFromAssetBundle('assets/kozhikod_header.png');
+      footerimage = await imageFromAssetBundle('assets/kozhikod_footer.png');
+    }
 
     pdf.addPage(MultiPage(
+      pageFormat:
+          PdfPageFormat.a4.applyMargin(left: 0, top: 0, right: 0, bottom: 0),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
+      //  pageFormat: PdfPageFormat(8 * PdfPageFormat.cm, 20 * PdfPageFormat.cm, marginAll: 0.5 * PdfPageFormat.cm),
       build: (context) => [
         // imageSet(image, detailPdf, masterPdf, termsList),
         // SizedBox(
@@ -27,25 +41,30 @@ class PdfQuotation {
         //   // child: Watermark(
         //   //     child: Text("Conhshgsjshdj"), angle: 0, fit: BoxFit.contain),
         // ),
-
+        // waterMark(headerimage),
         buildQuotationHeading(),
         SizedBox(height: 0.1 * PdfPageFormat.cm),
         buildCustomerData(masterPdf),
 
-        SizedBox(
-          height: 0.4 * PdfPageFormat.cm,
-          child: Watermark(child: Image(image), angle: 0, fit: BoxFit.contain),
-          // child: Watermark(
-          //     child: Text("Conhshgsjshdj"), angle: 0, fit: BoxFit.contain),
-        ),
+        // SizedBox(
+        //   height: 0.4 * PdfPageFormat.cm,
+        //   child: Watermark(child: Image(image), angle: 0, fit: BoxFit.contain),
+        //   // child: Watermark(
+        //   //     child: Text("Conhshgsjshdj"), angle: 0, fit: BoxFit.contain),
+        // ),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildInvoice(detailPdf),
         // Divider(),
         SizedBox(height: 5),
         buildTotal(detailPdf),
       ],
-      header: (context) => buildHeader(image),
-      footer: (context) => buildFooter(termsList),
+
+      header: (
+        context,
+      ) {
+        return buildHeader(headerimage);
+      },
+      footer: (context) => buildFooter(termsList, footerimage),
     ));
 
     // final List<int> bytes = await pdf.save();
@@ -55,88 +74,58 @@ class PdfQuotation {
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
-  Widget imageSet(
-      ImageProvider image,
-      List<Map<String, dynamic>> detailPdf,
-      List<Map<String, dynamic>> masterPdf,
-      List<Map<String, dynamic>> termsList) {
-    return Expanded(
-        child: Stack(children: [
-      Container(
-        height: 800,
-        width: 900,
-        child: Image(image),
+  Widget waterMark(ImageProvider image) {
+    return Container(
+      child: Image(
+        image,
       ),
-      Container(
-        child: buildQuotationHeading(),
-      ),
-      Positioned(
-        top: 40,
-        child: Container(
-          child: buildCustomerData(masterPdf),
-        ),
-      ),
-      Positioned(
-        top: 50,
-        right: 0,
-        left: 0,
-        // bottom: 0,
-        child: Container(
-          child: buildInvoice(detailPdf),
-        ),
-      ),
-
-      //
-      // buildTotal(detailPdf),
-      // Positioned(
-      //   top: 100,
-      //   child: Container(
-      //     child: buildTotal(detailPdf),
-      //   ),
-      // ),
-    ]));
-
-    // return Container(height: double.infinity, child: Image(image));
+    );
   }
 
-/////////////////////
+  ///////////////////////////////////////////////////////////////////////
   Widget buildHeader(ImageProvider image) {
     return Container(
-        child: Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            height: 120,
-            width: 120,
-            child: Image(
-              image,
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("BEST MACHINETOOLS PVT LTD",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: pw.FontWeight.bold,
-                      color: PdfColors.red)),
-              Text("Attention to: Anushaa"),
-              Text("znckxjnckjxznckx"),
-            ],
-            // crossAxisAlignment: pw.CrossAxisAlignment.start,
-          ),
-        ],
+      child: Image(
+        image,
       ),
-      Divider(thickness: 2, color: PdfColors.red)
-    ]));
+    );
+    // return Container(
+    //     child: Column(children: [
+    //   Row(
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: [
+    //       SizedBox(
+    //         height: 120,
+    //         width: 600,
+    //         child: Image(
+    //           image,
+    //         ),
+    //       ),
+    //       // Column(
+    //       //   mainAxisAlignment: MainAxisAlignment.start,
+    //       //   crossAxisAlignment: CrossAxisAlignment.start,
+    //       //   children: [
+    //       //     Text("BEST MACHINETOOLS PVT LTD",
+    //       //         style: TextStyle(
+    //       //             fontSize: 24,
+    //       //             fontWeight: pw.FontWeight.bold,
+    //       //             color: PdfColors.red)),
+    //       //     Text("Attention to: Anushaa"),
+    //       //     Text("znckxjnckjxznckx"),
+    //       //   ],
+    //       //   // crossAxisAlignment: pw.CrossAxisAlignment.start,
+    //       // ),
+    //     ],
+    //   ),
+    //   // Divider(thickness: 2, color: PdfColors.red)
+    // ]));
   }
 
 /////////////////////////////////////////////////////////////////////////
   Widget buildQuotationHeading() {
     return Container(
         child: Column(children: [
+      SizedBox(height: 6),
       Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Text("QUOTATION", style: TextStyle(fontSize: 16))]),
@@ -287,13 +276,13 @@ class PdfQuotation {
           style: BorderStyle.solid,
         ),
       ),
-      headerStyle: TextStyle(fontWeight: FontWeight.bold),
-      cellStyle: TextStyle(fontSize: 10),
+      headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+      cellStyle: TextStyle(fontSize: 8),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 30,
       columnWidths: {
         // 0: FixedColumnWidth(50),
-        // 1: FixedColumnWidth(110),
+        1: FixedColumnWidth(110),
         // 2: FixedColumnWidth(50),
         // 3: FixedColumnWidth(70),
         // 4: FixedColumnWidth(70),
@@ -375,15 +364,23 @@ class PdfQuotation {
   }
 
   //////////////////////////////////////////////////////////////////
-  static Widget buildFooter(List<Map<String, dynamic>> listterms) => Column(
+  static Widget buildFooter(
+          List<Map<String, dynamic>> listterms, ImageProvider image) =>
+      Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Divider(),
+          // Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
           buildSimpleText(
               title: listterms[0]["t_head"], value: listterms[0]["t_detail"]),
           // SizedBox(height: 1 * PdfPageFormat.mm),
           // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
+
+          Container(
+              color: PdfColors.red,
+              width: 800,
+              // height:160,
+              child: Image(image, fit: BoxFit.contain))
         ],
       );
 //////////////////////////////////////////////////////////////////////
@@ -396,13 +393,13 @@ class PdfQuotation {
       Row(
         children: [
           Text(title,
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 7, fontWeight: FontWeight.bold)),
           SizedBox(width: 10),
           Flexible(
               child: Text(value,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
-                    fontSize: 9,
+                    fontSize: 6,
                   ))),
         ],
       ),

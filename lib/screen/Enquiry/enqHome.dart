@@ -5,6 +5,7 @@ import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
+import 'package:bestengineer/screen/Dashboard/serviceDashboard.dart';
 import 'package:bestengineer/screen/Enquiry/EnqHistory.dart';
 import 'package:bestengineer/screen/Enquiry/enquiryScreen.dart';
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
@@ -12,6 +13,7 @@ import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
 import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:bestengineer/screen/Quotation/test.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
+import 'package:bestengineer/screen/service/serviceScheduleList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,7 +44,7 @@ class _EnqHomeState extends State<EnqHome> {
   Icon actionIcon = Icon(Icons.search);
   TextEditingController _controller = TextEditingController();
   Widget? appBarTitle;
-
+  String? mobile_user_type;
   DateTime now = DateTime.now();
   List<String> s = [];
   String? todaydate;
@@ -98,7 +100,7 @@ class _EnqHomeState extends State<EnqHome> {
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
-
+    shared();
     appBarTitle = Text("");
 
     print(
@@ -215,9 +217,31 @@ class _EnqHomeState extends State<EnqHome> {
           );
         }
 
+      case "DS":
+        {
+          Provider.of<Controller>(context, listen: false)
+              .getServiceDashboardValues(context);
+          return ServiceDashboard();
+        }
+
+      case "SR":
+        {
+          print("srghhh");
+          // Provider.of<RegistrationController>(context, listen: false)
+          //     .getScheduleList(
+          //   context,
+          // );
+          return ServiceScheduleList(type: "from menu");
+        }
+
       // case "logout":
       //   logout();
     }
+  }
+
+  shared() async {
+    final prefs = await SharedPreferences.getInstance();
+    mobile_user_type = prefs.getString("mobile_user_type");
   }
 
   logout() async {
@@ -232,13 +256,23 @@ class _EnqHomeState extends State<EnqHome> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    if (widget.type == "return from quataion" ||
-        widget.type == "from scheduleList") {
-      print("from cart");
-      if (val) {
-        Provider.of<RegistrationController>(context, listen: false).menu_index =
-            "D1";
-        val = false;
+    if (mobile_user_type == "1") {
+      if (widget.type == "return from quataion" ||
+          widget.type == "from scheduleList") {
+        print("from cart");
+        if (val) {
+          Provider.of<RegistrationController>(context, listen: false)
+              .menu_index = "D1";
+          val = false;
+        }
+      }
+    } else if (mobile_user_type == "2") {
+      if (widget.type == "from service scheduleList") {
+        if (val) {
+          Provider.of<RegistrationController>(context, listen: false)
+              .menu_index = "DS";
+          val = false;
+        }
       }
     }
   }
@@ -305,8 +339,11 @@ class _EnqHomeState extends State<EnqHome> {
         backgroundColor: Color.fromARGB(255, 250, 248, 248),
         key: _key,
         appBar: Provider.of<RegistrationController>(context, listen: false)
-                    .menu_index ==
-                "D1"
+                        .menu_index ==
+                    "D1" ||
+                Provider.of<RegistrationController>(context, listen: false)
+                        .menu_index ==
+                    "DS"
             ? AppBar(
                 title: appBarTitle,
                 backgroundColor: P_Settings.loginPagetheme,
@@ -315,44 +352,48 @@ class _EnqHomeState extends State<EnqHome> {
                   decoration: BoxDecoration(),
                 ),
                 actions: [
-                  IconButton(
-                    icon: actionIcon,
-                    onPressed: () {
-                      // togle();
-                      togle();
-                      // setState(() {
-                      if (this.actionIcon.icon == Icons.search) {
-                        _controller.clear();
-                        this.actionIcon = Icon(Icons.close);
-                        this.appBarTitle = SearchAutoComplete();
+                  Provider.of<RegistrationController>(context, listen: false)
+                              .menu_index ==
+                          "DS"
+                      ? Container()
+                      : IconButton(
+                          icon: actionIcon,
+                          onPressed: () {
+                            // togle();
+                            togle();
+                            // setState(() {
+                            if (this.actionIcon.icon == Icons.search) {
+                              _controller.clear();
+                              this.actionIcon = Icon(Icons.close);
+                              this.appBarTitle = SearchAutoComplete();
 
-                        // TextField(
-                        //     controller: _controller,
-                        //     style: new TextStyle(
-                        //       color: Colors.white,
-                        //     ),
-                        //     decoration: InputDecoration(
-                        //       prefixIcon:
-                        //           Icon(Icons.search, color: Colors.white),
-                        //       hintText: "Search...cxzcxzxz",
-                        //       hintStyle: TextStyle(color: Colors.white),
-                        //     ),
-                        //     onChanged: ((value) {
-                        //       // print(value);
-                        //       onChangedValue(value);
-                        //     }),
-                        //     cursorColor: Colors.black);
-                      } else {
-                        if (this.actionIcon.icon == Icons.close) {
-                          this.actionIcon = Icon(Icons.search);
-                          this.appBarTitle = Text("");
-                          // Provider.of<Controller>(context, listen: false)
-                          //     .setIssearch(false);
-                        }
-                      }
-                      // });
-                    },
-                  ),
+                              // TextField(
+                              //     controller: _controller,
+                              //     style: new TextStyle(
+                              //       color: Colors.white,
+                              //     ),
+                              //     decoration: InputDecoration(
+                              //       prefixIcon:
+                              //           Icon(Icons.search, color: Colors.white),
+                              //       hintText: "Search...cxzcxzxz",
+                              //       hintStyle: TextStyle(color: Colors.white),
+                              //     ),
+                              //     onChanged: ((value) {
+                              //       // print(value);
+                              //       onChangedValue(value);
+                              //     }),
+                              //     cursorColor: Colors.black);
+                            } else {
+                              if (this.actionIcon.icon == Icons.close) {
+                                this.actionIcon = Icon(Icons.search);
+                                this.appBarTitle = Text("");
+                                // Provider.of<Controller>(context, listen: false)
+                                //     .setIssearch(false);
+                              }
+                            }
+                            // });
+                          },
+                        ),
                   Visibility(
                     visible: visible,
                     child: IconButton(
@@ -430,7 +471,15 @@ class _EnqHomeState extends State<EnqHome> {
                           Provider.of<RegistrationController>(context,
                                       listen: false)
                                   .menu_index ==
-                              "SL1"
+                              "SL1" ||
+                          Provider.of<RegistrationController>(context,
+                                      listen: false)
+                                  .menu_index ==
+                              "DS" ||
+                          Provider.of<RegistrationController>(context,
+                                      listen: false)
+                                  .menu_index ==
+                              "SR"
                       ? Container()
                       : InkWell(
                           onTap: () {
@@ -486,7 +535,12 @@ class _EnqHomeState extends State<EnqHome> {
                                           .menu_index ==
                                       "SL1"
                                   ? "SCHEDULE LIST"
-                                  : "",
+                                  : Provider.of<RegistrationController>(context,
+                                                  listen: false)
+                                              .menu_index ==
+                                          "SR"
+                                      ? " SERVICE SCHEDULE LIST"
+                                      : "",
                   style: TextStyle(fontSize: 15),
                 ),
                 backgroundColor:
@@ -500,7 +554,10 @@ class _EnqHomeState extends State<EnqHome> {
                             Provider.of<RegistrationController>(context,
                                         listen: false)
                                     .menu_index ==
-                                "SL1"
+                                "SL1"|| Provider.of<RegistrationController>(context,
+                                        listen: false)
+                                    .menu_index ==
+                                "SR"
                         ? P_Settings.loginPagetheme
                         : P_Settings.whiteColor,
                 elevation: 1,
@@ -513,7 +570,7 @@ class _EnqHomeState extends State<EnqHome> {
                         icon: Icon(Icons.menu,
                             color: value.menu_index == "E2" ||
                                     value.menu_index == "Q1" ||
-                                    value.menu_index == "SL1"
+                                    value.menu_index == "SL1" ||value.menu_index=="SR"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },

@@ -118,7 +118,7 @@ class RemarkSheet {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 14, right: 14,top:8),
+                      margin: EdgeInsets.only(left: 14, right: 14, top: 8),
                       child: TextField(
                         onChanged: (val) {
                           print("val----$val");
@@ -145,7 +145,6 @@ class RemarkSheet {
                         maxLines: null,
                       ),
                     ),
-                    
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0, left: 17),
                       child: ValueListenableBuilder(
@@ -196,7 +195,7 @@ class RemarkSheet {
                                       int.parse(rwId),
                                       enq_id,
                                       type,
-                                      hiddenstatus);
+                                      hiddenstatus,selected!);
                             }
                           },
                           child: Text(

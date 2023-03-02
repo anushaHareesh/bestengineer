@@ -23,6 +23,8 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../../controller/controller.dart';
 
 class PdfPreviewPage extends StatefulWidget {
+  String br;
+  PdfPreviewPage({required this.br});
   @override
   State<PdfPreviewPage> createState() => _PdfPreviewPageState();
 }
@@ -76,7 +78,7 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
                 return IconButton(
                     onPressed: () async {
                       final pdffile = await pdfSave.savepdf(
-                          value.detailPdf, value.masterPdf, value.termsPdf);
+                          value.detailPdf, value.masterPdf, value.termsPdf,widget.br);
                       print("pdffile----$pdffile");
                       PdFSave.sendFile(pdffile);
                     },
@@ -92,7 +94,7 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
                       final pdffile = await dwnload.downLoadpdf(
                         value.detailPdf,
                         value.masterPdf,
-                        value.termsPdf,
+                        value.termsPdf,widget.br
                       );
                       print("kjxnzx-------$pdffile");
                       final snackBar = SnackBar(
@@ -124,10 +126,9 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
               );
             } else {
               return PdfPreview(
-                
                   useActions: false,
                   build: (context) => quotation1.generate(
-                      value.detailPdf, value.masterPdf, value.termsPdf));
+                      value.detailPdf, value.masterPdf, value.termsPdf,widget.br));
             }
           },
         ),

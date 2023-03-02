@@ -20,14 +20,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RegistrationController extends ChangeNotifier {
   bool scheduleOpend = false;
   bool isMenuLoading = false;
+  bool isServSchedulelIstLoadind = false;
   int scheduleListCount = 0;
+  List<String> servceScheduldate = [];
+
+  int servicescheduleListCount = 0;
   List<Map<String, dynamic>> scheduleList = [];
+  List<Map<String, dynamic>> servicescheduleList = [];
+
   bool isSchedulelIstLoadind = false;
   String? staff_name;
   bool isLoading = false;
   bool isLoginLoading = false;
   StaffDetails staffModel = StaffDetails();
   String urlgolabl = Globaldata.apiglobal;
+  String commonurlgolabl = Globaldata.commonapiglobal;
+
   ExternalDir externalDir = ExternalDir();
   String? menu_index;
   String? fp;
@@ -183,10 +191,10 @@ class RegistrationController extends ChangeNotifier {
           prefs.setString("user_id", loginModel.userId!);
           prefs.setString("branch_id", loginModel.branchId!);
           prefs.setString("qt_pre", loginModel.qt_pre!);
-
           prefs.setString("staff_name", loginModel.staffName!);
           prefs.setString("branch_name", loginModel.branchName!);
           prefs.setString("branch_prefix", loginModel.branchPrefix!);
+          prefs.setString("mobile_user_type", loginModel.mobile_menu_type!);
         }
         getMenu(context);
       }
@@ -247,6 +255,9 @@ class RegistrationController extends ChangeNotifier {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
+          String? mobile_menu_type = prefs.getString("mobile_user_type");
+          print(" fgfffff---$mobile_menu_type");
+
           isMenuLoading = true;
 
           notifyListeners();
@@ -268,7 +279,13 @@ class RegistrationController extends ChangeNotifier {
             menuList.add(item);
           }
           notifyListeners();
-          getScheduleList(context);
+
+          print("jhjkd---$mobile_menu_type");
+          if (mobile_menu_type == "1" || mobile_menu_type == "3") {
+            getScheduleList(context);
+          } else if (mobile_menu_type == "2") {
+            getServiceScheduleList(context);
+          }
           print("menu res--$map");
           // if (menuList.length > 0) {
           //   Navigator.push(
@@ -277,8 +294,8 @@ class RegistrationController extends ChangeNotifier {
           //   );
           // }
 
-          isLoginLoading = false;
-          notifyListeners();
+          // isLoginLoading = false;
+          // notifyListeners();
           isMenuLoading = false;
           notifyListeners();
         } catch (e) {
@@ -312,6 +329,7 @@ class RegistrationController extends ChangeNotifier {
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
           String? qutation_id1 = prefs.getString("qutation_id");
+          String? mobile_menu_type = prefs.getString("mobile_user_type");
 
           String? staff_nam = prefs.getString("staff_name");
 
@@ -337,7 +355,73 @@ class RegistrationController extends ChangeNotifier {
             scheduleList.add(item);
           }
           isSchedulelIstLoadind = false;
-          notifyListeners(); 
+          notifyListeners();
+          if (mobile_menu_type == "3") {
+            getServiceScheduleList(context);
+          } else if (mobile_menu_type == "1") {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (Context) {
+              return EnqHome();
+            }), (route) => false);
+          }
+
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => EnqHome()),
+          // );
+          print("count------$scheduleListCount");
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////////
+  getServiceScheduleList(
+    BuildContext context,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          Uri url = Uri.parse("$commonurlgolabl/get_scedule_list_service.php");
+          Map body = {
+            'staff_id': user_id,
+          };
+
+          print("service schedule list jjj body----$body");
+          isServSchedulelIstLoadind = true;
+          notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          servicescheduleListCount = map["master"].length;
+          notifyListeners();
+
+          print("service schedule list-------$map");
+          servicescheduleList.clear();
+          for (var item in map["master"]) {
+            servicescheduleList.add(item);
+          }
+          // servceScheduldate =
+          //     List.generate(servicescheduleList.length, (index) => "");
+          // for (int i = 0; i < servicescheduleList.length; i++) {
+          //   servceScheduldate[i] = servicescheduleList[i]["installation_date"];
+          // }
+          isServSchedulelIstLoadind = false;
+          notifyListeners();
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (Context) {
             return EnqHome();

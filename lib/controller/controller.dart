@@ -15,8 +15,12 @@ import '../screen/Quotation/statusMonitoringQuotation.dart';
 import '../services/dbHelper.dart';
 
 class Controller extends ChangeNotifier {
-  String?  searchQotSelected;
+  String? searchQotSelected;
   String? selected;
+  String? todayService;
+  String? todayInstall;
+  String? totService;
+
   bool selectedCustomer = true;
   bool addNewItem = false;
   bool? arrowButtonclicked;
@@ -53,7 +57,7 @@ class Controller extends ChangeNotifier {
   List<bool> addButton = [];
   String? dropSelected;
   String? prioId;
-
+ bool isServceDahboardLoading=false;
   List<Map<String, dynamic>> area_list = [];
   List<Map<String, dynamic>> statusMon = [];
 
@@ -551,6 +555,42 @@ class Controller extends ChangeNotifier {
           scheduleCount = map["schdule_cnt"];
           verifedEnqCount = map["verify_cnt"];
           isDahboardLoading = false;
+          notifyListeners();
+          // PriorityListModel prioModel = PriorityListModel.fromJson(map);
+          // print("priority_list-----$map");
+          // priorityList.clear();
+          // for (var item in prioModel.priorityLevel!) {
+          //   priorityList.add(item);
+          // }
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+/////////////////////////////////////////////////
+  getServiceDashboardValues(BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          Uri url = Uri.parse("$urlgolabl/dashboard_list_service.php");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          Map body = {"staff_id": user_id};
+          isServceDahboardLoading = true;
+          notifyListeners();
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print(
+              "dahsboard service map------${map["todays_service"].runtimeType}");
+          todayService = map["todays_service"].toString();
+          todayInstall = map["todays_installation"].toString();
+          totService = map["total_service"].toString();
+          isServceDahboardLoading = false;
           notifyListeners();
           // PriorityListModel prioModel = PriorityListModel.fromJson(map);
           // print("priority_list-----$map");

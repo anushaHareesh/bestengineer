@@ -70,15 +70,25 @@ class _SplashScreenState extends State<SplashScreen> {
     cid = prefs.getString("cid");
     st_uname = prefs.getString("st_uname");
     st_pwd = prefs.getString("st_pwd");
+    String? mobile_menu_type = prefs.getString("mobile_menu_type");
+
     if (st_uname != null && st_pwd != null) {
       print("jujuuuu");
 
       Provider.of<RegistrationController>(context, listen: false)
           .getMenu(context);
-      Provider.of<RegistrationController>(context, listen: false)
-          .getScheduleList(
-        context,
-      );
+      if (mobile_menu_type == "1" || mobile_menu_type == "3") {
+        Provider.of<RegistrationController>(context, listen: false)
+            .getScheduleList(
+          context,
+        );
+      } else if (mobile_menu_type == "2") {
+        Provider.of<RegistrationController>(context, listen: false)
+            .getServiceScheduleList(
+          context,
+        );
+      }
+
       if (Provider.of<RegistrationController>(context, listen: false)
               .isMenuLoading ==
           false) {

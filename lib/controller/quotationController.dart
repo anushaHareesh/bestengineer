@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:bestengineer/components/commonColor.dart';
@@ -49,6 +50,7 @@ class QuotationController extends ChangeNotifier {
   String? color1;
   String? cust_id;
   List<String> qtScheduldate = [];
+
   double total = 0.0;
   double stotal_qty = 0.0;
   double s_total_taxable = 0.0;
@@ -346,7 +348,7 @@ class QuotationController extends ChangeNotifier {
 
   /////////////////////////////////////////////////////////////////////////
   saveQuotation(BuildContext context, String? remark, String sdate, int rwid,
-      String enq_id, String type, String hiddenstatus) async {
+      String enq_id, String type, String hiddenstatus, String br) async {
     List<Map<String, dynamic>> jsonResult = [];
     Map<String, dynamic> itemmap = {};
     Map<String, dynamic> resultmmap = {};
@@ -460,7 +462,7 @@ class QuotationController extends ChangeNotifier {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => JustPage(),
+                      builder: (context) => PdfPreviewPage(br: br),
                     ),
                   );
                 }
@@ -520,7 +522,7 @@ class QuotationController extends ChangeNotifier {
           }
           // quotation1.generate(detailPdf, masterPdf, termsPdf);
           isPdfLoading = false;
-          generateInvoice();
+          // generateInvoice();
           notifyListeners();
         } catch (e) {
           print(e);
@@ -743,6 +745,64 @@ class QuotationController extends ChangeNotifier {
     });
   }
 
+  //////////////////////////////////////////////
+  saveNextScheduleServiceDate(
+      String date, String form_id, String qb_id, BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          notifyListeners();
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/save_next_schedule_service.php");
+          Map body = {
+            'staff_id': user_id,
+            "staff_name": staff_nam,
+            "added_by": user_id,
+            "form_id": form_id,
+            "next_date": date,
+            "qb_id": qb_id,
+          };
+
+          print("save schedue---service---$body");
+
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+          if (map["flag"] == 0) {
+            getQuotationList(
+              context,
+            );
+          }
+          // quotationList.clear();
+          // for (var item in map["master"]) {
+          //   quotationList.add(item);
+          // }
+          print("save_next_schedule service----$map");
+
+          // isQuotLoading = false;
+          // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
   /////////////////////////////////////////////
   setDealerDrop(String s) {
     for (int i = 0; i < dealerList.length; i++) {
@@ -853,14 +913,20 @@ class QuotationController extends ChangeNotifier {
     var imgBytes =
         (await rootBundle.load("assets/burger.jpg")).buffer.asUint8List();
     var img = (await rootBundle.load("assets/noImg.png")).buffer.asUint8List();
-    final PdfPageTemplateElement headerTemplate =
-        PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
     final PdfDocument document = PdfDocument();
-    //Add page to the PDF
-    final PdfPage page = document.pages.add();
-    //Get page client size
+
+    PdfPage page = document.pages.add();
 
     final Size pageSize = page.getClientSize();
+    double headerH = 50;
+    double footerH = 120;
+    double gridH = pageSize.height - (headerH + footerH);
+
+    final PdfPageTemplateElement headerTemplate =
+        PdfPageTemplateElement(Rect.fromLTWH(0, 0, pageSize.width, headerH));
+    //Add page to the PDF
+    //Get page client size
+
     headerTemplate.graphics.drawImage(
         PdfBitmap(img),
         Rect.fromLTWH(0, 0, page.getClientSize().width,
@@ -873,12 +939,13 @@ class QuotationController extends ChangeNotifier {
     final PdfLayoutResult? result = drawHeader(page, pageSize, grid);
     //Draw grid
     drawGrid(page, grid, result!);
+
     PdfGraphics graphics = page.graphics;
 
     double x = (pageSize.width / 2) - 30;
 
     double y = (pageSize.height / 2) - 50;
-
+    print("page size-------${pageSize.height}----${{pageSize.width}}");
     graphics.save();
 
     graphics.translateTransform(x, y);
@@ -890,8 +957,9 @@ class QuotationController extends ChangeNotifier {
     graphics.drawImage(PdfBitmap(imgBytes), Rect.fromLTWH(0, 0, 40, 50));
 
     graphics.restore();
+
     final PdfPageTemplateElement footerTemplate =
-        PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 120));
+        PdfPageTemplateElement(Rect.fromLTWH(0, 0, pageSize.width, footerH));
     final PdfFont contentFont = PdfStandardFont(PdfFontFamily.helvetica, 8);
     final String tem = '${termsPdf[0]["t_head"]} : ';
     final Size temcontentSize = contentFont.measureString(tem);
@@ -919,6 +987,7 @@ class QuotationController extends ChangeNotifier {
         format: PdfStringFormat(alignment: PdfTextAlignment.justify));
 
     document.template.bottom = footerTemplate;
+
     final List<int> bytes = document.saveSync();
     //Dispose the document.
     document.dispose();
@@ -942,8 +1011,8 @@ class QuotationController extends ChangeNotifier {
         PdfPen(PdfColor(0, 0, 0), dashStyle: PdfDashStyle.custom);
     // linePen.dashPattern = <double>[3, 3];
     //Draw line
-    page.graphics.drawLine(linePen, Offset(0, pageSize.height - 100),
-        Offset(pageSize.width, pageSize.height - 100));
+    // page.graphics.drawLine(linePen, Offset(0, pageSize.height - 100),
+    //     Offset(pageSize.width, pageSize.height - 100));
     final String qtNumber =
         'Quotation No    :  ${masterPdf[0]["s_invoice_no"]}';
     final String cusName =
@@ -993,80 +1062,7 @@ class QuotationController extends ChangeNotifier {
   }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-  // Future<void> _createPDFAndDownload(String? fileName) async {
-  //   var imgBytes =
-  //       (await rootBundle.load("assets/noImg.png")).buffer.asUint8List();
-  //   final PdfDocument document = PdfDocument();
 
-  //   PdfPage page = document.pages.add();
-
-  //   document.pageSettings.size = PdfPageSize.a4;
-
-  //   final PdfPageTemplateElement headerTemplate =
-  //       PdfPageTemplateElement(const Rect.fromLTWH(0, 0, 515, 50));
-
-  //   Size pageSize = page.getClientSize();
-
-  //   // headerTemplate.graphics.drawImage(
-  //   //     PdfBitmap(imgBytes),
-  //   //     Rect.fromLTWH(0, 0, page.getClientSize().width,
-  //   //         page.getClientSize().height * 0.4));
-
-  //   // document.template.top = headerTemplate;
-
-  //   final PdfGrid grid = getGrid();
-  //   // final PdfLayoutResult result = drawHeader(page, pageSize, grid);
-  //   grid.draw(
-  //     page: document.pages.add(),
-  //   );
-
-  //   PdfGraphics graphics = page.graphics;
-
-  //   // double x = pageSize.width / 2;
-
-  //   // double y = pageSize.height / 2;
-
-  //   // graphics.save();
-
-  //   // graphics.translateTransform(x, y);
-
-  //   // graphics.setTransparency(0.25);
-
-  //   // graphics.rotateTransform(-40);
-
-  //   // graphics.drawImage(PdfBitmap(imgBytes), Rect.fromLTWH(0, 0, 40, 50));
-
-  //   // graphics.restore();
-
-  //   List<int> bytes = await document.save();
-  //   final folderName = "Management";
-  //   final subdirectory = "Docs";
-  //   final _fileName = fileName.toString();
-  //   final path = Directory("storage/emulated/0/$folderName/");
-  //   final path2 = Directory("storage/emulated/0/$folderName/$subdirectory/");
-  //   File fileDef =
-  //       File("storage/emulated/0/$folderName//$subdirectory/$_fileName.pdf");
-  //   var status = await Permission.storage.status;
-  //   if (!status.isGranted) {
-  //     await Permission.storage.request();
-  //   }
-  //   if ((await path.exists())) {
-  //     if ((await path2.exists())) {
-  //       await fileDef.writeAsBytes(bytes, flush: true);
-  //     }
-
-  //     // showToast("File Location " + path2.path);
-  //   } else {
-  //     await path.create();
-  //     await path2.create();
-  //     fileDef.writeAsBytes(bytes, flush: true);
-  //     // showToast("File Location " + path2.path);
-  //   }
-
-  //   document.dispose();
-  // }
-
-  ////////////////////////////////////////////////////////////
   PdfGrid getGrid() {
     PdfGridStyle gridStyle = PdfGridStyle(
       textBrush: PdfBrushes.black,
@@ -1114,22 +1110,24 @@ class QuotationController extends ChangeNotifier {
 
     grid.rows.applyStyle(gridStyle);
 
-    for (int i = 0; i < detailPdf.length; i++) {
+    for (int i = 0; i < 60; i++) {
+      addProducts(
+          "$i", "jxzjjh", "2", "234", "6557", "23", "23", "34", "885", grid);
+
       // print(
       //     "datatype---------------------${detailPdf[i]["tax_perc"].runtimeType}----${detailPdf[i]["tax"].runtimeType}");
+
       // addProducts(
-      //     "$i", "jxzjjh", "2", "234", "6557", "23", "23", "34", "885", grid);
-      addProducts(
-          detailPdf[i]["product_id"],
-          detailPdf[i]["product_name"],
-          detailPdf[i]["qty"],
-          detailPdf[i]["rate"],
-          detailPdf[i]["amount"],
-          detailPdf[i]["discount_amount"],
-          detailPdf[i]["tax_perc"].toString(),
-          detailPdf[i]["tax"].toString(),
-          detailPdf[i]["net_rate"].toString(),
-          grid);
+      //     detailPdf[i]["product_id"],
+      //     detailPdf[i]["product_name"],
+      //     detailPdf[i]["qty"],
+      //     detailPdf[i]["rate"],
+      //     detailPdf[i]["amount"],
+      //     detailPdf[i]["discount_amount"],
+      //     detailPdf[i]["tax_perc"].toString(),
+      //     detailPdf[i]["tax"].toString(),
+      //     detailPdf[i]["net_rate"].toString(),
+      //     grid);
     }
 
     grid.columns[1].width = 160;
@@ -1244,7 +1242,7 @@ class QuotationController extends ChangeNotifier {
         quantityCellBounds = args.bounds;
       }
     };
-
+    print("bound bottom------${result.bounds.bottom}");
     result = grid.draw(
         page: result.page,
         bounds: Rect.fromLTWH(0, result.bounds.bottom + 20, 0, 0))!;
