@@ -23,10 +23,12 @@ class RegistrationController extends ChangeNotifier {
   bool isServSchedulelIstLoadind = false;
   int scheduleListCount = 0;
   List<String> servceScheduldate = [];
+  bool isProdLoding = false;
 
   int servicescheduleListCount = 0;
   List<Map<String, dynamic>> scheduleList = [];
   List<Map<String, dynamic>> servicescheduleList = [];
+  List<Map<String, dynamic>> servicesProdList = [];
 
   bool isSchedulelIstLoadind = false;
   String? staff_name;
@@ -284,7 +286,7 @@ class RegistrationController extends ChangeNotifier {
           if (mobile_menu_type == "1" || mobile_menu_type == "3") {
             getScheduleList(context);
           } else if (mobile_menu_type == "2") {
-            getServiceScheduleList(context);
+            getServiceScheduleList(context, "");
           }
           print("menu res--$map");
           // if (menuList.length > 0) {
@@ -357,7 +359,7 @@ class RegistrationController extends ChangeNotifier {
           isSchedulelIstLoadind = false;
           notifyListeners();
           if (mobile_menu_type == "3") {
-            getServiceScheduleList(context);
+            getServiceScheduleList(context, "");
           } else if (mobile_menu_type == "1") {
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (Context) {
@@ -381,9 +383,7 @@ class RegistrationController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////////////////////
-  getServiceScheduleList(
-    BuildContext context,
-  ) {
+  getServiceScheduleList(BuildContext context, String type) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -422,10 +422,13 @@ class RegistrationController extends ChangeNotifier {
           // }
           isServSchedulelIstLoadind = false;
           notifyListeners();
-          Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (Context) {
-            return EnqHome();
-          }), (route) => false);
+          if (type == "") {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (Context) {
+              return EnqHome();
+            }), (route) => false);
+          }
+
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(builder: (context) => EnqHome()),
@@ -440,4 +443,106 @@ class RegistrationController extends ChangeNotifier {
       }
     });
   }
+
+//////////////////////////////////////////////////
+  saveNextScheduleServiceDate(
+      String date, String form_id, String qb_id, BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          notifyListeners();
+          Uri url =
+              Uri.parse("$commonurlgolabl/save_next_schedule_service.php");
+          Map body = {
+            'staff_id': user_id,
+            "staff_name": staff_nam,
+            "added_by": user_id,
+            "form_id": form_id,
+            "next_date": date,
+            "qb_id": qb_id,
+          };
+
+          print("save schedue---service---$body");
+
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+          if (map["flag"] == 0) {
+            getServiceScheduleList(context, "");
+          }
+          // quotationList.clear();
+          // for (var item in map["master"]) {
+          //   quotationList.add(item);
+          // }
+          print("save_next_schedule service----$map");
+
+          // isQuotLoading = false;
+          // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  getProdFromServiceSchedule(
+      String form_id, String qb_id, BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          isProdLoding = true;
+          notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/fetch_products_serv.php");
+          Map body = {
+            "form_id": form_id,
+            "qb_id": qb_id,
+          };
+
+          print("prod schedue---service---$body");
+
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("fjkdprod----------------------map");
+          servicesProdList.clear();
+          for (var item in map["product_list"]) {
+            servicesProdList.add(item);
+          }
+          isProdLoding = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////
+  
 }

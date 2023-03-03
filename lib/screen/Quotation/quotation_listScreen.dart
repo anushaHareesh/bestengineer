@@ -115,7 +115,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
               } else if (value.quotationList.length == 0 ||
                   value.isQuotSearch && value.newquotationList.length == 0) {
                 return Container(
-                    height: size.height * 0.7,
+                  height: size.height * 0.7,
                   child: Lottie.asset(
                     "assets/noData.json",
                     width: size.width * 0.45,
@@ -156,7 +156,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
             baseColor: Color.fromARGB(255, 248, 246, 246),
             expandedColor: Color.fromARGB(255, 248, 246, 246),
             // key: cardA,
-            leading: CircleAvatar(child: Image.asset("assets/man.png")),
+            leading:
+                CircleAvatar(backgroundImage: AssetImage("assets/man.png")),
             title: Text(value.quotationList[index]["cname"]),
             subtitle: Text(
               value.quotationList[index]["phone_1"],

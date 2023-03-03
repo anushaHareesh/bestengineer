@@ -227,10 +227,10 @@ class _EnqHomeState extends State<EnqHome> {
       case "SR":
         {
           print("srghhh");
-          // Provider.of<RegistrationController>(context, listen: false)
-          //     .getScheduleList(
-          //   context,
-          // );
+          Provider.of<RegistrationController>(context, listen: false)
+              .getServiceScheduleList(
+            context,"from menu"
+          );
           return ServiceScheduleList(type: "from menu");
         }
 

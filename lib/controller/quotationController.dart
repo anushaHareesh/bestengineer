@@ -28,6 +28,9 @@ class QuotationController extends ChangeNotifier {
   bool isQuotSearch = false;
   bool isSchedulelIstLoadind = false;
   String? dealerselected;
+  String commonurlgolabl = Globaldata.commonapiglobal;
+  bool isChatLoading = false;
+
   String? branchselected;
   List<Map<String, dynamic>> branchList = [
     {"id": "0", "value": "kannur"},
@@ -89,6 +92,7 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> dealerList = [];
   List<Map<String, dynamic>> quotationList = [];
   List<Map<String, dynamic>> newquotationList = [];
+  List<Map<String, dynamic>> serviceChatList = [];
 
   List<Map<String, dynamic>> quotationEditList = [];
 
@@ -746,62 +750,6 @@ class QuotationController extends ChangeNotifier {
   }
 
   //////////////////////////////////////////////
-  saveNextScheduleServiceDate(
-      String date, String form_id, String qb_id, BuildContext context) {
-    NetConnection.networkConnection(context).then((value) async {
-      if (value == true) {
-        try {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? branch_id = prefs.getString("branch_id");
-          String? user_id = prefs.getString("user_id");
-          String? qutation_id1 = prefs.getString("qutation_id");
-
-          String? staff_nam = prefs.getString("staff_name");
-
-          notifyListeners();
-          Uri url = Uri.parse(
-              "https://trafiqerp.in/webapp/beste/common_api/save_next_schedule_service.php");
-          Map body = {
-            'staff_id': user_id,
-            "staff_name": staff_nam,
-            "added_by": user_id,
-            "form_id": form_id,
-            "next_date": date,
-            "qb_id": qb_id,
-          };
-
-          print("save schedue---service---$body");
-
-          var jsonEnc = jsonEncode(body);
-          print("jsonEnc--$jsonEnc");
-          // isQuotLoading = true;
-          // notifyListeners();
-          http.Response response = await http.post(
-            url,
-            body: {'json_data': jsonEnc},
-          );
-          var map = jsonDecode(response.body);
-          if (map["flag"] == 0) {
-            getQuotationList(
-              context,
-            );
-          }
-          // quotationList.clear();
-          // for (var item in map["master"]) {
-          //   quotationList.add(item);
-          // }
-          print("save_next_schedule service----$map");
-
-          // isQuotLoading = false;
-          // notifyListeners();
-        } catch (e) {
-          print(e);
-          // return null;
-          return [];
-        }
-      }
-    });
-  }
 
   /////////////////////////////////////////////
   setDealerDrop(String s) {
@@ -1266,5 +1214,92 @@ class QuotationController extends ChangeNotifier {
     }
     return total;
   }
+
   ////////////////////////////////////////////////////////////////////
+  getPreviousChat(String form_id, String qb_id, BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          isChatLoading = true;
+          notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/fetch_prev_serv_remrk.php");
+          Map body = {
+            "form_id": form_id,
+            "qb_id": qb_id,
+          };
+
+          print("chat---service---$body");
+
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("chat service map----$map");
+          serviceChatList.clear();
+          for (var item in map["ser_remrk"]) {
+            serviceChatList.add(item);
+          }
+          isChatLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////
+  saveServiceChat(
+      String form_id, String qb_id, String remark, BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/save_service_remarks.php");
+          Map body = {
+            "form_id": form_id,
+            "qb_id": qb_id,
+            "added_by": user_id,
+            "remarks": remark
+          };
+
+          print("save chat---$body");
+
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("svae chat map----$map");
+          if (map["flag"] == 0) {
+            getPreviousChat(form_id, qb_id, context);
+          }
+          // isChatLoading = false;
+          // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
 }

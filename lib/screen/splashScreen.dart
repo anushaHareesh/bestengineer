@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else if (mobile_menu_type == "2") {
         Provider.of<RegistrationController>(context, listen: false)
             .getServiceScheduleList(
-          context,
+          context,""
         );
       }
 
