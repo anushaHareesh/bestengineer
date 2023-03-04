@@ -1,4 +1,5 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/controller/registrationController.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,9 +7,7 @@ import '../../controller/quotationController.dart';
 
 class VisitedRemarkSheet {
   TextEditingController remark = TextEditingController();
-  showRemarkSheet(
-    BuildContext context,
-  ) {
+  showRemarkSheet(BuildContext context, String enqId, String invId) {
     Size size = MediaQuery.of(context).size;
     return showModalBottomSheet<void>(
       isScrollControlled: true,
@@ -20,7 +19,8 @@ class VisitedRemarkSheet {
             topRight: Radius.circular(25.0)),
       ),
       builder: (BuildContext mycontext) {
-        return Consumer<QuotationController>(builder: (context, value, child) {
+        return Consumer<RegistrationController>(
+            builder: (context, value, child) {
           // value.qty[index].text=qty.toString();
 
           return SingleChildScrollView(
@@ -88,7 +88,11 @@ class VisitedRemarkSheet {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: P_Settings.loginPagetheme),
-                          onPressed: () {},
+                          onPressed: () {
+                            value.saveVisitedRemark(
+                                context, remark.text, enqId, invId);
+                            Navigator.pop(context);
+                          },
                           child: Text(
                             "Apply",
                             style: TextStyle(color: P_Settings.whiteColor),

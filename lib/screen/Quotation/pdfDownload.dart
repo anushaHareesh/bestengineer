@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -12,12 +13,14 @@ import 'package:share_plus/share_plus.dart';
 
 class PdfDownload {
   DateTime now = DateTime.now();
-
+  String? date;
   Future<File> downLoadpdf(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList,
       String br) async {
+    date = DateFormat('ddMMyyyy').format(now);
+
     final pdf = Document();
     final headerimage;
     final footerimage;
@@ -68,7 +71,7 @@ class PdfDownload {
       },
       footer: (context) => buildFooter(termsList, footerimage),
     ));
-    String inv = masterPdf[0]["s_customer_name"];
+    String inv = masterPdf[0]["s_customer_name"] + date;
 
     // return savedocument(name: "m$now.pdf", pdf: pdf);
     // return downloadDoc(name: "$inv.pdf", pdf: pdf);

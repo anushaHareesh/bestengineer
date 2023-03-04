@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:image_watermark/image_watermark.dart';
+import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -11,11 +12,14 @@ import 'package:printing/printing.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfQuotation {
+  String? date;
+  DateTime now = DateTime.now();
   Future<Uint8List> generate(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList,
       String br) async {
+    date = DateFormat('ddMMyyyy').format(now);
     final pdf = Document();
     final headerimage;
     final footerimage;
@@ -74,13 +78,13 @@ class PdfQuotation {
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
-  Widget waterMark(ImageProvider image) {
-    return Container(
-      child: Image(
-        image,
-      ),
-    );
-  }
+  // Widget waterMark(ImageProvider image) {
+  //   return Container(
+  //     child: Image(
+  //       image,
+  //     ),
+  //   );
+  // }
 
   ///////////////////////////////////////////////////////////////////////
   Widget buildHeader(ImageProvider image) {

@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
     cid = prefs.getString("cid");
     st_uname = prefs.getString("st_uname");
     st_pwd = prefs.getString("st_pwd");
-    String? mobile_menu_type = prefs.getString("mobile_menu_type");
+    String? mobile_menu_type = prefs.getString("mobile_user_type");
 
     if (st_uname != null && st_pwd != null) {
       print("jujuuuu");

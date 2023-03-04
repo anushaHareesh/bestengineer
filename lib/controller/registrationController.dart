@@ -12,6 +12,7 @@ import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 
 import 'package:bestengineer/services/dbHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -22,6 +23,7 @@ class RegistrationController extends ChangeNotifier {
   bool isMenuLoading = false;
   bool isServSchedulelIstLoadind = false;
   int scheduleListCount = 0;
+
   List<String> servceScheduldate = [];
   bool isProdLoding = false;
 
@@ -544,5 +546,57 @@ class RegistrationController extends ChangeNotifier {
   }
 
   /////////////////////////////////////////////////////////
-  
+  saveVisitedRemark(
+      BuildContext context, String remark, String enq_id, String s_invoice_id) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/mark_staff_visit.php");
+          Map body = {
+            "s_invoice_id": s_invoice_id,
+            "enq_id": enq_id,
+            "staff_id": user_id,
+            "remarks": remark
+          };
+
+          print("save remark body---$body");
+
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("svae remrk----$map");
+          if (map["err_status"] == 0) {
+            Fluttertoast.showToast(
+              msg: "${map["msg"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+
+            getScheduleList(context);
+          }
+          // isChatLoading = false;
+          // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
 }

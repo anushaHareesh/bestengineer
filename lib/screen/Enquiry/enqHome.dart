@@ -65,8 +65,10 @@ class _EnqHomeState extends State<EnqHome> {
       animType: AnimType.bottomSlide,
       // title: 'Reminder',
       descTextStyle: TextStyle(fontSize: 18),
-      desc:
-          'You have ${Provider.of<RegistrationController>(context, listen: false).scheduleListCount} schedules on tomorrow !!! ',
+      desc: mobile_user_type == "1"
+          ? 'You have ${Provider.of<RegistrationController>(context, listen: false).scheduleListCount} schedules on tomorrow !!! '
+          : 'You have ${Provider.of<RegistrationController>(context, listen: false).servicescheduleListCount} service tomorrow !!! ',
+
       buttonsTextStyle: const TextStyle(color: Colors.black),
       showCloseIcon: true,
       // btnCancelOnPress: () {
@@ -116,12 +118,14 @@ class _EnqHomeState extends State<EnqHome> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print(
           "kjfs---${Provider.of<RegistrationController>(context, listen: false).scheduleOpend}");
-      if (Provider.of<RegistrationController>(context, listen: false)
+      if (Provider.of<RegistrationController>(context,
+                      listen: false)
                   .scheduleListCount >
               0 &&
           Provider.of<RegistrationController>(context, listen: false)
                   .scheduleOpend ==
-              false) {
+              false &&
+          mobile_user_type != "3") {
         customNotification();
       }
     });
@@ -181,10 +185,10 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "E1":
         {
-          // Provider.of<Controller>(context, listen: false)
-          //     .gePriorityList(context);
-          // Provider.of<ProductController>(context, listen: false)
-          //     .geProductList(context);
+          Provider.of<Controller>(context, listen: false)
+              .gePriorityList(context);
+          Provider.of<ProductController>(context, listen: false)
+              .geProductList(context);
           return EnquiryScreen();
         }
       case "E2":
@@ -228,9 +232,7 @@ class _EnqHomeState extends State<EnqHome> {
         {
           print("srghhh");
           Provider.of<RegistrationController>(context, listen: false)
-              .getServiceScheduleList(
-            context,"from menu"
-          );
+              .getServiceScheduleList(context, "from menu");
           return ServiceScheduleList(type: "from menu");
         }
 
@@ -554,7 +556,8 @@ class _EnqHomeState extends State<EnqHome> {
                             Provider.of<RegistrationController>(context,
                                         listen: false)
                                     .menu_index ==
-                                "SL1"|| Provider.of<RegistrationController>(context,
+                                "SL1" ||
+                            Provider.of<RegistrationController>(context,
                                         listen: false)
                                     .menu_index ==
                                 "SR"
@@ -570,7 +573,8 @@ class _EnqHomeState extends State<EnqHome> {
                         icon: Icon(Icons.menu,
                             color: value.menu_index == "E2" ||
                                     value.menu_index == "Q1" ||
-                                    value.menu_index == "SL1" ||value.menu_index=="SR"
+                                    value.menu_index == "SL1" ||
+                                    value.menu_index == "SR"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },

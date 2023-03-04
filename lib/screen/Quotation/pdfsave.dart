@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -12,12 +13,13 @@ import 'package:share_plus/share_plus.dart';
 
 class PdFSave {
   DateTime now = DateTime.now();
-
+  String? date;
   Future<File> savepdf(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList,
       String br) async {
+    date = DateFormat('ddMMyyyy').format(now);
     final pdf = Document();
     final headerimage;
     final footerimage;
@@ -29,7 +31,7 @@ class PdFSave {
       footerimage = await imageFromAssetBundle('assets/kozhikod_footer.png');
     }
 
-  pdf.addPage(MultiPage(
+    pdf.addPage(MultiPage(
       pageFormat:
           PdfPageFormat.a4.applyMargin(left: 0, top: 0, right: 0, bottom: 0),
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,53 +70,60 @@ class PdFSave {
       },
       footer: (context) => buildFooter(termsList, footerimage),
     ));
-    String inv = masterPdf[0]["s_customer_name"];
+    String inv = masterPdf[0]["s_customer_name"] + date;
+
     return savedocument(name: "$inv.pdf", pdf: pdf);
     // return downloadDoc(name: "$inv.pdf", pdf: pdf);
     // return downloadDoc(name: "$inv.pdf", pdf: pdf);
   }
 
 ///////////////////////////////////////////////////////////////////////////////////
-  Widget buildHeader(ImageProvider image) {
+   Widget buildHeader(ImageProvider image) {
     return Container(
-        child: Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            height: 120,
-            width: 120,
-            child: Image(
-              image,
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("BEST MACHINETOOLS PVT LTD",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: pw.FontWeight.bold,
-                      color: PdfColors.red)),
-              Text("Attention to: Anushaa"),
-              Text("znckxjnckjxznckx"),
-            ],
-            // crossAxisAlignment: pw.CrossAxisAlignment.start,
-          ),
-        ],
+      child: Image(
+        image,
       ),
-      Divider(thickness: 2, color: PdfColors.red)
-    ]));
+    );
+    // return Container(
+    //     child: Column(children: [
+    //   Row(
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: [
+    //       SizedBox(
+    //         height: 120,
+    //         width: 600,
+    //         child: Image(
+    //           image,
+    //         ),
+    //       ),
+    //       // Column(
+    //       //   mainAxisAlignment: MainAxisAlignment.start,
+    //       //   crossAxisAlignment: CrossAxisAlignment.start,
+    //       //   children: [
+    //       //     Text("BEST MACHINETOOLS PVT LTD",
+    //       //         style: TextStyle(
+    //       //             fontSize: 24,
+    //       //             fontWeight: pw.FontWeight.bold,
+    //       //             color: PdfColors.red)),
+    //       //     Text("Attention to: Anushaa"),
+    //       //     Text("znckxjnckjxznckx"),
+    //       //   ],
+    //       //   // crossAxisAlignment: pw.CrossAxisAlignment.start,
+    //       // ),
+    //     ],
+    //   ),
+    //   // Divider(thickness: 2, color: PdfColors.red)
+    // ]));
   }
 
 /////////////////////////////////////////////////////////////////////////
-  Widget buildQuotationHeading() {
+Widget buildQuotationHeading() {
     return Container(
         child: Column(children: [
+      SizedBox(height: 6),
       Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text("QUOTATION", style: TextStyle(fontSize: 18))]),
+          children: [Text("QUOTATION", style: TextStyle(fontSize: 16))]),
       Divider(color: PdfColors.black, thickness: 1, indent: 180, endIndent: 180)
     ]));
   }
@@ -395,7 +404,6 @@ class PdFSave {
       // ])
     ]);
   }
-
   /////////////////////////////////////////////////
   Future<File> savedocument(
       {required String name, required pw.Document pdf}) async {

@@ -58,21 +58,21 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                   String rem = value.servicescheduleList[index]["complaints"]
                       .replaceAll("\n", " ");
                   return Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    padding: const EdgeInsets.only(left: 4.0, right: 4),
                     child: Card(
                       color: Colors.grey[100],
                       child: Padding(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(3),
                         child: ListTile(
                           onTap: () {
-                            Provider.of<RegistrationController>(context,
-                                    listen: false)
-                                .getProdFromServiceSchedule(
-                                    value.servicescheduleList[index]["form_id"],
-                                    value.servicescheduleList[index]["qb_id"],
-                                    context);
-                            ServiceProduct ser = ServiceProduct();
-                            ser.showProdSheet(context, index);
+                            // Provider.of<RegistrationController>(context,
+                            //         listen: false)
+                            //     .getProdFromServiceSchedule(
+                            //         value.servicescheduleList[index]["form_id"],
+                            //         value.servicescheduleList[index]["qb_id"],
+                            //         context);
+                            // ServiceProduct ser = ServiceProduct();
+                            // ser.showProdSheet(context, index);
                           },
                           title: Column(
                             children: [
@@ -163,36 +163,36 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                               color: Colors.grey[800],
                                               fontSize: 14))
                                     ]),
-                                    InkWell(
-                                      onTap: () {
-                                        Provider.of<QuotationController>(
-                                                context,
-                                                listen: false)
-                                            .getPreviousChat(
-                                                value.servicescheduleList[index]
-                                                    ["form_id"],
-                                                value.servicescheduleList[index]
-                                                    ["qb_id"],
-                                                context);
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ServiceChat(
-                                                    form_id: value
-                                                            .servicescheduleList[
-                                                        index]["form_id"],
-                                                    qb_id: value
-                                                            .servicescheduleList[
-                                                        index]["qb_id"],
-                                                  )),
-                                        );
-                                      },
-                                      child: Image.asset(
-                                        "assets/chat.png",
-                                        height: 20,
-                                        // color: Colors.green,
-                                      ),
-                                    ),
+                                    // InkWell(
+                                    //   onTap: () {
+                                    //     Provider.of<QuotationController>(
+                                    //             context,
+                                    //             listen: false)
+                                    //         .getPreviousChat(
+                                    //             value.servicescheduleList[index]
+                                    //                 ["form_id"],
+                                    //             value.servicescheduleList[index]
+                                    //                 ["qb_id"],
+                                    //             context);
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //           builder: (context) => ServiceChat(
+                                    //                 form_id: value
+                                    //                         .servicescheduleList[
+                                    //                     index]["form_id"],
+                                    //                 qb_id: value
+                                    //                         .servicescheduleList[
+                                    //                     index]["qb_id"],
+                                    //               )),
+                                    //     );
+                                    //   },
+                                    //   child: Image.asset(
+                                    //     "assets/chat.png",
+                                    //     height: 20,
+                                    //     // color: Colors.green,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
@@ -257,7 +257,88 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                           )
                                         ],
                                       ),
-                                    )
+                                    ),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Provider.of<RegistrationController>(
+                                              context,
+                                              listen: false)
+                                          .getProdFromServiceSchedule(
+                                              value.servicescheduleList[index]
+                                                  ["form_id"],
+                                              value.servicescheduleList[index]
+                                                  ["qb_id"],
+                                              context);
+                                      ServiceProduct ser = ServiceProduct();
+                                      ser.showProdSheet(context, index);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "View Product",
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Image.asset(
+                                          "assets/eye.png",
+                                          color: Colors.green,
+                                          height: size.height * 0.023,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Provider.of<QuotationController>(context,
+                                              listen: false)
+                                          .getPreviousChat(
+                                              value.servicescheduleList[index]
+                                                  ["form_id"],
+                                              value.servicescheduleList[index]
+                                                  ["qb_id"],
+                                              context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ServiceChat(
+                                                  form_id:
+                                                      value.servicescheduleList[
+                                                          index]["form_id"],
+                                                  qb_id:
+                                                      value.servicescheduleList[
+                                                          index]["qb_id"],
+                                                  title:
+                                                      value.servicescheduleList[
+                                                          index]["cust_name"],
+                                                )),
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Chat",
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Image.asset(
+                                          "assets/chat.png",
+                                          // color: Colors.green,
+                                          height: size.height * 0.023,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),

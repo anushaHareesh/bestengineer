@@ -57,7 +57,7 @@ class Controller extends ChangeNotifier {
   List<bool> addButton = [];
   String? dropSelected;
   String? prioId;
- bool isServceDahboardLoading=false;
+  bool isServceDahboardLoading = false;
   List<Map<String, dynamic>> area_list = [];
   List<Map<String, dynamic>> statusMon = [];
 
