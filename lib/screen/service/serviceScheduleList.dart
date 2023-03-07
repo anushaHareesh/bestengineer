@@ -3,14 +3,18 @@ import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/service/serviceChat.dart';
+import 'package:bestengineer/widgets/bottomsheets/completeService.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../controller/controller.dart';
 import '../../widgets/bottomsheets/productService.dart';
+import '../../widgets/bottomsheets/showComplaint.dart';
 
 class ServiceScheduleList extends StatefulWidget {
   String? type;
@@ -52,301 +56,434 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                 color: P_Settings.loginPagetheme,
               );
             } else {
-              return ListView.builder(
-                itemCount: value.servicescheduleList.length,
-                itemBuilder: (context, index) {
-                  String rem = value.servicescheduleList[index]["complaints"]
-                      .replaceAll("\n", " ");
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 4.0, right: 4),
-                    child: Card(
-                      color: Colors.grey[100],
-                      child: Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: ListTile(
-                          onTap: () {
-                            // Provider.of<RegistrationController>(context,
-                            //         listen: false)
-                            //     .getProdFromServiceSchedule(
-                            //         value.servicescheduleList[index]["form_id"],
-                            //         value.servicescheduleList[index]["qb_id"],
-                            //         context);
-                            // ServiceProduct ser = ServiceProduct();
-                            // ser.showProdSheet(context, index);
-                          },
-                          title: Column(
-                            children: [
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        "${value.servicescheduleList[index]["cust_name"]}",
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontSize: 19),
-                                      ),
-                                    )
-                                  ]),
-                              value.servicescheduleList[index]["cust_phn"] ==
-                                          null ||
-                                      value
-                                          .servicescheduleList[index]
-                                              ["cust_phn"]
-                                          .isEmpty
-                                  ? Container()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Row(children: [
-                                        Icon(
-                                          Icons.phone,
-                                          color: Colors.blue,
-                                          size: 15,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        // Text("Ph  : ",
-                                        //     style: TextStyle(
-                                        //         color: Colors.grey[600], fontSize: 13)),
-                                        Flexible(
-                                          child: Text(
-                                              "${value.servicescheduleList[index]["cust_phn"]}",
-                                              style: TextStyle(
-                                                  color: Colors.grey[800],
-                                                  fontSize: 14)),
-                                        )
-                                      ]),
-                                    ),
-                              value.servicescheduleList[index]
-                                              ["company_add1"] ==
-                                          null ||
-                                      value
-                                          .servicescheduleList[index]
-                                              ["company_add1"]
-                                          .isEmpty
-                                  ? Container()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Row(children: [
-                                        Icon(
-                                          Icons.business,
-                                          color: Colors.orange,
-                                          size: 15,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                              "${value.servicescheduleList[index]["company_add1"]}",
-                                              style: TextStyle(
-                                                  color: Colors.grey[800],
-                                                  fontSize: 14)),
-                                        )
-                                      ]),
-                                    ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(children: [
-                                      Text("Type  : ",
-                                          style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 13)),
-                                      Text(
-                                          "${value.servicescheduleList[index]["type"]}",
+              if (value.servicescheduleList.length == 0) {
+                return Center(
+                  child: Lottie.asset("assets/noData.json",
+                      height: size.height * 0.2),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: value.servicescheduleList.length,
+                  itemBuilder: (context, index) {
+                    String rem = value.servicescheduleList[index]["complaints"]
+                        .replaceAll("\n", " ");
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 4.0, right: 4),
+                      child: Card(
+                        elevation: 4,
+                        // color: Colors.grey[100],
+                        child: Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: ListTile(
+                            onTap: () {
+                              CompleteService completeSrvice =
+                                  CompleteService();
+                              completeSrvice.showCompleteServiceSheet(
+                                context,
+                                value.servicescheduleList[index]["cust_name"],
+                                value.servicescheduleList[index]["form_id"],
+                                value.servicescheduleList[index]["qb_id"],
+                              );
+                              // Provider.of<RegistrationController>(context,
+                              //         listen: false)
+                              //     .getProdFromServiceSchedule(
+                              //         value.servicescheduleList[index]["form_id"],
+                              //         value.servicescheduleList[index]["qb_id"],
+                              //         context);
+                              // ServiceProduct ser = ServiceProduct();
+                              // ser.showProdSheet(context, index);
+                            },
+                            title: Column(
+                              children: [
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          "${value.servicescheduleList[index]["cust_name"]}"
+                                              .toUpperCase(),
                                           style: TextStyle(
                                               color: Colors.grey[800],
-                                              fontSize: 14))
-                                    ]),
-                                    // InkWell(
-                                    //   onTap: () {
-                                    //     Provider.of<QuotationController>(
-                                    //             context,
-                                    //             listen: false)
-                                    //         .getPreviousChat(
-                                    //             value.servicescheduleList[index]
-                                    //                 ["form_id"],
-                                    //             value.servicescheduleList[index]
-                                    //                 ["qb_id"],
-                                    //             context);
-                                    //     Navigator.push(
-                                    //       context,
-                                    //       MaterialPageRoute(
-                                    //           builder: (context) => ServiceChat(
-                                    //                 form_id: value
-                                    //                         .servicescheduleList[
-                                    //                     index]["form_id"],
-                                    //                 qb_id: value
-                                    //                         .servicescheduleList[
-                                    //                     index]["qb_id"],
-                                    //               )),
-                                    //     );
-                                    //   },
-                                    //   child: Image.asset(
-                                    //     "assets/chat.png",
-                                    //     height: 20,
-                                    //     // color: Colors.green,
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _selectDate(
-                                        context,
-                                        index,
-                                        value.servicescheduleList[index]
-                                            ["form_id"],
-                                        value.servicescheduleList[index]
-                                            ["qb_id"]);
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text("Choose Installation date  :  ",
-                                          style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontSize: 13)),
-                                      Icon(
-                                        Icons.calendar_month,
-                                        size: 16,
-                                        color: Colors.red,
-                                      ),
-                                      SizedBox(
-                                        width: 6,
-                                      ),
-                                      Text(
-                                        "${value.servicescheduleList[index]["installation_date"]}",
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontSize: 14),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       )
+                                    ]),
+                                value.servicescheduleList[index]["cust_phn"] ==
+                                            null ||
+                                        value
+                                            .servicescheduleList[index]
+                                                ["cust_phn"]
+                                            .isEmpty
+                                    ? Container()
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.phone,
+                                            color: Colors.blue,
+                                            size: 15,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          // Text("Ph  : ",
+                                          //     style: TextStyle(
+                                          //         color: Colors.grey[600], fontSize: 13)),
+                                          Flexible(
+                                            child: Text(
+                                                "${value.servicescheduleList[index]["cust_phn"]}",
+                                                style: TextStyle(
+                                                    color: Colors.grey[800],
+                                                    fontSize: 14)),
+                                          )
+                                        ]),
+                                      ),
+                                value.servicescheduleList[index]
+                                                ["company_add1"] ==
+                                            null ||
+                                        value
+                                            .servicescheduleList[index]
+                                                ["company_add1"]
+                                            .isEmpty
+                                    ? Container()
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.business,
+                                            color: Colors.orange,
+                                            size: 15,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                                "${value.servicescheduleList[index]["company_add1"]}",
+                                                style: TextStyle(
+                                                    color: Colors.grey[800],
+                                                    fontSize: 14)),
+                                          )
+                                        ]),
+                                      ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(children: [
+                                        Text("Type  : ",
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 13)),
+                                        Text(
+                                            "${value.servicescheduleList[index]["type"]}",
+                                            style: TextStyle(
+                                                color: Colors.grey[800],
+                                                fontSize: 14))
+                                      ]),
+                                      // InkWell(
+                                      //   onTap: () {
+                                      //     Provider.of<QuotationController>(
+                                      //             context,
+                                      //             listen: false)
+                                      //         .getPreviousChat(
+                                      //             value.servicescheduleList[index]
+                                      //                 ["form_id"],
+                                      //             value.servicescheduleList[index]
+                                      //                 ["qb_id"],
+                                      //             context);
+                                      //     Navigator.push(
+                                      //       context,
+                                      //       MaterialPageRoute(
+                                      //           builder: (context) => ServiceChat(
+                                      //                 form_id: value
+                                      //                         .servicescheduleList[
+                                      //                     index]["form_id"],
+                                      //                 qb_id: value
+                                      //                         .servicescheduleList[
+                                      //                     index]["qb_id"],
+                                      //               )),
+                                      //     );
+                                      //   },
+                                      //   child: Image.asset(
+                                      //     "assets/chat.png",
+                                      //     height: 20,
+                                      //     // color: Colors.green,
+                                      //   ),
+                                      // ),
                                     ],
                                   ),
                                 ),
-                              ),
-                              value.servicescheduleList[index]["complaints"] ==
-                                          null ||
-                                      value
-                                          .servicescheduleList[index]
-                                              ["complaints"]
-                                          .isEmpty
-                                  ? Container()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _selectDate(
+                                          context,
+                                          index,
+                                          value.servicescheduleList[index]
+                                              ["form_id"],
+                                          value.servicescheduleList[index]
+                                              ["qb_id"]);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text("Choose Installation date  :  ",
+                                            style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 13)),
+                                        Icon(
+                                          Icons.calendar_month,
+                                          size: 16,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(
+                                          width: 6,
+                                        ),
+                                        Text(
+                                          "${value.servicescheduleList[index]["installation_date"]}",
+                                          style: TextStyle(
+                                              color: Colors.grey[800],
+                                              fontSize: 14),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.only(top: 8.0),
+                                //   child: Row(
+                                //     children: [
+                                //       Text("Complaints  : ",
+                                //           style: TextStyle(
+                                //               color: Colors.grey[600],
+                                //               fontSize: 13)),
+                                //     ],
+                                //   ),
+                                // ),
+                                // RichText(
+                                //   text: TextSpan(
+                                //     // text: '• ',
+                                //     style: TextStyle(
+                                //         fontSize: 14, color: Colors.grey[800], ),
+                                //     children: <TextSpan>[
+                                //       TextSpan(
+                                //           text: rem,
+                                //           style: GoogleFonts.ptSansNarrow(
+                                //               textStyle:
+                                //                   TextStyle(fontSize: 13,color: Colors.grey[800],))),
+                                //     ],
+                                //   ),
+                                // ),
+
+                                value.servicescheduleList[index]
+                                                ["complaints"] ==
+                                            null ||
+                                        value
+                                            .servicescheduleList[index]
+                                                ["complaints"]
+                                            .isEmpty
+                                    ? Container()
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Column(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                ShowComplaintsSheet com =
+                                                    ShowComplaintsSheet();
+                                                com.showComplaintSheet(
+                                                    context,
+                                                    value.servicescheduleList[
+                                                        index]["cust_name"],
+                                                    value.servicescheduleList[
+                                                        index]["complaints"]);
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Text("Show Complaints  : ",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.grey[600],
+                                                          fontSize: 13)),
+                                                  SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: Image.asset(
+                                                      "assets/downarrow.png",
+                                                      height: 12,
+                                                      color: Colors.brown,
+                                                    ),
+                                                  )
+                                                  // Expanded(
+                                                  //   child: RichText(
+                                                  //     text: TextSpan(
+                                                  //       // text: '• ',
+                                                  //       style: TextStyle(
+                                                  //         fontSize: 14,
+                                                  //         color: Colors.grey[800],
+                                                  //       ),
+                                                  //       children: <TextSpan>[
+                                                  //         TextSpan(
+                                                  //             text: rem,
+                                                  //             style: GoogleFonts
+                                                  //                 .ptSansNarrow(
+                                                  //                     textStyle:
+                                                  //                         TextStyle(
+                                                  //               fontSize: 13,
+                                                  //               color: Colors.grey[800],
+                                                  //             ))),
+                                                  //       ],
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                ],
+                                              ),
+                                            ),
+                                            // Padding(
+                                            //   padding:
+                                            //       const EdgeInsets.only(top: 8.0),
+                                            //   child: Row(
+                                            //     children: [
+                                            //       Flexible(
+                                            //         child: RichText(
+                                            //           text: TextSpan(
+                                            //             // text: '• ',
+                                            //             style: TextStyle(
+                                            //               fontSize: 14,
+                                            //               color: Colors.grey[800],
+                                            //             ),
+                                            //             children: <TextSpan>[
+                                            //               TextSpan(
+                                            //                   text: rem,
+                                            //                   style: GoogleFonts.ptSansNarrow(
+                                            //                       textStyle: TextStyle(
+                                            //                           fontSize:
+                                            //                               13,
+                                            //                           color: Colors
+                                            //                                   .grey[
+                                            //                               700],
+                                            //                           fontStyle:
+                                            //                               FontStyle
+                                            //                                   .italic))),
+                                            //             ],
+                                            //           ),
+                                            //         ),
+                                            //       )
+                                            //     ],
+                                            //   ),
+                                            // )
+                                          ],
+                                        ),
+                                      ),
+                                Divider(
+                                  thickness: 1,
+                                ),
+
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Provider.of<RegistrationController>(
+                                                context,
+                                                listen: false)
+                                            .getProdFromServiceSchedule(
+                                                value.servicescheduleList[index]
+                                                    ["form_id"],
+                                                value.servicescheduleList[index]
+                                                    ["qb_id"],
+                                                context);
+                                        ServiceProduct ser = ServiceProduct();
+                                        ser.showProdSheet(context, index);
+                                      },
                                       child: Row(
                                         children: [
-                                          Text("Complaints  : ",
-                                              style: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontSize: 13)),
-                                          Flexible(
-                                            child: Text(
-                                              rem,
-                                              style: TextStyle(
-                                                  color: Colors.grey[800],
-                                                  fontSize: 14),
-                                            ),
+                                          Text(
+                                            "View Product",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Image.asset(
+                                            "assets/eye.png",
+                                            color: Colors.green,
+                                            height: size.height * 0.021,
                                           )
                                         ],
                                       ),
                                     ),
-                              Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      Provider.of<RegistrationController>(
-                                              context,
-                                              listen: false)
-                                          .getProdFromServiceSchedule(
-                                              value.servicescheduleList[index]
-                                                  ["form_id"],
-                                              value.servicescheduleList[index]
-                                                  ["qb_id"],
-                                              context);
-                                      ServiceProduct ser = ServiceProduct();
-                                      ser.showProdSheet(context, index);
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "View Product",
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        Image.asset(
-                                          "assets/eye.png",
-                                          color: Colors.green,
-                                          height: size.height * 0.023,
-                                        )
-                                      ],
+                                    InkWell(
+                                      onTap: () {
+                                        Provider.of<QuotationController>(
+                                                context,
+                                                listen: false)
+                                            .getPreviousChat(
+                                                value.servicescheduleList[index]
+                                                    ["form_id"],
+                                                value.servicescheduleList[index]
+                                                    ["qb_id"],
+                                                context);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => ServiceChat(
+                                                    form_id: value
+                                                            .servicescheduleList[
+                                                        index]["form_id"],
+                                                    qb_id: value
+                                                            .servicescheduleList[
+                                                        index]["qb_id"],
+                                                    title: value
+                                                            .servicescheduleList[
+                                                        index]["cust_name"],
+                                                  )),
+                                        );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Add Remark",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Image.asset(
+                                            "assets/chat.png",
+                                            // color: Colors.green,
+                                            height: size.height * 0.021,
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Provider.of<QuotationController>(context,
-                                              listen: false)
-                                          .getPreviousChat(
-                                              value.servicescheduleList[index]
-                                                  ["form_id"],
-                                              value.servicescheduleList[index]
-                                                  ["qb_id"],
-                                              context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ServiceChat(
-                                                  form_id:
-                                                      value.servicescheduleList[
-                                                          index]["form_id"],
-                                                  qb_id:
-                                                      value.servicescheduleList[
-                                                          index]["qb_id"],
-                                                  title:
-                                                      value.servicescheduleList[
-                                                          index]["cust_name"],
-                                                )),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "Chat",
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        SizedBox(
-                                          width: 4,
-                                        ),
-                                        Image.asset(
-                                          "assets/chat.png",
-                                          // color: Colors.green,
-                                          height: size.height * 0.023,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              );
+                    );
+                  },
+                );
+              }
             }
           },
         ),

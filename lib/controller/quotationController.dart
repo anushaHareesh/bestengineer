@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -24,6 +25,9 @@ import '../screen/Quotation/pdfQuotation.dart';
 
 class QuotationController extends ChangeNotifier {
   String? todaydate;
+
+  bool isLoading = false;
+  String? reportdealerselected;
   int? sivd;
   bool ispdfOpend = false;
   bool isQuotSearch = false;
@@ -31,6 +35,8 @@ class QuotationController extends ChangeNotifier {
   String? dealerselected;
   String commonurlgolabl = Globaldata.commonapiglobal;
   bool isChatLoading = false;
+  String? fromDate;
+  String? todate;
 
   String? branchselected;
   List<Map<String, dynamic>> branchList = [
@@ -87,6 +93,9 @@ class QuotationController extends ChangeNotifier {
   bool flag = false;
 
   List<Map<String, dynamic>> quotProdItem = [];
+  List<Map<String, dynamic>> userwiseReportList = [];
+  List<Map<String, dynamic>> topItemList = [];
+
   List<Map<String, dynamic>> masterPdf = [];
   List<Map<String, dynamic>> detailPdf = [];
   List<Map<String, dynamic>> termsPdf = [];
@@ -94,8 +103,11 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> quotationList = [];
   List<Map<String, dynamic>> newquotationList = [];
   List<Map<String, dynamic>> serviceChatList = [];
+  List<Map<String, dynamic>> reportDealerList = [];
+  List<Map<String, dynamic>> dealerwiseProductList = [];
 
   List<Map<String, dynamic>> quotationEditList = [];
+  List<Map<String, dynamic>> dealerwiseReportList = [];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   String rawCalculation(
@@ -763,6 +775,17 @@ class QuotationController extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///////////////////////////////////////
+  setReportDealerDrop(String s) {
+    for (int i = 0; i < dealerList.length; i++) {
+      if (reportDealerList[i]["c_id"] == s) {
+        reportdealerselected = reportDealerList[i]["company_name"];
+      }
+    }
+    print("s------$s");
+    notifyListeners();
+  }
+
   ///////////////////////////////////////////////////////////
   setBranchDrop(String s) {
     for (int i = 0; i < branchList.length; i++) {
@@ -1304,6 +1327,240 @@ class QuotationController extends ChangeNotifier {
     });
   }
 
+  ///////////////////////////////////
+  setDate(String date1, String date2) {
+    fromDate = date1;
+    todate = date2;
+    print("gtyy----$fromDate----$todate");
+    notifyListeners();
+  }
+
   /////////////////////////////////////////////////////
- 
+  getReportDealerList(BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/dealer_list.php");
+
+          // print("delaerbb---$body");
+
+          http.Response response = await http.post(
+            url,
+            // body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("delaerrr map----$map");
+          reportDealerList.clear();
+          for (var item in map) {
+            reportDealerList.add(item);
+          }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////////
+  getDealerWiseProduct(
+      BuildContext context, String fromdate, String tilldate, String dealerId) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/dealer_wise_prdt.php");
+
+          Map body = {
+            "dealer_id": dealerId,
+            "from_date": fromdate,
+            "till_date": tilldate,
+          };
+          isLoading = true;
+          notifyListeners();
+          print("repoprtbjnmn body-----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("repoprtbjnmn body---- map----$map");
+          dealerwiseProductList.clear();
+          for (var item in map) {
+            dealerwiseProductList.add(item);
+          }
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////
+  getDealerWiseReport(
+    BuildContext context,
+    String fromdate,
+    String tilldate,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/dealer_wise_rpt.php");
+
+          Map body = {
+            "from_date": fromdate,
+            "till_date": tilldate,
+          };
+          isLoading = true;
+          notifyListeners();
+          print("dealer body-----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("dealerWise map---- map----$map");
+          dealerwiseReportList.clear();
+          for (var item in map) {
+            dealerwiseReportList.add(item);
+          }
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  //////////////////////////////////////////////////
+  getUserWiseReport(
+    BuildContext context,
+
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/userwise_rpt.php");
+
+          // Map body = {
+          //   "from_date": fromdate,
+          //   "till_date": tilldate,
+          // };
+          isLoading = true;
+          notifyListeners();
+          // print("dealer body-----$body");
+          http.Response response = await http.post(
+            url,
+            // body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("userwise map---- map----$map");
+          userwiseReportList.clear();
+          for (var item in map) {
+            userwiseReportList.add(item);
+          }
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  //////////////////////////////////////////////////
+  getTopItemListReport(
+    BuildContext context,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/top_items_rpt.php");
+
+          // Map body = {
+          //   "from_date": fromdate,
+          //   "till_date": tilldate,
+          // };
+          isLoading = true;
+          notifyListeners();
+          // print("dealer body-----$body");
+          http.Response response = await http.post(
+            url,
+            // body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("topItem map---- map----$map");
+          topItemList.clear();
+          for (var item in map) {
+            topItemList.add(item);
+          }
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
 }

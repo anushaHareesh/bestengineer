@@ -30,6 +30,14 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<RegistrationController>(context, listen: false).isLoginLoading =
+        false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return WillPopScope(

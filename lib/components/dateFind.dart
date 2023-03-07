@@ -1,5 +1,6 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -58,11 +59,11 @@ class DateFind {
     print("fromdate-----$fromDate---$toDate");
     // Provider.of<Controller>(context, listen: false).fromDate=fromDate;
     if (fromDate != null && toDate != null) {
-      Provider.of<ProductController>(context, listen: false)
+      Provider.of<QuotationController>(context, listen: false)
           .setDate(fromDate!, toDate!);
     }
     toDate = toDate == null
-        ? Provider.of<ProductController>(context, listen: false).todate.toString()
+        ? Provider.of<QuotationController>(context, listen: false).todate.toString()
         : toDate.toString();
   }
 }

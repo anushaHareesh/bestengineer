@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +32,7 @@ class RegistrationController extends ChangeNotifier {
   List<Map<String, dynamic>> scheduleList = [];
   List<Map<String, dynamic>> servicescheduleList = [];
   List<Map<String, dynamic>> servicesProdList = [];
-
+  List<bool> showComplaint = [];
   bool isSchedulelIstLoadind = false;
   String? staff_name;
   bool isLoading = false;
@@ -417,8 +418,8 @@ class RegistrationController extends ChangeNotifier {
           for (var item in map["master"]) {
             servicescheduleList.add(item);
           }
-          // servceScheduldate =
-          //     List.generate(servicescheduleList.length, (index) => "");
+          showComplaint =
+              List.generate(servicescheduleList.length, (index) => false);
           // for (int i = 0; i < servicescheduleList.length; i++) {
           //   servceScheduldate[i] = servicescheduleList[i]["installation_date"];
           // }
@@ -502,6 +503,7 @@ class RegistrationController extends ChangeNotifier {
     });
   }
 
+////////////////////////////////////////////////////////////////////////////////////
   getProdFromServiceSchedule(
       String form_id, String qb_id, BuildContext context) {
     NetConnection.networkConnection(context).then((value) async {
@@ -591,6 +593,63 @@ class RegistrationController extends ChangeNotifier {
           }
           // isChatLoading = false;
           // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  saveCompleteService(BuildContext context, String formId, String qbId,
+      String tot, String paid) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/complete_service.php");
+
+          Map body = {
+            'staff_id': user_id,
+            "staff_name": staff_nam,
+            "added_by": user_id,
+            "form_id": formId,
+            "qb_id": qbId,
+            "total_amount": tot,
+            "amount_paid": paid
+          };
+          isLoading = true;
+          notifyListeners();
+          print("save complete service----$body");
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          // http.Response response = await http.post(
+          //   url,
+          //   body: body,
+          // );
+          var map = jsonDecode(response.body);
+          print("save complete service --$map");
+          if (map["flag"] == 0) {
+            getServiceScheduleList(context, "jd");
+          }
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
         } catch (e) {
           print(e);
           // return null;

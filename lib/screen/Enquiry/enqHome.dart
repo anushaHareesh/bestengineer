@@ -13,6 +13,9 @@ import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
 import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:bestengineer/screen/Quotation/test.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
+import 'package:bestengineer/screen/reports/dealerWiseReport.dart';
+import 'package:bestengineer/screen/reports/topItemReport.dart';
+import 'package:bestengineer/screen/reports/userWiseReport.dart';
 import 'package:bestengineer/screen/service/serviceScheduleList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -27,6 +30,7 @@ import 'package:badges/badges.dart' as badges;
 import '../Dashboard/executiveDash.dart';
 import '../Dashboard/searchAutocomplete.dart';
 import '../Quotation/statusMonitoringQuotation.dart';
+import '../reports/dealerWiseProduct.dart';
 
 class EnqHome extends StatefulWidget {
   String? type;
@@ -234,6 +238,41 @@ class _EnqHomeState extends State<EnqHome> {
           Provider.of<RegistrationController>(context, listen: false)
               .getServiceScheduleList(context, "from menu");
           return ServiceScheduleList(type: "from menu");
+        }
+
+      case "DR1":
+        {
+          print("srghhh");
+
+          Provider.of<QuotationController>(context, listen: false)
+              .getDealerWiseReport(context, todaydate!, todaydate!);
+          return DealerWiseReport();
+        }
+
+      case "DP1":
+        {
+          print("srghhh");
+          Provider.of<QuotationController>(context, listen: false)
+              .reportdealerselected = null;
+          Provider.of<QuotationController>(context, listen: false)
+              .dealerwiseProductList = [];
+          Provider.of<QuotationController>(context, listen: false)
+              .getReportDealerList(context);
+          return DealerWiseProduct();
+        }
+      case "UW1":
+        {
+          Provider.of<QuotationController>(context, listen: false)
+              .getUserWiseReport(context);
+          return UserwiseReport();
+        }
+      case "TI1":
+        {
+          print("srghhh");
+
+          Provider.of<QuotationController>(context, listen: false)
+              .getTopItemListReport(context);
+          return TopItemReport();
         }
 
       // case "logout":
@@ -466,22 +505,31 @@ class _EnqHomeState extends State<EnqHome> {
                   Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "E2" ||
-                          Provider.of<RegistrationController>(context,
-                                      listen: false)
+                          Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "Q1" ||
-                          Provider.of<RegistrationController>(context,
-                                      listen: false)
+                          Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "SL1" ||
-                          Provider.of<RegistrationController>(context,
-                                      listen: false)
+                          Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "DS" ||
+                          Provider.of<RegistrationController>(context, listen: false)
+                                  .menu_index ==
+                              "SR" ||
+                          Provider.of<RegistrationController>(context, listen: false)
+                                  .menu_index ==
+                              "DR1" ||
+                          Provider.of<RegistrationController>(context, listen: false)
+                                  .menu_index ==
+                              "DP1" ||
+                          Provider.of<RegistrationController>(context, listen: false)
+                                  .menu_index ==
+                              "UW1" ||
                           Provider.of<RegistrationController>(context,
                                       listen: false)
                                   .menu_index ==
-                              "SR"
+                              "TI1"
                       ? Container()
                       : InkWell(
                           onTap: () {
@@ -522,47 +570,65 @@ class _EnqHomeState extends State<EnqHome> {
                               .menu_index ==
                           "Q1"
                       ? "QUOTATION LIST"
-                      : Provider.of<RegistrationController>(context,
-                                      listen: false)
+                      : Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "E2"
                           ? "ENQUIRY LIST"
-                          : Provider.of<RegistrationController>(context,
-                                          listen: false)
+                          : Provider.of<RegistrationController>(context, listen: false)
                                       .menu_index ==
                                   "E1"
                               ? "ENQUIRY"
-                              : Provider.of<RegistrationController>(context,
-                                              listen: false)
+                              : Provider.of<RegistrationController>(context, listen: false)
                                           .menu_index ==
                                       "SL1"
                                   ? "SCHEDULE LIST"
-                                  : Provider.of<RegistrationController>(context,
-                                                  listen: false)
+                                  : Provider.of<RegistrationController>(context, listen: false)
                                               .menu_index ==
                                           "SR"
                                       ? " SERVICE SCHEDULE LIST"
-                                      : "",
+                                      : Provider.of<RegistrationController>(context, listen: false)
+                                                  .menu_index ==
+                                              "DR1"
+                                          ? "DEALERWISE REPORT"
+                                          : Provider.of<RegistrationController>(context,
+                                                          listen: false)
+                                                      .menu_index ==
+                                                  "DP1"
+                                              ? "DEALER WISE PRODUCT"
+                                              : Provider.of<RegistrationController>(context, listen: false).menu_index == "UW1"
+                                                  ? "USER WISE REPORT"
+                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "DP1"
+                                                      ? "TOP ITEMS"
+                                                      : "",
                   style: TextStyle(fontSize: 15),
                 ),
-                backgroundColor:
-                    Provider.of<RegistrationController>(context, listen: false)
-                                    .menu_index ==
-                                "E2" ||
-                            Provider.of<RegistrationController>(context,
-                                        listen: false)
-                                    .menu_index ==
-                                "Q1" ||
-                            Provider.of<RegistrationController>(context,
-                                        listen: false)
-                                    .menu_index ==
-                                "SL1" ||
-                            Provider.of<RegistrationController>(context,
-                                        listen: false)
-                                    .menu_index ==
-                                "SR"
-                        ? P_Settings.loginPagetheme
-                        : P_Settings.whiteColor,
+                backgroundColor: Provider.of<RegistrationController>(context,
+                                    listen: false)
+                                .menu_index ==
+                            "E2" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "Q1" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "SL1" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "SR" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "DR1" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "DP1" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "UW1" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "TI1"
+                    ? P_Settings.loginPagetheme
+                    : P_Settings.whiteColor,
                 elevation: 1,
                 leading: Consumer<RegistrationController>(
                   builder: (context, value, child) {
@@ -574,7 +640,11 @@ class _EnqHomeState extends State<EnqHome> {
                             color: value.menu_index == "E2" ||
                                     value.menu_index == "Q1" ||
                                     value.menu_index == "SL1" ||
-                                    value.menu_index == "SR"
+                                    value.menu_index == "SR" ||
+                                    value.menu_index == "DR1" ||
+                                    value.menu_index == "DP1" ||
+                                    value.menu_index == "UW1" ||
+                                    value.menu_index == "TI1"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },

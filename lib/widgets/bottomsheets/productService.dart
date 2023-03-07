@@ -84,7 +84,7 @@ class ServiceProduct {
                                               AssetImage("assets/noImg.png"),
                                         ),
                                         title: Text(
-                                          "${value.servicesProdList[index]["product_name"]}",
+                                          "${value.servicesProdList[index]["product_name"]}",style: TextStyle(fontSize: 13),
                                         ),
                                         subtitle: Row(
                                           children: [

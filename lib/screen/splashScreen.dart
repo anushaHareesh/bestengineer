@@ -30,37 +30,37 @@ class _SplashScreenState extends State<SplashScreen> {
       st_uname = prefs.getString("st_uname");
       st_pwd = prefs.getString("st_pwd");
 
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (Context) {
-        if (cid != null) {
-          // return DashboardPage();
-          if (st_uname != null && st_pwd != null) {
-            print("fhhh");
-            return EnqHome();
-          } else {
-            return LoginPage();
-          }
-        } else {
-          return RegistrationScreen();
-        }
-      }), (route) => false);
-      // Navigator.push(
-      //     context,
-      //     PageRouteBuilder(
-      //         opaque: false, // set to false
-      //         pageBuilder: (_, __, ___) {
-      //           if (cid != null) {
-      //             // return DashboardPage();
-      //             if (st_uname != null && st_pwd != null) {
-      //               print("fhhh");
-      //               return EnqHome();
-      //             } else {
-      //               return LoginPage();
-      //             }
-      //           } else {
-      //             return RegistrationScreen();
-      //           }
-      //         }));
+      // Navigator.pushAndRemoveUntil(context,
+      //     MaterialPageRoute(builder: (Context) {
+      //   if (cid != null) {
+      //     // return DashboardPage();
+      //     if (st_uname != null && st_pwd != null) {
+      //       print("fhhh");
+      //       return EnqHome();
+      //     } else {
+      //       return LoginPage();
+      //     }
+      //   } else {
+      //     return RegistrationScreen();
+      //   }
+      // }), (route) => false);
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              opaque: false, // set to false
+              pageBuilder: (_, __, ___) {
+                if (cid != null) {
+                  // return DashboardPage();
+                  if (st_uname != null && st_pwd != null) {
+                    print("fhhh");
+                    return EnqHome();
+                  } else {
+                    return LoginPage();
+                  }
+                } else {
+                  return RegistrationScreen();
+                }
+              }));
     });
   }
 
@@ -84,9 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       } else if (mobile_menu_type == "2") {
         Provider.of<RegistrationController>(context, listen: false)
-            .getServiceScheduleList(
-          context,""
-        );
+            .getServiceScheduleList(context, "");
       }
 
       if (Provider.of<RegistrationController>(context, listen: false)
