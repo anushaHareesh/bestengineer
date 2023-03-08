@@ -1,4 +1,4 @@
-import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/components/customSnackbar.dart';
 import 'package:bestengineer/components/dateFind.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -7,21 +7,21 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/customSnackbar.dart';
+import '../../components/commonColor.dart';
 import '../../controller/quotationController.dart';
 
-class DealerWiseProduct extends StatefulWidget {
-  const DealerWiseProduct({super.key});
+class CustomerWiseReport extends StatefulWidget {
+  const CustomerWiseReport({super.key});
 
   @override
-  State<DealerWiseProduct> createState() => _DealerWiseProductState();
+  State<CustomerWiseReport> createState() => _CustomerWiseReportState();
 }
 
-class _DealerWiseProductState extends State<DealerWiseProduct> {
+class _CustomerWiseReportState extends State<CustomerWiseReport> {
+  String? selected;
   DateFind dateFind = DateFind();
   String? todaydate;
   DateTime now = DateTime.now();
-  String? selected;
   @override
   void initState() {
     // TODO: implement initState
@@ -33,6 +33,7 @@ class _DealerWiseProductState extends State<DealerWiseProduct> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Consumer<QuotationController>(
         builder: (context, value, child) {
@@ -170,7 +171,7 @@ class _DealerWiseProductState extends State<DealerWiseProduct> {
                             // isDense: true,
                             hint: Text(
                               value.reportdealerselected == null
-                                  ? "Select Dealer.."
+                                  ? "Select Customer.."
                                   : value.reportdealerselected!,
                               style: TextStyle(fontSize: 14),
                             ),
@@ -232,15 +233,15 @@ class _DealerWiseProductState extends State<DealerWiseProduct> {
                             } else {
                               tf = value.todate.toString();
                             }
-
+                            print("selected-----$selected");
                             if (selected == null || selected!.isEmpty) {
                               CustomSnackbar snackbar = CustomSnackbar();
                               snackbar.showSnackbar(
-                                  context, "Please Select Dealer !!!", "");
+                                  context, "Please Select Customer !!!", "");
                             } else {
                               Provider.of<QuotationController>(context,
                                       listen: false)
-                                  .getDealerWiseProduct(
+                                  .getCustomerwiseReport(
                                       context, df, tf, selected!);
                             }
                           },
@@ -271,7 +272,7 @@ class _DealerWiseProductState extends State<DealerWiseProduct> {
                         ],
                       ),
                     )
-                  : value.dealerwiseProductList.length == 0
+                  : value.customerwiseReport.length == 0
                       ? Container(
                           height: size.height * 0.6,
                           child: Column(
@@ -285,99 +286,32 @@ class _DealerWiseProductState extends State<DealerWiseProduct> {
                         )
                       : Expanded(
                           child: ListView.builder(
-                            itemCount: value.dealerwiseProductList.length,
+                            itemCount: value.customerwiseReport.length,
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Card(
-                                  elevation: 4,
-                                  // color: Colors.grey[100],
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ListTile(
-                                      // leading: CircleAvatar(
-                                      //   backgroundImage: AssetImage("assets/noImg.png"),
-                                      // ),
-                                      title: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Flexible(
-                                                child: Text(
-                                                  value.dealerwiseProductList[
-                                                      index]["product_name"],
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.grey[700]),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          // Divider()
-                                        ],
+                              return Card(
+                                child: ListTile(
+                                  title: Text(
+                                    value.customerwiseReport[index]
+                                        ["product_name"],
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey[600]),
+                                  ),
+                                  subtitle: Row(
+                                    children: [
+                                      Text(
+                                        "Warranty Start Date  :  ",
+                                        style: TextStyle(color: Colors.grey),
                                       ),
-                                      // trailing: Wrap(
-                                      //   children: [
-                                      //     Text(
-                                      //       "Qty : ",
-                                      //     ),
-                                      //     Text(
-                                      //       value.dealerwiseProductList[index]["qty"],
-                                      //     ),
-                                      //   ],
-                                      // ),
-                                      subtitle: Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "Inv No  :   ",
-                                                  style: TextStyle(
-                                                      color: Colors.grey[500]),
-                                                ),
-                                                Flexible(
-                                                  child: Text(
-                                                    // "shhsjsf/19/20000/2000/2000/20002/28/2567/2435465",
-                                                    value.dealerwiseProductList[
-                                                        index]["s_invoice_no"],
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color:
-                                                            Colors.grey[700]),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: size.height * 0.01,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "Qty        :   ",
-                                                  style: TextStyle(
-                                                      color: Colors.grey[500]),
-                                                ),
-                                                Text(
-                                                  value.dealerwiseProductList[
-                                                      index]["qty"],
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey[700]),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
+                                      Text(
+                                        value.customerwiseReport[index]
+                                            ["waranty_start_date"],
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
                               );

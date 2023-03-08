@@ -29,6 +29,7 @@ class EnqList {
   String? custId;
   String? addedOn;
   String? verify_status;
+  String? l_color;
 
   EnqList(
       {this.enqId,
@@ -36,7 +37,9 @@ class EnqList {
       this.ownerName,
       this.companyName,
       this.custId,
-      this.addedOn,this.verify_status});
+      this.addedOn,
+      this.verify_status,
+      this.l_color});
 
   EnqList.fromJson(Map<String, dynamic> json) {
     enqId = json['enq_id'];
@@ -46,7 +49,7 @@ class EnqList {
     custId = json['cust_id'];
     addedOn = json['added_on'];
     verify_status = json['verify_status'];
-
+    l_color = json['l_color'];
   }
 
   Map<String, dynamic> toJson() {
@@ -58,6 +61,7 @@ class EnqList {
     data['cust_id'] = this.custId;
     data['added_on'] = this.addedOn;
     data['verify_status'] = this.verify_status;
+    data['l_color'] = this.l_color;
 
     return data;
   }

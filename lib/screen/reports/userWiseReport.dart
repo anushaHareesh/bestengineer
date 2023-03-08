@@ -53,7 +53,7 @@ class _UserwiseReportState extends State<UserwiseReport> {
                                       .toUpperCase(),
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.grey[700],
+                                      color: P_Settings.loginPagetheme,
                                       fontWeight: FontWeight.bold),
                                 )
                               ],
@@ -83,7 +83,7 @@ class _UserwiseReportState extends State<UserwiseReport> {
                                 Expanded(
                                   // width: size.width*0.4,
                                   child: Text(
-                                    "Enq Count : ",
+                                    "Enquiry Count",
                                     style: TextStyle(
                                         color: Colors.grey[500], fontSize: 13),
                                   ),
@@ -102,7 +102,7 @@ class _UserwiseReportState extends State<UserwiseReport> {
                                   Expanded(
                                     // width: size.width*0.4,
                                     child: Text(
-                                      "Quotation Conirmed: ",
+                                      "Quotation Conirmed ",
                                       style: TextStyle(
                                           color: Colors.grey[500],
                                           fontSize: 13),
@@ -123,7 +123,7 @@ class _UserwiseReportState extends State<UserwiseReport> {
                                   Expanded(
                                     // width: size.width*0.4,
                                     child: Text(
-                                      "Quotation Pending: ",
+                                      "Quotation Pending",
                                       style: TextStyle(
                                           color: Colors.grey[500],
                                           fontSize: 13),

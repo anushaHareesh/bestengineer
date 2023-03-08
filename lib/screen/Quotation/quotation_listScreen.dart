@@ -31,6 +31,17 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
   List<String> s = [];
   String? todaydate;
   String? date;
+  Color parseColor(String color) {
+    print("Colorrrrr...$color");
+    String hex = color.replaceAll("#", "");
+    if (hex.isEmpty) hex = "ffffff";
+    if (hex.length == 3) {
+      hex =
+          '${hex.substring(0, 1)}${hex.substring(0, 1)}${hex.substring(1, 2)}${hex.substring(1, 2)}${hex.substring(2, 3)}${hex.substring(2, 3)}';
+    }
+    Color col = Color(int.parse(hex, radix: 16)).withOpacity(1.0);
+    return col;
+  }
 
   @override
   void initState() {
@@ -153,9 +164,15 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
           padding: const EdgeInsets.only(left: 8.0, right: 8, top: 5),
           child: ExpansionTileCard(
             elevation: 4,
-            baseColor: Color.fromARGB(255, 248, 246, 246),
+            baseColor: value.quotationList[index]["p_color"] == null ||
+                    value.quotationList[index]["p_color"].isEmpty
+                ? Colors.grey[100]
+                : parseColor(value.quotationList[index]["p_color"]),
             expandedColor: Color.fromARGB(255, 248, 246, 246),
-            // key: cardA,
+            // shadowColor: value.quotationList[index]["p_color"] == null ||
+            //         value.quotationList[index]["p_color"].isEmpty
+            //     ? Colors.grey
+            //     : parseColor(value.quotationList[index]["p_color"]),
             leading:
                 CircleAvatar(backgroundImage: AssetImage("assets/man.png")),
             title: Text(value.quotationList[index]["cname"]),
@@ -401,7 +418,10 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
           padding: const EdgeInsets.only(left: 8.0, right: 8, top: 5),
           child: ExpansionTileCard(
             elevation: 4,
-            baseColor: Color.fromARGB(255, 248, 246, 246),
+            baseColor: value.newquotationList[index]["p_color"] == null ||
+                    value.newquotationList[index]["p_color"].isEmpty
+                ? Colors.grey[100]
+                : parseColor(value.newquotationList[index]["p_color"]),
             expandedColor: Color.fromARGB(255, 248, 246, 246),
             // key: cardA,
             leading: CircleAvatar(child: Image.asset("assets/man.png")),

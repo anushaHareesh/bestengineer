@@ -19,6 +19,18 @@ class ScheduleListScreen extends StatefulWidget {
 }
 
 class _ScheduleListScreenState extends State<ScheduleListScreen> {
+  Color parseColor(String color) {
+    print("Colorrrrr...$color");
+    String hex = color.replaceAll("#", "");
+    if (hex.isEmpty) hex = "ffffff";
+    if (hex.length == 3) {
+      hex =
+          '${hex.substring(0, 1)}${hex.substring(0, 1)}${hex.substring(1, 2)}${hex.substring(1, 2)}${hex.substring(2, 3)}${hex.substring(2, 3)}';
+    }
+    Color col = Color(int.parse(hex, radix: 16)).withOpacity(1.0);
+    return col;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,7 +308,7 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
           },
           child: Card(
             elevation: 3,
-            color: Color.fromARGB(255, 250, 250, 250),
+            // color: Colors.red,
             child: Column(
               children: [
                 Padding(
@@ -311,12 +323,22 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                               .toString()
                               .toUpperCase(),
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
+                              fontSize: 13, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
                 ),
+                Divider(
+                  indent: 50,
+                  endIndent: 50,
+                  thickness: 4,
+                  color: value.scheduleList[index]["l_color"] == null ||
+                          value.scheduleList[index]["l_color"].isEmpty
+                      ? Colors.grey[100]
+                      : parseColor(value.scheduleList[index]["l_color"]),
+                ),
+
                 // Row(
                 //   children: [
                 //     Column(
@@ -339,9 +361,20 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                 //   ],
                 // )
                 ListTile(
-                  title: Text(
-                    value.scheduleList[index]["s_invoice_no"].toString(),
-                    style: TextStyle(fontSize: 14),
+                  title: Row(
+                    children: [
+                      Text(
+                        "Inv No : ",
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                      Flexible(
+                        child: Text(
+                          value.scheduleList[index]["s_invoice_no"].toString(),
+                          style:
+                              TextStyle(fontSize: 13, color: Colors.grey[900]),
+                        ),
+                      ),
+                    ],
                   ),
                   leading:
                       // Image.asset("assets/calendar.png",height: 25,),
@@ -363,8 +396,8 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                       Text(
                         value.scheduleList[index]["s_invoice_date"].toString(),
                         style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
+                            fontSize: 13,
+                            color: Colors.grey[700],
                             fontStyle: FontStyle.italic),
                       ),
                     ],

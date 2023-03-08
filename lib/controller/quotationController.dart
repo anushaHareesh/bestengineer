@@ -95,6 +95,7 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> quotProdItem = [];
   List<Map<String, dynamic>> userwiseReportList = [];
   List<Map<String, dynamic>> topItemList = [];
+  List<Map<String, dynamic>> customerwiseReport = [];
 
   List<Map<String, dynamic>> masterPdf = [];
   List<Map<String, dynamic>> detailPdf = [];
@@ -777,9 +778,12 @@ class QuotationController extends ChangeNotifier {
 
   ///////////////////////////////////////
   setReportDealerDrop(String s) {
-    for (int i = 0; i < dealerList.length; i++) {
+    for (int i = 0; i < reportDealerList.length; i++) {
+      print("com------${reportDealerList[i]["c_id"]}---$s");
       if (reportDealerList[i]["c_id"] == s) {
         reportdealerselected = reportDealerList[i]["company_name"];
+        print("reportdealerselected---$reportdealerselected");
+        // notifyListeners();
       }
     }
     print("s------$s");
@@ -1336,7 +1340,7 @@ class QuotationController extends ChangeNotifier {
   }
 
   /////////////////////////////////////////////////////
-  getReportDealerList(BuildContext context) {
+  getReportDealerList(BuildContext context, String type) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -1351,18 +1355,19 @@ class QuotationController extends ChangeNotifier {
           // notifyListeners();
           Uri url = Uri.parse("$urlgolabl/dealer_list.php");
 
-          // print("delaerbb---$body");
+          Map body = {"type": type};
 
           http.Response response = await http.post(
             url,
-            // body: body,
+            body: body,
           );
           var map = jsonDecode(response.body);
-          print("delaerrr map----$map");
+
           reportDealerList.clear();
           for (var item in map) {
             reportDealerList.add(item);
           }
+          print("reportDealerList----$reportDealerList");
           notifyListeners();
         } catch (e) {
           print(e);
@@ -1472,7 +1477,6 @@ class QuotationController extends ChangeNotifier {
   //////////////////////////////////////////////////
   getUserWiseReport(
     BuildContext context,
-
   ) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
@@ -1552,6 +1556,54 @@ class QuotationController extends ChangeNotifier {
           for (var item in map) {
             topItemList.add(item);
           }
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////
+  getCustomerwiseReport(
+      BuildContext context, String fromdate, String tilldate, String custid) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/customer_wise_rpt.php");
+
+          Map body = {
+            "cust_id": custid,
+            "from_date": fromdate,
+            "till_date": tilldate,
+          };
+          isLoading = true;
+          notifyListeners();
+          print("cust body----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          customerwiseReport.clear();
+          for (var item in map) {
+            customerwiseReport.add(item);
+          }
+          print("cust --- body---- map----$customerwiseReport");
+
           isLoading = false;
           notifyListeners();
           notifyListeners();

@@ -287,7 +287,7 @@ class RegistrationController extends ChangeNotifier {
 
           print("jhjkd---$mobile_menu_type");
           if (mobile_menu_type == "1" || mobile_menu_type == "3") {
-            getScheduleList(context);
+            getScheduleList(context, "");
           } else if (mobile_menu_type == "2") {
             getServiceScheduleList(context, "");
           }
@@ -324,9 +324,7 @@ class RegistrationController extends ChangeNotifier {
   }
 
 /////////////////////////////////////////////////////////////////////
-  getScheduleList(
-    BuildContext context,
-  ) {
+  getScheduleList(BuildContext context, String type) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -361,13 +359,15 @@ class RegistrationController extends ChangeNotifier {
           }
           isSchedulelIstLoadind = false;
           notifyListeners();
-          if (mobile_menu_type == "3") {
-            getServiceScheduleList(context, "");
-          } else if (mobile_menu_type == "1") {
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (Context) {
-              return EnqHome();
-            }), (route) => false);
+          if (type == "") {
+            if (mobile_menu_type == "3") {
+              getServiceScheduleList(context, "");
+            } else if (mobile_menu_type == "1") {
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (Context) {
+                return EnqHome();
+              }), (route) => false);
+            }
           }
 
           // Navigator.push(
@@ -470,6 +470,7 @@ class RegistrationController extends ChangeNotifier {
             "form_id": form_id,
             "next_date": date,
             "qb_id": qb_id,
+            "type": "2"
           };
 
           print("save schedue---service---$body");
@@ -589,7 +590,7 @@ class RegistrationController extends ChangeNotifier {
               backgroundColor: Colors.green,
             );
 
-            getScheduleList(context);
+            getScheduleList(context, "");
           }
           // isChatLoading = false;
           // notifyListeners();

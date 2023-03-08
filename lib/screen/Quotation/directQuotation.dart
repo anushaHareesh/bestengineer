@@ -63,6 +63,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                 InkWell(
                   onTap: () {
                     RemarkSheet remark = RemarkSheet();
+                    value.branchselected=null;
                     remark.showRemarkSheet(_scaffoldKey.currentContext!, sdate!,
                         widget.enqId, _scaffoldKey, _keyLoader, "add", "0");
                   },

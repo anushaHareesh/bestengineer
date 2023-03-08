@@ -53,7 +53,7 @@ class ShowComplaintsSheet {
                 Divider(),
                 Padding(
                   padding:
-                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 30),
                   child: Row(
                     children: [Flexible(child: Text(complaint))],
                   ),

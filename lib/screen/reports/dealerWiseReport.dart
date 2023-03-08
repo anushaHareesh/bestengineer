@@ -244,6 +244,14 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                                                 top: 10.0),
                                             child: Row(
                                               children: [
+                                                Icon(
+                                                  Icons.numbers,
+                                                  color: Colors.blue,
+                                                  size: 16,
+                                                ),
+                                                SizedBox(
+                                                  width: size.height * 0.01,
+                                                ),
                                                 Text(
                                                   "Inv No           :   ",
                                                   style: TextStyle(
@@ -257,8 +265,10 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                                                             ["s_invoice_no"]
                                                         .toString()
                                                         .toUpperCase(),
-                                                    style:
-                                                        TextStyle(fontSize: 14,color: Colors.grey[700]),
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color:
+                                                            Colors.grey[700]),
                                                   ),
                                                 )
                                               ],
@@ -269,6 +279,14 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                                                 const EdgeInsets.only(top: 8.0),
                                             child: Row(
                                               children: [
+                                                Icon(
+                                                  Icons.calendar_month,
+                                                  color: Colors.orange,
+                                                  size: 16,
+                                                ),
+                                                SizedBox(
+                                                  width: size.height * 0.01,
+                                                ),
                                                 Text(
                                                   "Inv date        :   ",
                                                   style: TextStyle(
@@ -282,8 +300,10 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                                                             ["s_invoice_date"]
                                                         .toString()
                                                         .toUpperCase(),
-                                                    style:
-                                                        TextStyle(fontSize: 14,color: Colors.grey[700]),
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color:
+                                                            Colors.grey[700]),
                                                   ),
                                                 )
                                               ],
@@ -294,6 +314,14 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                                                 const EdgeInsets.only(top: 8.0),
                                             child: Row(
                                               children: [
+                                                Icon(
+                                                  Icons.business,
+                                                  color: Colors.brown,
+                                                  size: 16,
+                                                ),
+                                                SizedBox(
+                                                  width: size.height * 0.01,
+                                                ),
                                                 Text(
                                                   "Com Name :   ",
                                                   style: TextStyle(
@@ -306,8 +334,10 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                                                             index]
                                                             ["company_name"]
                                                         .toString(),
-                                                    style:
-                                                        TextStyle(fontSize: 14,color: Colors.grey[700]),
+                                                    style: TextStyle(
+                                                        fontSize: 13 ,
+                                                        color:
+                                                            Colors.grey[700]),
                                                   ),
                                                 )
                                               ],

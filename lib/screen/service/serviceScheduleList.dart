@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import '../../controller/controller.dart';
 import '../../widgets/bottomsheets/productService.dart';
 import '../../widgets/bottomsheets/showComplaint.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ServiceScheduleList extends StatefulWidget {
   String? type;
@@ -28,6 +29,26 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
   DateTime currentDate = DateTime.now();
   String? todaydate;
   String? date;
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Color parseColor(String color) {
+    print("Colorrrrr...$color");
+    String hex = color.replaceAll("#", "");
+    if (hex.isEmpty) hex = "ffffff";
+    if (hex.length == 3) {
+      hex =
+          '${hex.substring(0, 1)}${hex.substring(0, 1)}${hex.substring(1, 2)}${hex.substring(1, 2)}${hex.substring(2, 3)}${hex.substring(2, 3)}';
+    }
+    Color col = Color(int.parse(hex, radix: 16)).withOpacity(1.0);
+    return col;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -76,22 +97,19 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                           padding: const EdgeInsets.all(3),
                           child: ListTile(
                             onTap: () {
-                              CompleteService completeSrvice =
-                                  CompleteService();
-                              completeSrvice.showCompleteServiceSheet(
-                                context,
-                                value.servicescheduleList[index]["cust_name"],
-                                value.servicescheduleList[index]["form_id"],
-                                value.servicescheduleList[index]["qb_id"],
-                              );
-                              // Provider.of<RegistrationController>(context,
-                              //         listen: false)
-                              //     .getProdFromServiceSchedule(
-                              //         value.servicescheduleList[index]["form_id"],
-                              //         value.servicescheduleList[index]["qb_id"],
-                              //         context);
-                              // ServiceProduct ser = ServiceProduct();
-                              // ser.showProdSheet(context, index);
+                              // if (value.servicescheduleList[index]
+                              //             ["complaints"] !=
+                              //         null &&
+                              //     value.servicescheduleList[index]["complaints"]
+                              //         .isNotEmpty) {
+                              //   ShowComplaintsSheet com = ShowComplaintsSheet();
+                              //   com.showComplaintSheet(
+                              //       context,
+                              //       value.servicescheduleList[index]
+                              //           ["cust_name"],
+                              //       value.servicescheduleList[index]
+                              //           ["complaints"]);
+                              // }
                             },
                             title: Column(
                               children: [
@@ -103,8 +121,8 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                           "${value.servicescheduleList[index]["cust_name"]}"
                                               .toUpperCase(),
                                           style: TextStyle(
-                                              color: Colors.grey[800],
-                                              fontSize: 14,
+                                              color: Colors.grey[600],
+                                              fontSize: 13,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       )
@@ -120,10 +138,17 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                         padding:
                                             const EdgeInsets.only(top: 8.0),
                                         child: Row(children: [
-                                          Icon(
-                                            Icons.phone,
-                                            color: Colors.blue,
-                                            size: 15,
+                                          InkWell(
+                                            onTap: () {
+                                              _makePhoneCall(
+                                                  value.servicescheduleList[
+                                                      index]["cust_phn"]);
+                                            },
+                                            child: Icon(
+                                              Icons.phone,
+                                              color: Colors.blue,
+                                              size: 15,
+                                            ),
                                           ),
                                           SizedBox(
                                             width: 10,
@@ -183,9 +208,31 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                         Text(
                                             "${value.servicescheduleList[index]["type"]}",
                                             style: TextStyle(
-                                                color: Colors.grey[800],
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
                                                 fontSize: 14))
                                       ]),
+                                      Container(
+                                        height: size.height * 0.03,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.green),
+                                            onPressed: () {
+                                              CompleteService completeSrvice =
+                                                  CompleteService();
+                                              completeSrvice
+                                                  .showCompleteServiceSheet(
+                                                context,
+                                                value.servicescheduleList[index]
+                                                    ["cust_name"],
+                                                value.servicescheduleList[index]
+                                                    ["form_id"],
+                                                value.servicescheduleList[index]
+                                                    ["qb_id"],
+                                              );
+                                            },
+                                            child: Text("Finish")),
+                                      )
                                       // InkWell(
                                       //   onTap: () {
                                       //     Provider.of<QuotationController>(
@@ -233,7 +280,7 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                     },
                                     child: Row(
                                       children: [
-                                        Text("Choose Installation date  :  ",
+                                        Text("Choose Service date  :  ",
                                             style: TextStyle(
                                                 color: Colors.grey[600],
                                                 fontSize: 13)),
@@ -318,9 +365,9 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                                   Container(
                                                     alignment: Alignment.center,
                                                     child: Image.asset(
-                                                      "assets/downarrow.png",
-                                                      height: 12,
-                                                      color: Colors.brown,
+                                                      "assets/notes.png",
+                                                      height: 16,
+                                                      // color: Colors.brown,
                                                     ),
                                                   )
                                                   // Expanded(
@@ -384,8 +431,22 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                           ],
                                         ),
                                       ),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Divider(
-                                  thickness: 1,
+                                  thickness: 4,
+                                  color: value.servicescheduleList[index]
+                                                  ["l_color"] ==
+                                              null ||
+                                          value
+                                              .servicescheduleList[index]
+                                                  ["l_color"]!
+                                              .isEmpty
+                                      ? Colors.grey[100]
+                                      : parseColor(value
+                                          .servicescheduleList[index]["l_color"]
+                                          .toString()),
                                 ),
 
                                 Row(
@@ -412,16 +473,18 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                             "View Product",
                                             style: TextStyle(
                                                 fontSize: 12,
-                                                color: Colors.green,
-                                                fontWeight: FontWeight.bold),
+                                                color: Color.fromARGB(
+                                                    255, 145, 26, 17),
+                                                fontWeight: FontWeight.w500),
                                           ),
                                           SizedBox(
                                             width: 4,
                                           ),
                                           Image.asset(
                                             "assets/eye.png",
-                                            color: Colors.green,
-                                            height: size.height * 0.021,
+                                            color: Color.fromARGB(
+                                                255, 145, 26, 17),
+                                            height: size.height * 0.018,
                                           )
                                         ],
                                       ),
@@ -460,7 +523,7 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                             style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.blue,
-                                                fontWeight: FontWeight.bold),
+                                                fontWeight: FontWeight.w500),
                                           ),
                                           SizedBox(
                                             width: 4,
@@ -468,7 +531,7 @@ class _ServiceScheduleListState extends State<ServiceScheduleList> {
                                           Image.asset(
                                             "assets/chat.png",
                                             // color: Colors.green,
-                                            height: size.height * 0.021,
+                                            height: size.height * 0.018,
                                           )
                                         ],
                                       ),

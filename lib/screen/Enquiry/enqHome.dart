@@ -13,6 +13,7 @@ import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
 import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:bestengineer/screen/Quotation/test.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
+import 'package:bestengineer/screen/reports/customerwiseReport.dart';
 import 'package:bestengineer/screen/reports/dealerWiseReport.dart';
 import 'package:bestengineer/screen/reports/topItemReport.dart';
 import 'package:bestengineer/screen/reports/userWiseReport.dart';
@@ -61,17 +62,18 @@ class _EnqHomeState extends State<EnqHome> {
   List<Widget> drawerOpts = [];
   // final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   customNotification() {
-    print("fhjzklfkdx");
+    print(
+        "fhjzklfkdx--${Provider.of<RegistrationController>(context, listen: false).scheduleListCount}");
     AwesomeDialog(
       context: context,
       dialogType: DialogType.info,
       headerAnimationLoop: false,
       animType: AnimType.bottomSlide,
       // title: 'Reminder',
-      descTextStyle: TextStyle(fontSize: 18),
+      descTextStyle: TextStyle(fontSize: 15),
       desc: mobile_user_type == "1"
-          ? 'You have ${Provider.of<RegistrationController>(context, listen: false).scheduleListCount} schedules on tomorrow !!! '
-          : 'You have ${Provider.of<RegistrationController>(context, listen: false).servicescheduleListCount} service tomorrow !!! ',
+          ? 'You have ${Provider.of<RegistrationController>(context, listen: false).scheduleListCount} schedules for tomorrow !!! '
+          : 'You have ${Provider.of<RegistrationController>(context, listen: false).servicescheduleListCount} service for tomorrow !!! ',
 
       buttonsTextStyle: const TextStyle(color: Colors.black),
       showCloseIcon: true,
@@ -85,10 +87,17 @@ class _EnqHomeState extends State<EnqHome> {
             .scheduleOpend = true;
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => ScheduleListScreen(
-                    type: "from not",
-                  )),
+          MaterialPageRoute(builder: (context) {
+            if (mobile_user_type == "1") {
+              return ScheduleListScreen(
+                type: "from not",
+              );
+            } else {
+              return ServiceScheduleList(
+                type: "from not",
+              );
+            }
+          }),
         );
         // Navigator.pop(context);
       },
@@ -119,20 +128,20 @@ class _EnqHomeState extends State<EnqHome> {
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print(
-          "kjfs---${Provider.of<RegistrationController>(context, listen: false).scheduleOpend}");
-      if (Provider.of<RegistrationController>(context,
-                      listen: false)
-                  .scheduleListCount >
-              0 &&
-          Provider.of<RegistrationController>(context, listen: false)
-                  .scheduleOpend ==
-              false &&
-          mobile_user_type != "3") {
-        customNotification();
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   print(
+    //       "kjfs---${Provider.of<RegistrationController>(context, listen: false).scheduleOpend}");
+    //   if (Provider.of<RegistrationController>(context,
+    //                   listen: false)
+    //               .scheduleListCount >
+    //           0 &&
+    //       Provider.of<RegistrationController>(context, listen: false)
+    //               .scheduleOpend ==
+    //           false &&
+    //       mobile_user_type != "3") {
+    //     customNotification();
+    //   }
+    // });
   }
 
   bool visible = false;
@@ -216,10 +225,8 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "SL1":
         {
-          // Provider.of<RegistrationController>(context, listen: false)
-          //     .getScheduleList(
-          //   context,
-          // );
+          Provider.of<RegistrationController>(context, listen: false)
+              .getScheduleList(context, "menu");
           return ScheduleListScreen(
             type: "from menu",
           );
@@ -257,7 +264,9 @@ class _EnqHomeState extends State<EnqHome> {
           Provider.of<QuotationController>(context, listen: false)
               .dealerwiseProductList = [];
           Provider.of<QuotationController>(context, listen: false)
-              .getReportDealerList(context);
+              .reportDealerList = [];
+          Provider.of<QuotationController>(context, listen: false)
+              .getReportDealerList(context, "1");
           return DealerWiseProduct();
         }
       case "UW1":
@@ -274,6 +283,17 @@ class _EnqHomeState extends State<EnqHome> {
               .getTopItemListReport(context);
           return TopItemReport();
         }
+      case "CR1":
+        {
+          print("srghhh");
+          Provider.of<QuotationController>(context, listen: false)
+              .reportDealerList = [];
+          Provider.of<QuotationController>(context, listen: false)
+              .reportdealerselected = null;
+          Provider.of<QuotationController>(context, listen: false)
+              .getReportDealerList(context, "0");
+          return CustomerWiseReport();
+        }
 
       // case "logout":
       //   logout();
@@ -283,6 +303,28 @@ class _EnqHomeState extends State<EnqHome> {
   shared() async {
     final prefs = await SharedPreferences.getInstance();
     mobile_user_type = prefs.getString("mobile_user_type");
+    print("mobile_user_type-ccc--$mobile_user_type");
+    if (mobile_user_type == "1") {
+      if (Provider.of<RegistrationController>(context, listen: false)
+                  .scheduleListCount >
+              0 &&
+          Provider.of<RegistrationController>(context, listen: false)
+                  .scheduleOpend ==
+              false) {
+        print("yes huhu");
+        customNotification();
+      }
+    } else if (mobile_user_type == "2") {
+      if (Provider.of<RegistrationController>(context, listen: false)
+                  .servicescheduleListCount >
+              0 &&
+          Provider.of<RegistrationController>(context, listen: false)
+                  .scheduleOpend ==
+              false) {
+        print("yes huhu");
+        customNotification();
+      }
+    }
   }
 
   logout() async {
@@ -526,10 +568,12 @@ class _EnqHomeState extends State<EnqHome> {
                           Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "UW1" ||
-                          Provider.of<RegistrationController>(context,
-                                      listen: false)
+                          Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
-                              "TI1"
+                              "TI1" ||
+                          Provider.of<RegistrationController>(context, listen: false)
+                                  .menu_index ==
+                              "CR1"
                       ? Container()
                       : InkWell(
                           onTap: () {
@@ -589,7 +633,7 @@ class _EnqHomeState extends State<EnqHome> {
                                       : Provider.of<RegistrationController>(context, listen: false)
                                                   .menu_index ==
                                               "DR1"
-                                          ? "DEALERWISE REPORT"
+                                          ? "DEALER WISE REPORT"
                                           : Provider.of<RegistrationController>(context,
                                                           listen: false)
                                                       .menu_index ==
@@ -599,7 +643,9 @@ class _EnqHomeState extends State<EnqHome> {
                                                   ? "USER WISE REPORT"
                                                   : Provider.of<RegistrationController>(context, listen: false).menu_index == "DP1"
                                                       ? "TOP ITEMS"
-                                                      : "",
+                                                      : Provider.of<RegistrationController>(context, listen: false).menu_index == "CR1"
+                                                          ? "CUSTOMER WISE REPORT"
+                                                          : "",
                   style: TextStyle(fontSize: 15),
                 ),
                 backgroundColor: Provider.of<RegistrationController>(context,
@@ -626,7 +672,8 @@ class _EnqHomeState extends State<EnqHome> {
                             "UW1" ||
                         Provider.of<RegistrationController>(context, listen: false)
                                 .menu_index ==
-                            "TI1"
+                            "TI1" ||
+                        Provider.of<RegistrationController>(context, listen: false).menu_index == "CR1"
                     ? P_Settings.loginPagetheme
                     : P_Settings.whiteColor,
                 elevation: 1,
@@ -644,7 +691,8 @@ class _EnqHomeState extends State<EnqHome> {
                                     value.menu_index == "DR1" ||
                                     value.menu_index == "DP1" ||
                                     value.menu_index == "UW1" ||
-                                    value.menu_index == "TI1"
+                                    value.menu_index == "TI1" ||
+                                    value.menu_index == "CR1"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },
