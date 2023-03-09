@@ -161,6 +161,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  charts_common:
+    dependency: transitive
+    description:
+      name: charts_common
+      sha256: "7b8922f9b0d9b134122756a787dab1c3946ae4f3fc5022ff323ba0014998ea02"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.0"
+  charts_flutter:
+    dependency: transitive
+    description:
+      name: charts_flutter
+      sha256: "4172c3f4b85322fdffe1896ffbed79ae4689ae72cb6fe6690dcaaea620a9c558"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.0"
   clock:
     dependency: transitive
     description:
@@ -281,6 +297,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  d_chart:
+    dependency: "direct main"
+    description:
+      name: d_chart
+      sha256: f9963605ec318e077954c79d945c17319e2d6021905d8afa8de96c215e616471
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   dbus:
     dependency: transitive
     description:
@@ -944,6 +968,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: "04094f2eb032cbb06c6f6e8d3607edcfcb0455e2bb6cbc010cb01171dcb64e6d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   lottie:
     dependency: "direct main"
     description:

@@ -5,6 +5,7 @@ import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
+import 'package:bestengineer/screen/Dashboard/adminDahsboard.dart';
 import 'package:bestengineer/screen/Dashboard/serviceDashboard.dart';
 import 'package:bestengineer/screen/Enquiry/EnqHistory.dart';
 import 'package:bestengineer/screen/Enquiry/enquiryScreen.dart';
@@ -116,10 +117,12 @@ class _EnqHomeState extends State<EnqHome> {
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
     shared();
+    // findMobileUser();
     appBarTitle = Text("");
+    // Provider.of<RegistrationController>(context, listen: false).setMenuIndex("D1");
 
     print(
-        "zxzx--${Provider.of<RegistrationController>(context, listen: false).scheduleListCount}");
+        "zxzx--${Provider.of<RegistrationController>(context, listen: false).menu_index}");
     Provider.of<Controller>(context, listen: false).getArea(context);
     Provider.of<RegistrationController>(context, listen: false).userDetails();
     Provider.of<QuotationController>(context, listen: false)
@@ -198,6 +201,7 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "E1":
         {
+          Provider.of<Controller>(context, listen: false).dupcustomer_id = null;
           Provider.of<Controller>(context, listen: false)
               .gePriorityList(context);
           Provider.of<ProductController>(context, listen: false)
@@ -294,6 +298,17 @@ class _EnqHomeState extends State<EnqHome> {
               .getReportDealerList(context, "0");
           return CustomerWiseReport();
         }
+ case "AD1":
+        {
+          print("srghhh");
+          // Provider.of<QuotationController>(context, listen: false)
+          //     .reportDealerList = [];
+          // Provider.of<QuotationController>(context, listen: false)
+          //     .reportdealerselected = null;
+          // Provider.of<QuotationController>(context, listen: false)
+          //     .getReportDealerList(context, "0");
+          return AdminDashboard();
+        }
 
       // case "logout":
       //   logout();
@@ -335,17 +350,19 @@ class _EnqHomeState extends State<EnqHome> {
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
+  findMobileUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    mobile_user_type = prefs.getString("mobile_user_type");
     if (mobile_user_type == "1") {
       if (widget.type == "return from quataion" ||
-          widget.type == "from scheduleList") {
-        print("from cart");
+          widget.type == "from scheduleList" ||
+          widget.type == "return from enquiry") {
         if (val) {
+          print(
+              "from cart---$mobile_user_type--${Provider.of<RegistrationController>(context, listen: false).menu_index}");
+
           Provider.of<RegistrationController>(context, listen: false)
-              .menu_index = "D1";
+              .setMenuIndex("D1");
           val = false;
         }
       }
@@ -353,12 +370,40 @@ class _EnqHomeState extends State<EnqHome> {
       if (widget.type == "from service scheduleList") {
         if (val) {
           Provider.of<RegistrationController>(context, listen: false)
-              .menu_index = "DS";
+              .setMenuIndex("DS");
           val = false;
         }
       }
     }
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  //   findMobileUser();
+  //   print("mj----$mobile_user_type");
+  //   // if (mobile_user_type == "1") {
+  //   //   if (widget.type == "return from quataion" ||
+  //   //       widget.type == "from scheduleList" ||
+  //   //       widget.type == "return from enquiry") {
+  //   //     print("from cart");
+  //   //     if (val) {
+  //   //       Provider.of<RegistrationController>(context, listen: false)
+  //   //           .menu_index = "D1";
+  //   //       val = false;
+  //   //     }
+  //   //   }
+  //   // } else if (mobile_user_type == "2") {
+  //   //   if (widget.type == "from service scheduleList") {
+  //   //     if (val) {
+  //   //       Provider.of<RegistrationController>(context, listen: false)
+  //   //           .menu_index = "DS";
+  //   //       val = false;
+  //   //     }
+  //   //   }
+  //   // }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -426,7 +471,9 @@ class _EnqHomeState extends State<EnqHome> {
                     "D1" ||
                 Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
-                    "DS"
+                    "DS"|| Provider.of<RegistrationController>(context, listen: false)
+                        .menu_index ==
+                    "AD1"
             ? AppBar(
                 title: appBarTitle,
                 backgroundColor: P_Settings.loginPagetheme,
@@ -807,7 +854,7 @@ class _EnqHomeState extends State<EnqHome> {
                                           .toString(),
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )

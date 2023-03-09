@@ -74,6 +74,7 @@ dependencies:
   sizer: null
   fluttertoast: ^8.0.9
   pdf: ^3.8.3
+  d_chart: ^0.0.4
   flash: ^2.0.3+1
   awesome_dialog: ^3.0.2
   printing: ^5.9.3

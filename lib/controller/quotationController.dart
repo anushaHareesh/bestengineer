@@ -1615,4 +1615,7 @@ class QuotationController extends ChangeNotifier {
       }
     });
   }
+
+  ///////////////////////////////////////////////////
+  
 }

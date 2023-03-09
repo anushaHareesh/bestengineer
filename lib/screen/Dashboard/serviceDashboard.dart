@@ -22,7 +22,7 @@ class _ServiceDashboardState extends State<ServiceDashboard> {
     await Future.delayed(Duration(milliseconds: 1000));
     Provider.of<Controller>(context, listen: false)
         .getServiceDashboardValues(context);
-        _refreshController.refreshCompleted();
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -49,49 +49,65 @@ class _ServiceDashboardState extends State<ServiceDashboard> {
                 painter: HeaderCurvedContainer(),
               ),
               Positioned(
-                top: 60,
+                top: 100,
                 child: Consumer<Controller>(
                   builder: (context, value, child) {
                     return Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              height: size.height * 0.28,
-                              width: size.width * 0.45,
+                              height: size.height * 0.15,
+                              width: size.width * 0.85,
                               child: Card(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                child: Row(
                                   children: [
-                                    Container(
-                                      height: size.height * 0.07,
-                                      width: size.width * 0.2,
-                                      child: Image.asset(
-                                        "assets/service2.png",
-                                        // fit: BoxFit.cover,
-                                      ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: size.height * 0.07,
+                                          width: size.width * 0.2,
+                                          child: Image.asset(
+                                            "assets/service2.png",
+                                            // fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
+                                    Expanded(
+                                      child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "Total Service",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          )
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "Total Service",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
+                                      padding:
+                                          const EdgeInsets.only(right: 23.0),
+                                      child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           value.isServceDahboardLoading
                                               ? SpinKitThreeBounce(
@@ -118,41 +134,62 @@ class _ServiceDashboardState extends State<ServiceDashboard> {
                                 ),
                               ),
                             ),
+                          
+                          ],
+                        ),
+                        Row(
+                          children: [
                             Container(
-                              height: size.height * 0.28,
-                              width: size.width * 0.45,
+                              height: size.height * 0.15,
+                              width: size.width * 0.85,
                               child: Card(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                child: Row(
                                   children: [
-                                    Container(
-                                      height: size.height * 0.07,
-                                      width: size.width * 0.2,
-                                      child: Image.asset(
-                                        "assets/service1.png",
-                                        // fit: BoxFit.cover,
-                                      ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: size.height * 0.07,
+                                          width: size.width * 0.2,
+                                          child: Image.asset(
+                                           "assets/service1.png",
+                                            // fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
+                                    Expanded(
+                                      child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "Today's Service",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          )
+                                          Row(
+                                            children: [
+                                              Text(
+                                               "Today's Service",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
+                                      padding:
+                                          const EdgeInsets.only(right: 23.0),
+                                      child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           value.isServceDahboardLoading
                                               ? SpinKitThreeBounce(
@@ -178,50 +215,61 @@ class _ServiceDashboardState extends State<ServiceDashboard> {
                                       20.0), //<-- SEE HERE
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
-                        SizedBox(
-                          height: size.height * 0.00,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              height: size.height * 0.28,
-                              width: size.width * 0.45,
+                        Row(children: [
+                          Container(
+                              height: size.height * 0.15,
+                              width: size.width * 0.85,
                               child: Card(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                child: Row(
                                   children: [
-                                    Container(
-                                      height: size.height * 0.07,
-                                      width: size.width * 0.2,
-                                      child: Image.asset(
-                                        "assets/install.png",
-                                        // fit: BoxFit.cover,
-                                      ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: size.height * 0.07,
+                                          width: size.width * 0.2,
+                                          child: Image.asset(
+                                            "assets/install.png",
+                                            // fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
+                                    Expanded(
+                                      child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "Today's Installation",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          )
+                                          Row(
+                                            children: [
+                                              Text(
+                                               "Today's Installation",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
+                                          ),
                                         ],
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
+                                      padding:
+                                          const EdgeInsets.only(right:23.0),
+                                      child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           value.isServceDahboardLoading
                                               ? SpinKitThreeBounce(
@@ -229,7 +277,7 @@ class _ServiceDashboardState extends State<ServiceDashboard> {
                                                       P_Settings.loginPagetheme,
                                                   size: 13)
                                               : Text(
-                                                  value.todayInstall.toString(),
+                                                 value.todayInstall.toString(),
                                                   style: TextStyle(
                                                       fontSize: 26,
                                                       fontWeight:
@@ -248,70 +296,8 @@ class _ServiceDashboardState extends State<ServiceDashboard> {
                                 ),
                               ),
                             ),
-                            Container(
-                              height: size.height * 0.28,
-                              width: size.width * 0.45,
-                              child: Card(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: size.height * 0.07,
-                                      width: size.width * 0.2,
-                                      child: Image.asset(
-                                        "assets/calendar.png",
-                                        // fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Schedule",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 12.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          value.isServceDahboardLoading
-                                              ? SpinKitThreeBounce(
-                                                  color:
-                                                      P_Settings.loginPagetheme,
-                                                  size: 13)
-                                              : Text(
-                                                  value.scheduleCount
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 26,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: P_Settings
-                                                          .loginPagetheme),
-                                                )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      20.0), //<-- SEE HERE
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                        ],),
+                       
                       ],
                     );
                   },

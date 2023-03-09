@@ -10,17 +10,20 @@ import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PdfDownload {
   DateTime now = DateTime.now();
   String? date;
+  String? staff_name;
   Future<File> downLoadpdf(
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList,
       String br) async {
     date = DateFormat('ddMMyyyy').format(now);
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    staff_name = prefs.getString("staff_name");
     final pdf = Document();
     final headerimage;
     final footerimage;
@@ -69,7 +72,8 @@ class PdfDownload {
       ) {
         return buildHeader(headerimage);
       },
-      footer: (context) => buildFooter(termsList, footerimage),
+      footer: (context) =>
+          buildFooter(termsList, footerimage, staff_name.toString()),
     ));
     String inv = masterPdf[0]["s_customer_name"] + date;
 
@@ -360,12 +364,33 @@ class PdfDownload {
   }
 
   //////////////////////////////////////////////////////////////////
-  static Widget buildFooter(
-          List<Map<String, dynamic>> listterms, ImageProvider image) =>
+  static Widget buildFooter(List<Map<String, dynamic>> listterms,
+          ImageProvider image, String staffName) =>
       Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Divider(),
+          Container(
+            // width: 100,
+            // decoration:
+            //     BoxDecoration(border: Border.all(color: PdfColors.black)),
+            alignment: Alignment.centerLeft,
+            child: Padding(
+                padding: EdgeInsets.all(3),
+                child: Text("Prepared By : $staffName",
+                    style: TextStyle(fontSize: 10))),
+          ),
+          // Container(
+          //   width:400 ,
+          //     // margin: const EdgeInsets.all(15.0),
+          //     // padding: const EdgeInsets.all(3.0),
+          //     decoration:
+          //         BoxDecoration(border: Border.all(color: PdfColors.black)),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.start,
+          //       children: [
+          //       Text("Prepared By  : ", style: TextStyle(fontSize: 13)),
+          //       Text(staffName, style: TextStyle(fontSize: 12))
+          //     ])),
           SizedBox(height: 2 * PdfPageFormat.mm),
           buildSimpleText(
               title: listterms[0]["t_head"], value: listterms[0]["t_detail"]),

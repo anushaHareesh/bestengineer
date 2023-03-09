@@ -15,19 +15,28 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/datachartModel.dart';
+
 class RegistrationController extends ChangeNotifier {
   bool scheduleOpend = false;
   bool isMenuLoading = false;
+  bool isAdminLoading=false;
   bool isServSchedulelIstLoadind = false;
   int scheduleListCount = 0;
+  String? pendingEnq;
+  String? pendingQtn;
+  String? cnfQut;
+  String? pendingSer;
 
   List<String> servceScheduldate = [];
   bool isProdLoding = false;
-
+  DateTime now = DateTime.now();
+  String? dateToday;
   int servicescheduleListCount = 0;
   List<Map<String, dynamic>> scheduleList = [];
   List<Map<String, dynamic>> servicescheduleList = [];
@@ -50,6 +59,7 @@ class RegistrationController extends ChangeNotifier {
   int? qtyinc;
   String? uid;
   List<Map<String, dynamic>> menuList = [];
+  List<Map<String, dynamic>> confrmedQuotGraph = [];
   String? appType;
   String? bId;
   List<CD> c_d = [];
@@ -257,6 +267,8 @@ class RegistrationController extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+          dateToday = DateFormat('dd-MM-yyyy').format(now);
+
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
@@ -286,11 +298,21 @@ class RegistrationController extends ChangeNotifier {
           notifyListeners();
 
           print("jhjkd---$mobile_menu_type");
-          if (mobile_menu_type == "1" || mobile_menu_type == "3") {
-            getScheduleList(context, "");
-          } else if (mobile_menu_type == "2") {
-            getServiceScheduleList(context, "");
+          if (menuList.length > 0) {
+            if (mobile_menu_type == "3") {
+              getAdminDashboard(context, dateToday!);
+            }
+            if (mobile_menu_type == "1") {
+              getScheduleList(context, "");
+            } else if (mobile_menu_type == "2") {
+              getServiceScheduleList(context, "");
+            }
+          } else {
+            CustomSnackbar snackbar = CustomSnackbar();
+            snackbar.showSnackbar(
+                context, "Oops Something went wrong !!! ", "");
           }
+
           print("menu res--$map");
           // if (menuList.length > 0) {
           //   Navigator.push(
@@ -360,9 +382,7 @@ class RegistrationController extends ChangeNotifier {
           isSchedulelIstLoadind = false;
           notifyListeners();
           if (type == "") {
-            if (mobile_menu_type == "3") {
-              getServiceScheduleList(context, "");
-            } else if (mobile_menu_type == "1") {
+            if (mobile_menu_type == "1") {
               Navigator.pushAndRemoveUntil(context,
                   MaterialPageRoute(builder: (Context) {
                 return EnqHome();
@@ -651,6 +671,71 @@ class RegistrationController extends ChangeNotifier {
           isLoading = false;
           notifyListeners();
           notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  setMenuIndex(String ind) {
+    menu_index = ind;
+    // notifyListeners();
+  }
+
+///////////////////////////////////////////////////////////////////
+  getAdminDashboard(
+    BuildContext context,
+    String fromdate,
+  ) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/load_dashboard.php");
+
+          Map body = {
+            "from_date": fromdate,
+          };
+          isAdminLoading = true;
+          notifyListeners();
+          print("cust body----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("admin ---$map");
+          pendingEnq = map["pending_enq_cnt"];
+          pendingQtn = map["pending_qtn_cnt"];
+          cnfQut = map["cnfrm_qtn_cnt"];
+          pendingSer = map["pending_serv_cnt"];
+          notifyListeners();
+          for (var item in map['user_cnt_cnfrmd']) {
+            print("nnnn----${item.runtimeType}");
+            double m = double.parse(item['measure']);
+            var mapzz = {"domain": item["domain"], "measure": m};
+            confrmedQuotGraph.add(mapzz);
+          }
+          notifyListeners();
+ isAdminLoading = false;
+          notifyListeners();
+          print("admin map----$confrmedQuotGraph");
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (Context) {
+            return EnqHome();
+          }), (route) => false);
+         
         } catch (e) {
           print(e);
           // return null;
