@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:bestengineer/screen/Quotation/utils.dart';
+
 import 'package:flutter/services.dart';
 import 'package:image_watermark/image_watermark.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +12,6 @@ import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfQuotation {
   String? date;
@@ -25,8 +26,12 @@ class PdfQuotation {
     staff_name = prefs.getString("staff_name");
     date = DateFormat('ddMMyyyy').format(now);
     final pdf = Document();
+
+   
     final headerimage;
     final footerimage;
+     final rupee;
+    rupee = await imageFromAssetBundle('assets/rupee.png');
     if (br == "0") {
       headerimage = await imageFromAssetBundle('assets/kannur_header.png');
       footerimage = await imageFromAssetBundle('assets/kannur_footer.png');
@@ -34,7 +39,12 @@ class PdfQuotation {
       headerimage = await imageFromAssetBundle('assets/kozhikod_header.png');
       footerimage = await imageFromAssetBundle('assets/kozhikod_footer.png');
     }
-
+    // var myTheme = ThemeData.withFont(
+    //   base: Font.ttf(await rootBundle.load("assets/OpenSans-Regular.ttf")),
+    //   bold: Font.ttf(await rootBundle.load("assets/OpenSans-Bold.ttf")),
+    //   italic: Font.ttf(await rootBundle.load("assets/OpenSans-Italic.ttf")),
+    //   boldItalic: Font.ttf(await rootBundle.load("assets/OpenSans-BoldItalic.ttf")),
+    // );
     pdf.addPage(MultiPage(
       pageFormat:
           PdfPageFormat.a4.applyMargin(left: 0, top: 0, right: 0, bottom: 0),
@@ -64,7 +74,7 @@ class PdfQuotation {
         buildInvoice(detailPdf),
         // Divider(),
         SizedBox(height: 5),
-        buildTotal(detailPdf),
+        buildTotal(detailPdf, rupee),
       ],
 
       header: (
@@ -315,10 +325,18 @@ class PdfQuotation {
   }
 
   ////////////////////////////////////////////////////
-  static Widget buildTotal(List<Map<String, dynamic>> list) {
+  Widget buildTotal(
+    List<Map<String, dynamic>> list,
+    ImageProvider image,
+  ) {
     double sum = 0.0;
+    double amount_tot = 0.0;
+    double gstTot = 0.0;
+
     for (int i = 0; i < list.length; i++) {
       sum = double.parse(list[i]["net_rate"]) + sum;
+      amount_tot = double.parse(list[i]["amount"]) + amount_tot;
+      gstTot = double.parse(list[i]["tax"]) + gstTot;
     }
 
     return Container(
@@ -331,11 +349,49 @@ class PdfQuotation {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildText(
-                  title: 'Grand total',
-                  value: sum.toStringAsFixed(2),
-                  unite: true,
-                ),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'GST total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${gstTot.toStringAsFixed(2)}",
+                  )
+                ]),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'Amount total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${amount_tot.toStringAsFixed(2)}",
+                  )
+                ]),
+                Divider(),
+
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'Grand total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(sum.toStringAsFixed(2))
+                ]),
+                // buildText(
+                //   title: 'Grand total',
+                //   value: sum.toStringAsFixed(2),
+                //   unite: true,
+                // ),
 
                 Divider(),
 
@@ -366,7 +422,7 @@ class PdfQuotation {
       child: Row(
         children: [
           Expanded(child: Text(title, style: style)),
-          Text(value.toString(), style: unite ? style : null),
+          Text("${value.toString()}", style: unite ? style : null),
         ],
       ),
     );
@@ -440,6 +496,10 @@ class PdfQuotation {
     ]);
   }
 
+  loadDa() async {
+    var data = await rootBundle.load("assets/Rupee_Foradian.ttf");
+    return data;
+  }
   // Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
   //   final path = (await getExternalStorageDirectory())!.path;
   //   final file = File('$path/$fileName');

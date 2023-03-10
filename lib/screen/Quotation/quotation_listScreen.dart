@@ -164,6 +164,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
           padding: const EdgeInsets.only(left: 8.0, right: 8, top: 5),
           child: ExpansionTileCard(
             elevation: 4,
+            // baseColor: Colors.green,
             baseColor: value.quotationList[index]["p_color"] == null ||
                     value.quotationList[index]["p_color"].isEmpty
                 ? Colors.grey[100]
@@ -175,7 +176,10 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
             //     : parseColor(value.quotationList[index]["p_color"]),
             leading:
                 CircleAvatar(backgroundImage: AssetImage("assets/man.png")),
-            title: Text(value.quotationList[index]["cname"]),
+            title: Text(
+              value.quotationList[index]["cname"],
+              style: TextStyle(fontSize: 14),
+            ),
             subtitle: Text(
               value.quotationList[index]["phone_1"],
             ),
@@ -198,16 +202,18 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                           Text(
                             "Quotation No:  ",
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text(
-                            " [ ${value.quotationList[index]["qt_no"]} ]",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey[600]),
+                          Flexible(
+                            child: Text(
+                              " [ ${value.quotationList[index]["qt_no"]} ]",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: Colors.grey[600]),
+                            ),
                           ),
                         ],
                       ),
@@ -220,7 +226,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                   Text(
                                     "Compnay info: ",
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       color: Colors.grey[600],
                                     ),
                                   ),
@@ -230,7 +236,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                       value.quotationList[index]
                                           ["company_add1"],
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[600],
                                       ),
@@ -246,7 +252,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                             Text(
                               "Choose Schedule Date : ",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.grey[600],
                               ),
                             ),
@@ -271,8 +277,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                           size: 17),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 10.0),
+                                      padding: const EdgeInsets.only(left: 5.0),
                                       child: Text(
                                         value.qtScheduldate[index].toString(),
                                         style: TextStyle(
@@ -306,7 +311,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                 Text(
                                   "Qt Date : ",
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: Colors.grey[600],
                                   ),
                                 ),
@@ -425,7 +430,10 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
             expandedColor: Color.fromARGB(255, 248, 246, 246),
             // key: cardA,
             leading: CircleAvatar(child: Image.asset("assets/man.png")),
-            title: Text(value.newquotationList[index]["cname"]),
+            title: Text(
+              value.newquotationList[index]["cname"],
+              style: TextStyle(fontSize: 13),
+            ),
             subtitle: Text(
               value.newquotationList[index]["phone_1"],
             ),
@@ -448,16 +456,18 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                           Text(
                             "Quotation No:  ",
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: Colors.grey[600],
                             ),
                           ),
-                          Text(
-                            " [ ${value.newquotationList[index]["qt_no"]} ]",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Colors.grey[600]),
+                          Flexible(
+                            child: Text(
+                              " [ ${value.newquotationList[index]["qt_no"]} ]",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: Colors.grey[600]),
+                            ),
                           ),
                         ],
                       ),
@@ -470,7 +480,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                   Text(
                                     "Compnay info: ",
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       color: Colors.grey[600],
                                     ),
                                   ),
@@ -480,7 +490,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                       value.newquotationList[index]
                                           ["company_add1"],
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[600],
                                       ),
@@ -496,7 +506,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                             Text(
                               "Choose Schedule Date : ",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: Colors.grey[600],
                               ),
                             ),
@@ -522,8 +532,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                           size: 17),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 10.0),
+                                      padding: const EdgeInsets.only(left: 5.0),
                                       child: Text(
                                         value.qtScheduldate[index].toString(),
                                         style: TextStyle(
@@ -557,7 +566,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                 Text(
                                   "Qt Date : ",
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: Colors.grey[600],
                                   ),
                                 ),

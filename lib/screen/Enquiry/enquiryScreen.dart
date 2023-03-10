@@ -603,19 +603,19 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                             children: [
                               value.address == null || value.address!.isEmpty
                                   ? Container()
-                                  : Text("Customer Info :"),
+                                  : Text("Customer Info     ",style: TextStyle(fontSize: 13),),
                               value.landmark == null || value.landmark!.isEmpty
                                   ? Container()
                                   : Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text("Landmark  :"),
+                                      child: Text("Landmark   ",style: TextStyle(fontSize: 13),),
                                     ),
                               value.owner_name == null ||
                                       value.owner_name!.isEmpty
                                   ? Container()
                                   : Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text("Contact  Person :"),
+                                      child: Text("Contact  Person ",style: TextStyle(fontSize: 13),),
                                     )
                             ],
                           ),
@@ -626,10 +626,12 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                             children: [
                               value.address == null || value.address!.isEmpty
                                   ? Container()
-                                  : Text(value.address.toString(),
+                                  : Text(
+                                    // "skjfkjdfkldfjlkdxfjkldxfjlkxdjflkxdfjjjjjjjjjjjjjjjjjjjjjjcxc",
+                                    value.address.toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
-                                          fontSize: 15)),
+                                          fontSize: 13)),
                               value.landmark == null || value.landmark!.isEmpty
                                   ? Container()
                                   : Padding(
@@ -637,7 +639,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                                       child: Text(value.landmark.toString(),
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 15)),
+                                              fontSize: 13)),
                                     ),
                               value.owner_name == null ||
                                       value.owner_name!.isEmpty
@@ -647,7 +649,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                                       child: Text(value.owner_name.toString(),
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 15)),
+                                              fontSize: 13)),
                                     ),
                             ],
                           ),

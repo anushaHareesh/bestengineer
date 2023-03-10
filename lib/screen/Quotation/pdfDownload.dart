@@ -27,6 +27,8 @@ class PdfDownload {
     final pdf = Document();
     final headerimage;
     final footerimage;
+    final rupee;
+    rupee = await imageFromAssetBundle('assets/rupee.png');
     if (br == "0") {
       headerimage = await imageFromAssetBundle('assets/kannur_header.png');
       footerimage = await imageFromAssetBundle('assets/kannur_footer.png');
@@ -64,7 +66,7 @@ class PdfDownload {
         buildInvoice(detailPdf),
         // Divider(),
         SizedBox(height: 5),
-        buildTotal(detailPdf),
+        buildTotal(detailPdf, rupee),
       ],
 
       header: (
@@ -306,10 +308,18 @@ class PdfDownload {
   }
 
   ////////////////////////////////////////////////////
-  static Widget buildTotal(List<Map<String, dynamic>> list) {
+  Widget buildTotal(
+    List<Map<String, dynamic>> list,
+    ImageProvider image,
+  ) {
     double sum = 0.0;
+    double amount_tot = 0.0;
+    double gstTot = 0.0;
+
     for (int i = 0; i < list.length; i++) {
       sum = double.parse(list[i]["net_rate"]) + sum;
+      amount_tot = double.parse(list[i]["amount"]) + amount_tot;
+      gstTot = double.parse(list[i]["tax"]) + gstTot;
     }
 
     return Container(
@@ -322,11 +332,49 @@ class PdfDownload {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildText(
-                  title: 'Grand total',
-                  value: sum.toStringAsFixed(2),
-                  unite: true,
-                ),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'GST total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${gstTot.toStringAsFixed(2)}",
+                  )
+                ]),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'Amount total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${amount_tot.toStringAsFixed(2)}",
+                  )
+                ]),
+                Divider(),
+
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'Grand total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(sum.toStringAsFixed(2))
+                ]),
+                // buildText(
+                //   title: 'Grand total',
+                //   value: sum.toStringAsFixed(2),
+                //   unite: true,
+                // ),
 
                 Divider(),
 

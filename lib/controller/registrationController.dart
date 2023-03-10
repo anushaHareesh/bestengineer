@@ -25,7 +25,7 @@ import '../model/datachartModel.dart';
 class RegistrationController extends ChangeNotifier {
   bool scheduleOpend = false;
   bool isMenuLoading = false;
-  bool isAdminLoading=false;
+  bool isAdminLoading = false;
   bool isServSchedulelIstLoadind = false;
   int scheduleListCount = 0;
   String? pendingEnq;
@@ -60,6 +60,7 @@ class RegistrationController extends ChangeNotifier {
   String? uid;
   List<Map<String, dynamic>> menuList = [];
   List<Map<String, dynamic>> confrmedQuotGraph = [];
+  List<Map<String, dynamic>> userservDone = [];
   String? appType;
   String? bId;
   List<CD> c_d = [];
@@ -727,15 +728,21 @@ class RegistrationController extends ChangeNotifier {
             var mapzz = {"domain": item["domain"], "measure": m};
             confrmedQuotGraph.add(mapzz);
           }
+          userservDone.clear();
+          for (var item in map['user_serv_done']) {
+            print("nnnn----${item.runtimeType}");
+            double m = double.parse(item['measure']);
+            var mapzz = {"domain": item["domain"], "measure": m};
+            userservDone.add(mapzz);
+          }
           notifyListeners();
- isAdminLoading = false;
+          isAdminLoading = false;
           notifyListeners();
           print("admin map----$confrmedQuotGraph");
           Navigator.pushAndRemoveUntil(context,
               MaterialPageRoute(builder: (Context) {
             return EnqHome();
           }), (route) => false);
-         
         } catch (e) {
           print(e);
           // return null;

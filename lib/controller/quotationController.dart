@@ -862,7 +862,7 @@ class QuotationController extends ChangeNotifier {
     print("quo--$item--$quotationList");
     newquotationList.clear();
     quotationList.forEach((list) {
-      if (list["cname"].contains(item) || list["qt_no"].contains(item))
+      if (list["cname"].toString().toLowerCase().contains(item.toLowerCase()) || list["qt_no"].contains(item))
         newquotationList.add(list);
     });
     qtScheduldate = List.generate(newquotationList.length, (index) => "");

@@ -44,6 +44,7 @@ class _EnQHistoryState extends State<EnQHistory> {
       Provider.of<ProductController>(context, listen: false)
           .setEnqSearch(false);
     });
+
     Provider.of<ProductController>(context, listen: false).getEnqhistoryData(
       context,
       "",

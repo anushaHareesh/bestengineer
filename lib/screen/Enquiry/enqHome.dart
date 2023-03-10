@@ -210,6 +210,8 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "E2":
         {
+          // FocusManager.instance.primaryFocus!.unfocus();
+
           Provider.of<ProductController>(context, listen: false)
               .getEnqhistoryData(
             context,
@@ -220,6 +222,8 @@ class _EnqHomeState extends State<EnqHome> {
 
       case "Q1":
         {
+          // FocusManager.instance.primaryFocus!.unfocus();
+
           Provider.of<QuotationController>(context, listen: false)
               .getQuotationList(
             context,
@@ -298,7 +302,7 @@ class _EnqHomeState extends State<EnqHome> {
               .getReportDealerList(context, "0");
           return CustomerWiseReport();
         }
- case "AD1":
+      case "AD1":
         {
           print("srghhh");
           // Provider.of<QuotationController>(context, listen: false)
@@ -466,12 +470,14 @@ class _EnqHomeState extends State<EnqHome> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Color.fromARGB(255, 250, 248, 248),
         key: _key,
-        appBar: Provider.of<RegistrationController>(context, listen: false)
+        appBar: Provider.of<RegistrationController>(context,
+                            listen: false)
                         .menu_index ==
                     "D1" ||
                 Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
-                    "DS"|| Provider.of<RegistrationController>(context, listen: false)
+                    "DS" ||
+                Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
                     "AD1"
             ? AppBar(
@@ -483,8 +489,12 @@ class _EnqHomeState extends State<EnqHome> {
                 ),
                 actions: [
                   Provider.of<RegistrationController>(context, listen: false)
-                              .menu_index ==
-                          "DS"
+                                  .menu_index ==
+                              "DS" ||
+                          Provider.of<RegistrationController>(context,
+                                      listen: false)
+                                  .menu_index ==
+                              "AD1"
                       ? Container()
                       : IconButton(
                           icon: actionIcon,

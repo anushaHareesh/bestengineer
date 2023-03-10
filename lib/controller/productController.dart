@@ -694,7 +694,10 @@ class ProductController extends ChangeNotifier {
 
     newenQhistoryList.clear();
     enQhistoryList.forEach((list) {
-      if (list.companyName!.contains(item) || list.enqCode!.contains(item))
+      print("dddd----${list.companyName}----$item");
+      if (list.companyName!.toLowerCase().contains(item.toLowerCase()) 
+      // || list.enqCode!.contains(item)
+      )
         newenQhistoryList.add(list);
     });
     print("neww ----------$newenQhistoryList");

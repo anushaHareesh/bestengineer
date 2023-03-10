@@ -45,15 +45,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     ],
                   ),
                 ),
-                Divider(),
+                Divider(
+                  thickness: 1,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AspectRatio(
-                    aspectRatio: 1.5,
+                    aspectRatio: 1.7,
                     child: DChartBar(
                       data: [
                         {'id': 'Bar', 'data': value.confrmedQuotGraph},
                       ],
+                      domainLabelRotation:
+                          value.confrmedQuotGraph.length > 6 ? 45 : 0,
                       minimumPaddingBetweenLabel: 2,
                       domainLabelPaddingToAxisLine: 16,
                       axisLineTick: 2,
@@ -65,6 +69,58 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               (Random().nextDouble() * 0xFF4d47c).toInt() << 0)
                           .withOpacity(1),
                       showBarValue: true,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          "Service Done By User".toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  thickness: 1,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AspectRatio(
+                    aspectRatio: 1.6,
+                    child: DChartPie(
+                      data: value.userservDone,
+                      donutWidth: 30,
+                      labelColor: Colors.black,
+                      fillColor: (pieData, index) => Color(
+                              (Random().nextDouble() * 0xFF4d47c).toInt() << 0)
+                          .withOpacity(1),
+                      showLabelLine: true,
+                      pieLabel: (pieData, index) {
+                        return "${pieData['domain']}:\n${pieData['measure']}";
+                      },
+                      labelPosition: PieLabelPosition.outside,
+                      // pieLabel: (pieData, index) => "anu",
+                      // minimumPaddingBetweenLabel: 2,
+                      // domainLabelPaddingToAxisLine: 16,
+                      // axisLineTick: 2,
+                      // axisLinePointTick: 2,
+                      // axisLinePointWidth: 10,
+                      // axisLineColor: P_Settings.loginPagetheme,
+                      // measureLabelPaddingToAxisLine: 16,
+                      // barColor: (barData, index, id) => Color(
+                      //         (Random().nextDouble() * 0xFF4d47c).toInt() << 0)
+                      //     .withOpacity(1),
+                      // showBarValue: true,
                     ),
                   ),
                 ),
@@ -224,7 +280,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     Container(
                       height: size.height * 0.15,
                       width: size.width * 0.9,
-                      child: Card(elevation: 4,
+                      child: Card(
+                        elevation: 4,
                         child: Row(
                           children: [
                             Column(
@@ -235,7 +292,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                   height: size.height * 0.05,
                                   width: size.width * 0.15,
                                   child: Image.asset(
-                                    "assets/quot.png",
+                                    "assets/quot2.png",
                                     // fit: BoxFit.cover,
                                   ),
                                 ),
