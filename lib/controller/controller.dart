@@ -581,12 +581,12 @@ class Controller extends ChangeNotifier {
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
           Map body = {"staff_id": user_id};
+          print("dash serv--$body");
           isServceDahboardLoading = true;
           notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
-          print(
-              "dahsboard service map------${map["todays_service"].runtimeType}");
+          print("dahsboard service map------${map}");
           todayService = map["todays_service"].toString();
           todayInstall = map["todays_installation"].toString();
           totService = map["total_service"].toString();

@@ -667,6 +667,15 @@ class RegistrationController extends ChangeNotifier {
           var map = jsonDecode(response.body);
           print("save complete service --$map");
           if (map["flag"] == 0) {
+            //  Fluttertoast.showToast(
+            //   msg: "${map["msg"]}",
+            //   toastLength: Toast.LENGTH_SHORT,
+            //   gravity: ToastGravity.CENTER,
+            //   timeInSecForIosWeb: 1,
+            //   textColor: Colors.white,
+            //   fontSize: 14.0,
+            //   backgroundColor: Colors.green,
+            // );
             getServiceScheduleList(context, "jd");
           }
           isLoading = false;

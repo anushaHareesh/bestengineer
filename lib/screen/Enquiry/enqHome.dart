@@ -201,7 +201,7 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "E1":
         {
-          Provider.of<Controller>(context, listen: false).dupcustomer_id = null;
+          // Provider.of<Controller>(context, listen: false).dupcustomer_id = null;
           Provider.of<Controller>(context, listen: false)
               .gePriorityList(context);
           Provider.of<ProductController>(context, listen: false)
@@ -274,7 +274,7 @@ class _EnqHomeState extends State<EnqHome> {
           Provider.of<QuotationController>(context, listen: false)
               .reportDealerList = [];
           Provider.of<QuotationController>(context, listen: false)
-              .getReportDealerList(context, "1");
+              .getReportDealerList(context, "2");
           return DealerWiseProduct();
         }
       case "UW1":
@@ -333,17 +333,18 @@ class _EnqHomeState extends State<EnqHome> {
         print("yes huhu");
         customNotification();
       }
-    } else if (mobile_user_type == "2") {
-      if (Provider.of<RegistrationController>(context, listen: false)
-                  .servicescheduleListCount >
-              0 &&
-          Provider.of<RegistrationController>(context, listen: false)
-                  .scheduleOpend ==
-              false) {
-        print("yes huhu");
-        customNotification();
-      }
-    }
+    } 
+    // else if (mobile_user_type == "2") {
+    //   if (Provider.of<RegistrationController>(context, listen: false)
+    //               .servicescheduleListCount >
+    //           0 &&
+    //       Provider.of<RegistrationController>(context, listen: false)
+    //               .scheduleOpend ==
+    //           false) {
+    //     print("yes huhu");
+    //     customNotification();
+    //   }
+    // }
   }
 
   logout() async {
@@ -1004,6 +1005,7 @@ class _EnqHomeState extends State<EnqHome> {
                           String tabId;
                           Provider.of<Controller>(context, listen: false)
                               .setDropdowndata(selected!);
+                               Provider.of<ProductController>(context, listen: false).setAreaId(selected!);
                           Provider.of<Controller>(context, listen: false)
                               .getCustomerList(context, selected!);
 

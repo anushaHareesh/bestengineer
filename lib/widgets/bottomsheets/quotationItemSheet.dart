@@ -57,8 +57,7 @@ class QuotationItemSheet {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                          Flexible(
                             child: Text(
                               map["product_name"].toUpperCase(),
                               style: GoogleFonts.aBeeZee(
@@ -115,7 +114,7 @@ class QuotationItemSheet {
                           ),
                           Spacer(),
                           Container(
-                            width: size.width * 0.15,
+                            width: size.width * 0.2,
                             child: Row(
                               children: [
                                 // Text("\u{20B9}"),
@@ -276,10 +275,17 @@ class QuotationItemSheet {
                           ),
                           InkWell(
                             onTap: () {
-                              int q = 1;
                               if (int.parse(value.quotqty[index].text) > 1) {
                                 int q =
                                     int.parse(value.quotqty[index].text) - 1;
+
+                                print(
+                                    "vv-----${value.quotqty[index].text}---$q");
+                                value.quotqty[index].text = q.toString();
+                                print(
+                                    "jkhfdjkf--------${value.quotqty[index].text}");
+                              } else {
+                                int q = 1;
                                 value.quotqty[index].text = q.toString();
                               }
                               // int qt = int.parse(value.quotqty[index].text);
@@ -288,7 +294,7 @@ class QuotationItemSheet {
                               // } else {
                               //   q = qt - 1;
                               // }
-                              value.quotqty[index].text = q.toString();
+
                               value.rawCalculation(
                                   double.parse(value.rateEdit[index].text),
                                   int.parse(value.quotqty[index].text),
@@ -400,7 +406,7 @@ class QuotationItemSheet {
                           ),
                           Spacer(),
                           Container(
-                            width: size.width * 0.1,
+                            width: size.width * 0.2,
                             child: TextField(
                               keyboardType: TextInputType.number,
                               onTap: () {
@@ -458,7 +464,7 @@ class QuotationItemSheet {
                           ),
                           Spacer(),
                           Container(
-                            width: size.width * 0.1,
+                            width: size.width * 0.2,
                             child: TextField(
                               keyboardType: TextInputType.number,
                               onTap: () {

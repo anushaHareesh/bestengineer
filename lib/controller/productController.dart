@@ -46,7 +46,7 @@ class ProductController extends ChangeNotifier {
   List<Map<String, dynamic>> bagList = [];
   List<EnqList> enQhistoryList = [];
   List<EnqList> newenQhistoryList = [];
-
+String? area_id;
   List<Master> enQhistoryMaster = [];
   List<Detail> enQhistoryDetail = [];
   TextEditingController cname = TextEditingController();
@@ -379,6 +379,11 @@ class ProductController extends ChangeNotifier {
     notifyListeners();
   }
 
+  setAreaId(String id){
+    area_id=id;
+   notifyListeners();
+  }
+
 ///////////////////////////////////////////////////////////////////////////////
   saveCartDetails(
     BuildContext context,
@@ -422,6 +427,7 @@ class ProductController extends ChangeNotifier {
           "priority_level": priority_level,
           "added_by": user_id,
           "branch_id": branch_id,
+          "area_id" : area_id,
           "details": jsonResult
         };
 

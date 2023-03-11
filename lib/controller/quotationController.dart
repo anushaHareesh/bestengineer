@@ -609,16 +609,11 @@ class QuotationController extends ChangeNotifier {
 
   ///////////////////////////////////////////////////////////
   setScheduledDate(int index, String date, BuildContext context, String enq_id,
-      String invId) async {
+      String invId, String qtNo) async {
     qtScheduldate[index] = date;
     notifyListeners();
     print("jxkjjjj---${qtScheduldate[index]}");
-    saveNextScheduleDate(
-      qtScheduldate[index],
-      invId,
-      enq_id,
-      context,
-    );
+    saveNextScheduleDate(qtScheduldate[index], invId, enq_id, context, qtNo);
     notifyListeners();
   }
 
@@ -706,8 +701,8 @@ class QuotationController extends ChangeNotifier {
   }
 
 ////////////////////////////////////////////////
-  saveNextScheduleDate(
-      String date, String inv_id, String enq_id, BuildContext context) {
+  saveNextScheduleDate(String date, String inv_id, String enq_id,
+      BuildContext context, String qtno) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -751,7 +746,17 @@ class QuotationController extends ChangeNotifier {
           //   quotationList.add(item);
           // }
           print("save_next_schedule ----$map");
-
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: "$qtno Schedule date changed to $date",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+          }
           // isQuotLoading = false;
           // notifyListeners();
         } catch (e) {
@@ -862,8 +867,8 @@ class QuotationController extends ChangeNotifier {
     print("quo--$item--$quotationList");
     newquotationList.clear();
     quotationList.forEach((list) {
-      if (list["cname"].toString().toLowerCase().contains(item.toLowerCase()) || list["qt_no"].contains(item))
-        newquotationList.add(list);
+      if (list["cname"].toString().toLowerCase().contains(item.toLowerCase()) ||
+          list["qt_no"].contains(item)) newquotationList.add(list);
     });
     qtScheduldate = List.generate(newquotationList.length, (index) => "");
 
@@ -1617,5 +1622,4 @@ class QuotationController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////
-  
 }

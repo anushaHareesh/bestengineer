@@ -141,7 +141,7 @@ class _GraphDataTableState extends State<GraphDataTable> {
       List<Map<dynamic, dynamic>> row, String align, String width, String sum) {
     print("rowjsjfkd-----$row");
     List<DataRow> items = [];
-
+    
     var itemList = newMp;
     for (var r = 0; r < itemList.length; r++) {
       items.add(DataRow(

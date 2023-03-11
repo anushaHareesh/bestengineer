@@ -59,21 +59,25 @@ class ItemSlectionBottomsheet {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 8),
+                      padding: const EdgeInsets.only(top: 8.0, left: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                          Flexible(
                             child: Text(
                               list.productName!.toUpperCase(),
                               style: GoogleFonts.aBeeZee(
                                 textStyle:
                                     Theme.of(context).textTheme.bodyText2,
-                                fontSize: 17,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
+
                                 // color: P_Settings.loginPagetheme,
                               ),
+                              // overflow: TextOverflow.ellipsis,
+
+                              // softWrap: false,
+                              // maxLines: 1,
                             ),
                           ),
                           // Spacer(),

@@ -267,7 +267,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                           index,
                                           value.quotationList[index]["enq_id"],
                                           value.quotationList[index]
-                                              ["s_invoice_id"],
+                                              ["s_invoice_id"], value.quotationList[index]
+                                              ["qt_no"]
                                         );
                                         // dateFind.selectDateFind(
                                         //     context, "to date");
@@ -522,7 +523,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                           value.newquotationList[index]
                                               ["enq_id"],
                                           value.newquotationList[index]
-                                              ["s_invoice_id"],
+                                              ["s_invoice_id"], value.newquotationList[index]
+                                              ["qt_no"],
                                         );
                                         // dateFind.selectDateFind(
                                         //     context, "to date");
@@ -673,7 +675,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
   }
 
   Future<void> _selectDate(
-      BuildContext context, int index, String enqId, String invId) async {
+      BuildContext context, int index, String enqId, String invId,String qtNo) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
@@ -693,7 +695,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     print("date----------------$date");
 
     Provider.of<QuotationController>(context, listen: false)
-        .setScheduledDate(index, date!, context, enqId, invId);
+        .setScheduledDate(index, date!, context, enqId, invId,qtNo);
     // });
   }
 }

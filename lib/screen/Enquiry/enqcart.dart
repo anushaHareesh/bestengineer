@@ -118,6 +118,9 @@ class _EnqCartState extends State<EnqCart> {
                                                 Provider.of<Controller>(context,
                                                         listen: false)
                                                     .customer_id = null;
+                                                      Provider.of<Controller>(context,
+                                                        listen: false)
+                                                    .dupcustomer_id = null;
                                               },
                                               child: Text("Ok")),
                                           Padding(

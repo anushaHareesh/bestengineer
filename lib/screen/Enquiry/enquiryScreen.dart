@@ -518,6 +518,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
   Widget customerData(Size size) {
     return Consumer<Controller>(
       builder: (context, value, child) {
+        print("valueknjk-----${value.dupcustomer_id}");
         Provider.of<ProductController>(context, listen: false)
             .getbagData(context, "0", value.dupcustomer_id!);
         return Padding(
@@ -603,19 +604,28 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                             children: [
                               value.address == null || value.address!.isEmpty
                                   ? Container()
-                                  : Text("Customer Info     ",style: TextStyle(fontSize: 13),),
+                                  : Text(
+                                      "Customer Info     ",
+                                      style: TextStyle(fontSize: 13),
+                                    ),
                               value.landmark == null || value.landmark!.isEmpty
                                   ? Container()
                                   : Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text("Landmark   ",style: TextStyle(fontSize: 13),),
+                                      child: Text(
+                                        "Landmark   ",
+                                        style: TextStyle(fontSize: 13),
+                                      ),
                                     ),
                               value.owner_name == null ||
                                       value.owner_name!.isEmpty
                                   ? Container()
                                   : Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text("Contact  Person ",style: TextStyle(fontSize: 13),),
+                                      child: Text(
+                                        "Contact  Person ",
+                                        style: TextStyle(fontSize: 13),
+                                      ),
                                     )
                             ],
                           ),
@@ -627,8 +637,8 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                               value.address == null || value.address!.isEmpty
                                   ? Container()
                                   : Text(
-                                    // "skjfkjdfkldfjlkdxfjkldxfjlkxdjflkxdfjjjjjjjjjjjjjjjjjjjjjjcxc",
-                                    value.address.toString(),
+                                      // "skjfkjdfkldfjlkdxfjkldxfjlkxdjflkxdfjjjjjjjjjjjjjjjjjjjjjjcxc",
+                                      value.address.toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 13)),
