@@ -27,10 +27,9 @@ class PdfQuotation {
     date = DateFormat('ddMMyyyy').format(now);
     final pdf = Document();
 
-   
     final headerimage;
     final footerimage;
-     final rupee;
+    final rupee;
     rupee = await imageFromAssetBundle('assets/rupee.png');
     if (br == "0") {
       headerimage = await imageFromAssetBundle('assets/kannur_header.png');
@@ -249,27 +248,34 @@ class PdfQuotation {
       'GST',
       'Net Amt',
     ];
+    var data1;
+    List<List<dynamic>> data = [];
+    for (int i = 0; i < list.length; i++) {
+      // i=i+1;
+      data1 = returnRows(list[i], i + 1);
+      data.add(data1);
+    }
+    print("data----$data1");
 
-    final data = list.map((item) {
-      print("sdjsjkh----${item["qty"].runtimeType}");
-      i = i + 1;
+    // final data = list.map((item) {
+    //   print("sdjsjkh----${item["qty"].runtimeType}");
+    //   i = i + 1;
 
-      // double total = double.parse(item["qty"]) * item["rate"] ;
-      double netrate = double.parse(item["net_rate"]!);
+    //   // double total = double.parse(item["qty"]) * item["rate"] ;
+    //   double netrate = double.parse(item["net_rate"]!);
 
-      return [
-        i,
-        item["product_name"],
-        item["qty"],
-        item["rate"],
-        item["amount"],
-        item["discount_amount"],
-        item["tax_perc"],
-        item["tax"],
-        netrate.toStringAsFixed(2),
-      ];
-    }).toList();
-
+    //   return [
+    //     i,
+    //     item["product_name"],
+    //     item["qty"],
+    //     item["rate"],
+    //     item["amount"],
+    //     item["discount_amount"],
+    //     item["tax_perc"],
+    //     item["tax"],
+    //     netrate.toStringAsFixed(2),
+    //   ];
+    // }).toList();
     return Table.fromTextArray(
       headers: headers,
       data: data,
@@ -322,6 +328,22 @@ class PdfQuotation {
         8: Alignment.centerRight,
       },
     );
+  }
+
+  /////////////////////////////////////////////////////
+  returnRows(Map listmap, int i) {
+    double netrate = double.parse(listmap["net_rate"]!);
+    return [
+      i,
+      listmap["product_name"],
+      listmap["qty"],
+      listmap["rate"],
+      listmap["amount"],
+      listmap["discount_amount"],
+      listmap["tax_perc"],
+      listmap["tax"],
+      netrate.toStringAsFixed(2),
+    ];
   }
 
   ////////////////////////////////////////////////////
