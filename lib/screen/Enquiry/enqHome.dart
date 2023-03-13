@@ -333,7 +333,7 @@ class _EnqHomeState extends State<EnqHome> {
         print("yes huhu");
         customNotification();
       }
-    } 
+    }
     // else if (mobile_user_type == "2") {
     //   if (Provider.of<RegistrationController>(context, listen: false)
     //               .servicescheduleListCount >
@@ -497,44 +497,46 @@ class _EnqHomeState extends State<EnqHome> {
                                   .menu_index ==
                               "AD1"
                       ? Container()
-                      : IconButton(
-                          icon: actionIcon,
-                          onPressed: () {
-                            // togle();
-                            togle();
-                            // setState(() {
-                            if (this.actionIcon.icon == Icons.search) {
-                              _controller.clear();
-                              this.actionIcon = Icon(Icons.close);
-                              this.appBarTitle = SearchAutoComplete();
+                      : mobile_user_type == "1"
+                          ? IconButton(
+                              icon: actionIcon,
+                              onPressed: () {
+                                // togle();
+                                togle();
+                                // setState(() {
+                                if (this.actionIcon.icon == Icons.search) {
+                                  _controller.clear();
+                                  this.actionIcon = Icon(Icons.close);
+                                  this.appBarTitle = SearchAutoComplete();
 
-                              // TextField(
-                              //     controller: _controller,
-                              //     style: new TextStyle(
-                              //       color: Colors.white,
-                              //     ),
-                              //     decoration: InputDecoration(
-                              //       prefixIcon:
-                              //           Icon(Icons.search, color: Colors.white),
-                              //       hintText: "Search...cxzcxzxz",
-                              //       hintStyle: TextStyle(color: Colors.white),
-                              //     ),
-                              //     onChanged: ((value) {
-                              //       // print(value);
-                              //       onChangedValue(value);
-                              //     }),
-                              //     cursorColor: Colors.black);
-                            } else {
-                              if (this.actionIcon.icon == Icons.close) {
-                                this.actionIcon = Icon(Icons.search);
-                                this.appBarTitle = Text("");
-                                // Provider.of<Controller>(context, listen: false)
-                                //     .setIssearch(false);
-                              }
-                            }
-                            // });
-                          },
-                        ),
+                                  // TextField(
+                                  //     controller: _controller,
+                                  //     style: new TextStyle(
+                                  //       color: Colors.white,
+                                  //     ),
+                                  //     decoration: InputDecoration(
+                                  //       prefixIcon:
+                                  //           Icon(Icons.search, color: Colors.white),
+                                  //       hintText: "Search...cxzcxzxz",
+                                  //       hintStyle: TextStyle(color: Colors.white),
+                                  //     ),
+                                  //     onChanged: ((value) {
+                                  //       // print(value);
+                                  //       onChangedValue(value);
+                                  //     }),
+                                  //     cursorColor: Colors.black);
+                                } else {
+                                  if (this.actionIcon.icon == Icons.close) {
+                                    this.actionIcon = Icon(Icons.search);
+                                    this.appBarTitle = Text("");
+                                    // Provider.of<Controller>(context, listen: false)
+                                    //     .setIssearch(false);
+                                  }
+                                }
+                                // });
+                              },
+                            )
+                          : Container(),
                   Visibility(
                     visible: visible,
                     child: IconButton(
@@ -1005,7 +1007,8 @@ class _EnqHomeState extends State<EnqHome> {
                           String tabId;
                           Provider.of<Controller>(context, listen: false)
                               .setDropdowndata(selected!);
-                               Provider.of<ProductController>(context, listen: false).setAreaId(selected!);
+                          Provider.of<ProductController>(context, listen: false)
+                              .setAreaId(selected!);
                           Provider.of<Controller>(context, listen: false)
                               .getCustomerList(context, selected!);
 

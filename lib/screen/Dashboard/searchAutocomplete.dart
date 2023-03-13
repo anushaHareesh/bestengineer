@@ -32,15 +32,15 @@ class _SearchAutoCompleteState extends State<SearchAutoComplete> {
                       .toString()
                       .toLowerCase()
                       .contains(textEditingValue.text.toLowerCase()) ||
-                  element["qt_no"].contains(
-                    textEditingValue.text.toLowerCase(),
-                  ));
+                  element["qt_no"].toString().toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      ));
             }
           },
           fieldViewBuilder:
               (context, textEditingController, focusNode, onFieldSubmitted) {
             return TextField(
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 12),
               controller: textEditingController,
               focusNode: focusNode,
               onEditingComplete: onFieldSubmitted,
@@ -51,8 +51,8 @@ class _SearchAutoCompleteState extends State<SearchAutoComplete> {
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
                   ),
-                  hintText: "Search Here....",
-                  hintStyle: TextStyle(color: Colors.white, fontSize: 13)),
+                  hintText: "Search With Qt No. or Customer....",
+                  hintStyle: TextStyle(color: Colors.white, fontSize: 12)),
             );
           },
           optionsViewBuilder: (context, onSelected, options) {
@@ -71,7 +71,8 @@ class _SearchAutoCompleteState extends State<SearchAutoComplete> {
                         return ListTile(
                           onTap: () {
                             onSelected(option);
-                            Provider.of<Controller>(context, listen: false).searchQotSelected=option["cname"] ;
+                            Provider.of<Controller>(context, listen: false)
+                                .searchQotSelected = option["cname"];
                             String s = option["s_invoice_id"];
                             Provider.of<Controller>(context, listen: false)
                                 .getQuotationSearchList(context, s);
@@ -83,7 +84,10 @@ class _SearchAutoCompleteState extends State<SearchAutoComplete> {
                             //   ),
                             // );
                           },
-                          title: Text(option["cname"]),
+                          title: Text(
+                            option["cname"],
+                            style: TextStyle(fontSize: 12),
+                          ),
                         );
                       },
                       itemCount: options.length),
