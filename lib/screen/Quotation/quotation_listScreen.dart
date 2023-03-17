@@ -263,13 +263,14 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                     InkWell(
                                       onTap: () async {
                                         _selectDate(
-                                          context,
-                                          index,
-                                          value.quotationList[index]["enq_id"],
-                                          value.quotationList[index]
-                                              ["s_invoice_id"], value.quotationList[index]
-                                              ["qt_no"]
-                                        );
+                                            context,
+                                            index,
+                                            value.quotationList[index]
+                                                ["enq_id"],
+                                            value.quotationList[index]
+                                                ["s_invoice_id"],
+                                            value.quotationList[index]
+                                                ["qt_no"]);
                                         // dateFind.selectDateFind(
                                         //     context, "to date");
                                       },
@@ -353,6 +354,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                           InkWell(
                             onTap: () {
                               DeleteQuotation quot = DeleteQuotation();
+                              value.dealerselected = null;
                               quot.showdeleteQuotSheet(
                                   context,
                                   value.quotationList[index]["qt_no"],
@@ -523,7 +525,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                           value.newquotationList[index]
                                               ["enq_id"],
                                           value.newquotationList[index]
-                                              ["s_invoice_id"], value.newquotationList[index]
+                                              ["s_invoice_id"],
+                                          value.newquotationList[index]
                                               ["qt_no"],
                                         );
                                         // dateFind.selectDateFind(
@@ -674,8 +677,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     );
   }
 
-  Future<void> _selectDate(
-      BuildContext context, int index, String enqId, String invId,String qtNo) async {
+  Future<void> _selectDate(BuildContext context, int index, String enqId,
+      String invId, String qtNo) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
@@ -695,7 +698,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     print("date----------------$date");
 
     Provider.of<QuotationController>(context, listen: false)
-        .setScheduledDate(index, date!, context, enqId, invId,qtNo);
+        .setScheduledDate(index, date!, context, enqId, invId, qtNo);
     // });
   }
 }

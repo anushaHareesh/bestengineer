@@ -27,7 +27,7 @@ class PdFSave {
     final pdf = Document();
     final headerimage;
     final footerimage;
-         final rupee;
+    final rupee;
     rupee = await imageFromAssetBundle('assets/rupee.png');
     if (br == "0") {
       headerimage = await imageFromAssetBundle('assets/kannur_header.png');
@@ -65,8 +65,8 @@ class PdFSave {
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildInvoice(detailPdf),
         // Divider(),
-        SizedBox(height: 5),
-        buildTotal(detailPdf,rupee),
+        // SizedBox(height: 5),
+        buildTotal(detailPdf, rupee),
       ],
 
       header: (
@@ -135,7 +135,7 @@ class PdFSave {
     ]));
   }
 
-  Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
+    Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
     return Container(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -149,7 +149,7 @@ class PdFSave {
               Text(
                 masterPdf[0]["s_invoice_no"],
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                 ),
               )
             ]),
@@ -168,7 +168,7 @@ class PdFSave {
                         TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
                 Text(masterPdf[0]["company_add1"],
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 10,
                     ))
               ],
             ),
@@ -183,7 +183,7 @@ class PdFSave {
                       pw.TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["qdate"],
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                   ))
             ]),
             Row(children: [
@@ -191,7 +191,7 @@ class PdFSave {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_1"],
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                   ))
             ]),
 
@@ -200,7 +200,7 @@ class PdFSave {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_2"],
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                   ))
             ]),
             // pw.Row(
@@ -228,7 +228,7 @@ class PdFSave {
       'Rate',
       'Amt',
       'Disc',
-      'GST%',
+      // 'GST%',
       'GST',
       'Net Amt',
     ];
@@ -247,7 +247,7 @@ class PdFSave {
         item["rate"],
         item["amount"],
         item["discount_amount"],
-        item["tax_perc"],
+        // item["tax_perc"],
         item["tax"],
         netrate.toStringAsFixed(2),
       ];
@@ -308,18 +308,20 @@ class PdFSave {
   }
 
   ////////////////////////////////////////////////////
-   Widget buildTotal(
+  Widget buildTotal(
     List<Map<String, dynamic>> list,
     ImageProvider image,
   ) {
     double sum = 0.0;
     double amount_tot = 0.0;
     double gstTot = 0.0;
+    double disctTot = 0.0;
 
     for (int i = 0; i < list.length; i++) {
       sum = double.parse(list[i]["net_rate"]) + sum;
       amount_tot = double.parse(list[i]["amount"]) + amount_tot;
       gstTot = double.parse(list[i]["tax"]) + gstTot;
+      disctTot = double.parse(list[i]["discount_amount"]) + disctTot;
     }
 
     return Container(
@@ -332,6 +334,20 @@ class PdFSave {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 2 * PdfPageFormat.mm),
+
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'Discount total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${disctTot.toStringAsFixed(2)}",
+                  )
+                ]),
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 Row(children: [
                   Expanded(
@@ -389,6 +405,7 @@ class PdFSave {
       ),
     );
   }
+
   ////////////////////////////////////////////////////
   static buildText({
     required String title,
@@ -416,16 +433,23 @@ class PdFSave {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            // width: 100,
-            // decoration:
-            //     BoxDecoration(border: Border.all(color: PdfColors.black)),
-            alignment: Alignment.centerLeft,
-            child: Padding(
-                padding: EdgeInsets.all(3),
-                child: Text("Prepared By : $staffName",
-                    style: TextStyle(fontSize: 10))),
-          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text("Prepared By : $staffName", style: TextStyle(fontSize: 8)),
+            Row(children: [
+              Text("Signature : ", style: TextStyle(fontSize: 8)),
+              Container(width: 40)
+            ])
+          ]),
+          // Container(
+          //   // width: 100,
+          //   // decoration:
+          //   //     BoxDecoration(border: Border.all(color: PdfColors.black)),
+          //   alignment: Alignment.centerLeft,
+          //   child: Padding(
+          //       padding: EdgeInsets.all(3),
+          //       child: Text("Prepared By : $staffName",
+          //           style: TextStyle(fontSize: 10))),
+          // ),
           // Container(
           //   width:400 ,
           //     // margin: const EdgeInsets.all(15.0),

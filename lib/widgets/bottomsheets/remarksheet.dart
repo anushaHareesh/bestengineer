@@ -1,5 +1,6 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/quotationController.dart';
+import 'package:bestengineer/widgets/alertCommon/savePopup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -183,24 +184,61 @@ class RemarkSheet {
                               visible.value = true;
                             } else {
                               visible.value = false;
+                              SavePopup save = SavePopup();
+                              if (type == "add") {
+                                // Navigator.of(_scaffoldKey.currentContext!)
+                                //     .pop();
 
-                              Navigator.of(_scaffoldKey.currentContext!).pop();
-                              showDailogue(context, true, _keyLoader, 1);
-                              Provider.of<QuotationController>(context,
-                                      listen: false)
-                                  .saveQuotation(
-                                      _scaffoldKey.currentContext!,
-                                      remark.text,
-                                      sdate,
-                                      int.parse(rwId),
-                                      enq_id,
-                                      type,
-                                      hiddenstatus,selected!);
+                                save.buildSavePopupDialog(
+                                    context,
+                                    _scaffoldKey,
+                                    _keyLoader,
+                                    remark.text,
+                                    sdate,
+                                    int.parse(rwId),
+                                    enq_id,
+                                    hiddenstatus,
+                                    selected!,
+                                    type);
+                              } else {
+                                print("editt----");
+                                Navigator.of(_scaffoldKey.currentContext!)
+                                    .pop();
+                                showDailogue(context, true, _keyLoader, 1);
+                                Provider.of<QuotationController>(context,
+                                        listen: false)
+                                    .saveQuotation(
+                                        _scaffoldKey.currentContext!,
+                                        remark.text,
+                                        sdate,
+                                        int.parse(rwId),
+                                        enq_id,
+                                        type,
+                                        hiddenstatus,
+                                        selected!);
+                              }
+                              //  Navigator.of(_scaffoldKey.currentContext!)
+                              //               .pop();
+                              //           showDailogue(context, true, _keyLoader, 1);
+                              //           Provider.of<QuotationController>(context,
+                              //                   listen: false)
+                              //               .saveQuotation(
+                              //                   _scaffoldKey.currentContext!,
+                              //                   remark.text,
+                              //                   sdate,
+                              //                   int.parse(rwId),
+                              //                   enq_id,
+                              //                   type,
+                              //                   hiddenstatus,
+                              //                   selected!);
                             }
                           },
                           child: Text(
-                            "Apply",
-                            style: TextStyle(color: P_Settings.whiteColor),
+                            type == "add" ? "Make Quotation" : "Apply",
+                            style: TextStyle(
+                                color: P_Settings.whiteColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
                           )),
                     )
                   ],

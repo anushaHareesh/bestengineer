@@ -11,8 +11,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:provider/provider.dart';
 
+import '../alertCommon/deleteQuotation.dart';
+
 class DeleteQuotation {
-  showdeleteQuotSheet(BuildContext context, String qtNo,String invId) {
+  showdeleteQuotSheet(BuildContext context, String qtNo, String invId) {
     Size size = MediaQuery.of(context).size;
 
     TextEditingController name = TextEditingController();
@@ -29,7 +31,7 @@ class DeleteQuotation {
             topLeft: Radius.circular(25.0),
             topRight: Radius.circular(25.0)),
       ),
-      builder: (BuildContext context) {
+      builder: (BuildContext mycontext) {
         return Consumer<QuotationController>(builder: (context, value, child) {
           // value.qty[index].text=qty.toString();
 
@@ -154,7 +156,7 @@ class DeleteQuotation {
                             ),
                           ),
                     Container(
-                      height: size.height * 0.05,
+                      // height: size.height * 0.05,
                       margin: EdgeInsets.only(left: 14, right: 14, top: 18),
                       child: TextField(
                         onChanged: (val) {
@@ -202,12 +204,22 @@ class DeleteQuotation {
 
                                     ),
                                 onPressed: () {
-                                  value.deleteQuotation(
+                                  DeleteQuotationpopup delete =
+                                      DeleteQuotationpopup();
+                                      Navigator.pop(mycontext);
+                                  delete.builddeletePopupDialog(
                                       context,
+                                      "Do You want to delete Inv : $invId",
                                       value.dealerselected.toString(),
                                       selected.toString(),
                                       remark.text,
                                       invId);
+                                  // value.deleteQuotation(
+                                  //     context,
+                                  //     value.dealerselected.toString(),
+                                  //     selected.toString(),
+                                  //     remark.text,
+                                  //     invId);
                                   // DeletePopup deletepopup = DeletePopup();
                                   // deletepopup.builddeletePopupDialog(
                                   //   context,
@@ -220,10 +232,10 @@ class DeleteQuotation {
                                   //   "",
                                   //   remark.text,
                                   // );
-                                  Navigator.pop(context);
+                                  // Navigator.pop(mycontext);
                                 },
                                 child: Text(
-                                  "Apply",
+                                  "Delete",
                                   style: TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),

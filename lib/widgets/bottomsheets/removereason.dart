@@ -48,7 +48,7 @@ class RemoveReason {
                         children: [
                           Text(
                             "Reason  :",
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 15),
                           )
                         ],
                       ),
@@ -104,7 +104,7 @@ class RemoveReason {
                             // Navigator.pop(mycontext);
                           },
                           child: Text(
-                            "Apply",
+                            "Delete",
                             style: TextStyle(color: P_Settings.whiteColor),
                           )),
                     )

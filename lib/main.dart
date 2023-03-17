@@ -39,6 +39,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'gmap/test_map.dart';
+
 // company Key------BS12KNRVBGBE
 
 void requestPermission() async {

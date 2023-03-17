@@ -72,8 +72,9 @@ class PdfQuotation {
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildInvoice(detailPdf),
         // Divider(),
-        SizedBox(height: 5),
+        // SizedBox(height: 5),
         buildTotal(detailPdf, rupee),
+        // returnTotal(detailPdf),
       ],
 
       header: (
@@ -165,7 +166,7 @@ class PdfQuotation {
               Text(
                 masterPdf[0]["s_invoice_no"],
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                 ),
               )
             ]),
@@ -184,7 +185,7 @@ class PdfQuotation {
                         TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
                 Text(masterPdf[0]["company_add1"],
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 10,
                     ))
               ],
             ),
@@ -199,7 +200,7 @@ class PdfQuotation {
                       pw.TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["qdate"],
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                   ))
             ]),
             Row(children: [
@@ -207,7 +208,7 @@ class PdfQuotation {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_1"],
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                   ))
             ]),
 
@@ -216,7 +217,7 @@ class PdfQuotation {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_2"],
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 10,
                   ))
             ]),
             // pw.Row(
@@ -235,7 +236,360 @@ class PdfQuotation {
   }
 
   Widget buildInvoice(List<Map<String, dynamic>> list) {
-    print("kjgkjf------$list");
+    bool bord = false;
+    // List<Map<String, dynamic>> list = [
+
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    //   {
+    //     "product_name": "czc",
+    //     "qty": "12",
+    //     "rate": "123",
+    //     "amount": "134",
+    //     "discount_amount": "10",
+    //     'tax_perc': "6",
+    //     "tax": "6",
+    //     "net_rate": "234"
+    //   },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // {
+    //   "product_name": "czc",
+    //   "qty": "12",
+    //   "rate": "123",
+    //   "amount": "134",
+    //   "discount_amount": "10",
+    //   'tax_perc': "6",
+    //   "tax": "6",
+    //   "net_rate": "234"
+    // },
+    // ];
     int i = 0;
     final headers = [
       'Sl No',
@@ -244,19 +598,113 @@ class PdfQuotation {
       'Rate',
       'Amt',
       'Disc',
-      'GST%',
+      // 'GST%',
       'GST',
       'Net Amt',
     ];
+
     var data1;
+    Map map;
     List<List<dynamic>> data = [];
+    int j;
+
+    // if (list.length > 13) {
+    //   int k = (list.length - 13) % 15;
+    //   if (k < 10) {
+    //     k = k + 5;
+    //   } else {
+    //     k = k;
+    //   }
+    //   j = list.length + k;
+    // } else {
+    //   j = 13;
+    // }
+    // for (int i = 0; i < j; i++) {
+    //   if (i > list.length - 1) {
+    //     // map = {
+    //     //   "product_name": "",
+    //     //   "qty": "",
+    //     //   "rate": "",
+    //     //   "amount": "",
+    //     //   "discount_amount": "",
+    //     //   'tax_perc': "",
+    //     //   "tax": "",
+    //     //   "net_rate": ""
+    //     // };
+    //     data1 = ["", "", "", "", "", "", "", ""];
+    //   } else {
+    //     map = list[i];
+    //     data1 = returnRows(map, (i + 1).toString());
+    //   }
+
+    //   data.add(data1);
+    // }
+
     for (int i = 0; i < list.length; i++) {
-      // i=i+1;
-      data1 = returnRows(list[i], i + 1);
+      data1 = returnRows(list[i], (i + 1).toString());
+
       data.add(data1);
     }
-    print("data----$data1");
 
+    // double sum = 0.0;
+    // double amount_tot = 0.0;
+    // double gstTot = 0.0;
+    // for (int i = 0; i < list.length; i++) {
+    //   sum = double.parse(list[i]["net_rate"]) + sum;
+    //   amount_tot = double.parse(list[i]["amount"]) + amount_tot;
+    //   gstTot = double.parse(list[i]["tax"]) + gstTot;
+    // }
+    // returnTotal(list);
+    // List<dynamic> tot = [
+    //   "",
+    //   "Grand Total",
+    //   "",
+    //   "",
+    //   "",
+    //   "",
+    //   "",
+    //   "",
+    //   sum.toStringAsFixed(2)
+    // ];
+    // List<dynamic> tot1 = [
+    //   "",
+    //   "GST Total",
+    //   "",
+    //   "",
+    //   "",
+    //   "",
+    //   "",
+    //   gstTot.toStringAsFixed(2),
+    //   ""
+    // ];
+    // List<dynamic> tot2 = [
+    //   "",
+    //   "Amount Total",
+    //   "",
+    //   "",
+    //   amount_tot.toStringAsFixed(2),
+    //   "",
+    //   "",
+    //   "",
+    //   ""
+    // ];
+
+    // data.add(tot2);
+    // data.add(tot1);
+    // data.add(tot);
+    // bord = true;
+    print("data----$data1");
+///////////////////**************************************************************  */
+    // List<List<dynamic>> data = [];
+    // for (int i = 0; i < list.length; i++) {
+    //   data1 = returnRows(list[i], (i + 1).toString());
+
+    //   data.add(data1);
+    // }
+    // // List<dynamic> m = ["Grand Total", "400"];
+    // // data.add(m);
+    // print("data----$data1");
+///////////////************************************************/////////////////// */
     // final data = list.map((item) {
     //   print("sdjsjkh----${item["qty"].runtimeType}");
     //   i = i + 1;
@@ -276,10 +724,15 @@ class PdfQuotation {
     //     netrate.toStringAsFixed(2),
     //   ];
     // }).toList();
+
     return Table.fromTextArray(
       headers: headers,
       data: data,
       tableWidth: TableWidth.max,
+
+      // cellDecoration: (index, data, rowNum) {
+      //   return TableRow(children: children)
+      // },
       border: TableBorder(
         left: BorderSide(
           color: PdfColors.grey,
@@ -331,7 +784,7 @@ class PdfQuotation {
   }
 
   /////////////////////////////////////////////////////
-  returnRows(Map listmap, int i) {
+  returnRows(Map listmap, String i) {
     double netrate = double.parse(listmap["net_rate"]!);
     return [
       i,
@@ -340,11 +793,162 @@ class PdfQuotation {
       listmap["rate"],
       listmap["amount"],
       listmap["discount_amount"],
-      listmap["tax_perc"],
+      // listmap["tax_perc"],
       listmap["tax"],
       netrate.toStringAsFixed(2),
     ];
   }
+
+  // returnTotal(
+  //   List<Map<String, dynamic>> list,
+  // ) {
+  //   double sum = 0.0;
+  //   double amount_tot = 0.0;
+  //   double gstTot = 0.0;
+  //   double disctTot = 0.0;
+
+  //   for (int i = 0; i < list.length; i++) {
+  //     sum = double.parse(list[i]["net_rate"]) + sum;
+  //     amount_tot = double.parse(list[i]["amount"]) + amount_tot;
+  //     gstTot = double.parse(list[i]["tax"]) + gstTot;
+  //     disctTot=double.parse(list[i]["discount_amount"]) + disctTot;
+  //   }
+  //   return Column(children: [
+  //     Container(
+  //         decoration: BoxDecoration(
+  //           border: Border(
+  //             left: BorderSide(
+  //               //                   <--- left side
+  //               color: PdfColors.grey,
+  //               // width: 0,
+  //             ),
+  //             right: BorderSide(
+  //               //                    <--- top side
+  //               color: PdfColors.grey,
+  //               // width: 3.0,
+  //             ),
+  //             bottom: BorderSide(
+  //               //                    <--- top side
+  //               color: PdfColors.grey,
+  //               width: 0,
+  //             ),
+  //           ),
+  //         ),
+  //         child: Row(children: [
+  //           // Spacer(flex: 1),
+  //           SizedBox(width: 100),
+  //           Expanded(
+  //               child: Text('Grand total', style: TextStyle(fontSize: 10))),
+  //           // Container(
+  //           //   child: Image(image, height: 8, width: 9),
+  //           // ),
+  //           Container(
+  //               decoration: BoxDecoration(
+  //                   border: Border(
+  //                 left: BorderSide(
+  //                   //                   <--- left side
+  //                   color: PdfColors.grey,
+  //                   // width: 0,
+  //                 ),
+  //               )),
+  //               child: Text(
+  //                   sum.toStringAsFixed(
+  //                     2,
+  //                   ),
+  //                   style: TextStyle(fontSize: 12)))
+  //         ])),
+  //     Container(
+  //       decoration: BoxDecoration(
+  //         border: Border(
+  //           left: BorderSide(
+  //             //                   <--- left side
+  //             color: PdfColors.grey,
+  //             // width: 0,
+  //           ),
+  //           right: BorderSide(
+  //             //                    <--- top side
+  //             color: PdfColors.grey,
+  //             // width: 3.0,
+  //           ),
+  //           bottom: BorderSide(
+  //             //                    <--- top side
+  //             color: PdfColors.grey,
+  //             // width: 0,
+  //           ),
+  //         ),
+  //       ),
+  //       child: Row(children: [
+  //         SizedBox(width: 100),
+  //         Expanded(child: Text('GST total', style: TextStyle(fontSize: 10))),
+  //         // SizedBox(width: 100),
+
+  //         // Container(
+  //         //   child: Image(image, height: 8, width: 9),
+  //         // ),
+  //         Text("${gstTot.toStringAsFixed(2)}", style: TextStyle(fontSize: 12))
+  //       ]),
+  //     ),
+  //     Container(
+  //         decoration: BoxDecoration(
+  //           border: Border(
+  //             left: BorderSide(
+  //               //                   <--- left side
+  //               color: PdfColors.grey,
+  //               // width: 0,
+  //             ),
+  //             right: BorderSide(
+  //               //                    <--- top side
+  //               color: PdfColors.grey,
+  //               // width: 3.0,
+  //             ),
+  //             bottom: BorderSide(
+  //               //                    <--- top side
+  //               color: PdfColors.grey,
+  //               // width: 0,
+  //             ),
+  //           ),
+  //         ),
+  //         child: Row(children: [
+  //           // Spacer(flex: 1),
+  //           SizedBox(width: 100),
+  //           Expanded(
+  //               child: Text('Grand total', style: TextStyle(fontSize: 10))),
+  //           // Container(
+  //           //   child: Image(image, height: 8, width: 9),
+  //           // ),
+  //           Text(sum.toStringAsFixed(2), style: TextStyle(fontSize: 12))
+  //         ]))
+  //   ]);
+  //   // return Container(
+  //   //     decoration: BoxDecoration(
+  //   //       border: Border(
+  //   //         left: BorderSide(
+  //   //           //                   <--- left side
+  //   //           color: PdfColors.grey,
+  //   //           // width: 0,
+  //   //         ),
+  //   //         right: BorderSide(
+  //   //           //                    <--- top side
+  //   //           color: PdfColors.grey,
+  //   //           // width: 3.0,
+  //   //         ),
+  //   //         bottom: BorderSide(
+  //   //           //                    <--- top side
+  //   //           color: PdfColors.grey,
+  //   //           width: 0,
+  //   //         ),
+  //   //       ),
+  //   //     ),
+  //   //     child: Row(children: [
+  //   //       // Spacer(flex: 1),
+  //   //       SizedBox(width: 100),
+  //   //       Expanded(child: Text('Grand total', style: TextStyle(fontSize: 10))),
+  //   //       // Container(
+  //   //       //   child: Image(image, height: 8, width: 9),
+  //   //       // ),
+  //   //       Text(sum.toStringAsFixed(2))
+  //   //     ]));
+  // }
 
   ////////////////////////////////////////////////////
   Widget buildTotal(
@@ -354,11 +958,13 @@ class PdfQuotation {
     double sum = 0.0;
     double amount_tot = 0.0;
     double gstTot = 0.0;
+    double disctTot = 0.0;
 
     for (int i = 0; i < list.length; i++) {
       sum = double.parse(list[i]["net_rate"]) + sum;
       amount_tot = double.parse(list[i]["amount"]) + amount_tot;
       gstTot = double.parse(list[i]["tax"]) + gstTot;
+      disctTot = double.parse(list[i]["discount_amount"]) + disctTot;
     }
 
     return Container(
@@ -371,6 +977,20 @@ class PdfQuotation {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 2 * PdfPageFormat.mm),
+
+                Row(children: [
+                  Expanded(
+                      child: Text(
+                    'Discount total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${disctTot.toStringAsFixed(2)}",
+                  )
+                ]),
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 Row(children: [
                   Expanded(
@@ -456,16 +1076,23 @@ class PdfQuotation {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            // width: 100,
-            // decoration:
-            //     BoxDecoration(border: Border.all(color: PdfColors.black)),
-            alignment: Alignment.centerLeft,
-            child: Padding(
-                padding: EdgeInsets.all(3),
-                child: Text("Prepared By : $staffName",
-                    style: TextStyle(fontSize: 10))),
-          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text("Prepared By : $staffName", style: TextStyle(fontSize: 8)),
+            Row(children: [
+              Text("Signature : ", style: TextStyle(fontSize: 8)),
+              Container(width: 40)
+            ])
+          ]),
+          // Container(
+          //   // width: 100,
+          //   // decoration:
+          //   //     BoxDecoration(border: Border.all(color: PdfColors.black)),
+          //   alignment: Alignment.centerLeft,
+          //   child: Padding(
+          //       padding: EdgeInsets.all(3),
+          //       child: Text("Prepared By : $staffName",
+          //           style: TextStyle(fontSize: 10))),
+          // ),
           // Container(
           //   width:400 ,
           //     // margin: const EdgeInsets.all(15.0),

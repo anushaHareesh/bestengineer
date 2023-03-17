@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/bottomsheets/visitedRemarkSheet.dart';
 
@@ -19,6 +20,14 @@ class ScheduleListScreen extends StatefulWidget {
 }
 
 class _ScheduleListScreenState extends State<ScheduleListScreen> {
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
   Color parseColor(String color) {
     print("Colorrrrr...$color");
     String hex = color.replaceAll("#", "");
@@ -299,13 +308,13 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
     return Consumer<RegistrationController>(
       builder: (context, value, child) {
         return InkWell(
-          onTap: () {
-            VisitedRemarkSheet visited = VisitedRemarkSheet();
-            visited.showRemarkSheet(
-                context,
-                value.scheduleList[index]["enq_id"],
-                value.scheduleList[index]["s_invoice_id"]);
-          },
+          // onTap: () {
+          //   VisitedRemarkSheet visited = VisitedRemarkSheet();
+          //   visited.showRemarkSheet(
+          //       context,
+          //       value.scheduleList[index]["enq_id"],
+          //       value.scheduleList[index]["s_invoice_id"]);
+          // },
           child: Card(
             elevation: 3,
             // color: Colors.red,
@@ -404,10 +413,15 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                   ),
                   subtitle: Row(
                     children: [
-                      Icon(
-                        Icons.phone,
-                        size: 14,
-                        color: Colors.green,
+                      InkWell(
+                        onTap: () {
+                          _makePhoneCall(value.scheduleList[index]["phone_1"]);
+                        },
+                        child: Icon(
+                          Icons.phone,
+                          size: 14,
+                          color: Colors.green,
+                        ),
                       ),
                       SizedBox(
                         width: 5,
@@ -449,30 +463,79 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                           ],
                         ),
                       ),
-                value.scheduleList[index]["owner_name"] == null ||
-                        value.scheduleList[index]["owner_name"].isEmpty
-                    ? Container()
-                    : Padding(
-                        padding: const EdgeInsets.only(
-                            left: 12.0, top: 8, bottom: 8),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Contact Person   :  ',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            Flexible(
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Contact Person :  ',
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          ),
+                          Container(
+                            width: 200,
+                            child: Flexible(
                               child: Text(
-                                // "anusha kkk",
+                                // "anusha kkkmfnnnnnnnnnnnnnnnnnnnnmn kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
                                 value.scheduleList[index]["owner_name"],
                                 style: TextStyle(fontSize: 14),
                               ),
-                            )
-                          ],
-                        ),
-                      )
+                            ),
+                          )
+                        ],
+                      ),
+                      InkWell(
+                          onTap: () {
+                            VisitedRemarkSheet visited = VisitedRemarkSheet();
+                            visited.showRemarkSheet(
+                                context,
+                                value.scheduleList[index]["enq_id"],
+                                value.scheduleList[index]["s_invoice_id"]);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Finish",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ))
+                    ],
+                  ),
+                )
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     value.scheduleList[index]["owner_name"] == null ||
+                //             value.scheduleList[index]["owner_name"].isEmpty
+                //         ? Container()
+                //         : Row(
+                //           children: [
+                //             Text(
+                //               'Contact Person   :  ',
+                //               style: TextStyle(
+                //                 color: Colors.grey,
+                //               ),
+                //             ),
+                //             Flexible(
+                //               child: Text(
+                //                 // "anusha kkk",
+                //                 value.scheduleList[index]["owner_name"],
+                //                 style: TextStyle(fontSize: 14),
+                //               ),
+                //             )
+                //           ],
+                //         ),
+
+                //   ],
+                // )
               ],
             ),
           ),

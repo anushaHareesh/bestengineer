@@ -64,7 +64,8 @@ class VisitedRemarkSheet {
                         style: TextStyle(color: Colors.grey[800]),
                         controller: remark,
                         decoration: InputDecoration(
-                          // hintText: "Reason ........",
+                          hintText: "Type Remark here ..........",
+                          hintStyle: TextStyle(fontSize: 12,color: Colors.grey[500]),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 1,

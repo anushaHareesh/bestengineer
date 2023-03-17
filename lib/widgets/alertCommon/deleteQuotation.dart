@@ -1,22 +1,17 @@
 import 'package:bestengineer/components/commonColor.dart';
-import 'package:bestengineer/controller/controller.dart';
-import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'package:provider/provider.dart';
 
-class DeletePopup {
+class DeleteQuotationpopup {
   Future builddeletePopupDialog(
-      BuildContext context,
-      String itemName,
-      String itemId,
-      int index,
-      String type,
-      String enqId,
-      String fdtae,
-      String tdate,
-      String? reason) {
+    BuildContext context,
+    String content,
+    String dealerName,
+    String dealerId,
+    String? reason,
+    String invId,
+  ) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -26,11 +21,15 @@ class DeletePopup {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(child: Text("Do you want to delete $itemName ?",style: TextStyle(fontSize: 14),)),
+                Flexible(
+                    child: Text(
+                  content,
+                  style: TextStyle(fontSize: 14),
+                )),
               ],
             ),
             actions: <Widget>[
-              Consumer<ProductController>(
+              Consumer<QuotationController>(
                 builder: (context, value, child) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -39,30 +38,13 @@ class DeletePopup {
                           style: ElevatedButton.styleFrom(
                               primary: P_Settings.loginPagetheme),
                           onPressed: () {
-                            if (type == "history") {
-                              value.updateHistory(
-                                  context, "2", enqId, fdtae, tdate, reason);
-                            } else if (type == "quotation") {
-                            } else {
-                              value.addDeletebagItem(
-                                itemName,
-                                itemId,
-                                value.cartQty[index].text,
-                                "",
-                                "2",
-                                value.bagList[index]["cart_id"],
-                                Provider.of<Controller>(context, listen: false)
-                                    .dupcustomer_id
-                                    .toString(),
-                                context,
-                              );
-                            }
-
                             Navigator.pop(context);
+                            value.deleteQuotation(context, dealerName, dealerId,
+                                reason.toString(), invId);
                           },
                           child: Text("Ok")),
                       Padding(
-                        padding: const EdgeInsets.only(left: 8.0), 
+                        padding: const EdgeInsets.only(left: 8.0),
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: P_Settings.loginPagetheme),
