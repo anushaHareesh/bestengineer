@@ -73,7 +73,7 @@ class PdfQuotation {
         buildInvoice(detailPdf),
         // Divider(),
         // SizedBox(height: 5),
-        buildTotal(detailPdf, rupee),
+        // buildTotal(detailPdf, rupee),
         // returnTotal(detailPdf),
       ],
 
@@ -590,6 +590,7 @@ class PdfQuotation {
     //   "net_rate": "234"
     // },
     // ];
+
     int i = 0;
     final headers = [
       'Sl No',
@@ -646,52 +647,54 @@ class PdfQuotation {
       data.add(data1);
     }
 
-    // double sum = 0.0;
-    // double amount_tot = 0.0;
-    // double gstTot = 0.0;
-    // for (int i = 0; i < list.length; i++) {
-    //   sum = double.parse(list[i]["net_rate"]) + sum;
-    //   amount_tot = double.parse(list[i]["amount"]) + amount_tot;
-    //   gstTot = double.parse(list[i]["tax"]) + gstTot;
-    // }
+    double sum = 0.0;
+    double amount_tot = 0.0;
+    double gstTot = 0.0;
+    double discTot = 0.0;
+
+    for (int i = 0; i < list.length; i++) {
+      sum = double.parse(list[i]["net_rate"]) + sum;
+      amount_tot = double.parse(list[i]["amount"]) + amount_tot;
+      gstTot = double.parse(list[i]["tax"]) + gstTot;
+      discTot = double.parse(list[i]["discount_amount"]) + discTot;
+    }
     // returnTotal(list);
-    // List<dynamic> tot = [
-    //   "",
-    //   "Grand Total",
-    //   "",
-    //   "",
-    //   "",
-    //   "",
-    //   "",
-    //   "",
-    //   sum.toStringAsFixed(2)
-    // ];
-    // List<dynamic> tot1 = [
-    //   "",
-    //   "GST Total",
-    //   "",
-    //   "",
-    //   "",
-    //   "",
-    //   "",
-    //   gstTot.toStringAsFixed(2),
-    //   ""
-    // ];
-    // List<dynamic> tot2 = [
-    //   "",
-    //   "Amount Total",
-    //   "",
-    //   "",
-    //   amount_tot.toStringAsFixed(2),
-    //   "",
-    //   "",
-    //   "",
-    //   ""
-    // ];
+    List<dynamic> tot = [
+      "",
+      "Amount / Discount / GST Total",
+      "",
+      "",
+      amount_tot,
+      discTot,
+      gstTot,
+      sum.toStringAsFixed(2)
+    ];
+    List<dynamic> tot1 = [
+      "",
+      "Grand Total",
+      "",
+      "",
+      "",
+      "",
+      "",
+      sum.toStringAsFixed(2)
+    ];
+    // // List<dynamic> tot2 = [
+    // //   "",
+    // //   "Amount Total",
+    // //   "",
+    // //   "",
+    // //   amount_tot.toStringAsFixed(2),
+    // //   "",
+    // //   "",
+    // //   "",
+    // //   ""
+    // // ];
 
     // data.add(tot2);
-    // data.add(tot1);
-    // data.add(tot);
+    data.add(tot);
+    data.add(tot1);
+
     // bord = true;
     print("data----$data1");
 ///////////////////**************************************************************  */
@@ -757,7 +760,7 @@ class PdfQuotation {
       headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
       cellStyle: TextStyle(fontSize: 8),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
-      cellHeight: 30,
+      cellHeight: 10,
       columnWidths: {
         // 0: FixedColumnWidth(50),
         1: FixedColumnWidth(110),
@@ -778,7 +781,7 @@ class PdfQuotation {
         5: Alignment.centerRight,
         6: Alignment.centerRight,
         7: Alignment.centerRight,
-        8: Alignment.centerRight,
+        // 8: Alignment.centerRight,
       },
     );
   }
@@ -799,156 +802,190 @@ class PdfQuotation {
     ];
   }
 
-  // returnTotal(
-  //   List<Map<String, dynamic>> list,
-  // ) {
-  //   double sum = 0.0;
-  //   double amount_tot = 0.0;
-  //   double gstTot = 0.0;
-  //   double disctTot = 0.0;
+//////////////////////////////////////////////////////////////////////////////
+  returnTotal(
+    List<Map<String, dynamic>> list,
+  ) {
+    double sum = 0.0;
+    double amount_tot = 0.0;
+    double gstTot = 0.0;
+    double disctTot = 0.0;
 
-  //   for (int i = 0; i < list.length; i++) {
-  //     sum = double.parse(list[i]["net_rate"]) + sum;
-  //     amount_tot = double.parse(list[i]["amount"]) + amount_tot;
-  //     gstTot = double.parse(list[i]["tax"]) + gstTot;
-  //     disctTot=double.parse(list[i]["discount_amount"]) + disctTot;
-  //   }
-  //   return Column(children: [
-  //     Container(
-  //         decoration: BoxDecoration(
-  //           border: Border(
-  //             left: BorderSide(
-  //               //                   <--- left side
-  //               color: PdfColors.grey,
-  //               // width: 0,
-  //             ),
-  //             right: BorderSide(
-  //               //                    <--- top side
-  //               color: PdfColors.grey,
-  //               // width: 3.0,
-  //             ),
-  //             bottom: BorderSide(
-  //               //                    <--- top side
-  //               color: PdfColors.grey,
-  //               width: 0,
-  //             ),
-  //           ),
-  //         ),
-  //         child: Row(children: [
-  //           // Spacer(flex: 1),
-  //           SizedBox(width: 100),
-  //           Expanded(
-  //               child: Text('Grand total', style: TextStyle(fontSize: 10))),
-  //           // Container(
-  //           //   child: Image(image, height: 8, width: 9),
-  //           // ),
-  //           Container(
-  //               decoration: BoxDecoration(
-  //                   border: Border(
-  //                 left: BorderSide(
-  //                   //                   <--- left side
-  //                   color: PdfColors.grey,
-  //                   // width: 0,
-  //                 ),
-  //               )),
-  //               child: Text(
-  //                   sum.toStringAsFixed(
-  //                     2,
-  //                   ),
-  //                   style: TextStyle(fontSize: 12)))
-  //         ])),
-  //     Container(
-  //       decoration: BoxDecoration(
-  //         border: Border(
-  //           left: BorderSide(
-  //             //                   <--- left side
-  //             color: PdfColors.grey,
-  //             // width: 0,
-  //           ),
-  //           right: BorderSide(
-  //             //                    <--- top side
-  //             color: PdfColors.grey,
-  //             // width: 3.0,
-  //           ),
-  //           bottom: BorderSide(
-  //             //                    <--- top side
-  //             color: PdfColors.grey,
-  //             // width: 0,
-  //           ),
-  //         ),
-  //       ),
-  //       child: Row(children: [
-  //         SizedBox(width: 100),
-  //         Expanded(child: Text('GST total', style: TextStyle(fontSize: 10))),
-  //         // SizedBox(width: 100),
+    for (int i = 0; i < list.length; i++) {
+      sum = double.parse(list[i]["net_rate"]) + sum;
+      amount_tot = double.parse(list[i]["amount"]) + amount_tot;
+      gstTot = double.parse(list[i]["tax"]) + gstTot;
+      disctTot = double.parse(list[i]["discount_amount"]) + disctTot;
+    }
+    return Column(children: [
+      Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(
+                //                   <--- left side
+                color: PdfColors.grey,
+                // width: 0,
+              ),
+              right: BorderSide(
+                //                    <--- top side
+                color: PdfColors.grey,
+                // width: 3.0,
+              ),
+              bottom: BorderSide(
+                //                    <--- top side
+                color: PdfColors.grey,
+                width: 0,
+              ),
+            ),
+          ),
+          child: Row(children: [
+            // Spacer(flex: 1),
+            SizedBox(width: 59),
+            Expanded(
+                child: Text('Amount / Discount / GST Total',
+                    style: TextStyle(fontSize: 10))),
+            // Container(
+            //   child: Image(image, height: 8, width: 9),
+            // ),
+            Container(
+                decoration: BoxDecoration(
+                    border: Border(
+                  left: BorderSide(
+                    //                   <--- left side
+                    color: PdfColors.grey,
+                    // width: 0,
+                  ),
+                )),
+                child: Text(
+                    amount_tot.toStringAsFixed(
+                      2,
+                    ),
+                    style: TextStyle(fontSize: 12)))
+          ])),
+      Container(
+        decoration: BoxDecoration(
+          border: Border(
+            left: BorderSide(
+              //                   <--- left side
+              color: PdfColors.grey,
+              // width: 0,
+            ),
+            right: BorderSide(
+              //                    <--- top side
+              color: PdfColors.grey,
+              // width: 3.0,
+            ),
+            bottom: BorderSide(
+              //                    <--- top side
+              color: PdfColors.grey,
+              // width: 0,
+            ),
+          ),
+        ),
+        child: Row(children: [
+          SizedBox(width: 100),
+          Expanded(
+              child: Text('Discount total', style: TextStyle(fontSize: 10))),
+          // SizedBox(width: 100),
 
-  //         // Container(
-  //         //   child: Image(image, height: 8, width: 9),
-  //         // ),
-  //         Text("${gstTot.toStringAsFixed(2)}", style: TextStyle(fontSize: 12))
-  //       ]),
-  //     ),
-  //     Container(
-  //         decoration: BoxDecoration(
-  //           border: Border(
-  //             left: BorderSide(
-  //               //                   <--- left side
-  //               color: PdfColors.grey,
-  //               // width: 0,
-  //             ),
-  //             right: BorderSide(
-  //               //                    <--- top side
-  //               color: PdfColors.grey,
-  //               // width: 3.0,
-  //             ),
-  //             bottom: BorderSide(
-  //               //                    <--- top side
-  //               color: PdfColors.grey,
-  //               // width: 0,
-  //             ),
-  //           ),
-  //         ),
-  //         child: Row(children: [
-  //           // Spacer(flex: 1),
-  //           SizedBox(width: 100),
-  //           Expanded(
-  //               child: Text('Grand total', style: TextStyle(fontSize: 10))),
-  //           // Container(
-  //           //   child: Image(image, height: 8, width: 9),
-  //           // ),
-  //           Text(sum.toStringAsFixed(2), style: TextStyle(fontSize: 12))
-  //         ]))
-  //   ]);
-  //   // return Container(
-  //   //     decoration: BoxDecoration(
-  //   //       border: Border(
-  //   //         left: BorderSide(
-  //   //           //                   <--- left side
-  //   //           color: PdfColors.grey,
-  //   //           // width: 0,
-  //   //         ),
-  //   //         right: BorderSide(
-  //   //           //                    <--- top side
-  //   //           color: PdfColors.grey,
-  //   //           // width: 3.0,
-  //   //         ),
-  //   //         bottom: BorderSide(
-  //   //           //                    <--- top side
-  //   //           color: PdfColors.grey,
-  //   //           width: 0,
-  //   //         ),
-  //   //       ),
-  //   //     ),
-  //   //     child: Row(children: [
-  //   //       // Spacer(flex: 1),
-  //   //       SizedBox(width: 100),
-  //   //       Expanded(child: Text('Grand total', style: TextStyle(fontSize: 10))),
-  //   //       // Container(
-  //   //       //   child: Image(image, height: 8, width: 9),
-  //   //       // ),
-  //   //       Text(sum.toStringAsFixed(2))
-  //   //     ]));
-  // }
+          // Container(
+          //   child: Image(image, height: 8, width: 9),
+          // ),
+          Text("${disctTot.toStringAsFixed(2)}", style: TextStyle(fontSize: 12))
+        ]),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          border: Border(
+            left: BorderSide(
+              //                   <--- left side
+              color: PdfColors.grey,
+              // width: 0,
+            ),
+            right: BorderSide(
+              //                    <--- top side
+              color: PdfColors.grey,
+              // width: 3.0,
+            ),
+            bottom: BorderSide(
+              //                    <--- top side
+              color: PdfColors.grey,
+              // width: 0,
+            ),
+          ),
+        ),
+        child: Row(children: [
+          SizedBox(width: 100),
+          Expanded(child: Text('GST total', style: TextStyle(fontSize: 10))),
+          // SizedBox(width: 100),
+
+          // Container(
+          //   child: Image(image, height: 8, width: 9),
+          // ),
+          Text("${gstTot.toStringAsFixed(2)}", style: TextStyle(fontSize: 12))
+        ]),
+      ),
+      Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(
+                //                   <--- left side
+                color: PdfColors.grey,
+                // width: 0,
+              ),
+              right: BorderSide(
+                //                    <--- top side
+                color: PdfColors.grey,
+                // width: 3.0,
+              ),
+              bottom: BorderSide(
+                //                    <--- top side
+                color: PdfColors.grey,
+                // width: 0,
+              ),
+            ),
+          ),
+          child: Row(children: [
+            // Spacer(flex: 1),
+            SizedBox(width: 100),
+            Expanded(
+                child: Text('Grand total', style: TextStyle(fontSize: 10))),
+            // Container(
+            //   child: Image(image, height: 8, width: 9),
+            // ),
+            Text(sum.toStringAsFixed(2), style: TextStyle(fontSize: 12))
+          ]))
+    ]);
+    // return Container(
+    //     decoration: BoxDecoration(
+    //       border: Border(
+    //         left: BorderSide(
+    //           //                   <--- left side
+    //           color: PdfColors.grey,
+    //           // width: 0,
+    //         ),
+    //         right: BorderSide(
+    //           //                    <--- top side
+    //           color: PdfColors.grey,
+    //           // width: 3.0,
+    //         ),
+    //         bottom: BorderSide(
+    //           //                    <--- top side
+    //           color: PdfColors.grey,
+    //           width: 0,
+    //         ),
+    //       ),
+    //     ),
+    //     child: Row(children: [
+    //       // Spacer(flex: 1),
+    //       SizedBox(width: 100),
+    //       Expanded(child: Text('Grand total', style: TextStyle(fontSize: 10))),
+    //       // Container(
+    //       //   child: Image(image, height: 8, width: 9),
+    //       // ),
+    //       Text(sum.toStringAsFixed(2))
+    //     ]));
+  }
 
   ////////////////////////////////////////////////////
   Widget buildTotal(
