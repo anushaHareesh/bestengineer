@@ -338,15 +338,16 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                     ],
                   ),
                 ),
-                Divider(
-                  indent: 50,
-                  endIndent: 50,
-                  thickness: 4,
-                  color: value.scheduleList[index]["l_color"] == null ||
-                          value.scheduleList[index]["l_color"].isEmpty
-                      ? Colors.grey[100]
-                      : parseColor(value.scheduleList[index]["l_color"]),
-                ),
+                Divider(),
+                // Divider(
+                //   indent: 50,
+                //   endIndent: 50,
+                //   thickness: 4,
+                //   color: value.scheduleList[index]["l_color"] == null ||
+                //           value.scheduleList[index]["l_color"].isEmpty
+                //       ? Colors.grey[100]
+                //       : parseColor(value.scheduleList[index]["l_color"]),
+                // ),
 
                 // Row(
                 //   children: [
@@ -433,12 +434,12 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                     ],
                   ),
                 ),
-                value.scheduleList[index]["owner_name"] == null ||
-                        value.scheduleList[index]["owner_name"].isEmpty &&
-                            value.scheduleList[index]["company_add1"] == null ||
-                        value.scheduleList[index]["company_add1"].isEmpty
-                    ? Container()
-                    : Divider(),
+                // value.scheduleList[index]["owner_name"] == null ||
+                //         value.scheduleList[index]["owner_name"].isEmpty &&
+                //             value.scheduleList[index]["company_add1"] == null ||
+                //         value.scheduleList[index]["company_add1"].isEmpty
+                //     ? Container()
+                //     : Divider(),
                 value.scheduleList[index]["company_add1"] == null ||
                         value.scheduleList[index]["company_add1"].isEmpty
                     ? Container()
@@ -463,8 +464,19 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                           ],
                         ),
                       ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  thickness: 4,
+                  color: value.scheduleList[index]["l_color"] == null ||
+                          value.scheduleList[index]["l_color"].isEmpty
+                      ? Colors.grey[200]
+                      : parseColor(
+                          value.scheduleList[index]["l_color"].toString()),
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(3),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -476,12 +488,10 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                           ),
                           Container(
                             width: 200,
-                            child: Flexible(
-                              child: Text(
-                                // "anusha kkkmfnnnnnnnnnnnnnnnnnnnnmn kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
-                                value.scheduleList[index]["owner_name"],
-                                style: TextStyle(fontSize: 14),
-                              ),
+                            child: Text(
+                              // "anusha kkkmfnnnnnnnnnnnnnnnnnnnnmn kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+                              value.scheduleList[index]["owner_name"],
+                              style: TextStyle(fontSize: 14),
                             ),
                           )
                         ],

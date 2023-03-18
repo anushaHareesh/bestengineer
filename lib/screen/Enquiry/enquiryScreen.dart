@@ -13,6 +13,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widgets/alertCommon/itemSelectionAlert.dart';
 import '../../widgets/bottomsheets/itemSelectionSheet.dart';
@@ -29,13 +30,26 @@ class _EnquiryScreenState extends State<EnquiryScreen>
   TextEditingController search = TextEditingController();
   NewItemSheet itemBottom = NewItemSheet();
   AnimationController? _animationController;
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   @override
   void initState() {
     // TODO: implement initState
     _animationController =
         new AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animationController!.repeat(reverse: true);
+    Provider.of<ProductController>(context, listen: false)
+        .geProductList(context);
     super.initState();
+    print('enqnnmn----');
+  }
+
+////////////////////////////////////////////////////////////////
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    Provider.of<ProductController>(context, listen: false)
+        .geProductList(context);
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -87,273 +101,288 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                       SizedBox(
                         width: size.width * 0.04,
                       ),
-                      badges.Badge(
-                          badgeStyle: badges.BadgeStyle(
-                              // badgeGradient: badges.BadgeGradient.radial(colors: Colors.primaries),
-                              shape: badges.BadgeShape.circle,
-                              badgeColor: Colors.red),
-                          position:
-                              badges.BadgePosition.topEnd(top: -10, end: -22),
-                          badgeContent: value.isCartLoading ||
-                                  value.customer_id == null ||
-                                  value.cartCount == null ||
-                                  Provider.of<Controller>(context,
-                                              listen: false)
-                                          .dupcustomer_id ==
-                                      null
-                              ? SpinKitChasingDots(
-                                  color: P_Settings.loginPagetheme,
-                                  size: 8,
-                                )
-                              : Text(
-                                  value.cartCount.toString(),
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                          child: Icon(
-                            Icons.shopping_cart,
-                            color: Colors.white,
-                          ))
+                      value.customer_id == null
+                          ? Container()
+                          : badges.Badge(
+                              badgeStyle: badges.BadgeStyle(
+                                  // badgeGradient: badges.BadgeGradient.radial(colors: Colors.primaries),
+                                  shape: badges.BadgeShape.circle,
+                                  badgeColor: Colors.red),
+                              position: badges.BadgePosition.topEnd(
+                                  top: -10, end: -22),
+                              badgeContent: value.isCartLoading ||
+                                      value.customer_id == null ||
+                                      value.cartCount == null ||
+                                      Provider.of<Controller>(context,
+                                                  listen: false)
+                                              .dupcustomer_id ==
+                                          null
+                                  ? SpinKitChasingDots(
+                                      color: P_Settings.loginPagetheme,
+                                      size: 8,
+                                    )
+                                  : Text(
+                                      value.cartCount.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                              child: Icon(
+                                Icons.shopping_cart,
+                                color: Colors.white,
+                              ))
                     ],
                   );
                 },
               ),
             ),
           )),
-      body: SingleChildScrollView(
-        // physics: NeverScrollableScrollPhysics(),
-        child: Consumer<Controller>(
-          builder: (context, value, child) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, left: 16, right: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        value.customer_id == null
-                            ? "Add Customer"
-                            : "Customer Details",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          if (value.selected == null) {
-                            _showCustomFlash();
-                          } else {
-                            Provider.of<Controller>(context, listen: false)
-                                .setSelectedCustomer(false);
-                            value.dropSelected = null;
-                            cusPopup.buildcusPopupDialog(
-                              context,
-                              size,
-                            );
-                          }
-                        },
-                        child: CircleAvatar(
-                          radius: 14,
-                          backgroundColor: P_Settings.loginPagetheme,
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        onRefresh: _onRefresh,
+        child: SingleChildScrollView(
+          // physics: NeverScrollableScrollPhysics(),
+          child: Consumer<Controller>(
+            builder: (context, value, child) {
+              return Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 8.0, left: 16, right: 14),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          value.customer_id == null
+                              ? "Add Customer"
+                              : "Customer Details",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        // child: Image.asset(
-                        //   "assets/plus.png",
-                        //   height: size.height * 0.035,
-                        // ),
-                        // child: Icon(Icons.add,
-                        //     size: 29, color: P_Settings.loginPagetheme),
-                      ),
-                      // FadeTransition(
-                      //   opacity: _animationController!,
-                      //   child: InkWell(
-                      //     onTap: () {
-                      //       Provider.of<Controller>(context, listen: false)
-                      //           .setSelectedCustomer(false);
-                      //       value.dropSelected = null;
-                      //       cusPopup.buildcusPopupDialog(
-                      //         context,
-                      //         size,
-                      //       );
-                      //     },
-                      //     child: Icon(Icons.add,size: 29,
-                      //         color: P_Settings.loginPagetheme),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ),
-                value.isSavecustomer
-                    ? Container(
-                        height: size.height * 0.14,
-                        child: SpinKitCircle(
-                          color: P_Settings.loginPagetheme,
-                        ),
-                      )
-                    : value.customer_id == null
-                        ? Container()
-                        : customerData(size),
-                // ListTile(
-                //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                //   trailing: Icon(
-                //     Icons.ads_click,
-                //     color: Colors.green,
-                //   ),
-                //   onTap: () {
-                //     Provider.of<Controller>(context, listen: false)
-                //         .setSelectedCustomer(false);
-                //     Provider.of<Controller>(context, listen: false)
-                //         .searchCustomerList(context);
-                //     cusPopup.buildcusPopupDialog(context, size);
-                //   },
-                //   title: Text(
-                //     "Customer Details",
-                //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                //   ),
-                // ),
-                Padding(padding: EdgeInsets.all(8)),
-
-                ListTile(
-                  title: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Product Details",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Padding(padding: EdgeInsets.all(8)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Consumer<ProductController>(
-                            builder: (context, value, child) {
-                              return Container(
-                                height: size.height * 0.045,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        primary: P_Settings.loginPagetheme),
-                                    onPressed: value.adddNewItem
-                                        ? () {
-                                            itemBottom.showNewItemSheet(
-                                                context, value.val.toString());
-                                          }
-                                        : null,
-                                    child: Text(
-                                      "New Item",
-                                      style: TextStyle(fontSize: 15),
-                                    )),
+                        InkWell(
+                          onTap: () {
+                            if (value.selected == null) {
+                              _showCustomFlash();
+                            } else {
+                              Provider.of<Controller>(context, listen: false)
+                                  .setSelectedCustomer(false);
+                              value.dropSelected = null;
+                              cusPopup.buildcusPopupDialog(
+                                context,
+                                size,
                               );
-                            },
+                            }
+                          },
+                          child: CircleAvatar(
+                            radius: 14,
+                            backgroundColor: P_Settings.loginPagetheme,
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
                           ),
-                          Expanded(
-                            child: Container(
-                                margin: EdgeInsets.only(left: 6),
-                                // width: size.width * 0.68,
-                                height: size.height * 0.045,
-                                child: TextField(
-                                  controller: search,
-                                  onChanged: (val) {
-                                    if (val != null && val.isNotEmpty) {
-                                      Provider.of<ProductController>(context,
-                                              listen: false)
-                                          .searchProduct(context, val);
-                                      // Provider.of<ProductController>(context,
-                                      //         listen: false)
-                                      //     .setIssearch(true);
-                                      // Provider.of<ProductController>(context,
-                                      //         listen: false)
-                                      //     .geProductList(context);
-                                    }
-                                  },
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        Icons.close,
-                                        size: 19,
-                                      ),
-                                      onPressed: () {
-                                        search.clear();
-                                        Provider.of<ProductController>(context,
-                                                listen: false)
-                                            .adddNewItem = false;
-                                        Provider.of<ProductController>(context,
-                                                listen: false)
-                                            .setIssearch(false);
-                                      },
-                                    ),
-                                    hintText: "Search item here",
-                                    hintStyle: TextStyle(fontSize: 13),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                      ), //<-- SEE HERE
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                      ), //<-- SEE HERE
-                                    ),
-                                  ),
-                                )),
-                          )
-                        ],
-                      ),
-                    ],
+                          // child: Image.asset(
+                          //   "assets/plus.png",
+                          //   height: size.height * 0.035,
+                          // ),
+                          // child: Icon(Icons.add,
+                          //     size: 29, color: P_Settings.loginPagetheme),
+                        ),
+                        // FadeTransition(
+                        //   opacity: _animationController!,
+                        //   child: InkWell(
+                        //     onTap: () {
+                        //       Provider.of<Controller>(context, listen: false)
+                        //           .setSelectedCustomer(false);
+                        //       value.dropSelected = null;
+                        //       cusPopup.buildcusPopupDialog(
+                        //         context,
+                        //         size,
+                        //       );
+                        //     },
+                        //     child: Icon(Icons.add,size: 29,
+                        //         color: P_Settings.loginPagetheme),
+                        //   ),
+                        // ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(padding: EdgeInsets.all(4)),
-                // Text(
-                //     "${Provider.of<ProductController>(context, listen: false).isSearch}"),
-                // Text(
-                //     "${Provider.of<ProductController>(context, listen: false).newList.length}"),
-                Consumer<ProductController>(
-                  builder: (context, value, child) {
-                    if (value.isSearch && value.newList.length == 0) {
-                      return Container();
-                    } else {
-                      return Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Product  List",
-                                style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: P_Settings.loginPagetheme),
-                              ),
-                            ],
+                  value.isSavecustomer
+                      ? Container(
+                          height: size.height * 0.14,
+                          child: SpinKitCircle(
+                            color: P_Settings.loginPagetheme,
                           ),
-                          // Divider(indent: 30,endIndent:30,thickness: 1,)
-                        ],
-                      );
-                    }
-                  },
-                ),
-                Padding(padding: EdgeInsets.all(3)),
+                        )
+                      : value.customer_id == null
+                          ? Container()
+                          : customerData(size),
+                  // ListTile(
+                  //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                  //   trailing: Icon(
+                  //     Icons.ads_click,
+                  //     color: Colors.green,
+                  //   ),
+                  //   onTap: () {
+                  //     Provider.of<Controller>(context, listen: false)
+                  //         .setSelectedCustomer(false);
+                  //     Provider.of<Controller>(context, listen: false)
+                  //         .searchCustomerList(context);
+                  //     cusPopup.buildcusPopupDialog(context, size);
+                  //   },
+                  //   title: Text(
+                  //     "Customer Details",
+                  //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  //   ),
+                  // ),
+                  Padding(padding: EdgeInsets.all(8)),
 
-                Consumer<ProductController>(
-                  builder: (context, value, child) {
-                    if (value.isSearch) {
-                      return SearchedProductList();
-                    } else {
-                      return ProductListPage();
-                    }
-                  },
-                ),
-              ],
-            );
-          },
+                  ListTile(
+                    title: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Product Details",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Padding(padding: EdgeInsets.all(8)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Consumer<ProductController>(
+                              builder: (context, value, child) {
+                                return Container(
+                                  height: size.height * 0.045,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          primary: P_Settings.loginPagetheme),
+                                      onPressed: value.adddNewItem
+                                          ? () {
+                                              itemBottom.showNewItemSheet(
+                                                  context,
+                                                  value.val.toString());
+                                            }
+                                          : null,
+                                      child: Text(
+                                        "New Item",
+                                        style: TextStyle(fontSize: 15),
+                                      )),
+                                );
+                              },
+                            ),
+                            Expanded(
+                              child: Container(
+                                  margin: EdgeInsets.only(left: 6),
+                                  // width: size.width * 0.68,
+                                  height: size.height * 0.045,
+                                  child: TextField(
+                                    controller: search,
+                                    onChanged: (val) {
+                                      if (val != null && val.isNotEmpty) {
+                                        Provider.of<ProductController>(context,
+                                                listen: false)
+                                            .searchProduct(context, val);
+                                        // Provider.of<ProductController>(context,
+                                        //         listen: false)
+                                        //     .setIssearch(true);
+                                        // Provider.of<ProductController>(context,
+                                        //         listen: false)
+                                        //     .geProductList(context);
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          Icons.close,
+                                          size: 19,
+                                        ),
+                                        onPressed: () {
+                                          search.clear();
+                                          Provider.of<ProductController>(
+                                                  context,
+                                                  listen: false)
+                                              .adddNewItem = false;
+                                          Provider.of<ProductController>(
+                                                  context,
+                                                  listen: false)
+                                              .setIssearch(false);
+                                          Provider.of<ProductController>(
+                                                  context,
+                                                  listen: false)
+                                              .geProductList(context);
+                                        },
+                                      ),
+                                      hintText: "Search item here",
+                                      hintStyle: TextStyle(fontSize: 13),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                        ), //<-- SEE HERE
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                        ), //<-- SEE HERE
+                                      ),
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.all(4)),
+                  // Text(
+                  //     "${Provider.of<ProductController>(context, listen: false).isSearch}"),
+                  // Text(
+                  //     "${Provider.of<ProductController>(context, listen: false).newList.length}"),
+                  Consumer<ProductController>(
+                    builder: (context, value, child) {
+                      if (value.isSearch && value.newList.length == 0) {
+                        return Container();
+                      } else {
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Product  List",
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: P_Settings.loginPagetheme),
+                                ),
+                              ],
+                            ),
+                            // Divider(indent: 30,endIndent:30,thickness: 1,)
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.all(3)),
+
+                  Consumer<ProductController>(
+                    builder: (context, value, child) {
+                      if (value.isSearch) {
+                        return SearchedProductList();
+                      } else {
+                        return ProductListPage();
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

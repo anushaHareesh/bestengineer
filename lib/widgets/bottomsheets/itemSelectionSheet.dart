@@ -7,16 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:provider/provider.dart';
-
 import '../../model/productListModel.dart';
 
 class ItemSlectionBottomsheet {
+  final FocusNode unitCodeCtrlFocusNode = FocusNode();
   showItemSheet(BuildContext context, ProductList list, int index) {
     Size size = MediaQuery.of(context).size;
     print(" uuuu---$index---${list.description}");
     String oldDesc;
+    // Provider.of<ProductController>(context, listen: false).desc[index].text =
+    //     Provider.of<ProductController>(context, listen: false)
+    //         .productList[index]
+    //         .description
+    //         .toString();
 
     return showModalBottomSheet<void>(
       isScrollControlled: true,
@@ -28,13 +32,13 @@ class ItemSlectionBottomsheet {
             topRight: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
-        Provider.of<ProductController>(context, listen: false)
-                .desc[index]
-                .text =
-            Provider.of<ProductController>(context, listen: false)
-                .productList[index]
-                .description
-                .toString();
+        // Provider.of<ProductController>(context, listen: false)
+        //         .desc[index]
+        //         .text =
+        //     Provider.of<ProductController>(context, listen: false)
+        //         .productList[index]
+        //         .description
+        //         .toString();
         return Consumer<ProductController>(builder: (context, value, child) {
           // value.qty[index].text=qty.toString();
 
@@ -69,7 +73,7 @@ class ItemSlectionBottomsheet {
                               style: GoogleFonts.aBeeZee(
                                 textStyle:
                                     Theme.of(context).textTheme.bodyText2,
-                                fontSize: 13,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
 
                                 // color: P_Settings.loginPagetheme,
@@ -93,6 +97,23 @@ class ItemSlectionBottomsheet {
                       indent: 20,
                       endIndent: 20,
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0, left: 14),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Description : ",
+                            style: GoogleFonts.aBeeZee(
+                              textStyle: Theme.of(context).textTheme.bodyText2,
+                              fontSize: 14,
+                              // fontWeight: FontWeight.bold,
+                              // color: P_Settings.loginPagetheme,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.only(left: 14, right: 14),
                       child: TextField(
@@ -107,6 +128,8 @@ class ItemSlectionBottomsheet {
                         style: TextStyle(color: Colors.grey[500]),
                         controller: value.desc[index],
                         decoration: InputDecoration(
+                          // hintText: "Type Description here...",
+                          hintStyle: TextStyle(fontSize: 13),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 1,
@@ -122,6 +145,7 @@ class ItemSlectionBottomsheet {
                         ),
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
+                        focusNode: unitCodeCtrlFocusNode,
                       ),
                     ),
                     ListTile(
@@ -132,7 +156,7 @@ class ItemSlectionBottomsheet {
                             "Rate",
                             style: GoogleFonts.aBeeZee(
                               textStyle: Theme.of(context).textTheme.bodyText2,
-                              fontSize: 17,
+                              fontSize: 14,
                               // fontWeight: FontWeight.bold,
                               // color: P_Settings.loginPagetheme,
                             ),
@@ -159,7 +183,7 @@ class ItemSlectionBottomsheet {
                             "Qty",
                             style: GoogleFonts.aBeeZee(
                               textStyle: Theme.of(context).textTheme.bodyText2,
-                              fontSize: 17,
+                              fontSize: 14,
                               // fontWeight: FontWeight.bold,
                               // color: P_Settings.loginPagetheme,
                             ),

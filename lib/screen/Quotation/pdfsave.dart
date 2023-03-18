@@ -135,7 +135,7 @@ class PdFSave {
     ]));
   }
 
-    Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
+  Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
     return Container(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -226,11 +226,11 @@ class PdFSave {
       'Product Name',
       'Qty',
       'Rate',
-      'Amt',
-      'Disc',
+      'Amount',
+      'Discount',
       // 'GST%',
       'GST',
-      'Net Amt',
+      'Net Amount',
     ];
 
     final data = list.map((item) {
@@ -278,7 +278,7 @@ class PdFSave {
           style: BorderStyle.solid,
         ),
       ),
-      headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+      headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
       cellStyle: TextStyle(fontSize: 8),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 30,
@@ -339,6 +339,20 @@ class PdFSave {
                 Row(children: [
                   Expanded(
                       child: Text(
+                    'Amount total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${amount_tot.toStringAsFixed(2)}",
+                  )
+                ]),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+
+                Row(children: [
+                  Expanded(
+                      child: Text(
                     'Discount total',
                   )),
                   Container(
@@ -348,6 +362,7 @@ class PdFSave {
                     "${disctTot.toStringAsFixed(2)}",
                   )
                 ]),
+
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 Row(children: [
                   Expanded(
@@ -359,19 +374,6 @@ class PdFSave {
                   ),
                   Text(
                     "${gstTot.toStringAsFixed(2)}",
-                  )
-                ]),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                Row(children: [
-                  Expanded(
-                      child: Text(
-                    'Amount total',
-                  )),
-                  Container(
-                    child: Image(image, height: 8, width: 9),
-                  ),
-                  Text(
-                    "${amount_tot.toStringAsFixed(2)}",
                   )
                 ]),
                 Divider(),

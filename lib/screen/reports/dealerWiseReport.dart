@@ -25,6 +25,8 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
     // TODO: implement initState
     super.initState();
     todaydate = DateFormat('dd-MM-yyyy').format(now);
+    Provider.of<QuotationController>(context, listen: false).fromDate = null;
+    Provider.of<QuotationController>(context, listen: false).todate = null;
   }
 
   @override

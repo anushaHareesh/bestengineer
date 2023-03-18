@@ -185,23 +185,25 @@ class RemarkSheet {
                             } else {
                               visible.value = false;
                               SavePopup save = SavePopup();
-                              if (type == "add") {
-                                // Navigator.of(_scaffoldKey.currentContext!)
-                                //     .pop();
+                              // if (type == "add") {
+                              //   // Navigator.of(_scaffoldKey.currentContext!)
+                              //   //     .pop();
 
-                                save.buildSavePopupDialog(
-                                    context,
-                                    _scaffoldKey,
-                                    _keyLoader,
-                                    remark.text,
-                                    sdate,
-                                    int.parse(rwId),
-                                    enq_id,
-                                    hiddenstatus,
-                                    selected!,
-                                    type);
-                              } else {
-                                print("editt----");
+                              //   save.buildSavePopupDialog(
+                              //       context,
+                              //       _scaffoldKey,
+                              //       _keyLoader,
+                              //       remark.text,
+                              //       sdate,
+                              //       int.parse(rwId),
+                              //       enq_id,
+                              //       hiddenstatus,
+                              //       selected!,
+                              //       type);
+                              // } else {
+                              //   print("editt----");
+
+
                                 Navigator.of(_scaffoldKey.currentContext!)
                                     .pop();
                                 showDailogue(context, true, _keyLoader, 1);
@@ -216,7 +218,7 @@ class RemarkSheet {
                                         type,
                                         hiddenstatus,
                                         selected!);
-                              }
+                              // }
                               //  Navigator.of(_scaffoldKey.currentContext!)
                               //               .pop();
                               //           showDailogue(context, true, _keyLoader, 1);

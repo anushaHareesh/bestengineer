@@ -46,7 +46,7 @@ class ProductController extends ChangeNotifier {
   List<Map<String, dynamic>> bagList = [];
   List<EnqList> enQhistoryList = [];
   List<EnqList> newenQhistoryList = [];
-String? area_id;
+  String? area_id;
   List<Master> enQhistoryMaster = [];
   List<Detail> enQhistoryDetail = [];
   TextEditingController cname = TextEditingController();
@@ -77,12 +77,13 @@ String? area_id;
           notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
+          print("proooo----${map}");
+
           ProductListModel prModel = ProductListModel.fromJson(map);
           productList.clear();
           for (var item in prModel.productList!) {
             productList.add(item);
           }
-          print("proooo----$productList");
 
           isProdLoading = false;
           notifyListeners();
@@ -96,10 +97,19 @@ String? area_id;
           );
 
           addButton = List.generate(productList.length, (index) => false);
-
+          RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
           for (var i = 0; i < productList.length; i++) {
             qty[i].text = "1";
-            desc[i].text = productList[i].description!;
+
+            String parsedstring1 =
+                productList[i].description!.replaceAll(exp, '');
+            print("parsed ----$parsedstring1");
+            if (parsedstring1 == null || parsedstring1.isEmpty) {
+              print("hahaah---");
+              // desc[i].text = "anusha";
+            } else {
+              desc[i].text = parsedstring1;
+            }
           }
           notifyListeners();
         } catch (e) {
@@ -134,6 +144,8 @@ String? area_id;
             prModel = ProductList.fromJson(item);
             newList.add(prModel);
           }
+          notifyListeners();
+
           if (newList.length == 0) {
             val = itemName;
             // notifyListeners();
@@ -143,7 +155,28 @@ String? area_id;
             adddNewItem = false;
             notifyListeners();
           }
-          print("newList----${newList.length}");
+          print("newList----${newList}");
+
+          desc =
+              List.generate(newList.length, (index) => TextEditingController());
+          qty = List.generate(
+            newList.length,
+            (index) => TextEditingController(),
+          );
+          print("ccccc----${desc.length} ---${qty.length}");
+          RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+          for (var i = 0; i < newList.length; i++) {
+            print("hhhh-----$newList[i]");
+            qty[i].text = "1";
+            String parsedstring1 = newList[i].description!.replaceAll(exp, '');
+            if (parsedstring1 == null || parsedstring1.isEmpty) {
+            } else {
+              desc[i].text = parsedstring1;
+            }
+          }
+          print("djkjkdjf");
+          notifyListeners();
+
           isnewlistLoading = false;
           notifyListeners();
 
@@ -379,9 +412,9 @@ String? area_id;
     notifyListeners();
   }
 
-  setAreaId(String id){
-    area_id=id;
-   notifyListeners();
+  setAreaId(String id) {
+    area_id = id;
+    notifyListeners();
   }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -427,7 +460,7 @@ String? area_id;
           "priority_level": priority_level,
           "added_by": user_id,
           "branch_id": branch_id,
-          "area_id" : area_id,
+          "area_id": area_id,
           "details": jsonResult
         };
 
@@ -701,10 +734,9 @@ String? area_id;
     newenQhistoryList.clear();
     enQhistoryList.forEach((list) {
       print("dddd----${list.companyName}----$item");
-      if (list.companyName!.toLowerCase().contains(item.toLowerCase()) 
-      // || list.enqCode!.contains(item)
-      )
-        newenQhistoryList.add(list);
+      if (list.companyName!.toLowerCase().contains(item.toLowerCase())
+          // || list.enqCode!.contains(item)
+          ) newenQhistoryList.add(list);
     });
     print("neww ----------$newenQhistoryList");
     notifyListeners();

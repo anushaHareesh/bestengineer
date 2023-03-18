@@ -125,8 +125,8 @@ class _EnqHomeState extends State<EnqHome> {
         "zxzx--${Provider.of<RegistrationController>(context, listen: false).menu_index}");
     Provider.of<Controller>(context, listen: false).getArea(context);
     Provider.of<RegistrationController>(context, listen: false).userDetails();
-    Provider.of<QuotationController>(context, listen: false)
-        .getQuotationList(context);
+    // Provider.of<QuotationController>(context, listen: false)
+    //     .getQuotationList(context);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
@@ -202,10 +202,12 @@ class _EnqHomeState extends State<EnqHome> {
       case "E1":
         {
           // Provider.of<Controller>(context, listen: false).dupcustomer_id = null;
-          Provider.of<Controller>(context, listen: false)
-              .gePriorityList(context);
-          Provider.of<ProductController>(context, listen: false)
-              .geProductList(context);
+          // Provider.of<Controller>(context, listen: false).selected = null;
+
+          // Provider.of<Controller>(context, listen: false)
+          //     .gePriorityList(context);
+          // Provider.of<ProductController>(context, listen: false)
+          //     .geProductList(context);
           return EnquiryScreen();
         }
       case "E2":
@@ -224,10 +226,10 @@ class _EnqHomeState extends State<EnqHome> {
         {
           // FocusManager.instance.primaryFocus!.unfocus();
 
-          Provider.of<QuotationController>(context, listen: false)
-              .getQuotationList(
-            context,
-          );
+          // Provider.of<QuotationController>(context, listen: false)
+          //     .getQuotationList(
+          //   context,
+          // );
 
           return QuotatationListScreen();
         }
@@ -258,7 +260,10 @@ class _EnqHomeState extends State<EnqHome> {
       case "DR1":
         {
           print("srghhh");
-
+          Provider.of<QuotationController>(context, listen: false).fromDate =
+              null;
+          Provider.of<QuotationController>(context, listen: false).todate =
+              null;
           Provider.of<QuotationController>(context, listen: false)
               .getDealerWiseReport(context, todaydate!, todaydate!);
           return DealerWiseReport();
@@ -267,6 +272,10 @@ class _EnqHomeState extends State<EnqHome> {
       case "DP1":
         {
           print("srghhh");
+          Provider.of<QuotationController>(context, listen: false).fromDate =
+              null;
+          Provider.of<QuotationController>(context, listen: false).todate =
+              null;
           Provider.of<QuotationController>(context, listen: false)
               .reportdealerselected = null;
           Provider.of<QuotationController>(context, listen: false)
@@ -279,6 +288,10 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "UW1":
         {
+          Provider.of<QuotationController>(context, listen: false).fromDate =
+              null;
+          Provider.of<QuotationController>(context, listen: false).todate =
+              null;
           Provider.of<QuotationController>(context, listen: false)
               .getUserWiseReport(context);
           return UserwiseReport();
@@ -286,7 +299,10 @@ class _EnqHomeState extends State<EnqHome> {
       case "TI1":
         {
           print("srghhh");
-
+          Provider.of<QuotationController>(context, listen: false).fromDate =
+              null;
+          Provider.of<QuotationController>(context, listen: false).todate =
+              null;
           Provider.of<QuotationController>(context, listen: false)
               .getTopItemListReport(context);
           return TopItemReport();
@@ -701,8 +717,8 @@ class _EnqHomeState extends State<EnqHome> {
                                               ? "DEALER WISE PRODUCT"
                                               : Provider.of<RegistrationController>(context, listen: false).menu_index == "UW1"
                                                   ? "USER WISE REPORT"
-                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "DP1"
-                                                      ? "TOP ITEMS"
+                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "TI1"
+                                                      ? "TOP ITEMS REPORT"
                                                       : Provider.of<RegistrationController>(context, listen: false).menu_index == "CR1"
                                                           ? "CUSTOMER WISE REPORT"
                                                           : "",

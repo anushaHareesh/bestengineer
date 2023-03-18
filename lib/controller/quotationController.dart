@@ -585,7 +585,7 @@ class QuotationController extends ChangeNotifier {
           for (var item in map["dealer"]) {
             dealerList.add(item);
           }
-          print("qutationlist map ----$quotationList");
+          // print("qutationlist map ----$quotationList");
           qtScheduldate = List.generate(quotationList.length, (index) => "");
 
           for (int i = 0; i < quotationList.length; i++) {

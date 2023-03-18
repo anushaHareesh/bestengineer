@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widgets/alertCommon/deletePopup.dart';
 
@@ -28,9 +29,21 @@ class _EnQHistoryState extends State<EnQHistory> {
   String? date;
   DateTime now = DateTime.now();
   List<String> s = [];
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   final TextEditingController _controller = new TextEditingController();
   String? todaydate;
-  // DeletePopup deletepopup = DeletePopup();
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    Provider.of<ProductController>(context, listen: false).getEnqhistoryData(
+      context,
+      "",
+      // s[0],
+      // s[0],
+    );
+    _refreshController.refreshCompleted();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -72,85 +85,90 @@ class _EnQHistoryState extends State<EnQHistory> {
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            height: size.height * 0.05,
-            margin: EdgeInsets.only(left: 6, right: 6),
-            child: TextField(
-              controller: _controller,
-              onChanged: (value) {
-                print("val----$value");
-                if (value != null && value.isNotEmpty) {
-                  Provider.of<ProductController>(context, listen: false)
-                      .setEnqSearch(true);
-                  Provider.of<ProductController>(context, listen: false)
-                      .searchEnqList(value);
-                }
-              },
-              decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: new Icon(Icons.cancel),
-                    onPressed: () {
-                      Provider.of<ProductController>(context, listen: false)
-                          .setEnqSearch(false);
-                      _controller.clear();
-                    },
-                  ),
-                  filled: true,
-                  hintStyle: TextStyle(color: Colors.grey[800]),
-                  hintText: "Search here...",
-                  fillColor: Colors.white70),
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        onRefresh: _onRefresh,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Consumer<ProductController>(
-            builder: (context, value, child) {
-              return value.isLoading
-                  ? Container(
-                      height: size.height * 0.8,
-                      child: SpinKitCircle(
-                        color: P_Settings.loginPagetheme,
-                      ),
-                    )
-                  : value.enQhistoryList.length == 0 ||
-                          value.isEnqSearch &&
-                              value.newenQhistoryList.length == 0
-                      ? Container(
-                          height: size.height * 0.8,
-                          child: Center(
-                            child: Lottie.asset("assets/noData.json",
-                                width: size.width * 0.45),
-                          ))
-                      : Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: value.isEnqSearch
-                                ? value.newenQhistoryList.length
-                                : value.enQhistoryList.length,
-                            itemBuilder: (context, index) {
-                              if (value.isEnqSearch) {
-                                return searchbuildCard(size, index);
-                              } else {
-                                return buildCard(size, index);
-                              }
-                            },
-                          ),
-                        );
-            },
-          ),
-        ],
+            Container(
+              height: size.height * 0.05,
+              margin: EdgeInsets.only(left: 6, right: 6),
+              child: TextField(
+                controller: _controller,
+                onChanged: (value) {
+                  print("val----$value");
+                  if (value != null && value.isNotEmpty) {
+                    Provider.of<ProductController>(context, listen: false)
+                        .setEnqSearch(true);
+                    Provider.of<ProductController>(context, listen: false)
+                        .searchEnqList(value);
+                  }
+                },
+                decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: new Icon(Icons.cancel),
+                      onPressed: () {
+                        Provider.of<ProductController>(context, listen: false)
+                            .setEnqSearch(false);
+                        _controller.clear();
+                      },
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800], fontSize: 13),
+                    hintText: "Search with Customer Name ... ",
+                    fillColor: Colors.white70),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Consumer<ProductController>(
+              builder: (context, value, child) {
+                return value.isLoading
+                    ? Container(
+                        height: size.height * 0.8,
+                        child: SpinKitCircle(
+                          color: P_Settings.loginPagetheme,
+                        ),
+                      )
+                    : value.enQhistoryList.length == 0 ||
+                            value.isEnqSearch &&
+                                value.newenQhistoryList.length == 0
+                        ? Container(
+                            height: size.height * 0.8,
+                            child: Center(
+                              child: Lottie.asset("assets/noData.json",
+                                  width: size.width * 0.45),
+                            ))
+                        : Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: value.isEnqSearch
+                                  ? value.newenQhistoryList.length
+                                  : value.enQhistoryList.length,
+                              itemBuilder: (context, index) {
+                                if (value.isEnqSearch) {
+                                  return searchbuildCard(size, index);
+                                } else {
+                                  return buildCard(size, index);
+                                }
+                              },
+                            ),
+                          );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -271,7 +289,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                   thickness: 4,
                   color: value.enQhistoryList[index].l_color == null ||
                           value.enQhistoryList[index].l_color!.isEmpty
-                      ? Colors.grey[100]
+                      ? Colors.grey[200]
                       : parseColor(
                           value.enQhistoryList[index].l_color.toString()),
                 ),
@@ -516,7 +534,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                   thickness: 4,
                   color: value.newenQhistoryList[index].l_color == null ||
                           value.newenQhistoryList[index].l_color!.isEmpty
-                      ? Colors.grey[100]
+                      ? Colors.grey[200]
                       : parseColor(
                           value.newenQhistoryList[index].l_color.toString()),
                 ),

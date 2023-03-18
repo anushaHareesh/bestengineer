@@ -1,4 +1,5 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/components/customSnackbar.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/widgets/bottomsheets/itemSelectionSheet.dart';
@@ -34,7 +35,7 @@ class _SearchedProductListState extends State<SearchedProductList> {
             itemCount: value.newList.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.only(left: 4.0),
+                padding: const EdgeInsets.only(left: 0),
                 child: Card(
                   // decoration: BoxDecoration(
                   //     border: Border(
@@ -45,13 +46,22 @@ class _SearchedProductListState extends State<SearchedProductList> {
                     child: ListTile(
                       trailing: InkWell(
                         onTap: () {
-                          value.qty[index].text = "1";
-
-                          itemBottom.showItemSheet(
-                            context,
-                            value.newList[index],
-                            index,
-                          );
+                          if (Provider.of<Controller>(context, listen: false)
+                                  .customer_id ==
+                              null) {
+                            CustomSnackbar snackbar = CustomSnackbar();
+                            snackbar.showSnackbar(
+                                context, "Please Choose a Customer", "");
+                          } else {
+                            // value.qty[index].text = "1";
+                            // value.desc[index].text =
+                            //     value.newList[index].description.toString();
+                            itemBottom.showItemSheet(
+                              context,
+                              value.newList[index],
+                              index,
+                            );
+                          }
                         },
                         child: Container(
                           height: size.height * 0.03,

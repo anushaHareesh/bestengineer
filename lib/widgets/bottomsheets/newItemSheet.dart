@@ -10,14 +10,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class NewItemSheet {
-  showNewItemSheet(BuildContext context,String prodName) {
+  showNewItemSheet(BuildContext context, String prodName) {
     Size size = MediaQuery.of(context).size;
 
     TextEditingController name = TextEditingController();
     TextEditingController desc = TextEditingController();
     Provider.of<ProductController>(context, listen: false).qtyVal = 1;
     String oldDesc;
-    name.text=prodName;
+    name.text = prodName;
     return showModalBottomSheet<void>(
       isScrollControlled: true,
       context: context,
@@ -64,7 +64,7 @@ class NewItemSheet {
                         decoration: InputDecoration(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          hintText: "ItemName",
+                          hintText: "Item Name",
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 1,
@@ -88,10 +88,11 @@ class NewItemSheet {
                         onChanged: (val) {
                           print("val----$val");
                         },
-                        style: TextStyle(color: Colors.grey[500]),
+                        style: TextStyle(color: Colors.grey[800]),
                         controller: desc,
                         decoration: InputDecoration(
-                          hintText: "Description",
+                          hintText: "Type Description here....",
+                          hintStyle: TextStyle(fontSize: 13),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 1,

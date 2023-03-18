@@ -55,7 +55,7 @@ class _ProductListPageState extends State<ProductListPage> {
               //   ),
               // );
               return Padding(
-                padding: const EdgeInsets.only(left: 3.0),
+                padding: const EdgeInsets.only(left: 0.0),
                 child: Card(
                   // decoration: BoxDecoration(
                   //     border: Border(
@@ -64,6 +64,7 @@ class _ProductListPageState extends State<ProductListPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListTile(
+                      
                       trailing: InkWell(
                         onTap: () {
                           if (Provider.of<Controller>(context, listen: false)
@@ -73,7 +74,9 @@ class _ProductListPageState extends State<ProductListPage> {
                             snackbar.showSnackbar(
                                 context, "Please Choose a Customer", "");
                           } else {
-                            value.qty[index].text = "1";
+                            // value.qty[index].text = "1";
+                            // value.desc[index].text =
+                            //     value.productList[index].description.toString();
                             itemBottom.showItemSheet(
                               context,
                               value.productList[index],

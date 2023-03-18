@@ -136,7 +136,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
       ),
       appBar: AppBar(
         title: Text(
-          "",
+          "Quotation Edit Screen",
           // widget.enqcode.toString(),
           style: TextStyle(
               color: Colors.grey[700],
@@ -293,9 +293,9 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                   width: size.width * 0.02,
                                                 ),
                                                 Text(
-                                                  "Customer Info :",
+                                                  "Customer Info   :",
                                                   style:
-                                                      TextStyle(fontSize: 15),
+                                                      TextStyle(fontSize: 12),
                                                 ),
                                                 Padding(
                                                   padding:
@@ -309,7 +309,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                           TextOverflow.ellipsis,
                                                       // value.cus_info.toString(),
                                                       style: TextStyle(
-                                                          fontSize: 15,
+                                                          fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.w400),
                                                     ),
@@ -334,7 +334,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                   Text(
                                                     "Landmark    :",
                                                     style:
-                                                        TextStyle(fontSize: 15),
+                                                      TextStyle(fontSize: 12),
                                                   ),
                                                   Padding(
                                                     padding:
@@ -348,7 +348,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: TextStyle(
-                                                            fontSize: 15,
+                                                            fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w400),
@@ -375,7 +375,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                   Text(
                                                     "Contact Person :",
                                                     style:
-                                                        TextStyle(fontSize: 15),
+                                                      TextStyle(fontSize: 12),
                                                   ),
                                                   Padding(
                                                     padding:
@@ -389,7 +389,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: TextStyle(
-                                                            fontSize: 15,
+                                                            fontSize: 14,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w400),

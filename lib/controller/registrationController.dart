@@ -188,6 +188,8 @@ class RegistrationController extends ChangeNotifier {
         url,
         body: body,
       );
+      print("login body ${body}");
+
       var map = jsonDecode(response.body);
       print("login map ${map}");
       LoginModel loginModel;

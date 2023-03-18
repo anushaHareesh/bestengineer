@@ -73,7 +73,7 @@ class PdfQuotation {
         buildInvoice(detailPdf),
         // Divider(),
         // SizedBox(height: 5),
-        // buildTotal(detailPdf, rupee),
+        buildTotal(detailPdf, rupee),
         // returnTotal(detailPdf),
       ],
 
@@ -597,11 +597,11 @@ class PdfQuotation {
       'Product Name',
       'Qty',
       'Rate',
-      'Amt',
-      'Disc',
+      'Amount',
+      'Discount',
       // 'GST%',
       'GST',
-      'Net Amt',
+      'Net Amount',
     ];
 
     var data1;
@@ -643,7 +643,6 @@ class PdfQuotation {
 
     for (int i = 0; i < list.length; i++) {
       data1 = returnRows(list[i], (i + 1).toString());
-
       data.add(data1);
     }
 
@@ -667,7 +666,7 @@ class PdfQuotation {
       amount_tot,
       discTot,
       gstTot,
-      sum.toStringAsFixed(2)
+      ""
     ];
     List<dynamic> tot1 = [
       "",
@@ -692,8 +691,8 @@ class PdfQuotation {
     // // ];
 
     // data.add(tot2);
-    data.add(tot);
-    data.add(tot1);
+    // data.add(tot);
+    // data.add(tot1);
 
     // bord = true;
     print("data----$data1");
@@ -757,7 +756,7 @@ class PdfQuotation {
           style: BorderStyle.solid,
         ),
       ),
-      headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+      headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
       cellStyle: TextStyle(fontSize: 8),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
       cellHeight: 10,
@@ -1019,6 +1018,20 @@ class PdfQuotation {
                 Row(children: [
                   Expanded(
                       child: Text(
+                    'Amount total',
+                  )),
+                  Container(
+                    child: Image(image, height: 8, width: 9),
+                  ),
+                  Text(
+                    "${amount_tot.toStringAsFixed(2)}",
+                  )
+                ]),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+
+                Row(children: [
+                  Expanded(
+                      child: Text(
                     'Discount total',
                   )),
                   Container(
@@ -1028,6 +1041,7 @@ class PdfQuotation {
                     "${disctTot.toStringAsFixed(2)}",
                   )
                 ]),
+
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 Row(children: [
                   Expanded(
@@ -1039,19 +1053,6 @@ class PdfQuotation {
                   ),
                   Text(
                     "${gstTot.toStringAsFixed(2)}",
-                  )
-                ]),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                Row(children: [
-                  Expanded(
-                      child: Text(
-                    'Amount total',
-                  )),
-                  Container(
-                    child: Image(image, height: 8, width: 9),
-                  ),
-                  Text(
-                    "${amount_tot.toStringAsFixed(2)}",
                   )
                 ]),
                 Divider(),

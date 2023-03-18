@@ -34,6 +34,7 @@ class _ServiceChatState extends State<ServiceChat> {
     await Future.delayed(Duration(milliseconds: 1000));
     Provider.of<QuotationController>(context, listen: false)
         .getPreviousChat(widget.form_id, widget.qb_id, context);
+    _refreshController.refreshCompleted();
   }
 
   getShared() async {

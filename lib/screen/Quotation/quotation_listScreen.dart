@@ -10,6 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widgets/bottomsheets/deleteQuotation.dart';
 
@@ -29,6 +30,8 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _controller = new TextEditingController();
   List<String> s = [];
+   RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   String? todaydate;
   String? date;
   Color parseColor(String color) {
@@ -42,6 +45,13 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     Color col = Color(int.parse(hex, radix: 16)).withOpacity(1.0);
     return col;
   }
+ void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+     Provider.of<QuotationController>(context, listen: false).getQuotationList(
+      context,
+    );
+    _refreshController.refreshCompleted();
+  }
 
   @override
   void initState() {
@@ -49,6 +59,9 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     super.initState();
     // date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     date = DateFormat('dd-MM-yyyy').format(now);
+    Provider.of<QuotationController>(context, listen: false).getQuotationList(
+      context,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<QuotationController>(context, listen: false)
           .setQuotSearch(false);
@@ -71,89 +84,94 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
       // appBar: AppBar(
       //   backgroundColor: P_Settings.loginPagetheme,
       // ),
-      body: SafeArea(
-          child: Column(
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-            height: size.height * 0.05,
-            margin: EdgeInsets.only(left: 6, right: 6),
-            child: TextField(
-              controller: _controller,
-              onChanged: (value) {
-                print("val----$value");
-                if (value != null && value.isNotEmpty) {
-                  Provider.of<QuotationController>(context, listen: false)
-                      .setQuotSearch(true);
-                  Provider.of<QuotationController>(context, listen: false)
-                      .searchQuotationList(value);
+      body: SmartRefresher(
+         controller: _refreshController,
+        enablePullDown: true,
+        onRefresh: _onRefresh,
+        child: SafeArea(
+            child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: size.height * 0.05,
+              margin: EdgeInsets.only(left: 6, right: 6),
+              child: TextField(
+                controller: _controller,
+                onChanged: (value) {
+                  print("val----$value");
+                  if (value != null && value.isNotEmpty) {
+                    Provider.of<QuotationController>(context, listen: false)
+                        .setQuotSearch(true);
+                    Provider.of<QuotationController>(context, listen: false)
+                        .searchQuotationList(value);
+                  }
+                },
+                decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: new Icon(Icons.cancel),
+                      onPressed: () {
+                        Provider.of<QuotationController>(context, listen: false)
+                            .setQuotSearch(false);
+                        _controller.clear();
+                      },
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800], fontSize: 13),
+                    hintText: "Search with Customer or Qt No : ",
+                    fillColor: Colors.white70),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Consumer<QuotationController>(
+              builder: (context, value, child) {
+                if (value.isQuotLoading) {
+                  return Container(
+                    height: size.height * 0.7,
+                    child: SpinKitCircle(
+                      color: P_Settings.loginPagetheme,
+                    ),
+                  );
+                } else if (value.quotationList.length == 0 ||
+                    value.isQuotSearch && value.newquotationList.length == 0) {
+                  return Container(
+                    height: size.height * 0.7,
+                    child: Lottie.asset(
+                      "assets/noData.json",
+                      width: size.width * 0.45,
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: value.isQuotSearch
+                          ? value.newquotationList.length
+                          : value.quotationList.length,
+                      // physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        if (value.isQuotSearch) {
+                          return buildSearchCard(index, size);
+                        } else {
+                          return buildCard(index, size);
+                        }
+                      },
+                    ),
+                  );
                 }
               },
-              decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: new Icon(Icons.cancel),
-                    onPressed: () {
-                      Provider.of<QuotationController>(context, listen: false)
-                          .setQuotSearch(false);
-                      _controller.clear();
-                    },
-                  ),
-                  filled: true,
-                  hintStyle: TextStyle(color: Colors.grey[800]),
-                  hintText: "Search here...",
-                  fillColor: Colors.white70),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Consumer<QuotationController>(
-            builder: (context, value, child) {
-              if (value.isQuotLoading) {
-                return Container(
-                  height: size.height * 0.7,
-                  child: SpinKitCircle(
-                    color: P_Settings.loginPagetheme,
-                  ),
-                );
-              } else if (value.quotationList.length == 0 ||
-                  value.isQuotSearch && value.newquotationList.length == 0) {
-                return Container(
-                  height: size.height * 0.7,
-                  child: Lottie.asset(
-                    "assets/noData.json",
-                    width: size.width * 0.45,
-                  ),
-                );
-              } else {
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: value.isQuotSearch
-                        ? value.newquotationList.length
-                        : value.quotationList.length,
-                    // physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      if (value.isQuotSearch) {
-                        return buildSearchCard(index, size);
-                      } else {
-                        return buildCard(index, size);
-                      }
-                    },
-                  ),
-                );
-              }
-            },
-          ),
-        ],
-      )),
+          ],
+        )),
+      ),
     );
   }
 
@@ -275,17 +293,30 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                         //     context, "to date");
                                       },
                                       child: Icon(Icons.calendar_month,
-                                          // color: Colors.blue,
-                                          size: 17),
+                                          color: Colors.blue, size: 17),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 5.0),
-                                      child: Text(
-                                        value.qtScheduldate[index].toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[700],
+                                    InkWell(
+                                      onTap: () {
+                                        _selectDate(
+                                            context,
+                                            index,
+                                            value.quotationList[index]
+                                                ["enq_id"],
+                                            value.quotationList[index]
+                                                ["s_invoice_id"],
+                                            value.quotationList[index]
+                                                ["qt_no"]);
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 5.0),
+                                        child: Text(
+                                          value.qtScheduldate[index].toString(),
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey[700],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -682,7 +713,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
-        firstDate: DateTime(2015),
+        firstDate: DateTime.now().subtract(Duration(days: 0)),
         lastDate: DateTime(2050),
         builder: (BuildContext context, Widget? child) {
           return Theme(
@@ -692,13 +723,15 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
               ),
               child: child!);
         });
-    if (pickedDate != null && pickedDate != currentDate)
-      // setState(() {
+    if (pickedDate != null && pickedDate != currentDate) {
       date = DateFormat('dd-MM-yyyy').format(pickedDate);
-    print("date----------------$date");
+      print("date----------------$date");
 
-    Provider.of<QuotationController>(context, listen: false)
-        .setScheduledDate(index, date!, context, enqId, invId, qtNo);
+      Provider.of<QuotationController>(context, listen: false)
+          .setScheduledDate(index, date!, context, enqId, invId, qtNo);
+    }
+    // setState(() {
+
     // });
   }
 }
