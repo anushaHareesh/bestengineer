@@ -238,7 +238,8 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
                             ),
                             InkWell(
                               onTap: () {
-                                _selectDate(context, index, );
+                                _selectDate(context, index, value.enqScheduleList[index]
+                                              ["enq_id"] );
                               },
                               child: Row(
                                 children: [
@@ -305,7 +306,7 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
 
 ////////////////////////////////////////////////////
   Future<void> _selectDate(
-      BuildContext context, int index, String frmId, String enq) async {
+      BuildContext context, int index, String enq) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
