@@ -1114,13 +1114,14 @@ class PdfQuotation {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text("Prepared By : $staffName", style: TextStyle(fontSize: 8)),
-            Row(children: [
-              Text("Signature : ", style: TextStyle(fontSize: 8)),
-              Container(width: 40)
-            ])
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Text("Prepared By : $staffName", style: TextStyle(fontSize: 9)),
+            // Row(children: [
+            //   Text("Signature : ", style: TextStyle(fontSize: 8)),
+            //   Container(width: 40)
+            // ])
           ]),
+
           // Container(
           //   // width: 100,
           //   // decoration:
@@ -1148,7 +1149,12 @@ class PdfQuotation {
               title: listterms[0]["t_head"], value: listterms[0]["t_detail"]),
           // SizedBox(height: 1 * PdfPageFormat.mm),
           // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
-
+          SizedBox(height: 0.2 * PdfPageFormat.cm),
+          Row(children: [
+            Text(
+                " * This quotation is system generated hence no signature required * ",
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold))
+          ]),
           Container(
               color: PdfColors.red,
               width: 800,

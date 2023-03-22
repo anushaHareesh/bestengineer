@@ -345,40 +345,53 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                                               ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.note,
-                                                  color: Colors.red,
-                                                  size: 16,
-                                                ),
-                                                SizedBox(
-                                                  width: size.height * 0.01,
-                                                ),
-                                                Text(
-                                                  "Cancel Remark   :   ",
-                                                  style: TextStyle(
-                                                      fontSize: 13,
-                                                      color: Colors.grey[500]),
-                                                ),
-                                                Flexible(
-                                                  child: Text(
-                                                    value.dealerwiseReportList[
-                                                            index]
-                                                            ["cancel_remark"]
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 13,
-                                                        color:
-                                                            Colors.grey[700]),
+                                          value.dealerwiseReportList[index]
+                                                          ["cancel_remark"] ==
+                                                      null ||
+                                                  value
+                                                      .dealerwiseReportList[
+                                                          index]
+                                                          ["cancel_remark"]
+                                                      .isEmpty
+                                              ? Container()
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.note,
+                                                        color: Colors.red,
+                                                        size: 16,
+                                                      ),
+                                                      SizedBox(
+                                                        width:
+                                                            size.height * 0.01,
+                                                      ),
+                                                      Text(
+                                                        "Cancel Remark   :   ",
+                                                        style: TextStyle(
+                                                            fontSize: 13,
+                                                            color: Colors
+                                                                .grey[500]),
+                                                      ),
+                                                      Flexible(
+                                                        child: Text(
+                                                          value
+                                                              .dealerwiseReportList[
+                                                                  index][
+                                                                  "cancel_remark"]
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              color: Colors
+                                                                  .grey[700]),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
+                                                ),
                                           Divider(),
                                           Row(
                                             mainAxisAlignment:

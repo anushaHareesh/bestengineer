@@ -29,7 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
       cid = prefs.getString("cid");
       st_uname = prefs.getString("st_uname");
       st_pwd = prefs.getString("st_pwd");
-
+    String? mobile_menu_type = prefs.getString("mobile_user_type");
+    print("from splash------$mobile_menu_type");
       // Navigator.pushAndRemoveUntil(context,
       //     MaterialPageRoute(builder: (Context) {
       //   if (cid != null) {
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   // return DashboardPage();
                   if (st_uname != null && st_pwd != null) {
                     print("fhhh");
-                    return EnqHome();
+                    return EnqHome(mobile_menu_type: mobile_menu_type,);
                   } else {
                     return LoginPage();
                   }
@@ -132,7 +133,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: P_Settings.loginPagetheme,
+      // backgroundColor: P_Settings.loginPagetheme,
       body: InkWell(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -140,15 +141,38 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Center(
             child: Column(
           children: [
-            SizedBox(
-              height: size.height * 0.4,
+            // SizedBox(
+            //   height: size.height * 0.4,
+            // ),
+            Expanded(
+              child: Container(
+                  height: 150,
+                  width: 150,
+                  child: Image.asset(
+                    "assets/logo.png",
+                  )),
             ),
-            Container(
-                height: 200,
-                width: 200,
-                child: Image.asset(
-                  "assets/logo_black_bg.png",
-                )),
+            Padding(
+              padding: const EdgeInsets.only(right:8.0,bottom: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "VEGA BUSINESS SOFTWARE",
+                    style: TextStyle(
+                        // color: P_Settings.loginPagetheme,
+                        fontSize:11,
+                        fontWeight: FontWeight.bold),
+                  )
+                  // Container(
+                  //     height: 50,
+                  //     // width: 150,
+                  //     child: Image.asset(
+                  //       "assets/logo_black_bg.png",
+                  //     )),
+                ],
+              ),
+            )
           ],
         )),
       ),

@@ -10,6 +10,7 @@ import 'package:bestengineer/screen/Dashboard/serviceDashboard.dart';
 import 'package:bestengineer/screen/Enquiry/EnqHistory.dart';
 import 'package:bestengineer/screen/Enquiry/enquiryScreen.dart';
 import 'package:bestengineer/screen/Enquiry/enqcart.dart';
+import 'package:bestengineer/screen/Enquiry/enquiry_schedule.dart';
 import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
 import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:bestengineer/screen/Quotation/test.dart';
@@ -36,10 +37,8 @@ import '../reports/dealerWiseProduct.dart';
 
 class EnqHome extends StatefulWidget {
   String? type;
-
-  EnqHome({
-    this.type,
-  });
+  String? mobile_menu_type;
+  EnqHome({this.type, this.mobile_menu_type});
 
   @override
   State<EnqHome> createState() => _EnqHomeState();
@@ -73,7 +72,7 @@ class _EnqHomeState extends State<EnqHome> {
       // title: 'Reminder',
       descTextStyle: TextStyle(fontSize: 15),
       desc: mobile_user_type == "1"
-          ? 'You have ${Provider.of<RegistrationController>(context, listen: false).scheduleListCount} schedules for tomorrow !!! '
+          ? 'You have ${Provider.of<RegistrationController>(context, listen: false).scheduleListCount} schedules pending '
           : 'You have ${Provider.of<RegistrationController>(context, listen: false).servicescheduleListCount} service for tomorrow !!! ',
 
       buttonsTextStyle: const TextStyle(color: Colors.black),
@@ -116,7 +115,11 @@ class _EnqHomeState extends State<EnqHome> {
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
-    shared();
+    if (widget.mobile_menu_type == null) {
+      shared();
+    } else {
+      mobile_user_type = widget.mobile_menu_type;
+    }
     // findMobileUser();
     appBarTitle = Text("");
     // Provider.of<RegistrationController>(context, listen: false).setMenuIndex("D1");
@@ -125,8 +128,8 @@ class _EnqHomeState extends State<EnqHome> {
         "zxzx--${Provider.of<RegistrationController>(context, listen: false).menu_index}");
     Provider.of<Controller>(context, listen: false).getArea(context);
     Provider.of<RegistrationController>(context, listen: false).userDetails();
-    // Provider.of<QuotationController>(context, listen: false)
-    //     .getQuotationList(context);
+    Provider.of<QuotationController>(context, listen: false)
+        .getQuotationList(context);
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
@@ -193,7 +196,8 @@ class _EnqHomeState extends State<EnqHome> {
     switch (pos) {
       case "D1":
         {
-          print("d111----");
+          getMobileUserType();
+          print("d111----$mobile_user_type--");
           Provider.of<Controller>(context, listen: false)
               .getDashboardValues(context);
 
@@ -240,6 +244,14 @@ class _EnqHomeState extends State<EnqHome> {
           return ScheduleListScreen(
             type: "from menu",
           );
+        }
+      case "ES1":
+        {
+          Provider.of<QuotationController>(context, listen: false)
+              .getEnquirySchedule(
+            context,
+          );
+          return EnquirySchedule();
         }
 
       case "DS":
@@ -398,6 +410,11 @@ class _EnqHomeState extends State<EnqHome> {
     }
   }
 
+  getMobileUserType() async {
+    final prefs = await SharedPreferences.getInstance();
+    mobile_user_type = prefs.getString("mobile_user_type");
+  }
+
   // @override
   // void didChangeDependencies() {
   //   // TODO: implement didChangeDependencies
@@ -428,6 +445,7 @@ class _EnqHomeState extends State<EnqHome> {
 
   @override
   Widget build(BuildContext context) {
+    print("mobile us----${widget.mobile_menu_type}");
     drawerOpts.clear();
     for (var i = 0;
         i <
@@ -620,11 +638,8 @@ class _EnqHomeState extends State<EnqHome> {
                   //               color: Colors.red,
                   //             )),
                   //       ),
-                  Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "E2" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
+                  Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
+                          Provider.of<RegistrationController>(context, listen: false).menu_index ==
                               "Q1" ||
                           Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
@@ -649,7 +664,10 @@ class _EnqHomeState extends State<EnqHome> {
                               "TI1" ||
                           Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
-                              "CR1"
+                              "CR1" ||
+                          Provider.of<RegistrationController>(context, listen: false)
+                                  .menu_index ==
+                              "ES1"
                       ? Container()
                       : InkWell(
                           onTap: () {
@@ -721,15 +739,13 @@ class _EnqHomeState extends State<EnqHome> {
                                                       ? "TOP ITEMS REPORT"
                                                       : Provider.of<RegistrationController>(context, listen: false).menu_index == "CR1"
                                                           ? "CUSTOMER WISE REPORT"
-                                                          : "",
+                                                          : Provider.of<RegistrationController>(context, listen: false).menu_index == "ES1"
+                                                              ? "ENQUIRY SCHEDULE"
+                                                              : "",
                   style: TextStyle(fontSize: 15),
                 ),
-                backgroundColor: Provider.of<RegistrationController>(context,
-                                    listen: false)
-                                .menu_index ==
-                            "E2" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
+                backgroundColor: Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
+                        Provider.of<RegistrationController>(context, listen: false).menu_index ==
                             "Q1" ||
                         Provider.of<RegistrationController>(context, listen: false)
                                 .menu_index ==
@@ -749,7 +765,12 @@ class _EnqHomeState extends State<EnqHome> {
                         Provider.of<RegistrationController>(context, listen: false)
                                 .menu_index ==
                             "TI1" ||
-                        Provider.of<RegistrationController>(context, listen: false).menu_index == "CR1"
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "CR1" ||
+                        Provider.of<RegistrationController>(context, listen: false)
+                                .menu_index ==
+                            "ES1"
                     ? P_Settings.loginPagetheme
                     : P_Settings.whiteColor,
                 elevation: 1,
@@ -768,7 +789,8 @@ class _EnqHomeState extends State<EnqHome> {
                                     value.menu_index == "DP1" ||
                                     value.menu_index == "UW1" ||
                                     value.menu_index == "TI1" ||
-                                    value.menu_index == "CR1"
+                                    value.menu_index == "CR1" ||
+                                    value.menu_index == "ES1"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },

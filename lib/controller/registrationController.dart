@@ -38,7 +38,9 @@ class RegistrationController extends ChangeNotifier {
   DateTime now = DateTime.now();
   String? dateToday;
   int servicescheduleListCount = 0;
-  List<Map<String, dynamic>> scheduleList = [];
+  List<Map<String, dynamic>> todyscheduleList = [];
+  List<Map<String, dynamic>> tomarwscheduleList = [];
+
   List<Map<String, dynamic>> servicescheduleList = [];
   List<Map<String, dynamic>> servicesProdList = [];
   List<bool> showComplaint = [];
@@ -378,9 +380,14 @@ class RegistrationController extends ChangeNotifier {
           notifyListeners();
 
           print("schedule list-------$map");
-          scheduleList.clear();
+          todyscheduleList.clear();
+          tomarwscheduleList.clear();
           for (var item in map) {
-            scheduleList.add(item);
+            if (item["d_flag"] == "0") {
+              todyscheduleList.add(item);
+            } else {
+              tomarwscheduleList.add(item);
+            }
           }
           isSchedulelIstLoadind = false;
           notifyListeners();
@@ -388,7 +395,9 @@ class RegistrationController extends ChangeNotifier {
             if (mobile_menu_type == "1") {
               Navigator.pushAndRemoveUntil(context,
                   MaterialPageRoute(builder: (Context) {
-                return EnqHome();
+                return EnqHome(
+                  mobile_menu_type: mobile_menu_type,
+                );
               }), (route) => false);
             }
           }

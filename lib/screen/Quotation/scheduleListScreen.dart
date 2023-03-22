@@ -2,6 +2,7 @@ import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
+import 'package:bestengineer/pdftest/pdfPreview.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,6 +10,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../widgets/bottomsheets/select_branch_sheet.dart';
 import '../../widgets/bottomsheets/visitedRemarkSheet.dart';
 
 class ScheduleListScreen extends StatefulWidget {
@@ -43,265 +45,190 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.type == "from menu"
-          ? null
-          : AppBar(
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EnqHome(
-                                  type: "from scheduleList",
-                                )));
-                  },
-                  icon: Icon(Icons.arrow_back)),
-              backgroundColor: P_Settings.loginPagetheme,
-              title: Text("Shedule List"),
-            ),
-      body: Consumer<RegistrationController>(
-        builder: (context, value, child) {
-          if (value.isSchedulelIstLoadind) {
-            return SpinKitCircle(
-              color: P_Settings.loginPagetheme,
-            );
-          } else if (value.scheduleList.length == 0) {
-            return Center(
-              child: Lottie.asset("assets/noData.json", height: 200),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                itemCount: value.scheduleList.length,
-                itemBuilder: (context, index) {
-                  return customCard(value.scheduleList[index], index);
-                  // return Card(
-                  //   color: Colors.grey[100],
-                  //   child: ListTile(
-                  //     onTap: () {
-                  //       VisitedRemarkSheet visited = VisitedRemarkSheet();
-                  //       visited.showRemarkSheet(
-                  //         context,
-                  //       );
-                  //     },
-                  //     // leading: CircleAvatar(
-                  //     //   radius: 18,
-                  //     //   backgroundImage: AssetImage(
-                  //     //     "assets/calendar.png",
-                  //     //   ),
-                  //     //   backgroundColor: Colors.transparent,
-                  //     // ),
-                  //     title: Column(
-                  //       children: [
-                  //         Padding(
-                  //           padding: const EdgeInsets.only(top: 8.0),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.center,
-                  //             children: [
-                  //               Text(
-                  //                 value.scheduleList[index]["s_customer_name"]
-                  //                     .toString()
-                  //                     .toUpperCase(),
-                  //                 style: TextStyle(
-                  //                     fontSize: 14,
-                  //                     fontWeight: FontWeight.bold),
-                  //               )
-                  //             ],
-                  //           ),
-                  //         ),
-                  //         Divider(
-                  //           indent: 40,
-                  //           endIndent: 50,
-                  //         ),
-                  //         Padding(
-                  //           padding: const EdgeInsets.only(left: 5.0, right: 5),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.start,
-                  //             children: [
-                  //               Icon(
-                  //                 Icons.calendar_month,
-                  //                 color: Colors.orange,
-                  //                 size: 17,
-                  //               ),
-                  //               SizedBox(
-                  //                 width: 10,
-                  //               ),
-                  //               Text(
-                  //                 "Inv Date        :  ",
-                  //                 style: TextStyle(
-                  //                     fontSize: 14, color: Colors.grey[500]),
-                  //               ),
-                  //               Flexible(
-                  //                 child: Text(
-                  //                   value.scheduleList[index]["s_invoice_date"]
-                  //                       .toString(),
-                  //                   style: TextStyle(fontSize: 14),
-                  //                 ),
-                  //               )
-                  //             ],
-                  //           ),
-                  //         ),
-                  //         Padding(
-                  //           padding: const EdgeInsets.only(
-                  //               left: 5, right: 5, top: 8.0, bottom: 8),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.start,
-                  //             children: [
-                  //               Icon(
-                  //                 Icons.numbers,
-                  //                 color: Colors.green,
-                  //                 size: 17,
-                  //               ),
-                  //               SizedBox(
-                  //                 width: 10,
-                  //               ),
-                  //               Text(
-                  //                 "Qt No             :  ",
-                  //                 style: TextStyle(
-                  //                     fontSize: 14, color: Colors.grey[500]),
-                  //               ),
-                  //               Flexible(
-                  //                 child: Text(
-                  //                   value.scheduleList[index]["s_invoice_no"]
-                  //                       .toString(),
-                  //                   style: TextStyle(fontSize: 14),
-                  //                 ),
-                  //               )
-                  //             ],
-                  //           ),
-                  //         ),
-                  //         Padding(
-                  //           padding: const EdgeInsets.only(left: 5, right: 5),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.start,
-                  //             children: [
-                  //               Icon(
-                  //                 Icons.phone,
-                  //                 color: Colors.blue,
-                  //                 size: 17,
-                  //               ),
-                  //               SizedBox(
-                  //                 width: 10,
-                  //               ),
-                  //               Text(
-                  //                 "Ph                     :  ",
-                  //                 style: TextStyle(
-                  //                     fontSize: 14, color: Colors.grey[500]),
-                  //               ),
-                  //               Flexible(
-                  //                 child: Text(
-                  //                   value.scheduleList[index]["phone_1"]
-                  //                       .toString(),
-                  //                   style: TextStyle(fontSize: 14),
-                  //                 ),
-                  //               )
-                  //             ],
-                  //           ),
-                  //         ),
-                  //         value.scheduleList[index]["company_add1"] == null ||
-                  //                 value.scheduleList[index]["company_add1"]
-                  //                     .isEmpty
-                  //             ? Container()
-                  //             : Padding(
-                  //                 padding: const EdgeInsets.only(
-                  //                     left: 5, right: 5, top: 8.0, bottom: 8),
-                  //                 child: Row(
-                  //                   mainAxisAlignment: MainAxisAlignment.start,
-                  //                   children: [
-                  //                     Icon(
-                  //                       Icons.place,
-                  //                       color: Colors.red,
-                  //                       size: 17,
-                  //                     ),
-                  //                     SizedBox(
-                  //                       width: 10,
-                  //                     ),
-                  //                     Text(
-                  //                       "Com Info       :  ",
-                  //                       style: TextStyle(
-                  //                           fontSize: 14,
-                  //                           color: Colors.grey[500]),
-                  //                     ),
-                  //                     Flexible(
-                  //                       child: Text(
-                  //                         value.scheduleList[index]
-                  //                                 ["company_add1"]
-                  //                             .toString(),
-                  //                         style: TextStyle(fontSize: 14),
-                  //                       ),
-                  //                     )
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //         value.scheduleList[index]["owner_name"] == null ||
-                  //                 value
-                  //                     .scheduleList[index]["owner_name"].isEmpty
-                  //             ? Container()
-                  //             : Padding(
-                  //                 padding:
-                  //                     const EdgeInsets.only(left: 5, right: 5),
-                  //                 child: Row(
-                  //                   mainAxisAlignment: MainAxisAlignment.start,
-                  //                   children: [
-                  //                     Icon(
-                  //                       Icons.person,
-                  //                       color: Colors.orange,
-                  //                       size: 17,
-                  //                     ),
-                  //                     SizedBox(
-                  //                       width: 10,
-                  //                     ),
-                  //                     Text(
-                  //                       "Contact Person : ",
-                  //                       style: TextStyle(
-                  //                           fontSize: 14,
-                  //                           color: Colors.grey[500]),
-                  //                     ),
-                  //                     Flexible(
-                  //                       child: Text(
-                  //                         value.scheduleList[index]
-                  //                                 ["owner_name"]
-                  //                             .toString(),
-                  //                         style: TextStyle(fontSize: 14),
-                  //                       ),
-                  //                     )
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //         // Row(
-                  //         //   mainAxisAlignment: MainAxisAlignment.start,
-                  //         //   children: [
-                  //         //     TextButton(
-                  //         //         onPressed: () {
-                  //         //           VisitedRemarkSheet visited =
-                  //         //               VisitedRemarkSheet();
-                  //         //           visited.showRemarkSheet(
-                  //         //             context,
-                  //         //           );
-                  //         //         },
-                  //         //         child: Text("Visited"))
-                  //         //     // TextButton(
-                  //         //     //     style: ElevatedButton.styleFrom(
-                  //         //     //         primary: P_Settings.loginPagetheme),
-                  //         //     //     onPressed: () {
-                  //         //     //       VisitedRemarkSheet visited=VisitedRemarkSheet();
-                  //         //     //       visited.showRemarkSheet(context, );
-                  //         //     //     },
-                  //         //     //     child: Text("Visited")),
-                  //         //   ],
-                  //         // )
-                  //       ],
-                  //     ),
-                  //   ),
-                  // );
-                },
+        appBar: widget.type == "from menu"
+            ? null
+            : AppBar(
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EnqHome(
+                                    type: "from scheduleList",
+                                  )));
+                    },
+                    icon: Icon(Icons.arrow_back)),
+                backgroundColor: P_Settings.loginPagetheme,
+                title: Text("Shedule List"),
               ),
-            );
-          }
-        },
-      ),
-    );
+        body: Consumer<RegistrationController>(
+          builder: (context, value, child) {
+            if (value.isSchedulelIstLoadind) {
+              return SpinKitCircle(
+                color: P_Settings.loginPagetheme,
+              );
+            } else if (value.todyscheduleList.length == 0 &&
+                value.tomarwscheduleList.length == 0) {
+              return Center(
+                child: Lottie.asset("assets/noData.json", height: 200),
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
+                  children: [
+                    value.todyscheduleList.length > 0
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Today's Schedule",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: value.todyscheduleList.length,
+                                itemBuilder: (context, index) {
+                                  return customCard(
+                                      value.todyscheduleList[index], index);
+                                },
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    value.tomarwscheduleList.length > 0
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Tomorrow's Schedule",
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              // SizedBox(
+                              //   height: 15,
+                              // ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: value.tomarwscheduleList.length,
+                                itemBuilder: (context, index) {
+                                  return customCard(
+                                      value.tomarwscheduleList[index], index);
+                                },
+                              ),
+                            ],
+                          )
+                        : Container(),
+                  ],
+                ),
+              );
+            }
+          },
+        )
+
+        //  Consumer<RegistrationController>(
+        //   builder: (context, value, child) {
+        //     if (value.isSchedulelIstLoadind) {
+        //       return SpinKitCircle(
+        //         color: P_Settings.loginPagetheme,
+        //       );
+        //     } else if (value.todyscheduleList.length == 0 &&
+        //         value.tomarwscheduleList.length == 0) {
+        //       return Center(
+        //         child: Lottie.asset("assets/noData.json", height: 200),
+        //       );
+        //     } else {
+        //       return Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: Column(
+        //           children: [
+        //             Row(
+        //               mainAxisAlignment: MainAxisAlignment.start,
+        //               children: [
+        //                 Text(
+        //                   "Today's Schedule",
+        //                   style: TextStyle(
+        //                       fontSize: 19,
+        //                       color: Colors.red,
+        //                       fontWeight: FontWeight.bold),
+        //                 ),
+        //               ],
+        //             ),
+        //             SizedBox(
+        //               height: 10,
+        //             ),
+        //             Expanded(
+        //               child: ListView.builder(
+        //                 itemCount: value.todyscheduleList.length,
+        //                 itemBuilder: (context, index) {
+        //                   return customCard(value.todyscheduleList[index], index);
+        //                 },
+        //               ),
+        //             ),
+        //             value.tomarwscheduleList.length > 0
+        //                 ? Row(
+        //                     mainAxisAlignment: MainAxisAlignment.start,
+        //                     children: [
+        //                       Text(
+        //                         "Tomarrow's Schedule",
+        //                         style: TextStyle(
+        //                             fontSize: 19,
+        //                             color: Colors.red,
+        //                             fontWeight: FontWeight.bold),
+        //                       ),
+        //                     ],
+        //                   )
+        //                 : Container(),
+        //             SizedBox(
+        //               height: 10,
+        //             ),
+        //             // SizedBox(
+        //             //   height: 15,
+        //             // ),
+        //             Expanded(
+        //               child: ListView.builder(
+        //                 itemCount: value.tomarwscheduleList.length,
+        //                 itemBuilder: (context, index) {
+        //                   return customCard(
+        //                       value.tomarwscheduleList[index], index);
+        //                 },
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       );
+        //     }
+        //   },
+        // ),
+        );
   }
 
   Widget customCard(Map list, int index) {
@@ -315,238 +242,248 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
           //       value.scheduleList[index]["enq_id"],
           //       value.scheduleList[index]["s_invoice_id"]);
           // },
-          child: Card(
-            elevation: 3,
-            // color: Colors.red,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          // "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssj",
-                          value.scheduleList[index]["s_customer_name"]
-                              .toString()
-                              .toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Card(
+              elevation: 3,
+              color: Color.fromARGB(255, 250, 249, 249),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            // "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssj",
+                            list["s_customer_name"].toString().toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Divider(),
-                // Divider(
-                //   indent: 50,
-                //   endIndent: 50,
-                //   thickness: 4,
-                //   color: value.scheduleList[index]["l_color"] == null ||
-                //           value.scheduleList[index]["l_color"].isEmpty
-                //       ? Colors.grey[100]
-                //       : parseColor(value.scheduleList[index]["l_color"]),
-                // ),
+                  Divider(),
+                  // Divider(
+                  //   indent: 50,
+                  //   endIndent: 50,
+                  //   thickness: 4,
+                  //   color: value.scheduleList[index]["l_color"] == null ||
+                  //           value.scheduleList[index]["l_color"].isEmpty
+                  //       ? Colors.grey[100]
+                  //       : parseColor(value.scheduleList[index]["l_color"]),
+                  // ),
 
-                // Row(
-                //   children: [
-                //     Column(
-                //       children: [
-                //         Image.asset(
-                //           "assets/calendar.png",
-                //           height: 28,
-                //         ),
-                //       ],
-                //     ),
-                //     Padding(
-                //       padding: const EdgeInsets.only(left: 8.0),
-                //       child: Column(
-                //         children: [
-                //           Text(list["no"]),
-                //           Text(list["ph"]),
-                //         ],
-                //       ),
-                //     )
-                //   ],
-                // )
-                ListTile(
-                  title: Row(
-                    children: [
-                      Text(
-                        "Inv No : ",
-                        style: TextStyle(fontSize: 13, color: Colors.grey),
-                      ),
-                      Flexible(
-                        child: Text(
-                          value.scheduleList[index]["s_invoice_no"].toString(),
-                          style:
-                              TextStyle(fontSize: 13, color: Colors.grey[900]),
+                  // Row(
+                  //   children: [
+                  //     Column(
+                  //       children: [
+                  //         Image.asset(
+                  //           "assets/calendar.png",
+                  //           height: 28,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     Padding(
+                  //       padding: const EdgeInsets.only(left: 8.0),
+                  //       child: Column(
+                  //         children: [
+                  //           Text(list["no"]),
+                  //           Text(list["ph"]),
+                  //         ],
+                  //       ),
+                  //     )
+                  //   ],
+                  // )
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Text(
+                          "Inv No : ",
+                          style: TextStyle(fontSize: 13, color: Colors.grey),
                         ),
-                      ),
-                    ],
-                  ),
-                  leading:
-                      // Image.asset("assets/calendar.png",height: 25,),
+                        Flexible(
+                          child: Text(
+                            list["s_invoice_no"].toString(),
+                            style: TextStyle(
+                                fontSize: 13, color: Colors.grey[900]),
+                          ),
+                        ),
+                      ],
+                    ),
+                    leading:
+                        // Image.asset("assets/calendar.png",height: 25,),
 
-                      CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: AssetImage("assets/calendar.png"),
-                  ),
-                  trailing: Wrap(
-                    children: [
-                      Icon(
-                        Icons.calendar_month,
-                        size: 14,
-                        color: Color.fromARGB(255, 175, 116, 76),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        value.scheduleList[index]["s_invoice_date"].toString(),
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[700],
-                            fontStyle: FontStyle.italic),
-                      ),
-                    ],
-                  ),
-                  subtitle: Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          _makePhoneCall(value.scheduleList[index]["phone_1"]);
-                        },
-                        child: Icon(
-                          Icons.phone,
+                        CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: AssetImage("assets/calendar.png"),
+                    ),
+                    trailing: Wrap(
+                      children: [
+                        Icon(
+                          Icons.calendar_month,
                           size: 14,
-                          color: Colors.green,
+                          color: Color.fromARGB(255, 175, 116, 76),
                         ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        value.scheduleList[index]["phone_1"].toString(),
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ],
+                        SizedBox(
+                          width: 4,
+                        ),
+                        // Text("Inv Date : "),
+                        Text(
+                          list["s_invoice_date"].toString(),
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey[700],
+                              fontStyle: FontStyle.italic),
+                        ),
+                      ],
+                    ),
+                    subtitle: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            _makePhoneCall(list["phone_1"]);
+                          },
+                          child: Icon(
+                            Icons.phone,
+                            size: 14,
+                            color: Colors.green,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          list["phone_1"].toString(),
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                // value.scheduleList[index]["owner_name"] == null ||
-                //         value.scheduleList[index]["owner_name"].isEmpty &&
-                //             value.scheduleList[index]["company_add1"] == null ||
-                //         value.scheduleList[index]["company_add1"].isEmpty
-                //     ? Container()
-                //     : Divider(),
-                value.scheduleList[index]["company_add1"] == null ||
-                        value.scheduleList[index]["company_add1"].isEmpty
-                    ? Container()
-                    : Padding(
-                        padding: const EdgeInsets.only(left: 12.0),
-                        child: Row(
+                  // value.scheduleList[index]["owner_name"] == null ||
+                  //         value.scheduleList[index]["owner_name"].isEmpty &&
+                  //             value.scheduleList[index]["company_add1"] == null ||
+                  //         value.scheduleList[index]["company_add1"].isEmpty
+                  //     ? Container()
+                  //     : Divider(),
+                  list["company_add1"] == null || list["company_add1"].isEmpty
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 12.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Company Info      :  ',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Flexible(
+                                child: Text(
+                                  // "Kanuur jhdjshdjdshjdjshdjadhd sdhjshd nhdhshh vv",
+                                  list["company_add1"].toString(),
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    thickness: 4,
+                    color: list["l_color"] == null || list["l_color"].isEmpty
+                        ? Colors.grey[200]
+                        : parseColor(list["l_color"].toString()),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
                           children: [
                             Text(
-                              'Company Info      :  ',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
+                              'Contact Person :  ',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 12),
                             ),
-                            Flexible(
+                            Container(
+                              width: 200,
                               child: Text(
-                                // "Kanuur jhdjshdjdshjdjshdjadhd sdhjshd nhdhshh vv",
-                                value.scheduleList[index]["company_add1"]
-                                    .toString(),
+                                // "anusha kkkmfnnnnnnnnnnnnnnnnnnnnmn kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+                                list["owner_name"],
                                 style: TextStyle(fontSize: 14),
                               ),
                             )
                           ],
                         ),
-                      ),
-                SizedBox(
-                  height: 10,
-                ),
-                Divider(
-                  thickness: 4,
-                  color: value.scheduleList[index]["l_color"] == null ||
-                          value.scheduleList[index]["l_color"].isEmpty
-                      ? Colors.grey[200]
-                      : parseColor(
-                          value.scheduleList[index]["l_color"].toString()),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(3),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Contact Person :  ',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                          Container(
-                            width: 200,
-                            child: Text(
-                              // "anusha kkkmfnnnnnnnnnnnnnnnnnnnnmn kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
-                              value.scheduleList[index]["owner_name"],
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          )
-                        ],
-                      ),
-                      InkWell(
-                          onTap: () {
-                            VisitedRemarkSheet visited = VisitedRemarkSheet();
-                            visited.showRemarkSheet(
-                                context,
-                                value.scheduleList[index]["enq_id"],
-                                value.scheduleList[index]["s_invoice_id"]);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Finish",
-                                style: TextStyle(color: Colors.white),
+                        InkWell(
+                            onTap: () {
+                              Provider.of<QuotationController>(context,
+                                      listen: false)
+                                  .branchselected = null;
+                              SelectBranchSheet sheet = SelectBranchSheet();
+                              sheet.showRemarkSheet(
+                                  context, list["s_invoice_id"]);
+                            },
+                            child: Icon(
+                              Icons.picture_as_pdf_outlined,
+                              color: Colors.purple,
+                            )),
+                        InkWell(
+                            onTap: () {
+                              VisitedRemarkSheet visited = VisitedRemarkSheet();
+                              visited.showRemarkSheet(context, list["enq_id"],
+                                  list["s_invoice_id"]);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(5),
                               ),
-                            ),
-                          ))
-                    ],
-                  ),
-                )
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     value.scheduleList[index]["owner_name"] == null ||
-                //             value.scheduleList[index]["owner_name"].isEmpty
-                //         ? Container()
-                //         : Row(
-                //           children: [
-                //             Text(
-                //               'Contact Person   :  ',
-                //               style: TextStyle(
-                //                 color: Colors.grey,
-                //               ),
-                //             ),
-                //             Flexible(
-                //               child: Text(
-                //                 // "anusha kkk",
-                //                 value.scheduleList[index]["owner_name"],
-                //                 style: TextStyle(fontSize: 14),
-                //               ),
-                //             )
-                //           ],
-                //         ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Finish",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                  )
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     value.scheduleList[index]["owner_name"] == null ||
+                  //             value.scheduleList[index]["owner_name"].isEmpty
+                  //         ? Container()
+                  //         : Row(
+                  //           children: [
+                  //             Text(
+                  //               'Contact Person   :  ',
+                  //               style: TextStyle(
+                  //                 color: Colors.grey,
+                  //               ),
+                  //             ),
+                  //             Flexible(
+                  //               child: Text(
+                  //                 // "anusha kkk",
+                  //                 value.scheduleList[index]["owner_name"],
+                  //                 style: TextStyle(fontSize: 14),
+                  //               ),
+                  //             )
+                  //           ],
+                  //         ),
 
-                //   ],
-                // )
-              ],
+                  //   ],
+                  // )
+                ],
+              ),
             ),
           ),
         );

@@ -24,7 +24,8 @@ import '../../controller/controller.dart';
 
 class PdfPreviewPage extends StatefulWidget {
   String br;
-  PdfPreviewPage({required this.br});
+  String id;
+  PdfPreviewPage({required this.br, required this.id});
   @override
   State<PdfPreviewPage> createState() => _PdfPreviewPageState();
 }
@@ -42,11 +43,8 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Provider.of<QuotationController>(context, listen: false).getPdfData(
-        context,
-        Provider.of<QuotationController>(context, listen: false)
-            .sivd
-            .toString());
+    Provider.of<QuotationController>(context, listen: false)
+        .getPdfData(context, widget.id);
   }
 
   @override
@@ -77,8 +75,8 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
               builder: (context, value, child) {
                 return IconButton(
                     onPressed: () async {
-                      final pdffile = await pdfSave.savepdf(
-                          value.detailPdf, value.masterPdf, value.termsPdf,widget.br);
+                      final pdffile = await pdfSave.savepdf(value.detailPdf,
+                          value.masterPdf, value.termsPdf, widget.br);
                       print("pdffile----$pdffile");
                       PdFSave.sendFile(pdffile);
                     },
@@ -91,11 +89,8 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
                   padding: const EdgeInsets.only(left: 12.0),
                   child: IconButton(
                     onPressed: () async {
-                      final pdffile = await dwnload.downLoadpdf(
-                        value.detailPdf,
-                        value.masterPdf,
-                        value.termsPdf,widget.br
-                      );
+                      final pdffile = await dwnload.downLoadpdf(value.detailPdf,
+                          value.masterPdf, value.termsPdf, widget.br);
                       print("kjxnzx-------$pdffile");
                       final snackBar = SnackBar(
                         duration: Duration(seconds: 2),
@@ -127,8 +122,8 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
             } else {
               return PdfPreview(
                   useActions: false,
-                  build: (context) => quotation1.generate(
-                      value.detailPdf, value.masterPdf, value.termsPdf,widget.br));
+                  build: (context) => quotation1.generate(value.detailPdf,
+                      value.masterPdf, value.termsPdf, widget.br));
             }
           },
         ),

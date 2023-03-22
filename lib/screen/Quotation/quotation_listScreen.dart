@@ -4,6 +4,7 @@ import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/screen/Quotation/quotationEdit.dart';
+import 'package:bestengineer/widgets/bottomsheets/select_branch_sheet.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -30,7 +31,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _controller = new TextEditingController();
   List<String> s = [];
-   RefreshController _refreshController =
+  RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   String? todaydate;
   String? date;
@@ -45,9 +46,10 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     Color col = Color(int.parse(hex, radix: 16)).withOpacity(1.0);
     return col;
   }
- void _onRefresh() async {
+
+  void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
-     Provider.of<QuotationController>(context, listen: false).getQuotationList(
+    Provider.of<QuotationController>(context, listen: false).getQuotationList(
       context,
     );
     _refreshController.refreshCompleted();
@@ -85,7 +87,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
       //   backgroundColor: P_Settings.loginPagetheme,
       // ),
       body: SmartRefresher(
-         controller: _refreshController,
+        controller: _refreshController,
         enablePullDown: true,
         onRefresh: _onRefresh,
         child: SafeArea(
@@ -229,7 +231,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                               " [ ${value.quotationList[index]["qt_no"]} ]",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   color: Colors.grey[600]),
                             ),
                           ),
@@ -254,7 +256,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                       value.quotationList[index]
                                           ["company_add1"],
                                       style: TextStyle(
-                                        fontSize: 13,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[600],
                                       ),
@@ -313,7 +315,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                         child: Text(
                                           value.qtScheduldate[index].toString(),
                                           style: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey[700],
                                           ),
@@ -396,10 +398,35 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                 Text(
                                   "Cancel",
                                   style: TextStyle(
-                                      color: P_Settings.loginPagetheme),
+                                      color: P_Settings.loginPagetheme,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Icon(Icons.close,
                                     size: 17, color: P_Settings.loginPagetheme)
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              value.branchselected = null;
+                              SelectBranchSheet quot = SelectBranchSheet();
+
+                              quot.showRemarkSheet(context,
+                                  value.quotationList[index]["s_invoice_id"]);
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  "View PDF",
+                                  style: TextStyle(
+                                      color: Colors.brown,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Icon(
+                                  Icons.picture_as_pdf,
+                                  size: 17,
+                                  color: Colors.brown,
+                                )
                               ],
                             ),
                           ),
@@ -427,7 +454,9 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                               children: [
                                 Text(
                                   "Edit",
-                                  style: TextStyle(color: Colors.green),
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Icon(
                                   Icons.edit,
@@ -499,7 +528,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                               " [ ${value.newquotationList[index]["qt_no"]} ]",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   color: Colors.grey[600]),
                             ),
                           ),
@@ -524,7 +553,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                       value.newquotationList[index]
                                           ["company_add1"],
                                       style: TextStyle(
-                                        fontSize: 13,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[600],
                                       ),
@@ -572,7 +601,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                       child: Text(
                                         value.qtScheduldate[index].toString(),
                                         style: TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 13,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.grey[700],
                                         ),
@@ -658,6 +687,32 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                 ),
                                 Icon(Icons.close,
                                     size: 17, color: P_Settings.loginPagetheme)
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              value.branchselected = null;
+                              SelectBranchSheet quot = SelectBranchSheet();
+
+                              quot.showRemarkSheet(
+                                  context,
+                                  value.newquotationList[index]
+                                      ["s_invoice_id"]);
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  "View PDF",
+                                  style: TextStyle(
+                                      color: Colors.brown,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Icon(
+                                  Icons.picture_as_pdf,
+                                  size: 17,
+                                  color: Colors.brown,
+                                )
                               ],
                             ),
                           ),

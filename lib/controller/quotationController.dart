@@ -96,6 +96,8 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> userwiseReportList = [];
   List<Map<String, dynamic>> topItemList = [];
   List<Map<String, dynamic>> customerwiseReport = [];
+  List<Map<String, dynamic>> adminDashTileDetail = [];
+  List<Map<String, dynamic>> enqScheduleList = [];
 
   List<Map<String, dynamic>> masterPdf = [];
   List<Map<String, dynamic>> detailPdf = [];
@@ -480,7 +482,8 @@ class QuotationController extends ChangeNotifier {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PdfPreviewPage(br: br),
+                      builder: (context) =>
+                          PdfPreviewPage(br: br, id: sivd.toString()),
                     ),
                   );
                 }
@@ -1622,4 +1625,177 @@ class QuotationController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////
+  getAdminDashTile(BuildContext context, String tileId) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/load_dashboard_detail.php");
+
+          Map body = {"sf": tileId.toString()};
+          isLoading = true;
+          notifyListeners();
+          print("dashtile----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          var map = jsonDecode(response.body);
+
+          adminDashTileDetail.clear();
+          for (var item in map["data"]) {
+            adminDashTileDetail.add(item);
+          }
+          print("dashtile-------${adminDashTileDetail}");
+
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  //////////////////////////////////////////////////////
+  getEnquirySchedule(BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/get_schedule_enq.php");
+
+          Map body = {"staff_id": user_id};
+          isLoading = true;
+          notifyListeners();
+          print("enq schedle---$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          var map = jsonDecode(response.body);
+
+          enqScheduleList.clear();
+          for (var item in map) {
+            enqScheduleList.add(item);
+          }
+          print("enq schedule-- map-----${enqScheduleList}");
+
+          isLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+  ////////////////////////////////////////////////////////
+ saveNextEnqSchedule(BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/save_next_schedule_enq.php");
+
+          Map body = {"staff_id": user_id,"staff_name":,};
+          isLoading = true;
+          notifyListeners();
+          print("enq schedle---$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          var map = jsonDecode(response.body);
+
+          enqScheduleList.clear();
+          for (var item in map) {
+            enqScheduleList.add(item);
+          }
+          print("enq schedule-- map-----${enqScheduleList}");
+
+          isLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+  ///////////////////////////////////////////////////////
+  getAreaWiseReport(BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/area_wise_report.php");
+
+          Map body = {"staff_id": user_id};
+          isLoading = true;
+          notifyListeners();
+          print("enq schedle---$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          var map = jsonDecode(response.body);
+
+          enqScheduleList.clear();
+          for (var item in map) {
+            enqScheduleList.add(item);
+          }
+          print("enq schedule-- map-----${enqScheduleList}");
+
+          isLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
 }
