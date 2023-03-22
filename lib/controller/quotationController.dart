@@ -1712,8 +1712,9 @@ class QuotationController extends ChangeNotifier {
       }
     });
   }
+
   ////////////////////////////////////////////////////////
- saveNextEnqSchedule(BuildContext context) {
+  saveNextEnqSchedule(BuildContext context, String date, String enqId) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -1728,22 +1729,28 @@ class QuotationController extends ChangeNotifier {
           // notifyListeners();
           Uri url = Uri.parse("$commonurlgolabl/save_next_schedule_enq.php");
 
-          Map body = {"staff_id": user_id,"staff_name":,};
+          Map body = {
+            "staff_id": user_id,
+            "staff_name": staff_nam,
+            "added by": user_id,
+            "next_date": date,
+            "enq_id": enqId
+          };
           isLoading = true;
           notifyListeners();
-          print("enq schedle---$body");
+          print("save enq schedule---- body-$body");
           http.Response response = await http.post(
             url,
             body: body,
           );
 
           var map = jsonDecode(response.body);
+          print("save enq schedule----${map}");
 
           enqScheduleList.clear();
           for (var item in map) {
             enqScheduleList.add(item);
           }
-          print("enq schedule-- map-----${enqScheduleList}");
 
           isLoading = false;
           notifyListeners();
@@ -1755,6 +1762,7 @@ class QuotationController extends ChangeNotifier {
       }
     });
   }
+
   ///////////////////////////////////////////////////////
   getAreaWiseReport(BuildContext context) {
     NetConnection.networkConnection(context).then((value) async {

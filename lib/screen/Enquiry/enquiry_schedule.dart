@@ -236,41 +236,46 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
                             SizedBox(
                               height: 8,
                             ),
-                            Row(
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.07,
-                                  child: Icon(
-                                    Icons.calendar_month,
-                                    color: Colors.brown,
-                                    size: 16,
+                            InkWell(
+                              onTap: () {
+                                _selectDate(context, index, );
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.07,
+                                    child: Icon(
+                                      Icons.calendar_month,
+                                      color: Colors.brown,
+                                      size: 16,
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                    // width: MediaQuery.of(context).size.width *
-                                    //     0.2,
-                                    child: Text(
-                                  "Choose Schedule date",
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.grey[500]),
-                                )),
-                                SizedBox(
-                                  width: 4,
-                                  // child: Text(":"),
-                                ),
-                                SizedBox(
-                                  width: 14,
-                                  child: Text(":"),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    value.enqScheduleList[index]["next_date"],
+                                  Container(
+                                      // width: MediaQuery.of(context).size.width *
+                                      //     0.2,
+                                      child: Text(
+                                    "Choose Schedule date",
                                     style: TextStyle(
-                                        fontSize: 14, color: Colors.grey[800]),
+                                        fontSize: 13, color: Colors.grey[500]),
+                                  )),
+                                  SizedBox(
+                                    width: 4,
+                                    // child: Text(":"),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    width: 14,
+                                    child: Text(":"),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      value.enqScheduleList[index]["next_date"],
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.grey[800]),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -300,7 +305,7 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
 
 ////////////////////////////////////////////////////
   Future<void> _selectDate(
-      BuildContext context, int index, String frmId, String qb_id) async {
+      BuildContext context, int index, String frmId, String enq) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
@@ -319,8 +324,8 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
       date = DateFormat('dd-MM-yyyy').format(pickedDate);
     print("date----------------$date");
 
-    // Provider.of<QuotationController>(context, listen: false)
-    //     .saveNextScheduleServiceDate(date!, frmId, qb_id, context);
-    // });
+    Provider.of<QuotationController>(context, listen: false)
+        .saveNextEnqSchedule(context,date!,enq );
+    
   }
 }
