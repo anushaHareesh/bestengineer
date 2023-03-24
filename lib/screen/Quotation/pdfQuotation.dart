@@ -154,8 +154,9 @@ class PdfQuotation {
 
   Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
     return Container(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
       Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +167,7 @@ class PdfQuotation {
               Text(
                 masterPdf[0]["s_invoice_no"],
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 9,
                 ),
               )
             ]),
@@ -175,7 +176,7 @@ class PdfQuotation {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["s_customer_name"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                   ))
             ]),
             Row(
@@ -183,10 +184,17 @@ class PdfQuotation {
                 Text('Address            : ',
                     style:
                         TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-                Text(masterPdf[0]["company_add1"],
-                    style: TextStyle(
-                      fontSize: 10,
-                    ))
+                Container(
+                    width: 200,
+                    // flex: 1,
+                    // fit: FlexFit.tight,
+                    child: Flexible(
+                        child: Text(
+                            // "bzjjzsbzsjbnm nfkjfnjkxd nfjkfjkf jfjfndjkf jfkjdfj jkhfkjzfshkj jkhfjkzskjf ihjkkkkkkkkkkkkkkkk jkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjk kkkkkkkkkkkkkkkj",
+                            masterPdf[0]["company_add1"],
+                            style: TextStyle(
+                              fontSize: 9,
+                            ))))
               ],
             ),
           ]),
@@ -200,7 +208,7 @@ class PdfQuotation {
                       pw.TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["qdate"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize:9,
                   ))
             ]),
             Row(children: [
@@ -208,7 +216,7 @@ class PdfQuotation {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_1"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                   ))
             ]),
 
@@ -217,7 +225,7 @@ class PdfQuotation {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_2"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize:9,
                   ))
             ]),
             // pw.Row(
@@ -237,359 +245,7 @@ class PdfQuotation {
 
   Widget buildInvoice(List<Map<String, dynamic>> list) {
     bool bord = false;
-    // List<Map<String, dynamic>> list = [
-
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    //   {
-    //     "product_name": "czc",
-    //     "qty": "12",
-    //     "rate": "123",
-    //     "amount": "134",
-    //     "discount_amount": "10",
-    //     'tax_perc': "6",
-    //     "tax": "6",
-    //     "net_rate": "234"
-    //   },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // {
-    //   "product_name": "czc",
-    //   "qty": "12",
-    //   "rate": "123",
-    //   "amount": "134",
-    //   "discount_amount": "10",
-    //   'tax_perc': "6",
-    //   "tax": "6",
-    //   "net_rate": "234"
-    // },
-    // ];
+  
 
     int i = 0;
     final headers = [

@@ -15,6 +15,7 @@ import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
 import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:bestengineer/screen/Quotation/test.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
+import 'package:bestengineer/screen/reports/areawise_report.dart';
 import 'package:bestengineer/screen/reports/customerwiseReport.dart';
 import 'package:bestengineer/screen/reports/dealerWiseReport.dart';
 import 'package:bestengineer/screen/reports/topItemReport.dart';
@@ -318,6 +319,19 @@ class _EnqHomeState extends State<EnqHome> {
           Provider.of<QuotationController>(context, listen: false)
               .getTopItemListReport(context);
           return TopItemReport();
+        }
+      case "AP1":
+        {
+          print("srghhh");
+          Provider.of<Controller>(context, listen: false).selected = null;
+          Provider.of<Controller>(context, listen: false).talukSelected = null;
+            Provider.of<Controller>(context, listen: false).talukId = null;
+          Provider.of<Controller>(context, listen: false).areaId = null;
+          Provider.of<QuotationController>(context, listen: false).listWidget =
+              [];
+          // Provider.of<QuotationController>(context, listen: false)
+          //     .getAreaWiseReport(context,null,null);
+          return AreaWiseReport();
         }
       case "CR1":
         {
@@ -667,7 +681,8 @@ class _EnqHomeState extends State<EnqHome> {
                               "CR1" ||
                           Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
-                              "ES1"
+                              "ES1" ||
+                          Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
                       ? Container()
                       : InkWell(
                           onTap: () {
@@ -741,7 +756,9 @@ class _EnqHomeState extends State<EnqHome> {
                                                           ? "CUSTOMER WISE REPORT"
                                                           : Provider.of<RegistrationController>(context, listen: false).menu_index == "ES1"
                                                               ? "ENQUIRY SCHEDULE"
-                                                              : "",
+                                                              : Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
+                                                                  ? "AREA WISE REPORT"
+                                                                  : "",
                   style: TextStyle(fontSize: 15),
                 ),
                 backgroundColor: Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
@@ -770,7 +787,8 @@ class _EnqHomeState extends State<EnqHome> {
                             "CR1" ||
                         Provider.of<RegistrationController>(context, listen: false)
                                 .menu_index ==
-                            "ES1"
+                            "ES1" ||
+                        Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
                     ? P_Settings.loginPagetheme
                     : P_Settings.whiteColor,
                 elevation: 1,
@@ -790,7 +808,8 @@ class _EnqHomeState extends State<EnqHome> {
                                     value.menu_index == "UW1" ||
                                     value.menu_index == "TI1" ||
                                     value.menu_index == "CR1" ||
-                                    value.menu_index == "ES1"
+                                    value.menu_index == "ES1" ||
+                                    value.menu_index == "AP1"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },

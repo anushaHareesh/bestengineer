@@ -19,6 +19,7 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
   String? date;
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Consumer<QuotationController>(
         builder: (context, value, child) {
@@ -27,7 +28,9 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
               color: P_Settings.loginPagetheme,
             );
           } else if (value.enqScheduleList.length == 0) {
-            return Center(child: Lottie.asset("assets/noData.json"));
+            return Center(
+                child: Lottie.asset("assets/noData.json",
+                    height: size.height * 0.25));
           } else {
             return ListView.builder(
               itemCount: value.enqScheduleList.length,
@@ -238,14 +241,18 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
                             ),
                             InkWell(
                               onTap: () {
-                                _selectDate(context, index, value.enqScheduleList[index]
-                                              ["enq_id"] );
+                                _selectDate(
+                                    context,
+                                    index,
+                                    value.enqScheduleList[index]["enq_id"],
+                                    value.enqScheduleList[index]
+                                        ["company_name"]);
                               },
                               child: Row(
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.07,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.07,
                                     child: Icon(
                                       Icons.calendar_month,
                                       color: Colors.brown,
@@ -272,7 +279,8 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
                                     child: Text(
                                       value.enqScheduleList[index]["next_date"],
                                       style: TextStyle(
-                                          fontSize: 14, color: Colors.grey[800]),
+                                          fontSize: 14,
+                                          color: Colors.grey[800]),
                                     ),
                                   ),
                                 ],
@@ -294,7 +302,7 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
 
   Color parseColor(String color) {
     print("Colorrrrr...$color");
-    String hex = color.replaceAll("#", "");
+    String hex = color.replaceAll("#", ""); 
     if (hex.isEmpty) hex = "ffffff";
     if (hex.length == 3) {
       hex =
@@ -306,7 +314,7 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
 
 ////////////////////////////////////////////////////
   Future<void> _selectDate(
-      BuildContext context, int index, String enq) async {
+      BuildContext context, int index, String enq, String cus) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: currentDate,
@@ -326,7 +334,6 @@ class _EnquiryScheduleState extends State<EnquirySchedule> {
     print("date----------------$date");
 
     Provider.of<QuotationController>(context, listen: false)
-        .saveNextEnqSchedule(context,date!,enq );
-    
+        .saveNextEnqSchedule(context, date!, enq, cus);
   }
 }

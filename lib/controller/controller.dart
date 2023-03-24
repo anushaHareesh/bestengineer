@@ -20,7 +20,9 @@ class Controller extends ChangeNotifier {
   String? todayService;
   String? todayInstall;
   String? totService;
-
+  String? talukSelected;
+  String? areaId;
+  String? talukId;
   bool selectedCustomer = true;
   bool addNewItem = false;
   bool? arrowButtonclicked;
@@ -31,6 +33,8 @@ class Controller extends ChangeNotifier {
 
   // String? todate;
   String urlgolabl = Globaldata.apiglobal;
+  String commonurlgolabl = Globaldata.commonapiglobal;
+
   bool isLoading = false;
   bool isListLoading = false;
   bool isDahboardLoading = false;
@@ -59,6 +63,7 @@ class Controller extends ChangeNotifier {
   String? prioId;
   bool isServceDahboardLoading = false;
   List<Map<String, dynamic>> area_list = [];
+  List<Map<String, dynamic>> talukList = [];
   List<Map<String, dynamic>> statusMon = [];
 
   List<PriorityLevel> priorityList = [];
@@ -422,6 +427,10 @@ class Controller extends ChangeNotifier {
           for (var item in map["area"]) {
             area_list.add(item);
           }
+          talukList.clear();
+          for (var item in map["thaluk"]) {
+            talukList.add(item);
+          }
 
           notifyListeners();
         } catch (e) {
@@ -637,6 +646,52 @@ class Controller extends ChangeNotifier {
           //     builder: (context) => QuotationStatusMonitoring(),
           //   ),
           // );
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////
+  settalukDropSelected(String s) {
+    for (int i = 0; i < talukList.length; i++) {
+      print("com------${talukList[i]["th_id"]}---$s");
+      if (talukList[i]["th_id"] == s) {
+        talukSelected = talukList[i]["th_name"];
+        print("talukSelected---$talukSelected");
+        // notifyListeners();
+      }
+    }
+    print("s------$s");
+    notifyListeners();
+  }
+
+  fetchAreaFromTaluk(BuildContext context, String taluk_id) {
+    NetConnection.networkConnection(context).then((value) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? branch_id = prefs.getString("branch_id");
+      String? user_id = prefs.getString("user_id");
+      if (value == true) {
+        try {
+          Uri url = Uri.parse("$commonurlgolabl/fetch_area.php");
+          Map body = {"taluk_id": taluk_id};
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          // AreaModel regModel = AreaModel.fromJson(map);
+          print("fetch area-----$map");
+          // area_list.clear();
+          // for (var item in map["area"]) {
+          //   area_list.add(item);
+          // }
+          // talukList.clear();
+          // for (var item in map["thaluk"]) {
+          //   talukList.add(item);
+          // }
+
+          notifyListeners();
         } catch (e) {
           print(e);
           // return null;

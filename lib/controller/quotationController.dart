@@ -28,6 +28,7 @@ class QuotationController extends ChangeNotifier {
 
   bool isLoading = false;
   String? reportdealerselected;
+
   int? sivd;
   bool ispdfOpend = false;
   bool isQuotSearch = false;
@@ -37,7 +38,7 @@ class QuotationController extends ChangeNotifier {
   bool isChatLoading = false;
   String? fromDate;
   String? todate;
-
+  List<Container> listWidget = [];
   String? branchselected;
   List<Map<String, dynamic>> branchList = [
     {"id": "0", "value": "kannur"},
@@ -108,6 +109,7 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> serviceChatList = [];
   List<Map<String, dynamic>> reportDealerList = [];
   List<Map<String, dynamic>> dealerwiseProductList = [];
+  List<Map<String, dynamic>> areaWiseReportList = [];
 
   List<Map<String, dynamic>> quotationEditList = [];
   List<Map<String, dynamic>> dealerwiseReportList = [];
@@ -1714,7 +1716,8 @@ class QuotationController extends ChangeNotifier {
   }
 
   ////////////////////////////////////////////////////////
-  saveNextEnqSchedule(BuildContext context, String date, String enqId) {
+  saveNextEnqSchedule(
+      BuildContext context, String date, String enqId, String cus) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -1736,24 +1739,35 @@ class QuotationController extends ChangeNotifier {
             "next_date": date,
             "enq_id": enqId
           };
-          isLoading = true;
-          notifyListeners();
-          print("save enq schedule---- body-$body");
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
           http.Response response = await http.post(
             url,
-            body: body,
+            body: {'json_data': jsonEnc},
           );
-
           var map = jsonDecode(response.body);
           print("save enq schedule----${map}");
-
-          enqScheduleList.clear();
-          for (var item in map) {
-            enqScheduleList.add(item);
+          if (map["flag"] == 0) {
+            getEnquirySchedule(context);
+              Fluttertoast.showToast(
+              msg: "( $enqId - $cus ) Schedule date changed to $date",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
           }
+          // enqScheduleList.clear();
+          // for (var item in map) {
+          //   enqScheduleList.add(item);
+          // }
 
-          isLoading = false;
-          notifyListeners();
+          // isLoading = false;
+          // notifyListeners();
         } catch (e) {
           print(e);
           // return null;
@@ -1764,7 +1778,7 @@ class QuotationController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////////
-  getAreaWiseReport(BuildContext context) {
+  getAreaWiseReport(BuildContext context, String? talukId, String? area) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -1779,22 +1793,91 @@ class QuotationController extends ChangeNotifier {
           // notifyListeners();
           Uri url = Uri.parse("$commonurlgolabl/area_wise_report.php");
 
-          Map body = {"staff_id": user_id};
+          Map body = {"thaluk_id": talukId, "area_id": area, "type": "1"};
           isLoading = true;
           notifyListeners();
-          print("enq schedle---$body");
+          print("area wise report body---$body");
           http.Response response = await http.post(
             url,
             body: body,
           );
 
           var map = jsonDecode(response.body);
+          print("area wise report map---$map");
 
-          enqScheduleList.clear();
+          areaWiseReportList.clear();
+          String? cid;
+          listWidget.clear();
           for (var item in map) {
-            enqScheduleList.add(item);
+            if (cid != item["c_id"]) {
+              print("com---${item["company_name"]}");
+              listWidget.add(Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        item["company_name"].toString().toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green),
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+              cid = item["c_id"];
+            }
+            print("item----${item["product_name"]}");
+            listWidget.add((Container(
+              child: Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Flexible(
+                              child: Text(
+                            item["product_name"],
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[600]),
+                          )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Qty : ",
+                            style: TextStyle(
+                                fontSize: 13, color: Colors.grey[500]),
+                          ),
+                          Flexible(
+                              child: Text(
+                            item["qty"],
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          )),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )));
+
+            // areaWiseReportList.add(item);
           }
-          print("enq schedule-- map-----${enqScheduleList}");
 
           isLoading = false;
           notifyListeners();

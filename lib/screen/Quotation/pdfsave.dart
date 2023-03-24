@@ -149,7 +149,7 @@ class PdFSave {
               Text(
                 masterPdf[0]["s_invoice_no"],
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize:9,
                 ),
               )
             ]),
@@ -158,7 +158,7 @@ class PdFSave {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["s_customer_name"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                   ))
             ]),
             Row(
@@ -166,10 +166,17 @@ class PdFSave {
                 Text('Address            : ',
                     style:
                         TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
-                Text(masterPdf[0]["company_add1"],
-                    style: TextStyle(
-                      fontSize: 10,
-                    ))
+                Container(
+                    width: 200,
+                    // flex: 1,
+                    // fit: FlexFit.tight,
+                    child: Flexible(
+                        child: Text(
+                            // "bzjjzsbzsjbnm nfkjfnjkxd nfjkfjkf jfjfndjkf jfkjdfj jkhfkjzfshkj jkhfjkzskjf ihjkkkkkkkkkkkkkkkk jkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjkjk kkkkkkkkkkkkkkkj",
+                            masterPdf[0]["company_add1"],
+                            style: TextStyle(
+                              fontSize: 9,
+                            ))))
               ],
             ),
           ]),
@@ -183,7 +190,7 @@ class PdFSave {
                       pw.TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["qdate"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                   ))
             ]),
             Row(children: [
@@ -191,7 +198,7 @@ class PdFSave {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_1"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                   ))
             ]),
 
@@ -200,7 +207,7 @@ class PdFSave {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_2"],
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 9,
                   ))
             ]),
             // pw.Row(
@@ -219,7 +226,9 @@ class PdFSave {
   }
 
   Widget buildInvoice(List<Map<String, dynamic>> list) {
-    print("kjgkjf------$list");
+    bool bord = false;
+  
+
     int i = 0;
     final headers = [
       'Sl No',
@@ -233,30 +242,137 @@ class PdFSave {
       'Net Amount',
     ];
 
-    final data = list.map((item) {
-      print("sdjsjkh----${item["qty"].runtimeType}");
-      i = i + 1;
+    var data1;
+    Map map;
+    List<List<dynamic>> data = [];
+    int j;
 
-      // double total = double.parse(item["qty"]) * item["rate"] ;
-      double netrate = double.parse(item["net_rate"]!);
+    // if (list.length > 13) {
+    //   int k = (list.length - 13) % 15;
+    //   if (k < 10) {
+    //     k = k + 5;
+    //   } else {
+    //     k = k;
+    //   }
+    //   j = list.length + k;
+    // } else {
+    //   j = 13;
+    // }
+    // for (int i = 0; i < j; i++) {
+    //   if (i > list.length - 1) {
+    //     // map = {
+    //     //   "product_name": "",
+    //     //   "qty": "",
+    //     //   "rate": "",
+    //     //   "amount": "",
+    //     //   "discount_amount": "",
+    //     //   'tax_perc': "",
+    //     //   "tax": "",
+    //     //   "net_rate": ""
+    //     // };
+    //     data1 = ["", "", "", "", "", "", "", ""];
+    //   } else {
+    //     map = list[i];
+    //     data1 = returnRows(map, (i + 1).toString());
+    //   }
 
-      return [
-        i,
-        item["product_name"],
-        item["qty"],
-        item["rate"],
-        item["amount"],
-        item["discount_amount"],
-        // item["tax_perc"],
-        item["tax"],
-        netrate.toStringAsFixed(2),
-      ];
-    }).toList();
+    //   data.add(data1);
+    // }
+
+    for (int i = 0; i < list.length; i++) {
+      data1 = returnRows(list[i], (i + 1).toString());
+      data.add(data1);
+    }
+
+    double sum = 0.0;
+    double amount_tot = 0.0;
+    double gstTot = 0.0;
+    double discTot = 0.0;
+
+    for (int i = 0; i < list.length; i++) {
+      sum = double.parse(list[i]["net_rate"]) + sum;
+      amount_tot = double.parse(list[i]["amount"]) + amount_tot;
+      gstTot = double.parse(list[i]["tax"]) + gstTot;
+      discTot = double.parse(list[i]["discount_amount"]) + discTot;
+    }
+    // returnTotal(list);
+    List<dynamic> tot = [
+      "",
+      "Amount / Discount / GST Total",
+      "",
+      "",
+      amount_tot,
+      discTot,
+      gstTot,
+      ""
+    ];
+    List<dynamic> tot1 = [
+      "",
+      "Grand Total",
+      "",
+      "",
+      "",
+      "",
+      "",
+      sum.toStringAsFixed(2)
+    ];
+    // // List<dynamic> tot2 = [
+    // //   "",
+    // //   "Amount Total",
+    // //   "",
+    // //   "",
+    // //   amount_tot.toStringAsFixed(2),
+    // //   "",
+    // //   "",
+    // //   "",
+    // //   ""
+    // // ];
+
+    // data.add(tot2);
+    // data.add(tot);
+    // data.add(tot1);
+
+    // bord = true;
+    print("data----$data1");
+///////////////////**************************************************************  */
+    // List<List<dynamic>> data = [];
+    // for (int i = 0; i < list.length; i++) {
+    //   data1 = returnRows(list[i], (i + 1).toString());
+
+    //   data.add(data1);
+    // }
+    // // List<dynamic> m = ["Grand Total", "400"];
+    // // data.add(m);
+    // print("data----$data1");
+///////////////************************************************/////////////////// */
+    // final data = list.map((item) {
+    //   print("sdjsjkh----${item["qty"].runtimeType}");
+    //   i = i + 1;
+
+    //   // double total = double.parse(item["qty"]) * item["rate"] ;
+    //   double netrate = double.parse(item["net_rate"]!);
+
+    //   return [
+    //     i,
+    //     item["product_name"],
+    //     item["qty"],
+    //     item["rate"],
+    //     item["amount"],
+    //     item["discount_amount"],
+    //     item["tax_perc"],
+    //     item["tax"],
+    //     netrate.toStringAsFixed(2),
+    //   ];
+    // }).toList();
 
     return Table.fromTextArray(
       headers: headers,
       data: data,
       tableWidth: TableWidth.max,
+
+      // cellDecoration: (index, data, rowNum) {
+      //   return TableRow(children: children)
+      // },
       border: TableBorder(
         left: BorderSide(
           color: PdfColors.grey,
@@ -281,7 +397,7 @@ class PdFSave {
       headerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 9),
       cellStyle: TextStyle(fontSize: 8),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
-      cellHeight: 30,
+      cellHeight: 10,
       columnWidths: {
         // 0: FixedColumnWidth(50),
         1: FixedColumnWidth(110),
@@ -302,11 +418,24 @@ class PdFSave {
         5: Alignment.centerRight,
         6: Alignment.centerRight,
         7: Alignment.centerRight,
-        8: Alignment.centerRight,
+        // 8: Alignment.centerRight,
       },
     );
   }
-
+ returnRows(Map listmap, String i) {
+    double netrate = double.parse(listmap["net_rate"]!);
+    return [
+      i,
+      listmap["product_name"],
+      listmap["qty"],
+      listmap["rate"],
+      listmap["amount"],
+      listmap["discount_amount"],
+      // listmap["tax_perc"],
+      listmap["tax"],
+      netrate.toStringAsFixed(2),
+    ];
+  }
   ////////////////////////////////////////////////////
   Widget buildTotal(
     List<Map<String, dynamic>> list,
