@@ -116,10 +116,14 @@ class _EnqHomeState extends State<EnqHome> {
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
+    print("jhjhjhkjjk--------------------${widget.mobile_menu_type}");
     if (widget.mobile_menu_type == null) {
       shared();
     } else {
       mobile_user_type = widget.mobile_menu_type;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        customNotification();
+      });
     }
     // findMobileUser();
     appBarTitle = Text("");
@@ -325,18 +329,16 @@ class _EnqHomeState extends State<EnqHome> {
           print("srghhh");
           Provider.of<Controller>(context, listen: false).selected = null;
           Provider.of<Controller>(context, listen: false).talukSelected = null;
-            Provider.of<Controller>(context, listen: false).talukId = null;
+          Provider.of<Controller>(context, listen: false).talukId = null;
           Provider.of<Controller>(context, listen: false).areaId = null;
           Provider.of<Controller>(context, listen: false).panId = null;
-          Provider.of<Controller>(context, listen: false).panchayatSelected = null;
-
+          Provider.of<Controller>(context, listen: false).panchayatSelected =
+              null;
 
           Provider.of<QuotationController>(context, listen: false).listWidget =
               [];
-                  Provider.of<Controller>(context, listen: false).talukList =
-              [];
-               Provider.of<Controller>(context, listen: false).panchayt =
-              [];
+          Provider.of<Controller>(context, listen: false).talukList = [];
+          Provider.of<Controller>(context, listen: false).panchayt = [];
           // Provider.of<QuotationController>(context, listen: false)
           //     .getAreaWiseReport(context,null,null);
           return AreaWiseReport();

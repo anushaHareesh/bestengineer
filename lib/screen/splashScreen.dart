@@ -29,8 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
       cid = prefs.getString("cid");
       st_uname = prefs.getString("st_uname");
       st_pwd = prefs.getString("st_pwd");
-    String? mobile_menu_type = prefs.getString("mobile_user_type");
-    print("from splash------$mobile_menu_type");
+      String? mobile_menu_type = prefs.getString("mobile_user_type");
+      print("from splash------$mobile_menu_type");
       // Navigator.pushAndRemoveUntil(context,
       //     MaterialPageRoute(builder: (Context) {
       //   if (cid != null) {
@@ -54,7 +54,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   // return DashboardPage();
                   if (st_uname != null && st_pwd != null) {
                     print("fhhh");
-                    return EnqHome(mobile_menu_type: mobile_menu_type,);
+                    return EnqHome(
+                      mobile_menu_type: mobile_menu_type,
+                    );
                   } else {
                     return LoginPage();
                   }
@@ -153,7 +155,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   )),
             ),
             Padding(
-              padding: const EdgeInsets.only(right:8.0,bottom: 12),
+              padding: const EdgeInsets.only(right: 8.0, bottom: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -161,7 +163,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     "VEGA BUSINESS SOFTWARE",
                     style: TextStyle(
                         // color: P_Settings.loginPagetheme,
-                        fontSize:11,
+                        fontSize: 11,
                         fontWeight: FontWeight.bold),
                   )
                   // Container(
