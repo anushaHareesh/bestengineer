@@ -175,7 +175,35 @@ class QuotationItemSheet {
                                               true,
                                               "rate");
                                         }
-                                      }
+                                      } 
+                                      
+                                      // else {
+                                      //   if (rateval <
+                                      //       double.parse(
+                                      //           value.enqSceheduleQuotLIST[index]
+                                      //               ["base_rate"])) {
+                                      //     rateError.value = true;
+                                      //   } else {
+                                      //     rateError.value = false;
+                                      //     value.rawCalculation(
+                                      //         double.parse(
+                                      //             value.rateEdit[index].text),
+                                      //         int.parse(
+                                      //             value.quotqty[index].text),
+                                      //         double.parse(value
+                                      //             .discount_prercent[index]
+                                      //             .text),
+                                      //         double.parse(value
+                                      //             .discount_amount[index].text),
+                                      //         double.parse(map["tax_perc"]),
+                                      //         0.0,
+                                      //         "0",
+                                      //         0,
+                                      //         index,
+                                      //         true,
+                                      //         "rate");
+                                      //   }
+                                      // }
 
                                       // value.fromApi = false;
                                     },
@@ -516,7 +544,8 @@ class QuotationItemSheet {
                         style: TextStyle(color: Colors.grey[500]),
                         controller: desc,
                         decoration: InputDecoration(
-                          hintText: "Description",
+                          hintText: "Type Description here ....",
+                          hintStyle: TextStyle(fontSize: 13),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 width: 1,

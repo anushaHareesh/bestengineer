@@ -210,7 +210,7 @@ class RegistrationController extends ChangeNotifier {
           loginModel = LoginModel.fromJson(item);
           prefs.setString("user_id", loginModel.userId!);
           prefs.setString("branch_id", loginModel.branchId!);
-          prefs.setString("qt_pre", loginModel.qt_pre!);
+
           prefs.setString("staff_name", loginModel.staffName!);
           prefs.setString("branch_name", loginModel.branchName!);
           prefs.setString("branch_prefix", loginModel.branchPrefix!);
@@ -377,6 +377,8 @@ class RegistrationController extends ChangeNotifier {
           );
           var map = jsonDecode(response.body);
           scheduleListCount = map.length;
+          // qtScheduldate = List.generate(newquotationList.length, (index) => "");
+
           notifyListeners();
 
           print("schedule list-------$map");
@@ -635,6 +637,7 @@ class RegistrationController extends ChangeNotifier {
     });
   }
 
+//////////////////////////////////////
   saveCompleteService(BuildContext context, String formId, String qbId,
       String tot, String paid) {
     NetConnection.networkConnection(context).then((value) async {
@@ -763,6 +766,130 @@ class RegistrationController extends ChangeNotifier {
               MaterialPageRoute(builder: (Context) {
             return EnqHome();
           }), (route) => false);
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+  confirmQuotation(
+      BuildContext context, String invId, String enqId, String type) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/conform_qt.php");
+
+          Map body = {
+            "added_by": user_id,
+            "s_invoice_id": invId,
+            "enq_id": enqId
+          };
+          String jsonEnc = jsonEncode(body);
+          isLoading = true;
+          notifyListeners();
+          print("confrm quot  $body");
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+
+          var map = jsonDecode(response.body);
+          print("confirm quot map-----${map}");
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: "Quotation ${map['msg']}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+            getScheduleList(context, "type");
+          }
+
+          isLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ////////////////////////////////////////////////////
+  saveNextScheduleDate(String date, String inv_id, String enq_id,
+      BuildContext context, String qtno) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          notifyListeners();
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/save_next_schedule.php");
+          Map body = {
+            'staff_id': user_id,
+            "staff_name": staff_nam,
+            "added_by": user_id,
+            "s_invoice_id": inv_id,
+            "next_date": date,
+            "enq_id": enq_id,
+          };
+
+          print("save schedue----$body");
+
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+          // if (map["flag"] == 0) {
+          //   print("jkxd");
+          // }
+          // quotationList.clear();
+          // for (var item in map["master"]) {
+          //   quotationList.add(item);
+          // }
+          print("save_next_schedule ----$map");
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: "$qtno Schedule date changed to $date",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+            getScheduleList(context, "type");
+          }
+          // isQuotLoading = false;
+          // notifyListeners();
         } catch (e) {
           print(e);
           // return null;

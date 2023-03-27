@@ -32,6 +32,7 @@ class _SearchedProductListState extends State<SearchedProductList> {
           return ListView.builder(
             shrinkWrap: true,
             physics: ScrollPhysics(),
+            // physics: ClampingScrollPhysics(),
             itemCount: value.newList.length,
             itemBuilder: (context, index) {
               return Padding(

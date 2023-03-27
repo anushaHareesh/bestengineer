@@ -25,7 +25,7 @@ import '../screen/Quotation/pdfQuotation.dart';
 
 class QuotationController extends ChangeNotifier {
   String? todaydate;
-
+  String? qt_pre;
   bool isLoading = false;
   String? reportdealerselected;
 
@@ -92,7 +92,7 @@ class QuotationController extends ChangeNotifier {
   bool isDetailLoading = false;
 
   bool flag = false;
-
+  // List<Map<String, dynamic>> enqSceheduleQuotLIST = [];
   List<Map<String, dynamic>> quotProdItem = [];
   List<Map<String, dynamic>> userwiseReportList = [];
   List<Map<String, dynamic>> topItemList = [];
@@ -240,6 +240,7 @@ class QuotationController extends ChangeNotifier {
 
           var map = jsonDecode(response.body);
           print("quot------$map");
+          qt_pre = map["master"][0]["qt_pre"];
           priority = map["master"][0]["priority"];
           cust_id = map["master"][0]["cust_id"];
           company_pin = map["master"][0]["company_pin"];
@@ -378,7 +379,6 @@ class QuotationController extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? branch_id = prefs.getString("branch_id");
     String? user_id = prefs.getString("user_id");
-    String? qt_pre = prefs.getString("qt_pre");
 
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
@@ -613,14 +613,14 @@ class QuotationController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////////////
-  setScheduledDate(int index, String date, BuildContext context, String enq_id,
-      String invId, String qtNo) async {
-    qtScheduldate[index] = date;
-    notifyListeners();
-    print("jxkjjjj---${qtScheduldate[index]}");
-    saveNextScheduleDate(qtScheduldate[index], invId, enq_id, context, qtNo);
-    notifyListeners();
-  }
+  // setScheduledDate(int index, String date, BuildContext context, String enq_id,
+  //     String invId, String qtNo) async {
+  //   qtScheduldate[index] = date;
+  //   notifyListeners();
+  //   print("jxkjjjj---${qtScheduldate[index]}");
+  //   saveNextScheduleDate(qtScheduldate[index], invId, enq_id, context, qtNo);
+  //   notifyListeners();
+  // }
 
   //////////////////////////////////////////////////////////////
   quotationEdit(BuildContext context, String row_id, String enqId) {
@@ -706,72 +706,70 @@ class QuotationController extends ChangeNotifier {
   }
 
 ////////////////////////////////////////////////
-  saveNextScheduleDate(String date, String inv_id, String enq_id,
-      BuildContext context, String qtno) {
-    NetConnection.networkConnection(context).then((value) async {
-      if (value == true) {
-        try {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? branch_id = prefs.getString("branch_id");
-          String? user_id = prefs.getString("user_id");
-          String? qutation_id1 = prefs.getString("qutation_id");
+  // saveNextScheduleDate(String date, String inv_id, String enq_id,
+  //     BuildContext context, String qtno) {
+  //   NetConnection.networkConnection(context).then((value) async {
+  //     if (value == true) {
+  //       try {
+  //         SharedPreferences prefs = await SharedPreferences.getInstance();
+  //         String? branch_id = prefs.getString("branch_id");
+  //         String? user_id = prefs.getString("user_id");
+  //         String? qutation_id1 = prefs.getString("qutation_id");
 
-          String? staff_nam = prefs.getString("staff_name");
+  //         String? staff_nam = prefs.getString("staff_name");
 
-          notifyListeners();
-          Uri url = Uri.parse(
-              "https://trafiqerp.in/webapp/beste/common_api/save_next_schedule.php");
-          Map body = {
-            'staff_id': user_id,
-            "staff_name": staff_nam,
-            "added_by": user_id,
-            "s_invoice_id": inv_id,
-            "next_date": date,
-            "enq_id": enq_id,
-          };
+  //         notifyListeners();
+  //         Uri url = Uri.parse(
+  //             "https://trafiqerp.in/webapp/beste/common_api/save_next_schedule.php");
+  //         Map body = {
+  //           'staff_id': user_id,
+  //           "staff_name": staff_nam,
+  //           "added_by": user_id,
+  //           "s_invoice_id": inv_id,
+  //           "next_date": date,
+  //           "enq_id": enq_id,
+  //         };
 
-          print("save schedue----$body");
+  //         print("save schedue----$body");
 
-          var jsonEnc = jsonEncode(body);
-          print("jsonEnc--$jsonEnc");
-          // isQuotLoading = true;
-          // notifyListeners();
-          http.Response response = await http.post(
-            url,
-            body: {'json_data': jsonEnc},
-          );
-          var map = jsonDecode(response.body);
-          if (map["flag"] == 0) {
-            getQuotationList(
-              context,
-            );
-          }
-          // quotationList.clear();
-          // for (var item in map["master"]) {
-          //   quotationList.add(item);
-          // }
-          print("save_next_schedule ----$map");
-          if (map["flag"] == 0) {
-            Fluttertoast.showToast(
-              msg: "$qtno Schedule date changed to $date",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              textColor: Colors.white,
-              fontSize: 14.0,
-              backgroundColor: Colors.green,
-            );
-          }
-          // isQuotLoading = false;
-          // notifyListeners();
-        } catch (e) {
-          print(e);
-          // return null;
-          return [];
-        }
-      }
-    });
-  }
+  //         var jsonEnc = jsonEncode(body);
+  //         print("jsonEnc--$jsonEnc");
+  //         // isQuotLoading = true;
+  //         // notifyListeners();
+  //         http.Response response = await http.post(
+  //           url,
+  //           body: {'json_data': jsonEnc},
+  //         );
+  //         var map = jsonDecode(response.body);
+  //         if (map["flag"] == "0") {
+  //         //  getEnquirySchedule(c);
+  //         }
+  //         // quotationList.clear();
+  //         // for (var item in map["master"]) {
+  //         //   quotationList.add(item);
+  //         // }
+  //         print("save_next_schedule ----$map");
+  //         if (map["flag"] == 0) {
+  //           Fluttertoast.showToast(
+  //             msg: "$qtno Schedule date changed to $date",
+  //             toastLength: Toast.LENGTH_SHORT,
+  //             gravity: ToastGravity.CENTER,
+  //             timeInSecForIosWeb: 1,
+  //             textColor: Colors.white,
+  //             fontSize: 14.0,
+  //             backgroundColor: Colors.green,
+  //           );
+  //         }
+  //         // isQuotLoading = false;
+  //         // notifyListeners();
+  //       } catch (e) {
+  //         print(e);
+  //         // return null;
+  //         return [];
+  //       }
+  //     }
+  //   });
+  // }
 
   //////////////////////////////////////////////
 
@@ -1751,7 +1749,7 @@ class QuotationController extends ChangeNotifier {
           print("save enq schedule----${map}");
           if (map["flag"] == 0) {
             getEnquirySchedule(context);
-              Fluttertoast.showToast(
+            Fluttertoast.showToast(
               msg: "( $enqId - $cus ) Schedule date changed to $date",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
@@ -1778,7 +1776,8 @@ class QuotationController extends ChangeNotifier {
   }
 
   ///////////////////////////////////////////////////////
-  getAreaWiseReport(BuildContext context, String? talukId, String? area) {
+  getAreaWiseReport(
+      BuildContext context, String? talukId, String? area, String panId) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
@@ -1793,7 +1792,12 @@ class QuotationController extends ChangeNotifier {
           // notifyListeners();
           Uri url = Uri.parse("$commonurlgolabl/area_wise_report.php");
 
-          Map body = {"thaluk_id": talukId, "area_id": area, "type": "1"};
+          Map body = {
+            "thaluk_id": talukId,
+            "area_id": area,
+            "type": "1",
+            "pch_id": panId
+          };
           isLoading = true;
           notifyListeners();
           print("area wise report body---$body");
@@ -1889,4 +1893,140 @@ class QuotationController extends ChangeNotifier {
       }
     });
   }
+
+  ////////////////////////////////////////////////////////////////
+  confirmQuotation(
+      BuildContext context, String invId, String enqId, String type) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/conform_qt.php");
+
+          Map body = {
+            "added_by": user_id,
+            "s_invoice_id": invId,
+            "enq_id": enqId
+          };
+          String jsonEnc = jsonEncode(body);
+          isLoading = true;
+          notifyListeners();
+          print("confrm quot  $body");
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+
+          var map = jsonDecode(response.body);
+          print("confirm quot map-----${map}");
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: "Quotation ${map['msg']}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+            getQuotationList(context);
+          }
+
+          isLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+////////////////////////////////////////////////////////////////////
+  // enquiryScheduleQuotationMake(BuildContext context, String enqId) {
+  //   NetConnection.networkConnection(context).then((value) async {
+  //     if (value == true) {
+  //       try {
+  //         SharedPreferences prefs = await SharedPreferences.getInstance();
+  //         String? branch_id = prefs.getString("branch_id");
+  //         String? user_id = prefs.getString("user_id");
+  //         String? qutation_id1 = prefs.getString("qutation_id");
+  //         notifyListeners();
+
+  //         Uri url = Uri.parse("$urlgolabl/get_enq_details.php");
+  //         Map body = {
+  //           'enq_id': enqId,
+  //         };
+
+  //         print("qutationlistedit  b----$body");
+  //         isQuotEditLoading = true;
+  //         notifyListeners();
+  //         http.Response response = await http.post(url, body: body);
+  //         var map = jsonDecode(response.body);
+  //         print("enq schedule qutationlis ----$map");
+  //         priority = map["master"][0]["priority"];
+  //         cust_id = map["master"][0]["cust_id"];
+  //         company_pin = map["master"][0]["company_pin"];
+  //         phone2 = map["master"][0]["phone_2"];
+  //         customer_name = map["master"][0]["company_name"];
+  //         cus_info = map["master"][0]["cust_info"];
+  //         phone = map["master"][0]["contact_num"];
+  //         c_person = map["master"][0]["owner_name"];
+  //         landmarked = map["master"][0]["landmark"];
+  //         color1 = map["master"][0]["l_color"];
+
+  //         enqSceheduleQuotLIST.clear();
+
+  //         for (var item in map["detail"]) {
+  //           enqSceheduleQuotLIST.add(item);
+  //         }
+  //         print("details--------$quotationEditList");
+
+  //         rateEdit = List.generate(
+  //             enqSceheduleQuotLIST.length, (index) => TextEditingController());
+  //         quotqty = List.generate(
+  //             enqSceheduleQuotLIST.length, (index) => TextEditingController());
+  //         discount_prercent = List.generate(
+  //             enqSceheduleQuotLIST.length, (index) => TextEditingController());
+  //         discount_amount = List.generate(
+  //             enqSceheduleQuotLIST.length, (index) => TextEditingController());
+  //         total = 0.0;
+  //         s_total_disc = 0.0;
+  //         s_total_taxable = 0.0;
+  //         stotal_qty = 0.0;
+
+  //         print("quotProdItem----$quotationEditList");
+  //         for (int i = 0; i < enqSceheduleQuotLIST.length; i++) {
+  //           rateEdit[i].text = enqSceheduleQuotLIST[i]["l_rate"];
+  //           quotqty[i].text = enqSceheduleQuotLIST[i]["qty"];
+  //           // rateEdit[i].text = quotProdItem[i]["l_rate"];
+  //           discount_prercent[i].text = enqSceheduleQuotLIST[i]["disc"];
+  //           discount_amount[i].text = enqSceheduleQuotLIST[i]["disc_amt"];
+  //           total = total + double.parse(enqSceheduleQuotLIST[i]["net_total"]);
+  //           s_total_disc = s_total_disc +
+  //               double.parse(enqSceheduleQuotLIST[i]["disc_amt"]);
+  //           stotal_qty =
+  //               stotal_qty + double.parse(enqSceheduleQuotLIST[i]["qty"]);
+  //           s_total_taxable = s_total_taxable +
+  //               double.parse(enqSceheduleQuotLIST[i]["tax_amt"]);
+  //         }
+  //         isQuotEditLoading = false;
+  //         notifyListeners();
+  //       } catch (e) {
+  //         print(e);
+  //         // return null;
+  //         return [];
+  //       }
+  //     }
+  //   });
+  // }
 }

@@ -3,7 +3,9 @@ import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
+import 'package:bestengineer/controller/registrationController.dart';
 import 'package:bestengineer/screen/Quotation/quotationEdit.dart';
+import 'package:bestengineer/widgets/alertCommon/savePopup.dart';
 import 'package:bestengineer/widgets/bottomsheets/select_branch_sheet.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
@@ -228,6 +230,7 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                           ),
                           Flexible(
                             child: Text(
+                              // "[jkfkjnfjnfkjnfkxdnfjkxdnfkjdxnknxdfnxdkfnxdjfn]",
                               " [ ${value.quotationList[index]["qt_no"]} ]",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -235,6 +238,18 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                   color: Colors.grey[600]),
                             ),
                           ),
+                          SizedBox(
+                            width: size.width * 0.25,
+                          ),
+                          InkWell(
+                              onTap: () {
+                                value.branchselected = null;
+                                SelectBranchSheet quot = SelectBranchSheet();
+
+                                quot.showRemarkSheet(context,
+                                    value.quotationList[index]["s_invoice_id"]);
+                              },
+                              child: Icon(Icons.picture_as_pdf))
                         ],
                       ),
                       value.quotationList[index]["company_add1"] == null
@@ -265,77 +280,77 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                 ],
                               ),
                             ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Choose Schedule Date : ",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            Consumer<QuotationController>(
-                              builder: (context, value, child) {
-                                return Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        _selectDate(
-                                            context,
-                                            index,
-                                            value.quotationList[index]
-                                                ["enq_id"],
-                                            value.quotationList[index]
-                                                ["s_invoice_id"],
-                                            value.quotationList[index]
-                                                ["qt_no"]);
-                                        // dateFind.selectDateFind(
-                                        //     context, "to date");
-                                      },
-                                      child: Icon(Icons.calendar_month,
-                                          color: Colors.blue, size: 17),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        _selectDate(
-                                            context,
-                                            index,
-                                            value.quotationList[index]
-                                                ["enq_id"],
-                                            value.quotationList[index]
-                                                ["s_invoice_id"],
-                                            value.quotationList[index]
-                                                ["qt_no"]);
-                                      },
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 5.0),
-                                        child: Text(
-                                          value.qtScheduldate[index].toString(),
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey[700],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // Text(
-                                    //   value.quotationList[index]["qdate"],
-                                    //   style: TextStyle(
-                                    //       fontWeight: FontWeight.bold,
-                                    //       fontSize: 15,
-                                    //       color: Colors.blue),
-                                    // )
-                                  ],
-                                );
-                              },
-                            )
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(top: 8.0),
+                      //   child: Row(
+                      //     children: [
+                      //       Text(
+                      //         "Choose Schedule Date : ",
+                      //         style: TextStyle(
+                      //           fontSize: 13,
+                      //           color: Colors.grey[600],
+                      //         ),
+                      //       ),
+                      //       Consumer<QuotationController>(
+                      //         builder: (context, value, child) {
+                      //           return Row(
+                      //             children: [
+                      //               InkWell(
+                      //                 onTap: () async {
+                      //                   _selectDate(
+                      //                       context,
+                      //                       index,
+                      //                       value.quotationList[index]
+                      //                           ["enq_id"],
+                      //                       value.quotationList[index]
+                      //                           ["s_invoice_id"],
+                      //                       value.quotationList[index]
+                      //                           ["qt_no"]);
+                      //                   // dateFind.selectDateFind(
+                      //                   //     context, "to date");
+                      //                 },
+                      //                 child: Icon(Icons.calendar_month,
+                      //                     color: Colors.blue, size: 17),
+                      //               ),
+                      //               InkWell(
+                      //                 onTap: () {
+                      //                   _selectDate(
+                      //                       context,
+                      //                       index,
+                      //                       value.quotationList[index]
+                      //                           ["enq_id"],
+                      //                       value.quotationList[index]
+                      //                           ["s_invoice_id"],
+                      //                       value.quotationList[index]
+                      //                           ["qt_no"]);
+                      //                 },
+                      //                 child: Padding(
+                      //                   padding:
+                      //                       const EdgeInsets.only(left: 5.0),
+                      //                   child: Text(
+                      //                     value.qtScheduldate[index].toString(),
+                      //                     style: TextStyle(
+                      //                       fontSize: 13,
+                      //                       fontWeight: FontWeight.bold,
+                      //                       color: Colors.grey[700],
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               // Text(
+                      //               //   value.quotationList[index]["qdate"],
+                      //               //   style: TextStyle(
+                      //               //       fontWeight: FontWeight.bold,
+                      //               //       fontSize: 15,
+                      //               //       color: Colors.blue),
+                      //               // )
+                      //             ],
+                      //           );
+                      //         },
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Row(
@@ -408,28 +423,66 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              value.branchselected = null;
-                              SelectBranchSheet quot = SelectBranchSheet();
-
-                              quot.showRemarkSheet(context,
-                                  value.quotationList[index]["s_invoice_id"]);
+                              SavePopup popup = SavePopup();
+                              popup.buildSavePopupDialog(
+                                  context,
+                                  _scaffoldKey,
+                                  value.quotationList[index]["s_invoice_id"],
+                                  value.quotationList[index]["enq_id"]);
+                              // Provider.of<QuotationController>(context,
+                              //         listen: false)
+                              //     .confirmQuotation(
+                              //         context,
+                              //         value.quotationList[index]
+                              //             ["s_invoice_id"],
+                              //         value.quotationList[index]["enq_id"],
+                              //         "from quot");
                             },
                             child: Row(
                               children: [
                                 Text(
-                                  "View PDF",
+                                  "Confirm",
                                   style: TextStyle(
                                       color: Colors.brown,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Icon(
-                                  Icons.picture_as_pdf,
-                                  size: 17,
-                                  color: Colors.brown,
+                                Image.asset(
+                                  "assets/confirm.png",
+                                  height: 20,
                                 )
+                                // Icon(
+
+                                //   Icons.done,
+                                //   size: 17,
+                                //   color: Colors.green,
+                                // )
                               ],
                             ),
                           ),
+                          // InkWell(
+                          //   onTap: () {
+                          //     value.branchselected = null;
+                          //     SelectBranchSheet quot = SelectBranchSheet();
+
+                          //     quot.showRemarkSheet(context,
+                          //         value.quotationList[index]["s_invoice_id"]);
+                          //   },
+                          //   child: Row(
+                          //     children: [
+                          //       Text(
+                          //         "View PDF",
+                          //         style: TextStyle(
+                          //             color: Colors.brown,
+                          //             fontWeight: FontWeight.bold),
+                          //       ),
+                          //       Icon(
+                          //         Icons.picture_as_pdf,
+                          //         size: 17,
+                          //         color: Colors.brown,
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
                           InkWell(
                             onTap: () {
                               Provider.of<QuotationController>(context,
@@ -532,6 +585,20 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                   color: Colors.grey[600]),
                             ),
                           ),
+                          SizedBox(
+                            width: size.width * 0.25,
+                          ),
+                          InkWell(
+                              onTap: () {
+                                value.branchselected = null;
+                                SelectBranchSheet quot = SelectBranchSheet();
+
+                                quot.showRemarkSheet(
+                                    context,
+                                    value.newquotationList[index]
+                                        ["s_invoice_id"]);
+                              },
+                              child: Icon(Icons.picture_as_pdf))
                         ],
                       ),
                       value.newquotationList[index]["company_add1"] == null
@@ -562,65 +629,65 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                                 ],
                               ),
                             ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Choose Schedule Date : ",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                            Consumer<QuotationController>(
-                              builder: (context, value, child) {
-                                return Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        _selectDate(
-                                          _scaffoldKey.currentContext!,
-                                          index,
-                                          value.newquotationList[index]
-                                              ["enq_id"],
-                                          value.newquotationList[index]
-                                              ["s_invoice_id"],
-                                          value.newquotationList[index]
-                                              ["qt_no"],
-                                        );
-                                        // dateFind.selectDateFind(
-                                        //     context, "to date");
-                                      },
-                                      child: Icon(Icons.calendar_month,
-                                          // color: Colors.blue,
-                                          size: 17),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 5.0),
-                                      child: Text(
-                                        value.qtScheduldate[index].toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ),
-                                    // Text(
-                                    //   value.quotationList[index]["qdate"],
-                                    //   style: TextStyle(
-                                    //       fontWeight: FontWeight.bold,
-                                    //       fontSize: 15,
-                                    //       color: Colors.blue),
-                                    // )
-                                  ],
-                                );
-                              },
-                            )
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(top: 8.0),
+                      //   child: Row(
+                      //     children: [
+                      //       Text(
+                      //         "Choose Schedule Date : ",
+                      //         style: TextStyle(
+                      //           fontSize: 13,
+                      //           color: Colors.grey[600],
+                      //         ),
+                      //       ),
+                      //       Consumer<QuotationController>(
+                      //         builder: (context, value, child) {
+                      //           return Row(
+                      //             children: [
+                      //               InkWell(
+                      //                 onTap: () async {
+                      //                   _selectDate(
+                      //                     _scaffoldKey.currentContext!,
+                      //                     index,
+                      //                     value.newquotationList[index]
+                      //                         ["enq_id"],
+                      //                     value.newquotationList[index]
+                      //                         ["s_invoice_id"],
+                      //                     value.newquotationList[index]
+                      //                         ["qt_no"],
+                      //                   );
+                      //                   // dateFind.selectDateFind(
+                      //                   //     context, "to date");
+                      //                 },
+                      //                 child: Icon(Icons.calendar_month,
+                      //                     // color: Colors.blue,
+                      //                     size: 17),
+                      //               ),
+                      //               Padding(
+                      //                 padding: const EdgeInsets.only(left: 5.0),
+                      //                 child: Text(
+                      //                   value.qtScheduldate[index].toString(),
+                      //                   style: TextStyle(
+                      //                     fontSize: 13,
+                      //                     fontWeight: FontWeight.bold,
+                      //                     color: Colors.grey[700],
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               // Text(
+                      //               //   value.quotationList[index]["qdate"],
+                      //               //   style: TextStyle(
+                      //               //       fontWeight: FontWeight.bold,
+                      //               //       fontSize: 15,
+                      //               //       color: Colors.blue),
+                      //               // )
+                      //             ],
+                      //           );
+                      //         },
+                      //       )
+                      //     ],
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Row(
@@ -692,30 +759,57 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              value.branchselected = null;
-                              SelectBranchSheet quot = SelectBranchSheet();
-
-                              quot.showRemarkSheet(
-                                  context,
-                                  value.newquotationList[index]
-                                      ["s_invoice_id"]);
+                              Provider.of<QuotationController>(context,
+                                      listen: false)
+                                  .confirmQuotation(
+                                      context,
+                                      value.newquotationList[index]
+                                          ["s_invoice_id"],
+                                      value.newquotationList[index]["enq_id"],
+                                      "from quot");
                             },
                             child: Row(
                               children: [
                                 Text(
-                                  "View PDF",
+                                  "Confirm",
                                   style: TextStyle(
-                                      color: Colors.brown,
+                                      color: Colors.red,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Icon(
-                                  Icons.picture_as_pdf,
-                                  size: 17,
-                                  color: Colors.brown,
-                                )
+                                // Icon(
+                                //   Icons.picture_as_pdf,
+                                //   size: 17,
+                                //   color: Colors.brown,
+                                // )
                               ],
                             ),
                           ),
+                          // InkWell(
+                          //   onTap: () {
+                          //     value.branchselected = null;
+                          //     SelectBranchSheet quot = SelectBranchSheet();
+
+                          //     quot.showRemarkSheet(
+                          //         context,
+                          //         value.newquotationList[index]
+                          //             ["s_invoice_id"]);
+                          //   },
+                          //   child: Row(
+                          //     children: [
+                          //       Text(
+                          //         "View PDF",
+                          //         style: TextStyle(
+                          //             color: Colors.brown,
+                          //             fontWeight: FontWeight.bold),
+                          //       ),
+                          //       Icon(
+                          //         Icons.picture_as_pdf,
+                          //         size: 17,
+                          //         color: Colors.brown,
+                          //       )
+                          //     ],
+                          //   ),
+                          // ),
                           InkWell(
                             onTap: () {
                               Provider.of<QuotationController>(context,
@@ -763,30 +857,30 @@ class _QuotatationListScreenState extends State<QuotatationListScreen> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context, int index, String enqId,
-      String invId, String qtNo) async {
-    final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: currentDate,
-        firstDate: DateTime.now().subtract(Duration(days: 0)),
-        lastDate: DateTime(2050),
-        builder: (BuildContext context, Widget? child) {
-          return Theme(
-              data: ThemeData.light().copyWith(
-                colorScheme: ColorScheme.light()
-                    .copyWith(primary: P_Settings.loginPagetheme),
-              ),
-              child: child!);
-        });
-    if (pickedDate != null && pickedDate != currentDate) {
-      date = DateFormat('dd-MM-yyyy').format(pickedDate);
-      print("date----------------$date");
+//   Future<void> _selectDate(BuildContext context, int index, String enqId,
+//       String invId, String qtNo) async {
+//     final DateTime? pickedDate = await showDatePicker(
+//         context: context,
+//         initialDate: currentDate,
+//         firstDate: DateTime.now().subtract(Duration(days: 0)),
+//         lastDate: DateTime(2050),
+//         builder: (BuildContext context, Widget? child) {
+//           return Theme(
+//               data: ThemeData.light().copyWith(
+//                 colorScheme: ColorScheme.light()
+//                     .copyWith(primary: P_Settings.loginPagetheme),
+//               ),
+//               child: child!);
+//         });
+//     if (pickedDate != null && pickedDate != currentDate) {
+//       date = DateFormat('dd-MM-yyyy').format(pickedDate);
+//       print("date----------------$date");
 
-      Provider.of<QuotationController>(context, listen: false)
-          .setScheduledDate(index, date!, context, enqId, invId, qtNo);
-    }
-    // setState(() {
+//       Provider.of<QuotationController>(context, listen: false)
+//           .setScheduledDate(index, date!, context, enqId, invId, qtNo);
+//     }
+//     // setState(() {
 
-    // });
-  }
+//     // });
+//   }
 }

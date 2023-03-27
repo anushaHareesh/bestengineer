@@ -4,8 +4,10 @@ import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/controller/registrationController.dart';
 import 'package:bestengineer/pdftest/pdfPreview.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
+import 'package:bestengineer/widgets/alertCommon/savePopup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,6 +24,10 @@ class ScheduleListScreen extends StatefulWidget {
 }
 
 class _ScheduleListScreenState extends State<ScheduleListScreen> {
+  String? todaydate;
+  String? date;
+  DateTime now = DateTime.now();
+  DateTime currentDate = DateTime.now();
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -156,6 +162,7 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
   }
 
   Widget customCard(Map list, int index) {
+    print("li-----$list");
     return Consumer<RegistrationController>(
       builder: (context, value, child) {
         return InkWell(
@@ -244,26 +251,18 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                       backgroundColor: Colors.transparent,
                       backgroundImage: AssetImage("assets/calendar.png"),
                     ),
-                    trailing: Wrap(
-                      children: [
-                        Icon(
-                          Icons.calendar_month,
-                          size: 14,
-                          color: Color.fromARGB(255, 175, 116, 76),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        // Text("Inv Date : "),
-                        Text(
-                          list["s_invoice_date"].toString(),
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey[700],
-                              fontStyle: FontStyle.italic),
-                        ),
-                      ],
-                    ),
+                    trailing: InkWell(
+                        onTap: () {
+                          Provider.of<QuotationController>(context,
+                                  listen: false)
+                              .branchselected = null;
+                          SelectBranchSheet sheet = SelectBranchSheet();
+                          sheet.showRemarkSheet(context, list["s_invoice_id"]);
+                        },
+                        child: Icon(
+                          Icons.picture_as_pdf_outlined,
+                          color: Colors.purple,
+                        )),
                     subtitle: Row(
                       children: [
                         InkWell(
@@ -314,6 +313,61 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                             ],
                           ),
                         ),
+                  list["owner_name"] == null || list["owner_name"].isEmpty
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 12.0, top: 5),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Contact Person             :  ',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 11),
+                              ),
+                              Flexible(
+                                // width: 200,
+                                child: Text(
+                                  // "anusha kkkmfnnnnnnnnnnnnnnnnnnnnmn kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
+                                  list["owner_name"].toString().toUpperCase(),
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                  InkWell(
+                    onTap: () async {
+                      _selectDate(context, index, list["enq_id"],
+                          list["s_invoice_id"], list["s_invoice_no"]);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12.0, top: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Choose Schedule Date     :   ",
+                            style: TextStyle(color: Colors.grey, fontSize: 11),
+                          ),
+                          Icon(
+                            Icons.calendar_month,
+                            size: 14,
+                            color: Color.fromARGB(255, 175, 116, 76),
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            list["s_invoice_date"].toString(),
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[800],
+                                fontStyle: FontStyle.italic),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -326,56 +380,72 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
                   Padding(
                     padding: const EdgeInsets.all(3),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Contact Person :  ',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 12),
-                            ),
-                            Container(
-                              width: 200,
-                              child: Text(
-                                // "anusha kkkmfnnnnnnnnnnnnnnnnnnnnmn kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk",
-                                list["owner_name"],
-                                style: TextStyle(fontSize: 14),
-                              ),
-                            )
-                          ],
-                        ),
-                        InkWell(
-                            onTap: () {
-                              Provider.of<QuotationController>(context,
-                                      listen: false)
-                                  .branchselected = null;
-                              SelectBranchSheet sheet = SelectBranchSheet();
-                              sheet.showRemarkSheet(
-                                  context, list["s_invoice_id"]);
-                            },
-                            child: Icon(
-                              Icons.picture_as_pdf_outlined,
-                              color: Colors.purple,
-                            )),
+                        // InkWell(
+                        //     onTap: () {
+                        //       // SavePopup popup=SavePopup();
+                        //       // popup.
+                        //       Provider.of<RegistrationController>(context,
+                        //               listen: false)
+                        //           .confirmQuotation(
+                        //               context,
+                        //               list["s_invoice_id"],
+                        //               list["enq_id"],
+                        //               "from sch");
+                        //     },
+                        //     child: Container(
+                        //       decoration: BoxDecoration(
+                        //         // border: Border.all(
+
+                        //         //   color: Color(0xFFF05A22),
+                        //         //   style: BorderStyle.solid,
+                        //         //   width: 1.0,
+                        //         // ),
+                        //         color: P_Settings.loginPagetheme,
+                        //         borderRadius: BorderRadius.circular(5),
+                        //       ),
+                        //       child: Padding(
+                        //         padding: const EdgeInsets.all(8.0),
+                        //         child: Text(
+                        //           "Confirm",
+                        //           style: TextStyle(
+                        //               color: Colors.white,
+                        //               fontWeight: FontWeight.bold,
+                        //               fontSize: 14),
+                        //         ),
+                        //       ),
+                        //     )),
                         InkWell(
                             onTap: () {
                               VisitedRemarkSheet visited = VisitedRemarkSheet();
                               visited.showRemarkSheet(context, list["enq_id"],
                                   list["s_invoice_id"]);
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Finish",
-                                  style: TextStyle(color: Colors.white),
+                            child: Row(
+                              children: [
+                                Container(
+                                  // width: 100,
+                                  // decoration: BoxDecoration(
+                                  //   color: Colors.green,
+                                  //   borderRadius: BorderRadius.circular(5),
+                                  // ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "Visit",
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Image.asset(
+                                  "assets/visit.png",
+                                  height: 15,
+                                )
+                              ],
                             ))
                       ],
                     ),
@@ -413,5 +483,34 @@ class _ScheduleListScreenState extends State<ScheduleListScreen> {
         );
       },
     );
+  }
+
+  Future<void> _selectDate(BuildContext context, int index, String enqId,
+      String invId, String qtNo) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: DateTime.now().subtract(Duration(days: 0)),
+        lastDate: DateTime(2050),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+              data: ThemeData.light().copyWith(
+                colorScheme: ColorScheme.light()
+                    .copyWith(primary: P_Settings.loginPagetheme),
+              ),
+              child: child!);
+        });
+    if (pickedDate != null && pickedDate != currentDate) {
+      date = DateFormat('dd-MM-yyyy').format(pickedDate);
+      print("date----------------$date");
+      Provider.of<RegistrationController>(context, listen: false)
+          .saveNextScheduleDate(date!, invId, enqId, context, qtNo);
+
+      // Provider.of<QuotationController>(context, listen: false)
+      //     .setScheduledDate(index, date!, context, enqId, invId, qtNo);
+    }
+    // setState(() {
+
+    // });
   }
 }

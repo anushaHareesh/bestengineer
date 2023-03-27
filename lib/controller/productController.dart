@@ -176,7 +176,8 @@ class ProductController extends ChangeNotifier {
           }
           print("djkjkdjf");
           notifyListeners();
-
+//  isSearch = true;
+//           notifyListeners();
           isnewlistLoading = false;
           notifyListeners();
 
@@ -542,7 +543,7 @@ class ProductController extends ChangeNotifier {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
-          print("history------------------$user_id-----");
+          print("history------------------$user_id----$branch_id-");
           Uri url = Uri.parse("$urlgolabl/enquiry_list.php");
           Map body = {
             'staff_id': user_id,

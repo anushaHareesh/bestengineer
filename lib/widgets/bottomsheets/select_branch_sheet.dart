@@ -177,7 +177,7 @@ class SelectBranchSheet {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => PdfPreviewPage(
-                                      br: value.branchselected.toString(),id: invId),
+                                      br: selected.toString(), id: invId),
                                 ),
                               );
                             }

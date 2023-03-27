@@ -184,7 +184,7 @@ class RemarkSheet {
                               visible.value = true;
                             } else {
                               visible.value = false;
-                              SavePopup save = SavePopup();
+                              // SavePopup save = SavePopup();
                               // if (type == "add") {
                               //   // Navigator.of(_scaffoldKey.currentContext!)
                               //   //     .pop();
@@ -217,7 +217,7 @@ class RemarkSheet {
                                         enq_id,
                                         type,
                                         hiddenstatus,
-                                        selected!);
+                                        selected!,);
                               // }
                               //  Navigator.of(_scaffoldKey.currentContext!)
                               //               .pop();

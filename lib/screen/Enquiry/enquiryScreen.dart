@@ -45,12 +45,12 @@ class _EnquiryScreenState extends State<EnquiryScreen>
   }
 
 ////////////////////////////////////////////////////////////////
-  void _onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    Provider.of<ProductController>(context, listen: false)
-        .geProductList(context);
-    _refreshController.refreshCompleted();
-  }
+  // void _onRefresh() async {
+  //   await Future.delayed(Duration(milliseconds: 1000));
+  //   Provider.of<ProductController>(context, listen: false)
+  //       .geProductList(context);
+  //   _refreshController.refreshCompleted();
+  // }
 
   @override
   void dispose() {
@@ -60,7 +60,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: SizedBox(
@@ -99,7 +99,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                             color: P_Settings.whiteColor),
                       ),
                       SizedBox(
-                        width: size.width * 0.04,
+                        width: MediaQuery.of(context).size.width * 0.04,
                       ),
                       value.customer_id == null
                           ? Container()
@@ -135,254 +135,250 @@ class _EnquiryScreenState extends State<EnquiryScreen>
               ),
             ),
           )),
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        onRefresh: _onRefresh,
-        child: SingleChildScrollView(
-          // physics: NeverScrollableScrollPhysics(),
-          child: Consumer<Controller>(
-            builder: (context, value, child) {
-              return Column(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 8.0, left: 16, right: 14),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          value.customer_id == null
-                              ? "Add Customer"
-                              : "Customer Details",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            if (value.selected == null) {
-                              _showCustomFlash();
-                            } else {
-                              Provider.of<Controller>(context, listen: false)
-                                  .setSelectedCustomer(false);
-                              value.dropSelected = null;
-                              cusPopup.buildcusPopupDialog(
-                                context,
-                                size,
-                              );
-                            }
-                          },
-                          child: CircleAvatar(
-                            radius: 14,
-                            backgroundColor: P_Settings.loginPagetheme,
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
+      body: SingleChildScrollView(
+        // physics: ClampingScrollPhysics(),
+        child: Consumer<Controller>(
+          builder: (context, value, child) {
+            return Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 8.0, left: 16, right: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        value.customer_id == null
+                            ? "Add Customer"
+                            : "Customer Details",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          if (value.selected == null) {
+                            _showCustomFlash();
+                          } else {
+                            Provider.of<Controller>(context, listen: false)
+                                .setSelectedCustomer(false);
+                            value.dropSelected = null;
+                            cusPopup.buildcusPopupDialog(
+                              context,
+                              MediaQuery.of(context).size,
+                            );
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: P_Settings.loginPagetheme,
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
                           ),
-                          // child: Image.asset(
-                          //   "assets/plus.png",
-                          //   height: size.height * 0.035,
-                          // ),
-                          // child: Icon(Icons.add,
-                          //     size: 29, color: P_Settings.loginPagetheme),
                         ),
-                        // FadeTransition(
-                        //   opacity: _animationController!,
-                        //   child: InkWell(
-                        //     onTap: () {
-                        //       Provider.of<Controller>(context, listen: false)
-                        //           .setSelectedCustomer(false);
-                        //       value.dropSelected = null;
-                        //       cusPopup.buildcusPopupDialog(
-                        //         context,
-                        //         size,
-                        //       );
-                        //     },
-                        //     child: Icon(Icons.add,size: 29,
-                        //         color: P_Settings.loginPagetheme),
-                        //   ),
+                        // child: Image.asset(
+                        //   "assets/plus.png",
+                        //   height: size.height * 0.035,
                         // ),
-                      ],
-                    ),
+                        // child: Icon(Icons.add,
+                        //     size: 29, color: P_Settings.loginPagetheme),
+                      ),
+                      // FadeTransition(
+                      //   opacity: _animationController!,
+                      //   child: InkWell(
+                      //     onTap: () {
+                      //       Provider.of<Controller>(context, listen: false)
+                      //           .setSelectedCustomer(false);
+                      //       value.dropSelected = null;
+                      //       cusPopup.buildcusPopupDialog(
+                      //         context,
+                      //         size,
+                      //       );
+                      //     },
+                      //     child: Icon(Icons.add,size: 29,
+                      //         color: P_Settings.loginPagetheme),
+                      //   ),
+                      // ),
+                    ],
                   ),
-                  value.isSavecustomer
-                      ? Container(
-                          height: size.height * 0.14,
-                          child: SpinKitCircle(
-                            color: P_Settings.loginPagetheme,
+                ),
+                value.isSavecustomer
+                    ? Container(
+                        height: MediaQuery.of(context).size.height * 0.14,
+                        child: SpinKitCircle(
+                          color: P_Settings.loginPagetheme,
+                        ),
+                      )
+                    : value.customer_id == null
+                        ? Container()
+                        : customerData(MediaQuery.of(context).size),
+                // ListTile(
+                //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                //   trailing: Icon(
+                //     Icons.ads_click,
+                //     color: Colors.green,
+                //   ),
+                //   onTap: () {
+                //     Provider.of<Controller>(context, listen: false)
+                //         .setSelectedCustomer(false);
+                //     Provider.of<Controller>(context, listen: false)
+                //         .searchCustomerList(context);
+                //     cusPopup.buildcusPopupDialog(context, size);
+                //   },
+                //   title: Text(
+                //     "Customer Details",
+                //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                //   ),
+                // ),
+                Padding(padding: EdgeInsets.all(8)),
+
+                ListTile(
+                  title: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Product Details",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                        )
-                      : value.customer_id == null
-                          ? Container()
-                          : customerData(size),
-                  // ListTile(
-                  //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                  //   trailing: Icon(
-                  //     Icons.ads_click,
-                  //     color: Colors.green,
-                  //   ),
-                  //   onTap: () {
-                  //     Provider.of<Controller>(context, listen: false)
-                  //         .setSelectedCustomer(false);
-                  //     Provider.of<Controller>(context, listen: false)
-                  //         .searchCustomerList(context);
-                  //     cusPopup.buildcusPopupDialog(context, size);
-                  //   },
-                  //   title: Text(
-                  //     "Customer Details",
-                  //     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  //   ),
-                  // ),
-                  Padding(padding: EdgeInsets.all(8)),
-
-                  ListTile(
-                    title: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Product Details",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        Padding(padding: EdgeInsets.all(8)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Consumer<ProductController>(
-                              builder: (context, value, child) {
-                                return Container(
-                                  height: size.height * 0.045,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: P_Settings.loginPagetheme),
-                                      onPressed: value.adddNewItem
-                                          ? () {
-                                              itemBottom.showNewItemSheet(
-                                                  context,
-                                                  value.val.toString());
-                                            }
-                                          : null,
-                                      child: Text(
-                                        "New Item",
-                                        style: TextStyle(fontSize: 15),
-                                      )),
-                                );
-                              },
-                            ),
-                            Expanded(
-                              child: Container(
-                                  margin: EdgeInsets.only(left: 6),
-                                  // width: size.width * 0.68,
-                                  height: size.height * 0.045,
-                                  child: TextField(
-                                    controller: search,
-                                    onChanged: (val) {
-                                      if (val != null && val.isNotEmpty) {
-                                        Provider.of<ProductController>(context,
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.all(8)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Consumer<ProductController>(
+                            builder: (context, value, child) {
+                              return Container(
+                                height: MediaQuery.of(context).size.height * 0.045,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: P_Settings.loginPagetheme),
+                                    onPressed: value.adddNewItem
+                                        ? () {
+                                            itemBottom.showNewItemSheet(
+                                                context,
+                                                value.val.toString());
+                                          }
+                                        : null,
+                                    child: Text(
+                                      "New Item",
+                                      style: TextStyle(fontSize: 15),
+                                    )),
+                              );
+                            },
+                          ),
+                          Expanded(
+                            child: Container(
+                                margin: EdgeInsets.only(left: 6),
+                                // width: size.width * 0.68,
+                                height: MediaQuery.of(context).size.height * 0.045,
+                                child: TextField(
+                                  controller: search,
+                                  onChanged: (val) {
+                                    if (val != null && val.isNotEmpty) {
+                                      Provider.of<ProductController>(context,
+                                              listen: false)
+                                          .searchProduct(context, val);
+                                      // Provider.of<ProductController>(context,
+                                      //         listen: false)
+                                      //     .setIssearch(true);
+                                      // Provider.of<ProductController>(context,
+                                      //         listen: false)
+                                      //     .geProductList(context);
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 19,
+                                      ),
+                                      onPressed: () {
+                                        search.clear();
+                                        print("haiiiiii");
+                                        Provider.of<ProductController>(
+                                                context,
                                                 listen: false)
-                                            .searchProduct(context, val);
-                                        // Provider.of<ProductController>(context,
-                                        //         listen: false)
-                                        //     .setIssearch(true);
-                                        // Provider.of<ProductController>(context,
-                                        //         listen: false)
-                                        //     .geProductList(context);
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          Icons.close,
-                                          size: 19,
-                                        ),
-                                        onPressed: () {
-                                          search.clear();
-                                          Provider.of<ProductController>(
-                                                  context,
-                                                  listen: false)
-                                              .adddNewItem = false;
-                                          Provider.of<ProductController>(
-                                                  context,
-                                                  listen: false)
-                                              .setIssearch(false);
-                                          Provider.of<ProductController>(
-                                                  context,
-                                                  listen: false)
-                                              .geProductList(context);
-                                        },
-                                      ),
-                                      hintText: "Search item here",
-                                      hintStyle: TextStyle(fontSize: 13),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                        ), //<-- SEE HERE
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 1,
-                                        ), //<-- SEE HERE
-                                      ),
+                                            .adddNewItem = false;
+                                        Provider.of<ProductController>(
+                                                context,
+                                                listen: false)
+                                            .setIssearch(false);
+                                        Provider.of<ProductController>(
+                                                context,
+                                                listen: false)
+                                            .geProductList(context);
+                                      },
                                     ),
-                                  )),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
+                                    hintText: "Search item here",
+                                    hintStyle: TextStyle(fontSize: 13),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                      ), //<-- SEE HERE
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                      ), //<-- SEE HERE
+                                    ),
+                                  ),
+                                )),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                  Padding(padding: EdgeInsets.all(4)),
-                  // Text(
-                  //     "${Provider.of<ProductController>(context, listen: false).isSearch}"),
-                  // Text(
-                  //     "${Provider.of<ProductController>(context, listen: false).newList.length}"),
-                  Consumer<ProductController>(
-                    builder: (context, value, child) {
-                      if (value.isSearch && value.newList.length == 0) {
-                        return Container();
-                      } else {
-                        return Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Product  List",
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: P_Settings.loginPagetheme),
-                                ),
-                              ],
-                            ),
-                            // Divider(indent: 30,endIndent:30,thickness: 1,)
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                  Padding(padding: EdgeInsets.all(3)),
+                ),
+                Padding(padding: EdgeInsets.all(4)),
+                // Text(
+                //     "${Provider.of<ProductController>(context, listen: false).isSearch}"),
+                // Text(
+                //     "${Provider.of<ProductController>(context, listen: false).newList.length}"),
+                Consumer<ProductController>(
+                  builder: (context, value, child) {
+                    if (value.isSearch && value.newList.length == 0) {
+                      return Container();
+                    } else {
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Product  List",
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: P_Settings.loginPagetheme),
+                              ),
+                            ],
+                          ),
+                          // Divider(indent: 30,endIndent:30,thickness: 1,)
+                        ],
+                      );
+                    }
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(3)),
 
-                  Consumer<ProductController>(
-                    builder: (context, value, child) {
-                      if (value.isSearch) {
-                        return SearchedProductList();
-                      } else {
-                        return ProductListPage();
-                      }
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
+                Consumer<ProductController>(
+                  builder: (context, value, child) {
+                    if (value.isSearch) {
+                      return SearchedProductList();
+                    } else {
+                      return ProductListPage();
+                    }
+                  },
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

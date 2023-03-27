@@ -21,8 +21,12 @@ class Controller extends ChangeNotifier {
   String? todayInstall;
   String? totService;
   String? talukSelected;
+  String? panchayatSelected;
+
   String? areaId;
   String? talukId;
+  String? panId;
+
   bool selectedCustomer = true;
   bool addNewItem = false;
   bool? arrowButtonclicked;
@@ -65,6 +69,7 @@ class Controller extends ChangeNotifier {
   List<Map<String, dynamic>> area_list = [];
   List<Map<String, dynamic>> talukList = [];
   List<Map<String, dynamic>> statusMon = [];
+  List<Map<String, dynamic>> panchayt = [];
 
   List<PriorityLevel> priorityList = [];
 
@@ -427,10 +432,10 @@ class Controller extends ChangeNotifier {
           for (var item in map["area"]) {
             area_list.add(item);
           }
-          talukList.clear();
-          for (var item in map["thaluk"]) {
-            talukList.add(item);
-          }
+          // talukList.clear();
+          // for (var item in map["thaluk"]) {
+          //   talukList.add(item);
+          // }
 
           notifyListeners();
         } catch (e) {
@@ -453,6 +458,7 @@ class Controller extends ChangeNotifier {
     notifyListeners();
   }
 
+///////////////////////////////////////////////////////////
   setPrioDrop(String s) {
     for (int i = 0; i < priorityList.length; i++) {
       if (priorityList[i].lId == s) {
@@ -669,7 +675,21 @@ class Controller extends ChangeNotifier {
     notifyListeners();
   }
 
-  fetchAreaFromTaluk(BuildContext context, String taluk_id) {
+  setpanchayatDropSelected(String s) {
+    for (int i = 0; i < panchayt.length; i++) {
+      print("com------${talukList[i]["th_id"]}---$s");
+      if (panchayt[i]["ph_id"] == s) {
+        panchayatSelected = panchayt[i]["name"];
+        print("panch sele---$panchayatSelected");
+        // notifyListeners();
+      }
+    }
+    print("s------$s");
+    notifyListeners();
+  }
+
+///////////////////////////////////////////////////////////
+  fetchTalukandPanchyt(BuildContext context, String taluk_id) {
     NetConnection.networkConnection(context).then((value) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? branch_id = prefs.getString("branch_id");
@@ -677,7 +697,7 @@ class Controller extends ChangeNotifier {
       if (value == true) {
         try {
           Uri url = Uri.parse("$commonurlgolabl/fetch_area.php");
-          Map body = {"taluk_id": taluk_id};
+          Map body = {"th_id": taluk_id};
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
           // AreaModel regModel = AreaModel.fromJson(map);
@@ -686,10 +706,14 @@ class Controller extends ChangeNotifier {
           // for (var item in map["area"]) {
           //   area_list.add(item);
           // }
-          // talukList.clear();
-          // for (var item in map["thaluk"]) {
-          //   talukList.add(item);
-          // }
+          talukList.clear();
+          for (var item in map["thaluk"]) {
+            talukList.add(item);
+          }
+          panchayt.clear();
+          for (var item in map["panchayat"]) {
+            panchayt.add(item);
+          }
 
           notifyListeners();
         } catch (e) {

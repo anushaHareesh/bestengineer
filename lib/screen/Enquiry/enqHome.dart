@@ -327,7 +327,15 @@ class _EnqHomeState extends State<EnqHome> {
           Provider.of<Controller>(context, listen: false).talukSelected = null;
             Provider.of<Controller>(context, listen: false).talukId = null;
           Provider.of<Controller>(context, listen: false).areaId = null;
+          Provider.of<Controller>(context, listen: false).panId = null;
+          Provider.of<Controller>(context, listen: false).panchayatSelected = null;
+
+
           Provider.of<QuotationController>(context, listen: false).listWidget =
+              [];
+                  Provider.of<Controller>(context, listen: false).talukList =
+              [];
+               Provider.of<Controller>(context, listen: false).panchayt =
               [];
           // Provider.of<QuotationController>(context, listen: false)
           //     .getAreaWiseReport(context,null,null);

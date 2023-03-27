@@ -11,14 +11,7 @@ class SavePopup {
   Future buildSavePopupDialog(
       BuildContext context,
       GlobalKey<ScaffoldState> _scaffoldKey,
-      GlobalKey<State> _keyLoader,
-      String reason,
-      String sdate,
-      int rwId,
-      String enqId,
-      String hiddenstatus,
-      String br,
-      String type) {
+String invId,String enqId) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -40,20 +33,13 @@ class SavePopup {
                           style: ElevatedButton.styleFrom(
                               primary: P_Settings.loginPagetheme),
                           onPressed: () {
-                            Navigator.of(_scaffoldKey.currentContext!).pop();
-                            showDailogue(context, true, _keyLoader, 1);
-
-                            Provider.of<QuotationController>(context,
-                                    listen: false)
-                                .saveQuotation(
-                                    _scaffoldKey.currentContext!,
-                                    reason,
-                                    sdate,
-                                    rwId,
-                                    enqId,
-                                    type,
-                                    hiddenstatus,
-                                    br);
+                           Provider.of<QuotationController>(context,
+                                      listen: false)
+                                  .confirmQuotation(
+                                      context,
+                                      invId,
+                                      enqId,
+                                      "from quot");
                             Navigator.pop(context);
                           },
                           child: Text("Ok")),
