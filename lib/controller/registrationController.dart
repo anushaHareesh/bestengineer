@@ -215,6 +215,8 @@ class RegistrationController extends ChangeNotifier {
           prefs.setString("branch_name", loginModel.branchName!);
           prefs.setString("branch_prefix", loginModel.branchPrefix!);
           prefs.setString("mobile_user_type", loginModel.mobile_menu_type!);
+          prefs.setString("userGroup", loginModel.usergroup!);
+
         }
         getMenu(context);
       }

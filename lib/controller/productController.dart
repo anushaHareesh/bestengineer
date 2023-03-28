@@ -524,6 +524,111 @@ class ProductController extends ChangeNotifier {
     });
   }
 
+  //////////////////////////////////////////////////////////
+  enquiryEdit(BuildContext context, String itemId, String itemName,
+      String description, int index,List list) async {
+    List<Map<String, dynamic>> jsonResult = [];
+    Map<String, dynamic> itemmap = {};
+    Map<String, dynamic> resultmmap = {};
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    branch_id = prefs.getString("branch_id");
+    String? user_id = prefs.getString("user_id");
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        print("list-----$list");
+        Uri url = Uri.parse(
+            "https://trafiqerp.in/webapp/beste/common_api/op_enquiry_master.php");
+
+        jsonResult.clear();
+        // itemmap.clear();
+
+        var itemmap = {
+          "product_id": itemId,
+          "product_name": itemName,
+          "qty": cartQty[index].text,
+          "product_info": description,
+        };
+        jsonResult.add(itemmap);
+
+        print("jsonResult----$jsonResult");
+       
+       
+        Map masterMap = {
+          "owner_name": owner_name,
+          "cust_id": customer_id,
+          "company_name": customerName,
+          "contact_num": customerPhone,
+          "cust_info": address,
+          // "row_id": row_id,
+          "hidden_status": "1",
+          "landmark": landmark,
+          "priority_level": priority_level,
+          "added_by": user_id,
+          "branch_id": branch_id,
+          "area_id": area_id,
+          "details": jsonResult
+        };
+
+        print("resultmap----$masterMap");
+        // var body = {'json_data': masterMap};
+        // print("body-----$body");
+
+        var jsonEnc = jsonEncode(masterMap);
+
+        print("jsonEnc-----$jsonEnc");
+        isLoading = true;
+        notifyListeners();
+        http.Response response = await http.post(
+          url,
+          body: {'json_data': jsonEnc},
+        );
+
+        var map = jsonDecode(response.body);
+        print("edit enq-----$map");
+
+        return showDialog(
+            context: context,
+            builder: (ct) {
+              Size size = MediaQuery.of(ct).size;
+
+              Future.delayed(Duration(seconds: 2), () {
+                // Navigator.of(context).pop(true);
+
+                Navigator.of(ct).pop(true);
+
+                // if (map["err_status"] == 0) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EnqHome(type: "return from enquiry"),
+                  ),
+                );
+                // }
+
+                // Navigator.pop(context);
+              });
+              return AlertDialog(
+                  content: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Flexible(
+                    child: Text(
+                      '${map['msg']}',
+                      style: TextStyle(color: P_Settings.loginPagetheme),
+                    ),
+                  ),
+                  Icon(
+                    Icons.done,
+                    color: Colors.green,
+                  )
+                ],
+              ));
+            });
+      }
+    });
+  }
+
   /////////////////////////////////////////////////////////////
   setDate(String date1, String date2) {
     fromDate = date1;

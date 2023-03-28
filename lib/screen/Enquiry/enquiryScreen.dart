@@ -372,7 +372,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                     if (value.isSearch) {
                       return SearchedProductList();
                     } else {
-                      return ProductListPage();
+                      return ProductListPage(type: "",);
                     }
                   },
                 ),

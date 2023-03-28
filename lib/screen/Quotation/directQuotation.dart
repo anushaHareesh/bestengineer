@@ -1,11 +1,14 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
+import 'package:bestengineer/screen/Enquiry/addNewProduct.dart';
 import 'package:bestengineer/widgets/bottomsheets/enqItemEdit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/bottomsheets/quotationItemSheet.dart';
 import '../../widgets/bottomsheets/remarksheet.dart';
@@ -23,7 +26,7 @@ class DirectQuotation extends StatefulWidget {
 class _DirectQuotationState extends State<DirectQuotation> {
   String? sdate;
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
-
+  String? userGp;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? selected;
   DateTime now = DateTime.now();
@@ -51,6 +54,17 @@ class _DirectQuotationState extends State<DirectQuotation> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+            Provider.of<ProductController>(context, listen: false)
+        .geProductList(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddNewProduct()),
+          );
+        },
+        label: Text("Add Product"),
+      ),
       backgroundColor: Colors.grey[200],
       key: _scaffoldKey,
       bottomNavigationBar: Container(
@@ -61,9 +75,9 @@ class _DirectQuotationState extends State<DirectQuotation> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     RemarkSheet remark = RemarkSheet();
-                    value.branchselected=null;
+                    value.branchselected = null;
                     remark.showRemarkSheet(_scaffoldKey.currentContext!, sdate!,
                         widget.enqId, _scaffoldKey, _keyLoader, "add", "0");
                   },
@@ -421,7 +435,10 @@ class _DirectQuotationState extends State<DirectQuotation> {
                               double.parse(value.quotProdItem[index]["gross"]);
 
                           return InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              userGp = prefs.getString('userGroup');
                               value.rawCalculation(
                                   double.parse(value.rateEdit[index].text),
                                   int.parse(value.quotqty[index].text),
@@ -438,7 +455,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                   true,
                                   "");
                               editsheet.showItemSheet(context, index,
-                                  value.quotProdItem[index], "add", "", "");
+                                  value.quotProdItem[index], "add", "", "",userGp.toString());
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(

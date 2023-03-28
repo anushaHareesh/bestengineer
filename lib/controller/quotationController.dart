@@ -631,10 +631,13 @@ class QuotationController extends ChangeNotifier {
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
           String? qutation_id1 = prefs.getString("qutation_id");
+          String? userGp = prefs.getString("userGroup");
+
+          
           notifyListeners();
           Uri url = Uri.parse(
               "https://trafiqerp.in/webapp/beste/common_api/edit_qutation_master.php");
-          Map body = {'row_id': row_id, "enq_id": enqId, "usergroup": ""};
+          Map body = {'row_id': row_id, "enq_id": enqId, "usergroup": userGp};
           print("qutationlistedit  b----$body");
           isQuotEditLoading = true;
           notifyListeners();
@@ -1670,7 +1673,7 @@ class QuotationController extends ChangeNotifier {
   }
 
   //////////////////////////////////////////////////////
-  getEnquirySchedule(BuildContext context) {
+   getEnquirySchedule(BuildContext context) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {

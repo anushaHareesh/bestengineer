@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/quotationController.dart';
 
@@ -19,6 +20,7 @@ class QuotationEditScreen extends StatefulWidget {
 
 class _QuotationEditScreenState extends State<QuotationEditScreen> {
   String? sdate;
+  String? userGp;
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   String? date;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -334,7 +336,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                   Text(
                                                     "Landmark    :",
                                                     style:
-                                                      TextStyle(fontSize: 12),
+                                                        TextStyle(fontSize: 12),
                                                   ),
                                                   Padding(
                                                     padding:
@@ -375,7 +377,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                   Text(
                                                     "Contact Person :",
                                                     style:
-                                                      TextStyle(fontSize: 12),
+                                                        TextStyle(fontSize: 12),
                                                   ),
                                                   Padding(
                                                     padding:
@@ -433,7 +435,10 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                               value.quotationEditList[index]["gross"]);
 
                           return InkWell(
-                            onTap: () {
+                            onTap: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              userGp = prefs.getString('userGroup');
                               value.rawCalculation(
                                   double.parse(value.rateEdit[index].text),
                                   int.parse(value.quotqty[index].text),
@@ -455,7 +460,8 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                   value.quotationEditList[index],
                                   "edit",
                                   value.enId!,
-                                  widget.row_id.toString());
+                                  widget.row_id.toString(),
+                                  userGp.toString());
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(

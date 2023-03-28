@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/quotationController.dart';
 import '../../widgets/bottomsheets/quotationItemSheet.dart';
@@ -27,7 +28,7 @@ class _EnqScheduleQuotationState extends State<EnqScheduleQuotation> {
   String? selected;
   DateTime now = DateTime.now();
   DateTime currentDate = DateTime.now();
-
+String? userGp;
   QuotationItemSheet editsheet = QuotationItemSheet();
   Color parseColor(String color) {
     print("Colorrrrr...$color");
@@ -428,7 +429,10 @@ class _EnqScheduleQuotationState extends State<EnqScheduleQuotation> {
                               double.parse(value.quotProdItem[index]["gross"]);
 
                           return InkWell(
-                            onTap: () {
+                            onTap: () async{
+                                SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              userGp = prefs.getString('userGroup');
                               value.rawCalculation(
                                   double.parse(value.rateEdit[index].text),
                                   int.parse(value.quotqty[index].text),
@@ -445,7 +449,7 @@ class _EnqScheduleQuotationState extends State<EnqScheduleQuotation> {
                                   true,
                                   "");
                               editsheet.showItemSheet(context, index,
-                                  value.quotProdItem[index], "add", "", "");
+                                  value.quotProdItem[index], "add", "", "",userGp.toString());
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(

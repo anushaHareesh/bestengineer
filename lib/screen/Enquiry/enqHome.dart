@@ -122,7 +122,17 @@ class _EnqHomeState extends State<EnqHome> {
     } else {
       mobile_user_type = widget.mobile_menu_type;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        customNotification();
+        if (mobile_user_type == "1") {
+          if (Provider.of<RegistrationController>(context, listen: false)
+                      .scheduleListCount >
+                  0 &&
+              Provider.of<RegistrationController>(context, listen: false)
+                      .scheduleOpend ==
+                  false) {
+            print("yes huhu");
+            customNotification();
+          }
+        }
       });
     }
     // findMobileUser();

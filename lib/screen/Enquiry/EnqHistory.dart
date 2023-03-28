@@ -2,7 +2,9 @@ import 'package:bestengineer/components/commonColor.dart';
 // import 'package:bestengineer/components/dateFind.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
+import 'package:bestengineer/screen/Enquiry/addNewProduct.dart';
 import 'package:bestengineer/screen/Enquiry/enqHistDetails.dart';
+import 'package:bestengineer/screen/Enquiry/productList.dart';
 import 'package:bestengineer/screen/Quotation/directQuotation.dart';
 import 'package:bestengineer/widgets/bottomsheets/removereason.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +84,7 @@ class _EnQHistoryState extends State<EnQHistory> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,

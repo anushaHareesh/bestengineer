@@ -10,7 +10,8 @@ import '../../widgets/bottomsheets/itemSelectionSheet.dart';
 
 class ProductListPage extends StatefulWidget {
   String? cus_id;
-  ProductListPage({this.cus_id});
+  String type;
+  ProductListPage({this.cus_id, required this.type});
 
   @override
   State<ProductListPage> createState() => _ProductListPageState();
@@ -64,24 +65,31 @@ class _ProductListPageState extends State<ProductListPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListTile(
-                      
                       trailing: InkWell(
                         onTap: () {
-                          if (Provider.of<Controller>(context, listen: false)
-                                  .customer_id ==
-                              null) {
-                            CustomSnackbar snackbar = CustomSnackbar();
-                            snackbar.showSnackbar(
-                                context, "Please Choose a Customer", "");
-                          } else {
-                            // value.qty[index].text = "1";
-                            // value.desc[index].text =
-                            //     value.productList[index].description.toString();
+                          if (widget.type == "edit enq") {
                             itemBottom.showItemSheet(
-                              context,
-                              value.productList[index],
-                              index,
-                            );
+                                context,
+                                value.productList[index],
+                                index,
+                              );
+                          } else {
+                            if (Provider.of<Controller>(context, listen: false)
+                                    .customer_id ==
+                                null) {
+                              CustomSnackbar snackbar = CustomSnackbar();
+                              snackbar.showSnackbar(
+                                  context, "Please Choose a Customer", "");
+                            } else {
+                              // value.qty[index].text = "1";
+                              // value.desc[index].text =
+                              //     value.productList[index].description.toString();
+                              itemBottom.showItemSheet(
+                                context,
+                                value.productList[index],
+                                index,
+                              );
+                            }
                           }
                         },
                         child: Container(

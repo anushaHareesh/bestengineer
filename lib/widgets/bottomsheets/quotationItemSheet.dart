@@ -11,7 +11,7 @@ class QuotationItemSheet {
   ValueNotifier<bool> rateError = ValueNotifier(false);
   TextEditingController desc = TextEditingController();
   showItemSheet(BuildContext context, int index, Map map, String type,
-      String enid, String row_id) {
+      String enid, String row_id, String ugp) {
     rateError.value = false;
     Size size = MediaQuery.of(context).size;
 
@@ -175,8 +175,8 @@ class QuotationItemSheet {
                                               true,
                                               "rate");
                                         }
-                                      } 
-                                      
+                                      }
+
                                       // else {
                                       //   if (rateval <
                                       //       double.parse(
@@ -535,6 +535,58 @@ class QuotationItemSheet {
                         ],
                       ),
                     ),
+                    ListTile(
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+                      title: Row(
+                        children: [
+                          Text(
+                            "Base Rate",
+                            style: GoogleFonts.aBeeZee(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyText2,
+                                fontSize: 14,
+                                color: Colors.grey[500]
+                                // fontWeight: FontWeight.bold,
+                                // color: P_Settings.loginPagetheme,
+                                ),
+                          ),
+                          Spacer(),
+                          Container(
+                            child: Text(
+                              map["base_rate"].toString(),
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ugp=="1"?  ListTile(
+                      visualDensity: VisualDensity(horizontal: 0, vertical: -3),
+                      title: Row(
+                        children: [
+                          Text(
+                            "L/Cost",
+                            style: GoogleFonts.aBeeZee(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyText2,
+                                fontSize: 14,
+                                color: Colors.grey[500]
+                                // fontWeight: FontWeight.bold,
+                                // color: P_Settings.loginPagetheme,
+                                ),
+                          ),
+                          Spacer(),
+                          Container(
+                            child: Text(
+                              map["l_cost"].toString(),
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ):Container(),
                     Container(
                       margin: EdgeInsets.only(left: 14, right: 14),
                       child: TextField(
