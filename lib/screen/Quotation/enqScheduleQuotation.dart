@@ -1,7 +1,11 @@
 import 'package:bestengineer/components/commonColor.dart';
+import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/screen/Enquiry/addNewProduct.dart';
+import 'package:bestengineer/widgets/alertCommon/deletePopup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +32,7 @@ class _EnqScheduleQuotationState extends State<EnqScheduleQuotation> {
   String? selected;
   DateTime now = DateTime.now();
   DateTime currentDate = DateTime.now();
-String? userGp;
+  String? userGp;
   QuotationItemSheet editsheet = QuotationItemSheet();
   Color parseColor(String color) {
     print("Colorrrrr...$color");
@@ -53,6 +57,34 @@ String? userGp;
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: Consumer<QuotationController>(
+        builder: (context, value, child) => FloatingActionButton.extended(
+          onPressed: () {
+            Provider.of<ProductController>(context, listen: false)
+                .geProductList(context);
+            Provider.of<ProductController>(context, listen: false)
+                .setIssearch(false);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNewProduct(
+                        com: value.customer_name.toString(),
+                        cInfo: value.cus_info.toString(),
+                        land: value.landmarked.toString(),
+                        contactNum: value.phone.toString(),
+                        cid: value.cust_id.toString(),
+                        pin: value.company_pin.toString(),
+                        prio: value.priority.toString(),
+                        owner: value.c_person.toString(),
+                        area: value.area.toString(),
+                        enqId: value.enq_id.toString(),
+                        page: "enquiry schedule",type: "edit enq",rwId: "0",
+                      )),
+            );
+          },
+          label: Text("Add Product"),
+        ),
+      ),
       backgroundColor: Colors.grey[200],
       key: _scaffoldKey,
       bottomNavigationBar: Container(
@@ -170,47 +202,52 @@ String? userGp;
                 builder: (context, value, child) {
                   return Column(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                          bottom: 6,
-                          top: 6,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Icon(
-                              Icons.date_range,
-                              color: Colors.red,
-                            ),
-                            // Text(
-                            //   " Date",
-                            //   style: TextStyle(
-                            //       fontSize: 17, fontWeight: FontWeight.bold),
-                            // ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                sdate.toString(),
-                                style: TextStyle(
-                                    fontSize: 17,
-                                    // fontWeight: FontWeight.bold,
-                                    color: Colors.green,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   margin: EdgeInsets.only(
+                      //     bottom: 6,
+                      //     top: 6,
+                      //   ),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.end,
+                      //     children: [
+
+                      //     ],
+                      //   ),
+                      // ),
                       Container(
                         margin: EdgeInsets.only(bottom: 0, top: 8, left: 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Customer Details",
                               style: TextStyle(
                                   fontSize: 17, fontWeight: FontWeight.bold),
                             ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.date_range,
+                                  color: Colors.red,
+                                ),
+                                // Text(
+                                //   " Date",
+                                //   style: TextStyle(
+                                //       fontSize: 17, fontWeight: FontWeight.bold),
+                                // ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    sdate.toString(),
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        // fontWeight: FontWeight.bold,
+                                        color: Colors.green,
+                                        fontStyle: FontStyle.italic),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -414,229 +451,302 @@ String? userGp;
                           ],
                         ),
                       ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: value.quotProdItem.length,
-                        itemBuilder: (context, index) {
-                          double tdiscamt = double.parse(
-                              value.quotProdItem[index]["disc_amt"]);
-                          double t = double.parse(
-                              value.quotProdItem[index]["tax_amt"]);
-                          double tnet = double.parse(
-                              value.quotProdItem[index]["net_total"]);
-                          double gt =
-                              double.parse(value.quotProdItem[index]["gross"]);
 
-                          return InkWell(
-                            onTap: () async{
-                                SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              userGp = prefs.getString('userGroup');
-                              value.rawCalculation(
-                                  double.parse(value.rateEdit[index].text),
-                                  int.parse(value.quotqty[index].text),
-                                  double.parse(
-                                      value.discount_prercent[index].text),
-                                  double.parse(
-                                      value.discount_amount[index].text),
-                                  double.parse(
-                                      value.quotProdItem[index]["tax_perc"]),
-                                  0.0,
-                                  "0",
-                                  0,
-                                  index,
-                                  true,
-                                  "");
-                              editsheet.showItemSheet(context, index,
-                                  value.quotProdItem[index], "add", "", "",userGp.toString());
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 6, top: 2.0, right: 6),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  // side: BorderSide(
-                                  //     color: P_Settings.loginPagetheme),
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 12.0,
-                                      right: 12,
-                                      top: 14,
-                                      bottom: 14),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              // "sdsbdhsbdhszbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-                                              value.quotProdItem[index]
-                                                      ["product_name"]
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  color: Colors.grey[700],
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
+                      value.quotProdItem.length == 0
+                          ? Center(
+                              child: Lottie.asset("assets/cartem.json",
+                                  height: size.height * 0.2),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: value.quotProdItem.length,
+                              itemBuilder: (context, index) {
+                                double tdiscamt = double.parse(
+                                    value.quotProdItem[index]["disc_amt"]);
+                                double t = double.parse(
+                                    value.quotProdItem[index]["tax_amt"]);
+                                double tnet = double.parse(
+                                    value.quotProdItem[index]["net_total"]);
+                                double gt = double.parse(
+                                    value.quotProdItem[index]["gross"]);
+
+                                return InkWell(
+                                  onTap: () async {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    userGp = prefs.getString('userGroup');
+                                    value.rawCalculation(
+                                        double.parse(
+                                            value.rateEdit[index].text),
+                                        int.parse(value.quotqty[index].text),
+                                        double.parse(value
+                                            .discount_prercent[index].text),
+                                        double.parse(
+                                            value.discount_amount[index].text),
+                                        double.parse(value.quotProdItem[index]
+                                            ["tax_perc"]),
+                                        0.0,
+                                        "0",
+                                        0,
+                                        index,
+                                        true,
+                                        "");
+                                    editsheet.showItemSheet(
+                                        context,
+                                        index,
+                                        value.quotProdItem[index],
+                                        "add",
+                                        "",
+                                        "",
+                                        userGp.toString());
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 6, top: 2.0, right: 6),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        // side: BorderSide(
+                                        //     color: P_Settings.loginPagetheme),
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            child: Row(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 12.0,
+                                            right: 12,
+                                            top: 14,
+                                            bottom: 14),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
-                                                Text("Rate    : "),
-                                                Text(
-                                                  '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}',
-                                                  style: TextStyle(
-                                                      // color: Colors.grey,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w300),
+                                                Flexible(
+                                                  child: Text(
+                                                    // "sdsbdhsbdhszbddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                                                    value.quotProdItem[index]
+                                                            ["product_name"]
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: Colors.grey[700],
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            child: Row(
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Text("Discount  :       "),
-                                                Text(
-                                                  "\u{20B9} ${tdiscamt.toStringAsFixed(2)}",
-                                                  style: TextStyle(
-                                                      // color: Colors.grey,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w300),
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Text("Rate    : "),
+                                                      Text(
+                                                        '\u{20B9}${value.quotProdItem[index]["l_rate"].toString()}',
+                                                        style: TextStyle(
+                                                            // color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                          "Discount  :       "),
+                                                      Text(
+                                                        "\u{20B9} ${tdiscamt.toStringAsFixed(2)}",
+                                                        style: TextStyle(
+                                                            // color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                        ],
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Text("Qty      : "),
+                                                      Text(
+                                                        value
+                                                            .quotProdItem[index]
+                                                                ["qty"]
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                            // color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Text("Tax  :   "),
+                                                      Text(
+                                                        "\u{20B9} ${t.toStringAsFixed(2)}",
+                                                        style: TextStyle(
+                                                            // color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Text("Gross  : "),
+                                                      Text(
+                                                        "\u{20B9} ${gt.toStringAsFixed(2)}",
+                                                        style: TextStyle(
+                                                            // color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                // Container(
+                                                //   margin: EdgeInsets.only(top: 8),
+                                                //   child: Row(
+                                                //     children: [
+                                                //       Text("Tax  : "),
+                                                //       Text(
+                                                //         value.quotProdItem[index]
+                                                //                 ["qty"]
+                                                //             .toString(),
+                                                //         style: TextStyle(
+                                                //             // color: Colors.grey,
+                                                //             fontSize: 17,
+                                                //             fontWeight:
+                                                //                 FontWeight.bold),
+                                                //       ),
+                                                //     ],
+                                                //   ),
+                                                // ),
+                                              ],
+                                            ),
+                                            Divider(),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    DeletePopup popup =
+                                                        DeletePopup();
+                                                    popup.builddeletePopupDialog(
+                                                        context,
+                                                        value
+                                                            .quotProdItem[index]
+                                                                ["product_name"]
+                                                            .toString(),
+                                                        value
+                                                            .quotProdItem[index]
+                                                                ["product_id"]
+                                                            .toString(),
+                                                        index,
+                                                        "enqpdt",
+                                                        value.quotProdItem[
+                                                            index]["enq_id"],
+                                                        "",
+                                                        "",
+                                                        "","1","");
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Remove",
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+                                                      ),
+                                                      Icon(Icons.close,
+                                                          size: 16,
+                                                          color: Colors.red)
+                                                    ],
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text("Total Price : ",
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    Text(
+                                                      "\u{20B9} ${tnet.toStringAsFixed(2)}",
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            child: Row(
-                                              children: [
-                                                Text("Qty      : "),
-                                                Text(
-                                                  value.quotProdItem[index]
-                                                          ["qty"]
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      // color: Colors.grey,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w300),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            child: Row(
-                                              children: [
-                                                Text("Tax  :   "),
-                                                Text(
-                                                  "\u{20B9} ${t.toStringAsFixed(2)}",
-                                                  style: TextStyle(
-                                                      // color: Colors.grey,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w300),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            child: Row(
-                                              children: [
-                                                Text("Gross  : "),
-                                                Text(
-                                                  "\u{20B9} ${gt.toStringAsFixed(2)}",
-                                                  style: TextStyle(
-                                                      // color: Colors.grey,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.w300),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          // Container(
-                                          //   margin: EdgeInsets.only(top: 8),
-                                          //   child: Row(
-                                          //     children: [
-                                          //       Text("Tax  : "),
-                                          //       Text(
-                                          //         value.quotProdItem[index]
-                                          //                 ["qty"]
-                                          //             .toString(),
-                                          //         style: TextStyle(
-                                          //             // color: Colors.grey,
-                                          //             fontSize: 17,
-                                          //             fontWeight:
-                                          //                 FontWeight.bold),
-                                          //       ),
-                                          //     ],
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
-                                      Divider(),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text("Total Price : ",
-                                              style: TextStyle(
-                                                  color: Colors.red,
-                                                  fontWeight: FontWeight.bold)),
-                                          Text(
-                                            "\u{20B9} ${tnet.toStringAsFixed(2)}",
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          );
+                                );
 
-                          // ListTile(
-                          //   onTap: () {
-                          //     editsheet.showNewItemSheet(context);
-                          //   },
-                          //   title:
-                          // );
-                        },
-                      ),
+                                // ListTile(
+                                //   onTap: () {
+                                //     editsheet.showNewItemSheet(context);
+                                //   },
+                                //   title:
+                                // );
+                              },
+                            ),
                     ],
                   );
                 },

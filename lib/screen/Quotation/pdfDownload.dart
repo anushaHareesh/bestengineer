@@ -399,7 +399,8 @@ class PdfDownload {
       cellHeight: 10,
       columnWidths: {
         // 0: FixedColumnWidth(50),
-        1: FixedColumnWidth(110),
+              1: FixedColumnWidth(190),
+
         // 2: FixedColumnWidth(50),
         // 3: FixedColumnWidth(70),
         // 4: FixedColumnWidth(70),

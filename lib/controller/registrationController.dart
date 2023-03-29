@@ -210,13 +210,12 @@ class RegistrationController extends ChangeNotifier {
           loginModel = LoginModel.fromJson(item);
           prefs.setString("user_id", loginModel.userId!);
           prefs.setString("branch_id", loginModel.branchId!);
-
+          prefs.setString("password", loginModel.pass!);
           prefs.setString("staff_name", loginModel.staffName!);
           prefs.setString("branch_name", loginModel.branchName!);
           prefs.setString("branch_prefix", loginModel.branchPrefix!);
           prefs.setString("mobile_user_type", loginModel.mobile_menu_type!);
           prefs.setString("userGroup", loginModel.usergroup!);
-
         }
         getMenu(context);
       }

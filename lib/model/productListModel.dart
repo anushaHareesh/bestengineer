@@ -28,6 +28,8 @@ class ProductList {
   String? sRate1;
   String? sRate2;
   String? description;
+  String? tax_perc;
+
 
   ProductList(
       {this.productId,
@@ -35,7 +37,7 @@ class ProductList {
       this.batchCode,
       this.sRate1,
       this.sRate2,
-      this.description});
+      this.description,this.tax_perc});
 
   ProductList.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -44,6 +46,8 @@ class ProductList {
     sRate1 = json['s_rate_1'];
     sRate2 = json['s_rate_2'];
     description = json['description'];
+    tax_perc = json['tax_perc'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +58,8 @@ class ProductList {
     data['s_rate_1'] = this.sRate1;
     data['s_rate_2'] = this.sRate2;
     data['description'] = this.description;
+    data['tax_perc'] = this.tax_perc;
+
 
     return data;
   }

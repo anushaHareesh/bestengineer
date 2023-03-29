@@ -77,7 +77,7 @@ class ProductController extends ChangeNotifier {
           notifyListeners();
           http.Response response = await http.post(url, body: body);
           var map = jsonDecode(response.body);
-          print("proooo----${map}");
+          print("product list---${map}");
 
           ProductListModel prModel = ProductListModel.fromJson(map);
           productList.clear();
@@ -176,8 +176,6 @@ class ProductController extends ChangeNotifier {
           }
           print("djkjkdjf");
           notifyListeners();
-//  isSearch = true;
-//           notifyListeners();
           isnewlistLoading = false;
           notifyListeners();
 
@@ -525,8 +523,22 @@ class ProductController extends ChangeNotifier {
   }
 
   //////////////////////////////////////////////////////////
-  enquiryEdit(BuildContext context, String itemId, String itemName,
-      String description, int index,List list) async {
+  enquiryEdit(
+      BuildContext context,
+      String itemId,
+      String itemName,
+      String qty1,
+      String description,
+      int index,
+      String owner,
+      String cuid,
+      String cName,
+      String cPhone,
+      String addre,
+      String landm,
+      String prioritylevel,
+      String enq_id,
+      String areaid) async {
     List<Map<String, dynamic>> jsonResult = [];
     Map<String, dynamic> itemmap = {};
     Map<String, dynamic> resultmmap = {};
@@ -536,7 +548,7 @@ class ProductController extends ChangeNotifier {
     String? user_id = prefs.getString("user_id");
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
-        print("list-----$list");
+        // print("list-----$list");
         Uri url = Uri.parse(
             "https://trafiqerp.in/webapp/beste/common_api/op_enquiry_master.php");
 
@@ -546,27 +558,26 @@ class ProductController extends ChangeNotifier {
         var itemmap = {
           "product_id": itemId,
           "product_name": itemName,
-          "qty": cartQty[index].text,
+          "qty": qty1,
           "product_info": description,
         };
         jsonResult.add(itemmap);
 
         print("jsonResult----$jsonResult");
-       
-       
+
         Map masterMap = {
-          "owner_name": owner_name,
-          "cust_id": customer_id,
-          "company_name": customerName,
-          "contact_num": customerPhone,
-          "cust_info": address,
-          // "row_id": row_id,
-          "hidden_status": "1",
-          "landmark": landmark,
-          "priority_level": priority_level,
+          "owner_name": owner,
+          "cust_id": cuid,
+          "company_name": cName,
+          "contact_num": cPhone,
+          "cust_info": addre,
+          "row_id": enq_id,
+          "hidden_status": "3",
+          "landmark": landm,
+          "priority_level": prioritylevel,
           "added_by": user_id,
           "branch_id": branch_id,
-          "area_id": area_id,
+          "area_id": areaid,
           "details": jsonResult
         };
 
@@ -586,45 +597,56 @@ class ProductController extends ChangeNotifier {
 
         var map = jsonDecode(response.body);
         print("edit enq-----$map");
+        if (map["flag"] == 0) {
+          Fluttertoast.showToast(
+            msg: "${itemName} Inserted Successfully...",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 14.0,
+            backgroundColor: Colors.green,
+          );
+        }
 
-        return showDialog(
-            context: context,
-            builder: (ct) {
-              Size size = MediaQuery.of(ct).size;
+        // return showDialog(
+        //     context: context,
+        //     builder: (ct) {
+        //       Size size = MediaQuery.of(ct).size;
 
-              Future.delayed(Duration(seconds: 2), () {
-                // Navigator.of(context).pop(true);
+        //       Future.delayed(Duration(seconds: 2), () {
+        //         // Navigator.of(context).pop(true);
 
-                Navigator.of(ct).pop(true);
+        //         Navigator.of(ct).pop(true);
 
-                // if (map["err_status"] == 0) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EnqHome(type: "return from enquiry"),
-                  ),
-                );
-                // }
+        //         // if (map["err_status"] == 0) {
+        //         // Navigator.push(
+        //         //   context,
+        //         //   MaterialPageRoute(
+        //         //     builder: (context) => EnqHome(type: "return from enquiry"),
+        //         //   ),
+        //         // );
+        //         // }
 
-                // Navigator.pop(context);
-              });
-              return AlertDialog(
-                  content: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Flexible(
-                    child: Text(
-                      '${map['msg']}',
-                      style: TextStyle(color: P_Settings.loginPagetheme),
-                    ),
-                  ),
-                  Icon(
-                    Icons.done,
-                    color: Colors.green,
-                  )
-                ],
-              ));
-            });
+        //         // Navigator.pop(context);
+        //       });
+        //       return AlertDialog(
+        //           content: Row(
+        //         mainAxisAlignment: MainAxisAlignment.end,
+        //         children: [
+        //           Flexible(
+        //             child: Text(
+        //               '${map['msg']}',
+        //               style: TextStyle(color: P_Settings.loginPagetheme),
+        //             ),
+        //           ),
+        //           Icon(
+        //             Icons.done,
+        //             color: Colors.green,
+        //           )
+        //         ],
+        //       ));
+        //     });
       }
     });
   }

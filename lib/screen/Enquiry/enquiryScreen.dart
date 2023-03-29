@@ -142,8 +142,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
             return Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(top: 8.0, left: 16, right: 14),
+                  padding: const EdgeInsets.only(top: 8.0, left: 16, right: 14),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -252,15 +251,15 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                           Consumer<ProductController>(
                             builder: (context, value, child) {
                               return Container(
-                                height: MediaQuery.of(context).size.height * 0.045,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.045,
                                 child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         primary: P_Settings.loginPagetheme),
                                     onPressed: value.adddNewItem
                                         ? () {
                                             itemBottom.showNewItemSheet(
-                                                context,
-                                                value.val.toString());
+                                                context, value.val.toString());
                                           }
                                         : null,
                                     child: Text(
@@ -274,7 +273,8 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                             child: Container(
                                 margin: EdgeInsets.only(left: 6),
                                 // width: size.width * 0.68,
-                                height: MediaQuery.of(context).size.height * 0.045,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.045,
                                 child: TextField(
                                   controller: search,
                                   onChanged: (val) {
@@ -301,16 +301,13 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                                       onPressed: () {
                                         search.clear();
                                         print("haiiiiii");
-                                        Provider.of<ProductController>(
-                                                context,
+                                        Provider.of<ProductController>(context,
                                                 listen: false)
                                             .adddNewItem = false;
-                                        Provider.of<ProductController>(
-                                                context,
+                                        Provider.of<ProductController>(context,
                                                 listen: false)
                                             .setIssearch(false);
-                                        Provider.of<ProductController>(
-                                                context,
+                                        Provider.of<ProductController>(context,
                                                 listen: false)
                                             .geProductList(context);
                                       },
@@ -370,9 +367,37 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                 Consumer<ProductController>(
                   builder: (context, value, child) {
                     if (value.isSearch) {
-                      return SearchedProductList();
+                      return SearchedProductList(
+                        type: "",
+                        cInfo: "",
+                        cid: "",
+                        com: "",
+                        contactNum: "",
+                        land: "",
+                        owner: "",
+                        pin: "",
+                        prio: "",
+                        cus_id: "",
+                        area: "",
+                        enq_id: "",
+                        rwId: "",
+                      );
                     } else {
-                      return ProductListPage(type: "",);
+                      return ProductListPage(
+                        type: "",
+                        cInfo: "",
+                        cid: "",
+                        com: "",
+                        contactNum: "",
+                        land: "",
+                        owner: "",
+                        pin: "",
+                        prio: "",
+                        cus_id: "",
+                        area: "",
+                        enq_id: "",
+                        rwId: "",
+                      );
                     }
                   },
                 ),

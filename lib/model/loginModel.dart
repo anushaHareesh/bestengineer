@@ -7,7 +7,7 @@ class LoginModel {
   String? qt_pre;
   String? mobile_menu_type;
   String? usergroup;
-
+  String? pass;
 
   LoginModel(
       {this.userId,
@@ -16,7 +16,9 @@ class LoginModel {
       this.branchName,
       this.branchPrefix,
       this.qt_pre,
-      this.mobile_menu_type,this.usergroup});
+      this.mobile_menu_type,
+      this.usergroup,
+      this.pass});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
@@ -27,7 +29,7 @@ class LoginModel {
     qt_pre = json['qt_pre'];
     mobile_menu_type = json['mobile_menu_type'];
     usergroup = json['usergroup'];
-
+    pass = json['pass'];
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +42,7 @@ class LoginModel {
     data['qt_pre'] = this.qt_pre;
     data['mobile_menu_type'] = this.mobile_menu_type;
     data['usergroup'] = this.usergroup;
+    data['pass'] = this.pass;
 
     return data;
   }

@@ -2,13 +2,41 @@ import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/components/customSnackbar.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:bestengineer/widgets/bottomsheets/itemSelectionSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class SearchedProductList extends StatefulWidget {
-  const SearchedProductList({super.key});
+  String? cus_id;
+  String type;
+  String owner;
+  String com;
+  String cid;
+  String contactNum;
+  String cInfo;
+  String land;
+  String prio;
+  String pin;
+  String enq_id;
+  String area;
+  String rwId;
+
+  SearchedProductList(
+      {this.cus_id,
+      required this.type,
+      required this.owner,
+      required this.com,
+      required this.cid,
+      required this.contactNum,
+      required this.cInfo,
+      required this.land,
+      required this.prio,
+      required this.pin,
+      required this.enq_id,
+      required this.area,
+      required this.rwId});
 
   @override
   State<SearchedProductList> createState() => _SearchedProductListState();
@@ -47,21 +75,83 @@ class _SearchedProductListState extends State<SearchedProductList> {
                     child: ListTile(
                       trailing: InkWell(
                         onTap: () {
-                          if (Provider.of<Controller>(context, listen: false)
-                                  .customer_id ==
-                              null) {
-                            CustomSnackbar snackbar = CustomSnackbar();
-                            snackbar.showSnackbar(
-                                context, "Please Choose a Customer", "");
-                          } else {
-                            // value.qty[index].text = "1";
-                            // value.desc[index].text =
-                            //     value.newList[index].description.toString();
+                          if (widget.type == "edit enq") {
                             itemBottom.showItemSheet(
-                              context,
-                              value.newList[index],
-                              index,
-                            );
+                                context,
+                                value.newList[index],
+                                index,
+                                widget.owner,
+                                widget.cid,
+                                widget.com,
+                                widget.contactNum,
+                                widget.cInfo,
+                                widget.land,
+                                widget.prio,
+                                widget.type,
+                                widget.enq_id,
+                                widget.area,
+                                "");
+                          }
+                          if (widget.type == "edit quot") {
+                            Provider.of<QuotationController>(context,
+                                    listen: false)
+                                .rawCalculation(
+                                    double.parse(value.newList[index].sRate1!),
+                                    1,
+                                    0.0,
+                                    0.0,
+                                    double.parse(
+                                        value.newList[index].tax_perc!),
+                                    0.0,
+                                    "0",
+                                    0,
+                                    index,
+                                    true,
+                                    "");
+                            print("nrrrr--------${value.newList[index].sRate1}");
+                            itemBottom.showItemSheet(
+                                context,
+                                value.newList[index],
+                                index,
+                                widget.owner,
+                                widget.cid,
+                                widget.com,
+                                widget.contactNum,
+                                widget.cInfo,
+                                widget.land,
+                                widget.prio,
+                                widget.type,
+                                widget.enq_id,
+                                widget.area,
+                                widget.rwId);
+                          }
+                          if (widget.type == "") {
+                            if (Provider.of<Controller>(context, listen: false)
+                                    .customer_id ==
+                                null) {
+                              CustomSnackbar snackbar = CustomSnackbar();
+                              snackbar.showSnackbar(
+                                  context, "Please Choose a Customer", "");
+                            } else {
+                              // value.qty[index].text = "1";
+                              // value.desc[index].text =
+                              //     value.newList[index].description.toString();
+                              itemBottom.showItemSheet(
+                                  context,
+                                  value.newList[index],
+                                  index,
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  widget.type,
+                                  "",
+                                  "",
+                                  "");
+                            }
                           }
                         },
                         child: Container(

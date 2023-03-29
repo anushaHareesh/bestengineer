@@ -98,7 +98,7 @@ class RemoveReason {
                                 value.enQhistoryList[index].enqId.toString(),
                                 "",
                                 "",
-                                reason.text);
+                                reason.text,"","");
                             //  FocusManager.instance.primaryFocus!
                             //                 .unfocus();
                             // Navigator.pop(mycontext);

@@ -28,7 +28,8 @@ class QuotationController extends ChangeNotifier {
   String? qt_pre;
   bool isLoading = false;
   String? reportdealerselected;
-
+  String? enq_id;
+  String? area;
   int? sivd;
   bool ispdfOpend = false;
   bool isQuotSearch = false;
@@ -129,7 +130,7 @@ class QuotationController extends ChangeNotifier {
       String? disCalc) {
     flag = false;
 
-    print("attribute----$rate----$qty--  cccc  $tax_per---");
+    print("attribute----$rate----$qty-- $tax_per---");
     if (method == "0") {
       /////////////////////////////////method=="0" - excluisive , method=1 - inclusive
       taxable_rate = rate;
@@ -251,6 +252,8 @@ class QuotationController extends ChangeNotifier {
           c_person = map["master"][0]["owner_name"];
           landmarked = map["master"][0]["landmark"];
           color1 = map["master"][0]["l_color"];
+          enq_id = map["master"][0]["enq_id"];
+          area = map["master"][0]["area_id"];
 
           quotProdItem.clear();
           for (var item in map["detail"]) {
@@ -370,6 +373,54 @@ class QuotationController extends ChangeNotifier {
   }
 
   /////////////////////////////////////////////////////////////////////////
+  removePrdctEnq(BuildContext context, String prdt_id, String enq, String rowId,
+      String type) async {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/remove_pdt.php");
+          Map body = {
+            'row_id': enq,
+            'prdt_id': prdt_id,
+            'hidden_status': "4",
+            "type": type
+          };
+          // String jsone = json.encode(body);
+          // isDetailLoading = true;
+          // notifyListeners();
+          print("remove pdt- body----$body");
+          var map;
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+
+          map = jsonDecode(response.body);
+          print("remove pdt------${map}");
+
+          if (map["flag"] == 0) {
+            if (type == "1") {
+              getQuotationFromEnqList(context, enq);
+            } else if (type == "2") {
+              quotationEdit(context, enq, rowId);
+            }
+          }
+          notifyListeners();
+          /////////////// insert into local db /////////////////////
+        } catch (e) {
+          print("error...$e");
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////////////////////
   saveQuotation(BuildContext context, String? remark, String sdate, int rwid,
       String enq_id, String type, String hiddenstatus, String br) async {
     List<Map<String, dynamic>> jsonResult = [];
@@ -384,7 +435,6 @@ class QuotationController extends ChangeNotifier {
       if (value == true) {
         Uri url = Uri.parse(
             "https://trafiqerp.in/webapp/beste/common_api/op_qutation_form.php");
-
         jsonResult.clear();
         itemmap.clear();
         if (type == "add") {
@@ -451,7 +501,7 @@ class QuotationController extends ChangeNotifier {
           "tnc": [],
           "details": jsonResult
         };
-        print("resultmap----$masterMap");
+        print("save quot resultmap----$masterMap");
         // var body = {'json_data': masterMap};
         // print("body-----$body");
 
@@ -509,6 +559,111 @@ class QuotationController extends ChangeNotifier {
                 ],
               ));
             });
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////
+  editQuotation(
+    BuildContext context,
+    String? remark,
+    int rwid,
+    String type,
+    String hiddenstatus,
+    String pr_id,
+    String pr_name,
+    String pr_info,
+    String qty,
+    String l_rate,
+    String tax_perc,
+    String disc_perc,
+    String disc_amnt,
+  ) async {
+    List<Map<String, dynamic>> jsonResult = [];
+    Map<String, dynamic> itemmap = {};
+    Map<String, dynamic> resultmmap = {};
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? branch_id = prefs.getString("branch_id");
+    String? user_id = prefs.getString("user_id");
+
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        Uri url = Uri.parse(
+            "https://trafiqerp.in/webapp/beste/common_api/op_qutation_form.php");
+        jsonResult.clear();
+        var itemmap = {
+          "product_id": pr_id,
+          "product_name": pr_name,
+          "description": pr_info,
+          "qty": qty,
+          "rate": l_rate,
+          "tax": tax,
+          "tax_perc": tax_perc,
+          "amount": gross,
+          "discount_perc": disc_perc,
+          "discount_amount": disc_amnt,
+          "net_rate": net_amt,
+        };
+        jsonResult.add(itemmap);
+
+        print("jsonResult----$jsonResult");
+        ///////////////////////////////////////////////////////////
+        // s_total_disc = s_total_disc + double.parse(disc_amnt);
+        // stotal_qty = stotal_qty + double.parse(qty);
+        // s_total_taxable = s_total_taxable + tax;
+        // total = total + net_amt;
+
+        Map masterMap = {
+          "company_add1": cus_info,
+          "phone_1": phone,
+          "phone_2": phone2,
+          "company_pin": company_pin,
+          "owner_name": c_person,
+          "enq_id": enId,
+          "s_customer_id": cust_id,
+          "s_customer_name": customer_name,
+          "s_invoice_date": qt_date,
+          "s_reference": remark,
+          "l_id": priority,
+          "hidden_status": "3",
+          "tot_qty": qty,
+          "s_total_dicount": disc_amnt,
+          "s_total_taxable": tax,
+          "s_total_net_amount": net_amt.toStringAsFixed(2),
+          "added_by": user_id,
+          "row_id": rwid,
+          "branch_id": branch_id,
+          "dflag": "1",
+          "qt_pre": qt_pre,
+          "tnc": [],
+          "details": jsonResult
+        };
+        print("resultmap----$masterMap");
+        // var body = {'json_data': masterMap};
+        // print("body-----$body");
+
+        var jsonEnc = jsonEncode(masterMap);
+
+        print("jsonEnc-----$jsonEnc");
+
+        http.Response response = await http.post(
+          url,
+          body: {'json_data': jsonEnc},
+        );
+        var map = jsonDecode(response.body);
+        print("edit quot map----$map");
+        if (map["flag"] == 0) {
+          Fluttertoast.showToast(
+            msg: "${pr_name} Inserted Successfully...",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 14.0,
+            backgroundColor: Colors.green,
+          );
+        }
       }
     });
   }
@@ -633,7 +788,6 @@ class QuotationController extends ChangeNotifier {
           String? qutation_id1 = prefs.getString("qutation_id");
           String? userGp = prefs.getString("userGroup");
 
-          
           notifyListeners();
           Uri url = Uri.parse(
               "https://trafiqerp.in/webapp/beste/common_api/edit_qutation_master.php");
@@ -656,6 +810,10 @@ class QuotationController extends ChangeNotifier {
           qt_date = map["master"][0]["qt_date"];
           enId = map["master"][0]["enq_id"];
           color1 = map["master"][0]["l_color"];
+          landmarked = map["master"][0]["landmark"];
+          landmarked = map["master"][0]["landmark"];
+
+          // qt_pre = map["master"][0]["landmark"];
 
           quotationEditList.clear();
 
@@ -677,7 +835,7 @@ class QuotationController extends ChangeNotifier {
           s_total_taxable = 0.0;
           stotal_qty = 0.0;
 
-          print("quotProdItem----$quotationEditList");
+          print("quotationEditList----$quotationEditList");
           for (int i = 0; i < quotationEditList.length; i++) {
             rateEdit[i].text = quotationEditList[i]["l_rate"];
             quotqty[i].text = quotationEditList[i]["qty"];
@@ -685,6 +843,7 @@ class QuotationController extends ChangeNotifier {
             discount_prercent[i].text = quotationEditList[i]["disc"];
             discount_amount[i].text = quotationEditList[i]["disc_amt"];
             total = total + double.parse(quotationEditList[i]["net_total"]);
+            print("from edit ---$total");
             s_total_disc =
                 s_total_disc + double.parse(quotationEditList[i]["disc_amt"]);
             stotal_qty = stotal_qty + double.parse(quotationEditList[i]["qty"]);
@@ -1673,7 +1832,7 @@ class QuotationController extends ChangeNotifier {
   }
 
   //////////////////////////////////////////////////////
-   getEnquirySchedule(BuildContext context) {
+  getEnquirySchedule(BuildContext context) {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {

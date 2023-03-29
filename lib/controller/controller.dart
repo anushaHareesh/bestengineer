@@ -4,6 +4,7 @@ import 'package:bestengineer/components/networkConnectivity.dart';
 import 'package:bestengineer/model/areaModel.dart';
 import 'package:bestengineer/model/priorityListModel.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -723,5 +724,52 @@ class Controller extends ChangeNotifier {
         }
       }
     });
+  }
+
+  resetPassword(BuildContext context, String pass,TextEditingController text) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          Uri url = Uri.parse("$urlgolabl/res_pass.php");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+          String? user_id = prefs.getString("user_id");
+          Map body = {
+            "pass": pass,
+            "staff_id": user_id,
+          };
+          print("reset pass---$body");
+          isStatusMon = true;
+          notifyListeners();
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("reset pass --map--$map");
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: "${map["msg"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+
+            text.clear();
+          }
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => QuotationStatusMonitoring(),
+          //   ),
+          // );
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+    return 1;
   }
 }

@@ -3,6 +3,7 @@ import 'package:bestengineer/components/customSnackbar.dart';
 import 'package:bestengineer/components/globaldata.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,7 +13,21 @@ import '../../model/productListModel.dart';
 
 class ItemSlectionBottomsheet {
   final FocusNode unitCodeCtrlFocusNode = FocusNode();
-  showItemSheet(BuildContext context, ProductList list, int index) {
+  showItemSheet(
+      BuildContext context,
+      ProductList list,
+      int index,
+      String owner,
+      String cuid,
+      String cName,
+      String cPhone,
+      String addre,
+      String landm,
+      String prioritylevel,
+      String type,
+      String enq_id,
+      String areaid,
+      String rwId) {
     Size size = MediaQuery.of(context).size;
     print(" uuuu---$index---${list.description}");
     String oldDesc;
@@ -193,6 +208,22 @@ class ItemSlectionBottomsheet {
                             onTap: () {
                               value.inCrementQty(
                                   int.parse(value.qty[index].text), index, "");
+                              if (type == "edit quot") {
+                                Provider.of<QuotationController>(context,
+                                        listen: false)
+                                    .rawCalculation(
+                                        double.parse(list.sRate1!),
+                                        int.parse(value.qty[index].text),
+                                        0.0,
+                                        0.0,
+                                        double.parse(list.tax_perc!),
+                                        0.0,
+                                        "0",
+                                        0,
+                                        index,
+                                        true,
+                                        "");
+                              }
                             },
                             child: Container(
                                 height: size.height * 0.04,
@@ -225,6 +256,22 @@ class ItemSlectionBottomsheet {
                             onTap: () {
                               value.deCrementQty(
                                   int.parse(value.qty[index].text), index, "");
+                              if (type == "edit quot") {
+                                Provider.of<QuotationController>(context,
+                                        listen: false)
+                                    .rawCalculation(
+                                        double.parse(list.sRate1!),
+                                        int.parse(value.qty[index].text),
+                                        0.0,
+                                        0.0,
+                                        double.parse(list.tax_perc!),
+                                        0.0,
+                                        "0",
+                                        0,
+                                        index,
+                                        true,
+                                        "");
+                              }
                             },
                             child: Container(
                                 height: size.height * 0.04,
@@ -259,21 +306,60 @@ class ItemSlectionBottomsheet {
 
                                   ),
                               onPressed: () async {
-                                value.setAddButtonColor(true, index);
-                                value.addDeletebagItem(
-                                    list.productName!,
+                                if (type == "edit enq") {
+                                  Provider.of<ProductController>(context,
+                                          listen: false)
+                                      .enquiryEdit(
+                                          context,
+                                          list.productId!,
+                                          list.productName!,
+                                          value.qty[index].text,
+                                          value.desc[index].text,
+                                          index,
+                                          owner,
+                                          cuid,
+                                          cName,
+                                          cPhone,
+                                          addre,
+                                          landm,
+                                          prioritylevel,
+                                          enq_id,
+                                          areaid);
+                                } else if (type == "edit quot") {
+                                  Provider.of<QuotationController>(context,
+                                          listen: false)
+                                      .editQuotation(
+                                    context,
+                                    "",
+                                    int.parse(rwId),
+                                    "",
+                                    "3",
                                     list.productId!,
-                                    value.qty[index].text,
+                                    list.productName!,
                                     value.desc[index].text,
+                                    value.qty[index].text,
+                                    list.sRate1.toString(),
+                                    list.tax_perc.toString(),
                                     "0",
                                     "0",
-                                    Provider.of<Controller>(context,
-                                            listen: false)
-                                        .dupcustomer_id
-                                        .toString(),
-                                    context);
-                                FocusManager.instance.primaryFocus!.unfocus();
-                                print("bhdb----${value.res}");
+                                  );
+                                } else {
+                                  value.setAddButtonColor(true, index);
+                                  value.addDeletebagItem(
+                                      list.productName!,
+                                      list.productId!,
+                                      value.qty[index].text,
+                                      value.desc[index].text,
+                                      "0",
+                                      "0",
+                                      Provider.of<Controller>(context,
+                                              listen: false)
+                                          .dupcustomer_id
+                                          .toString(),
+                                      context);
+                                  FocusManager.instance.primaryFocus!.unfocus();
+                                  print("bhdb----${value.res}");
+                                }
 
                                 Navigator.pop(context);
                               },

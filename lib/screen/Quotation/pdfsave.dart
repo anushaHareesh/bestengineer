@@ -149,7 +149,7 @@ class PdFSave {
               Text(
                 masterPdf[0]["s_invoice_no"],
                 style: TextStyle(
-                  fontSize:9,
+                  fontSize: 9,
                 ),
               )
             ]),
@@ -227,7 +227,6 @@ class PdFSave {
 
   Widget buildInvoice(List<Map<String, dynamic>> list) {
     bool bord = false;
-  
 
     int i = 0;
     final headers = [
@@ -400,7 +399,8 @@ class PdFSave {
       cellHeight: 10,
       columnWidths: {
         // 0: FixedColumnWidth(50),
-        1: FixedColumnWidth(110),
+        1: FixedColumnWidth(190),
+
         // 2: FixedColumnWidth(50),
         // 3: FixedColumnWidth(70),
         // 4: FixedColumnWidth(70),
@@ -422,7 +422,8 @@ class PdFSave {
       },
     );
   }
- returnRows(Map listmap, String i) {
+
+  returnRows(Map listmap, String i) {
     double netrate = double.parse(listmap["net_rate"]!);
     return [
       i,
@@ -436,6 +437,7 @@ class PdFSave {
       netrate.toStringAsFixed(2),
     ];
   }
+
   ////////////////////////////////////////////////////
   Widget buildTotal(
     List<Map<String, dynamic>> list,

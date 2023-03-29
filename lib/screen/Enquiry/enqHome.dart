@@ -34,6 +34,7 @@ import 'package:badges/badges.dart' as badges;
 import '../Dashboard/executiveDash.dart';
 import '../Dashboard/searchAutocomplete.dart';
 import '../Quotation/statusMonitoringQuotation.dart';
+import '../registration and login/change_password.dart';
 import '../reports/dealerWiseProduct.dart';
 
 class EnqHome extends StatefulWidget {
@@ -47,6 +48,7 @@ class EnqHome extends StatefulWidget {
 
 class _EnqHomeState extends State<EnqHome> {
   bool val = true;
+  String? password;
   Icon actionIcon = Icon(Icons.search);
   TextEditingController _controller = TextEditingController();
   Widget? appBarTitle;
@@ -116,6 +118,7 @@ class _EnqHomeState extends State<EnqHome> {
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
+    getPassword();
     print("jhjhjhkjjk--------------------${widget.mobile_menu_type}");
     if (widget.mobile_menu_type == null) {
       shared();
@@ -375,6 +378,10 @@ class _EnqHomeState extends State<EnqHome> {
           //     .getReportDealerList(context, "0");
           return AdminDashboard();
         }
+      case "RESP":
+        {
+          return ChangePassword(staff: staffName.toString(),oldp: password.toString(),);
+        }
 
       // case "logout":
       //   logout();
@@ -444,6 +451,12 @@ class _EnqHomeState extends State<EnqHome> {
     }
   }
 
+  getPassword() async {
+    final prefs = await SharedPreferences.getInstance();
+    password = prefs.getString("password");
+    staffName = prefs.getString("staff_name");
+
+  }
   getMobileUserType() async {
     final prefs = await SharedPreferences.getInstance();
     mobile_user_type = prefs.getString("mobile_user_type");
@@ -548,7 +561,10 @@ class _EnqHomeState extends State<EnqHome> {
                     "DS" ||
                 Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
-                    "AD1"
+                    "AD1"||Provider.of<RegistrationController>(context,
+                            listen: false)
+                        .menu_index ==
+                    "RESP" 
             ? AppBar(
                 title: appBarTitle,
                 backgroundColor: P_Settings.loginPagetheme,
@@ -563,7 +579,10 @@ class _EnqHomeState extends State<EnqHome> {
                           Provider.of<RegistrationController>(context,
                                       listen: false)
                                   .menu_index ==
-                              "AD1"
+                              "AD1"||Provider.of<RegistrationController>(context,
+                            listen: false)
+                        .menu_index ==
+                    "RESP" 
                       ? Container()
                       : mobile_user_type == "1"
                           ? IconButton(
@@ -979,6 +998,34 @@ class _EnqHomeState extends State<EnqHome> {
                         // ),
                         // Divider(),
                         Column(children: drawerOpts),
+                        InkWell(
+                          onTap: () async {
+                            _onSelectItem("RESP");
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8, top: 8),
+                            child: Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Icon(Icons.res),
+                                Container(
+                                  margin: EdgeInsets.only(left: 1),
+                                  child: Text(
+                                    "Reset Password",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 17),
+                                  ),
+                                ),
+                                Spacer(),
+                                Image.asset("assets/right.png",
+                                    height: 28, color: Colors.grey[700])
+                              ],
+                            ),
+                          ),
+                        ),
+                        Divider(),
                         InkWell(
                           onTap: () async {
                             final prefs = await SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/controller/controller.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -16,7 +17,9 @@ class DeletePopup {
       String enqId,
       String fdtae,
       String tdate,
-      String? reason) {
+      String? reason,
+      String type1,
+      String rowId) {
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -26,7 +29,11 @@ class DeletePopup {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(child: Text("Do you want to delete $itemName ?",style: TextStyle(fontSize: 14),)),
+                Flexible(
+                    child: Text(
+                  "Do you want to delete $itemName ?",
+                  style: TextStyle(fontSize: 14),
+                )),
               ],
             ),
             actions: <Widget>[
@@ -43,6 +50,11 @@ class DeletePopup {
                               value.updateHistory(
                                   context, "2", enqId, fdtae, tdate, reason);
                             } else if (type == "quotation") {
+                            } else if (type == "enqpdt" || type == "quotpdt") {
+                              Provider.of<QuotationController>(context,
+                                      listen: false)
+                                  .removePrdctEnq(
+                                      context, itemId, enqId, rowId, type1);
                             } else {
                               value.addDeletebagItem(
                                 itemName,
@@ -62,7 +74,7 @@ class DeletePopup {
                           },
                           child: Text("Ok")),
                       Padding(
-                        padding: const EdgeInsets.only(left: 8.0), 
+                        padding: const EdgeInsets.only(left: 8.0),
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: P_Settings.loginPagetheme),

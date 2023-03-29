@@ -1,6 +1,7 @@
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/components/customSnackbar.dart';
 import 'package:bestengineer/controller/productController.dart';
+import 'package:bestengineer/controller/quotationController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,40 @@ import '../../widgets/bottomsheets/itemSelectionSheet.dart';
 class ProductListPage extends StatefulWidget {
   String? cus_id;
   String type;
-  ProductListPage({this.cus_id, required this.type});
+  String owner;
+  String com;
+  String cid;
+  String contactNum;
+  String cInfo;
+  String land;
+  String prio;
+  String pin;
+  String enq_id;
+  String area;
+  String rwId;
+
+  // String tax;
+  // String taxP;
+  // String amt;
+  // String disc_per;
+  // String disc_amt;
+  // String rate;
+  // String net_rate;
+
+  ProductListPage(
+      {this.cus_id,
+      required this.type,
+      required this.owner,
+      required this.com,
+      required this.cid,
+      required this.contactNum,
+      required this.cInfo,
+      required this.land,
+      required this.prio,
+      required this.pin,
+      required this.enq_id,
+      required this.area,
+      required this.rwId});
 
   @override
   State<ProductListPage> createState() => _ProductListPageState();
@@ -72,8 +106,20 @@ class _ProductListPageState extends State<ProductListPage> {
                                 context,
                                 value.productList[index],
                                 index,
-                              );
-                          } else {
+                                widget.owner,
+                                widget.cid,
+                                widget.com,
+                                widget.contactNum,
+                                widget.cInfo,
+                                widget.land,
+                                widget.prio,
+                                widget.type,
+                                widget.enq_id,
+                                widget.area,
+                                "");
+                          }
+
+                          if (widget.type == "") {
                             if (Provider.of<Controller>(context, listen: false)
                                     .customer_id ==
                                 null) {
@@ -85,11 +131,55 @@ class _ProductListPageState extends State<ProductListPage> {
                               // value.desc[index].text =
                               //     value.productList[index].description.toString();
                               itemBottom.showItemSheet(
+                                  context,
+                                  value.productList[index],
+                                  index,
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  "",
+                                  widget.type,
+                                  "",
+                                  "",
+                                  "");
+                            }
+                          }
+
+                          if (widget.type == "edit quot") {
+                            Provider.of<QuotationController>(context,
+                                    listen: false)
+                                .rawCalculation(
+                                    double.parse(
+                                        value.productList[index].sRate1!),
+                                    1,
+                                    0.0,
+                                    0.0,
+                                    double.parse(
+                                        value.productList[index].tax_perc!),
+                                    0.0,
+                                    "0",
+                                    0,
+                                    index,
+                                    true,
+                                    "");
+                            itemBottom.showItemSheet(
                                 context,
                                 value.productList[index],
                                 index,
-                              );
-                            }
+                                widget.owner,
+                                widget.cid,
+                                widget.com,
+                                widget.contactNum,
+                                widget.cInfo,
+                                widget.land,
+                                widget.prio,
+                                widget.type,
+                                widget.enq_id,
+                                widget.area,
+                                widget.rwId);
                           }
                         },
                         child: Container(
