@@ -378,13 +378,19 @@ class QuotationController extends ChangeNotifier {
     NetConnection.networkConnection(context).then((value) async {
       if (value == true) {
         try {
+          String rId;
           SharedPreferences prefs = await SharedPreferences.getInstance();
           String? branch_id = prefs.getString("branch_id");
           String? user_id = prefs.getString("user_id");
           Uri url = Uri.parse(
               "https://trafiqerp.in/webapp/beste/common_api/remove_pdt.php");
+          if (type == "1") {
+            rId = enq;
+          } else {
+            rId = rowId;
+          }
           Map body = {
-            'row_id': enq,
+            'row_id': rId,
             'prdt_id': prdt_id,
             'hidden_status': "4",
             "type": type
@@ -406,7 +412,11 @@ class QuotationController extends ChangeNotifier {
             if (type == "1") {
               getQuotationFromEnqList(context, enq);
             } else if (type == "2") {
-              quotationEdit(context, enq, rowId);
+              quotationEdit(
+                context,
+                rowId,
+                enq,
+              );
             }
           }
           notifyListeners();

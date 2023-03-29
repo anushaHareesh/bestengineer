@@ -58,6 +58,7 @@ class _DirectQuotationState extends State<DirectQuotation> {
     return Scaffold(
       floatingActionButton: Consumer<QuotationController>(
         builder: (context, value, child) => FloatingActionButton.extended(
+          backgroundColor: Colors.green,
           onPressed: () {
             Provider.of<ProductController>(context, listen: false)
                 .geProductList(context);
@@ -76,7 +77,8 @@ class _DirectQuotationState extends State<DirectQuotation> {
                         area: value.area.toString(),
                         enqId: value.enq_id.toString(),
                         page: "enquiry list",
-                        type: "edit enq",rwId: "0",
+                        type: "edit enq",
+                        rwId: "0",
                       )),
             );
           },
@@ -681,26 +683,31 @@ class _DirectQuotationState extends State<DirectQuotation> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    DeletePopup popup =
-                                                        DeletePopup();
-                                                    popup.builddeletePopupDialog(
-                                                        context,
-                                                        value
-                                                            .quotProdItem[index]
-                                                                ["product_name"]
-                                                            .toString(),
-                                                        value
-                                                            .quotProdItem[index]
-                                                                ["product_id"]
-                                                            .toString(),
-                                                        index,
-                                                        "enqpdt",
-                                                        value.quotProdItem[
-                                                            index]["enq_id"],
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        "1","");
+                                                    if (value.quotProdItem
+                                                            .length >
+                                                        1) {
+                                                      DeletePopup popup =
+                                                          DeletePopup();
+                                                      popup.builddeletePopupDialog(
+                                                          context,
+                                                          value.quotProdItem[
+                                                                  index][
+                                                                  "product_name"]
+                                                              .toString(),
+                                                          value.quotProdItem[
+                                                                  index]
+                                                                  ["product_id"]
+                                                              .toString(),
+                                                          index,
+                                                          "enqpdt",
+                                                          value.quotProdItem[
+                                                              index]["enq_id"],
+                                                          "",
+                                                          "",
+                                                          "",
+                                                          "1",
+                                                          "");
+                                                    }
                                                     // value.removePrdctEnq(
                                                     //     context,
                                                     //     value.quotProdItem[index]

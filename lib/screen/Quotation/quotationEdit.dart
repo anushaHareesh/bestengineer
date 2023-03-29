@@ -59,6 +59,7 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
     return Scaffold(
       floatingActionButton: Consumer<QuotationController>(
         builder: (context, value, child) => FloatingActionButton.extended(
+          backgroundColor: Colors.green,
           onPressed: () {
             Provider.of<ProductController>(context, listen: false)
                 .geProductList(context);
@@ -84,7 +85,10 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                       )),
             );
           },
-          label: Text("Add Product"),
+          label: Text(
+            "Add Product",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       backgroundColor: Colors.grey[200],
@@ -713,26 +717,34 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    DeletePopup popup =
-                                                        DeletePopup();
-                                                    popup.builddeletePopupDialog(
-                                                        context,
-                                                        value.quotationEditList[
-                                                                index]
-                                                                ["product_name"]
-                                                            .toString(),
-                                                        value.quotationEditList[
-                                                                index]
-                                                                ["product_id"]
-                                                            .toString(),
-                                                        index,
-                                                        "quotpdt",
-                                                        value.quotationEditList[
-                                                            index]["enq_id"],
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        "2",widget.row_id!);
+                                                    if (value.quotationEditList
+                                                            .length >
+                                                        1) {
+                                                      DeletePopup popup =
+                                                          DeletePopup();
+                                                      popup.builddeletePopupDialog(
+                                                          context,
+                                                          value
+                                                              .quotationEditList[
+                                                                  index][
+                                                                  "product_name"]
+                                                              .toString(),
+                                                          value
+                                                              .quotationEditList[
+                                                                  index]
+                                                                  ["product_id"]
+                                                              .toString(),
+                                                          index,
+                                                          "quotpdt",
+                                                          value.quotationEditList[
+                                                              index]["enq_id"],
+                                                          "",
+                                                          "",
+                                                          "",
+                                                          "2",
+                                                          widget.row_id!);
+                                                    }
+
                                                     // value.removePrdctEnq(
                                                     //     context,
                                                     //     value.quotProdItem[index]
@@ -755,24 +767,24 @@ class _QuotationEditScreenState extends State<QuotationEditScreen> {
                                                     ],
                                                   ),
                                                 ),
-
                                                 Row(
                                                   children: [
                                                     Text("Total : ",
                                                         style: TextStyle(
                                                             color: Colors.red,
                                                             fontWeight:
-                                                                FontWeight.bold)),  Text(
-                                                  "\u{20B9} ${tnet.toStringAsFixed(2)}",
-                                                  style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
+                                                                FontWeight
+                                                                    .bold)),
+                                                    Text(
+                                                      "\u{20B9} ${tnet.toStringAsFixed(2)}",
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
                                                   ],
                                                 ),
-                                              
                                               ],
                                             )
                                           ],
