@@ -425,9 +425,13 @@ class PdFSave {
 
   returnRows(Map listmap, String i) {
     double netrate = double.parse(listmap["net_rate"]!);
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    String parsedstring1 =
+        listmap["product_desc"].replaceAll(exp, '').toString().toLowerCase();
+
     return [
       i,
-      listmap["product_name"],
+      "${listmap["product_name"]}  \n    $parsedstring1",
       listmap["qty"],
       listmap["rate"],
       listmap["amount"],

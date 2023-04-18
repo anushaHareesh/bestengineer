@@ -33,6 +33,8 @@ class QuotationController extends ChangeNotifier {
   int? sivd;
   bool ispdfOpend = false;
   bool isQuotSearch = false;
+  bool isReportLoading = false;
+
   bool isSchedulelIstLoadind = false;
   String? dealerselected;
   String commonurlgolabl = Globaldata.commonapiglobal;
@@ -90,6 +92,7 @@ class QuotationController extends ChangeNotifier {
   List<TextEditingController> rateEdit = [];
   List<TextEditingController> quotqty = [];
   List<TextEditingController> discount_amount = [];
+
   bool isDetailLoading = false;
 
   bool flag = false;
@@ -100,6 +103,8 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> customerwiseReport = [];
   List<Map<String, dynamic>> adminDashTileDetail = [];
   List<Map<String, dynamic>> enqScheduleList = [];
+  List<Map<String, dynamic>> confrimedQuotList = [];
+
 
   List<Map<String, dynamic>> masterPdf = [];
   List<Map<String, dynamic>> detailPdf = [];
@@ -2123,6 +2128,51 @@ class QuotationController extends ChangeNotifier {
     });
   }
 
+////////////////////////////////////////////////////////////////////
+  getConfirmedQuotation(String fdate, String tillDate, BuildContext context) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          isReportLoading = true;
+          notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$urlgolabl/confirmed_quotaton_rpt.php");
+          Map body = {
+            "staff_id": user_id,
+            "from_date": fdate,
+            "till_date": tillDate,
+          };
+
+          print("confirmd---quot---$body");
+
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("confirmd  map----$map");
+
+          confrimedQuotList.clear();
+          for (var item in map) {
+            confrimedQuotList.add(item);
+          }
+          print("confirmd quotation map----$confrimedQuotList");
+          isReportLoading = false;
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
 ////////////////////////////////////////////////////////////////////
   // enquiryScheduleQuotationMake(BuildContext context, String enqId) {
   //   NetConnection.networkConnection(context).then((value) async {

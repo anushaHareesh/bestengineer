@@ -154,9 +154,8 @@ class PdfQuotation {
 
   Widget buildCustomerData(List<Map<String, dynamic>> masterPdf) {
     return Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +207,7 @@ class PdfQuotation {
                       pw.TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["qdate"],
                   style: TextStyle(
-                    fontSize:9,
+                    fontSize: 9,
                   ))
             ]),
             Row(children: [
@@ -225,7 +224,7 @@ class PdfQuotation {
                   style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
               Text(masterPdf[0]["phone_2"],
                   style: TextStyle(
-                    fontSize:9,
+                    fontSize: 9,
                   ))
             ]),
             // pw.Row(
@@ -245,7 +244,6 @@ class PdfQuotation {
 
   Widget buildInvoice(List<Map<String, dynamic>> list) {
     bool bord = false;
-  
 
     int i = 0;
     final headers = [
@@ -314,26 +312,26 @@ class PdfQuotation {
       discTot = double.parse(list[i]["discount_amount"]) + discTot;
     }
     // returnTotal(list);
-    List<dynamic> tot = [
-      "",
-      "Amount / Discount / GST Total",
-      "",
-      "",
-      amount_tot,
-      discTot,
-      gstTot,
-      ""
-    ];
-    List<dynamic> tot1 = [
-      "",
-      "Grand Total",
-      "",
-      "",
-      "",
-      "",
-      "",
-      sum.toStringAsFixed(2)
-    ];
+    // List<dynamic> tot = [
+    //   "",
+    //   "Amount / Discount / GST Total",
+    //   "",
+    //   "",
+    //   amount_tot,
+    //   discTot,
+    //   gstTot,
+    //   ""
+    // ];
+    // List<dynamic> tot1 = [
+    //   "",
+    //   "Grand Total",
+    //   "",
+    //   "",
+    //   "",
+    //   "",
+    //   "",
+    //   sum.toStringAsFixed(2)
+    // ];
     // // List<dynamic> tot2 = [
     // //   "",
     // //   "Amount Total",
@@ -444,16 +442,18 @@ class PdfQuotation {
   /////////////////////////////////////////////////////
   returnRows(Map listmap, String i) {
     double netrate = double.parse(listmap["net_rate"]!);
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    String parsedstring1 = listmap["product_desc"].replaceAll(exp, '').toString().toLowerCase();
+    
     return [
       i,
-      listmap["product_name"],
+      "${listmap["product_name"]}  \n    $parsedstring1",
       listmap["qty"],
       listmap["rate"],
       listmap["amount"],
       listmap["discount_amount"],
       // listmap["tax_perc"],
       listmap["tax"],
-      
       netrate.toStringAsFixed(2),
     ];
   }

@@ -114,31 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                                             listen: false)
                                         .getLogin(controller1.text,
                                             controller2.text, context);
-                                    //  Provider.of<Controller>(context,
-                                    //         listen: false).getMenu(context);
-                                    // result = await MystockDB.instance.selectStaff(
-                                    //     controller1.text, controller2.text);
-
-                                    // if (result.length == 0) {
-                                    //   visible.value = true;
-                                    //   print("visible===${visible.value}");
-                                    // } else if (result[0] == "success" &&
-                                    //     result[1] != null) {
-                                    //   visible.value = false;
-                                    //   final prefs =
-                                    //       await SharedPreferences.getInstance();
-                                    //   await prefs.setString('sid', result[1]);
-                                    //   await prefs.setString(
-                                    //       'st_username', controller1.text);
-                                    //   await prefs.setString(
-                                    //       'st_pwd', controller2.text);
-
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (context) => MainDashboard()),
-                                    // );
-                                    // }
+                                   
                                   }
                                 },
                                 label: Text(

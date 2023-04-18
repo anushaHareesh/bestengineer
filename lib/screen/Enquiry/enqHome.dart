@@ -16,6 +16,7 @@ import 'package:bestengineer/screen/Quotation/scheduleListScreen.dart';
 import 'package:bestengineer/screen/Quotation/test.dart';
 import 'package:bestengineer/screen/registration%20and%20login/login.dart';
 import 'package:bestengineer/screen/reports/areawise_report.dart';
+import 'package:bestengineer/screen/reports/confirmed_quot_report.dart';
 import 'package:bestengineer/screen/reports/customerwiseReport.dart';
 import 'package:bestengineer/screen/reports/dealerWiseReport.dart';
 import 'package:bestengineer/screen/reports/topItemReport.dart';
@@ -380,11 +381,22 @@ class _EnqHomeState extends State<EnqHome> {
         }
       case "RESP":
         {
-          return ChangePassword(staff: staffName.toString(),oldp: password.toString(),);
+          return ChangePassword(
+            staff: staffName.toString(),
+            oldp: password.toString(),
+          );
         }
 
-      // case "logout":
-      //   logout();
+      case "CQ1":
+        {
+           Provider.of<QuotationController>(context,
+                                  listen: false)
+                              .getConfirmedQuotation(
+                            todaydate!, todaydate!,
+                            context,
+                          );
+          return ConfirmedQuotation();
+        }
     }
   }
 
@@ -455,8 +467,8 @@ class _EnqHomeState extends State<EnqHome> {
     final prefs = await SharedPreferences.getInstance();
     password = prefs.getString("password");
     staffName = prefs.getString("staff_name");
-
   }
+
   getMobileUserType() async {
     final prefs = await SharedPreferences.getInstance();
     mobile_user_type = prefs.getString("mobile_user_type");
@@ -556,15 +568,16 @@ class _EnqHomeState extends State<EnqHome> {
                             listen: false)
                         .menu_index ==
                     "D1" ||
-                Provider.of<RegistrationController>(context, listen: false)
+                Provider.of<RegistrationController>(context,
+                            listen: false)
                         .menu_index ==
                     "DS" ||
                 Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
-                    "AD1"||Provider.of<RegistrationController>(context,
-                            listen: false)
+                    "AD1" ||
+                Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
-                    "RESP" 
+                    "RESP"
             ? AppBar(
                 title: appBarTitle,
                 backgroundColor: P_Settings.loginPagetheme,
@@ -579,10 +592,11 @@ class _EnqHomeState extends State<EnqHome> {
                           Provider.of<RegistrationController>(context,
                                       listen: false)
                                   .menu_index ==
-                              "AD1"||Provider.of<RegistrationController>(context,
-                            listen: false)
-                        .menu_index ==
-                    "RESP" 
+                              "AD1" ||
+                          Provider.of<RegistrationController>(context,
+                                      listen: false)
+                                  .menu_index ==
+                              "RESP"
                       ? Container()
                       : mobile_user_type == "1"
                           ? IconButton(
@@ -721,7 +735,8 @@ class _EnqHomeState extends State<EnqHome> {
                           Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
                               "ES1" ||
-                          Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
+                          Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1" ||
+                          Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1"
                       ? Container()
                       : InkWell(
                           onTap: () {
@@ -797,7 +812,9 @@ class _EnqHomeState extends State<EnqHome> {
                                                               ? "ENQUIRY SCHEDULE"
                                                               : Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
                                                                   ? "AREA WISE REPORT"
-                                                                  : "",
+                                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1"
+                                                                      ? "CONFIRMED QUOTATION"
+                                                                      : "",
                   style: TextStyle(fontSize: 15),
                 ),
                 backgroundColor: Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
@@ -827,6 +844,7 @@ class _EnqHomeState extends State<EnqHome> {
                         Provider.of<RegistrationController>(context, listen: false)
                                 .menu_index ==
                             "ES1" ||
+                        Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1" ||
                         Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
                     ? P_Settings.loginPagetheme
                     : P_Settings.whiteColor,
@@ -848,7 +866,8 @@ class _EnqHomeState extends State<EnqHome> {
                                     value.menu_index == "TI1" ||
                                     value.menu_index == "CR1" ||
                                     value.menu_index == "ES1" ||
-                                    value.menu_index == "AP1"
+                                    value.menu_index == "AP1" ||
+                                    value.menu_index == "CQ1"
                                 ? P_Settings.whiteColor
                                 : Colors.grey[800]));
                   },

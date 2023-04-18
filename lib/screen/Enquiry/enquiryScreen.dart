@@ -148,7 +148,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                     children: [
                       Text(
                         value.customer_id == null
-                            ? "Add Customer"
+                            ? "Select Customer"
                             : "Customer Details",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
