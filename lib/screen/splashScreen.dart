@@ -30,30 +30,14 @@ class _SplashScreenState extends State<SplashScreen> {
       st_uname = prefs.getString("st_uname");
       st_pwd = prefs.getString("st_pwd");
       String? mobile_menu_type = prefs.getString("mobile_user_type");
-      print("from splash------$mobile_menu_type");
-      // Navigator.pushAndRemoveUntil(context,
-      //     MaterialPageRoute(builder: (Context) {
-      //   if (cid != null) {
-      //     // return DashboardPage();
-      //     if (st_uname != null && st_pwd != null) {
-      //       print("fhhh");
-      //       return EnqHome();
-      //     } else {
-      //       return LoginPage();
-      //     }
-      //   } else {
-      //     return RegistrationScreen();
-      //   }
-      // }), (route) => false);
       Navigator.push(
           context,
           PageRouteBuilder(
               opaque: false, // set to false
               pageBuilder: (_, __, ___) {
                 if (cid != null) {
-                  // return DashboardPage();
                   if (st_uname != null && st_pwd != null) {
-                    print("fhhh");
+                     
                     return EnqHome(
                       mobile_menu_type: mobile_menu_type,
                     );

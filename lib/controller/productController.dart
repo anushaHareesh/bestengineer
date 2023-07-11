@@ -838,7 +838,7 @@ class ProductController extends ChangeNotifier {
           print("update transaction------$map");
           // isLoading = false;
           // notifyListeners();
-
+          isEnqSearch=false;notifyListeners();
           if (map["flag"] == 0) {
             getEnqhistoryData(
               context,

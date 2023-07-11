@@ -21,6 +21,8 @@ import 'package:bestengineer/screen/reports/customerwiseReport.dart';
 import 'package:bestengineer/screen/reports/dealerWiseReport.dart';
 import 'package:bestengineer/screen/reports/topItemReport.dart';
 import 'package:bestengineer/screen/reports/userWiseReport.dart';
+import 'package:bestengineer/screen/sale%20order/pending_sale_order.dart';
+import 'package:bestengineer/screen/sale%20order/view_sale_order.dart';
 import 'package:bestengineer/screen/service/serviceScheduleList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -32,6 +34,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/controller.dart';
 import 'package:badges/badges.dart' as badges;
 
+import '../../widgets/alertCommon/pending_list.dart';
 import '../Dashboard/executiveDash.dart';
 import '../Dashboard/searchAutocomplete.dart';
 import '../Quotation/statusMonitoringQuotation.dart';
@@ -61,6 +64,7 @@ class _EnqHomeState extends State<EnqHome> {
   String? selected;
   int _selectedIndex = 0;
   String? staffName;
+  String? userGp;
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
   List<Widget> drawerOpts = [];
@@ -116,11 +120,14 @@ class _EnqHomeState extends State<EnqHome> {
     // TODO: implement initState
     super.initState();
     if (!mounted) return;
+    notification();
+
     date = DateFormat('dd-MM-yyyy kk:mm:ss').format(now);
     todaydate = DateFormat('dd-MM-yyyy').format(now);
     s = date!.split(" ");
     getPassword();
     print("jhjhjhkjjk--------------------${widget.mobile_menu_type}");
+    // notification1();
     if (widget.mobile_menu_type == null) {
       shared();
     } else {
@@ -139,12 +146,9 @@ class _EnqHomeState extends State<EnqHome> {
         }
       });
     }
-    // findMobileUser();
-    appBarTitle = Text("");
-    // Provider.of<RegistrationController>(context, listen: false).setMenuIndex("D1");
 
-    print(
-        "zxzx--${Provider.of<RegistrationController>(context, listen: false).menu_index}");
+    appBarTitle = Text("");
+
     Provider.of<Controller>(context, listen: false).getArea(context);
     Provider.of<RegistrationController>(context, listen: false).userDetails();
     Provider.of<QuotationController>(context, listen: false)
@@ -152,21 +156,6 @@ class _EnqHomeState extends State<EnqHome> {
     Provider.of<Controller>(context, listen: false).gePriorityList(context);
     Provider.of<ProductController>(context, listen: false)
         .geProductList(context);
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   print(
-    //       "kjfs---${Provider.of<RegistrationController>(context, listen: false).scheduleOpend}");
-    //   if (Provider.of<RegistrationController>(context,
-    //                   listen: false)
-    //               .scheduleListCount >
-    //           0 &&
-    //       Provider.of<RegistrationController>(context, listen: false)
-    //               .scheduleOpend ==
-    //           false &&
-    //       mobile_user_type != "3") {
-    //     customNotification();
-    //   }
-    // });
   }
 
   bool visible = false;
@@ -197,6 +186,15 @@ class _EnqHomeState extends State<EnqHome> {
     });
   }
 
+  notification() async {
+    final prefs = await SharedPreferences.getInstance();
+    userGp = prefs.getString("userGroup");
+    if (userGp == "1") {
+      Provider.of<QuotationController>(context, listen: false)
+          .getCount(context, todaydate.toString());
+    }
+  }
+
   _onSelectItem(String? menu) {
     if (!mounted) return;
     print("menu----$menu");
@@ -211,7 +209,6 @@ class _EnqHomeState extends State<EnqHome> {
 
   _getDrawerItemWidget(String? pos) {
     print("pos---${pos}");
-
     switch (pos) {
       case "D1":
         {
@@ -263,6 +260,38 @@ class _EnqHomeState extends State<EnqHome> {
           return ScheduleListScreen(
             type: "from menu",
           );
+        }
+      case "SA1":
+        {
+          if (widget.type != "return from sale order") {
+            Provider.of<QuotationController>(context, listen: false).fromDate =
+                null;
+            Provider.of<QuotationController>(context, listen: false).todate =
+                null;
+            Provider.of<QuotationController>(context, listen: false)
+                .getPendingSaleOrder(context, todaydate!, todaydate!);
+          } else {
+            Provider.of<QuotationController>(context, listen: false)
+                .getPendingSaleOrder(
+                    context,
+                    Provider.of<QuotationController>(context, listen: false)
+                        .fromDate!,
+                    Provider.of<QuotationController>(context, listen: false)
+                        .todate!);
+          }
+
+          return PendingSaleOrder();
+        }
+      case "SA":
+        {
+          Provider.of<QuotationController>(context, listen: false).fromDate =
+              null;
+          Provider.of<QuotationController>(context, listen: false).todate =
+              null;
+          Provider.of<QuotationController>(context, listen: false)
+              .viewSaleOrder(context, todaydate!, todaydate!);
+
+          return ViewSaleOrder();
         }
       case "ES1":
         {
@@ -389,12 +418,12 @@ class _EnqHomeState extends State<EnqHome> {
 
       case "CQ1":
         {
-           Provider.of<QuotationController>(context,
-                                  listen: false)
-                              .getConfirmedQuotation(
-                            todaydate!, todaydate!,
-                            context,
-                          );
+          Provider.of<QuotationController>(context, listen: false)
+              .getConfirmedQuotation(
+            todaydate!,
+            todaydate!,
+            context,
+          );
           return ConfirmedQuotation();
         }
     }
@@ -568,13 +597,9 @@ class _EnqHomeState extends State<EnqHome> {
                             listen: false)
                         .menu_index ==
                     "D1" ||
-                Provider.of<RegistrationController>(context,
-                            listen: false)
-                        .menu_index ==
-                    "DS" ||
                 Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
-                    "AD1" ||
+                    "DS" ||
                 Provider.of<RegistrationController>(context, listen: false)
                         .menu_index ==
                     "RESP"
@@ -679,272 +704,306 @@ class _EnqHomeState extends State<EnqHome> {
                   )
                 ],
               )
-            : AppBar(
-                actions: [
-                  // Provider.of<RegistrationController>(context, listen: false)
-                  //                 .menu_index ==
-                  //             "E2" ||
-                  //         Provider.of<RegistrationController>(context,
-                  //                     listen: false)
-                  //                 .menu_index ==
-                  //             "Q1"
-                  //     ? Container()
-                  //     : Container(
-                  //         margin: EdgeInsets.only(right: 8),
-                  //         child: InkWell(
-                  //             onTap: () {
-                  //               Navigator.push(
-                  //                 context,
-                  //                 MaterialPageRoute(
-                  //                     builder: (context) => EnQHistory()),
-                  //               );
-                  //             },
-                  //             child: Icon(
-                  //               Icons.history,
-                  //               size: 20,
-                  //               color: Colors.red,
-                  //             )),
-                  //       ),
-                  Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
-                          Provider.of<RegistrationController>(context, listen: false).menu_index ==
-                              "Q1" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "SL1" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "DS" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "SR" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "DR1" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "DP1" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "UW1" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "TI1" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "CR1" ||
-                          Provider.of<RegistrationController>(context, listen: false)
-                                  .menu_index ==
-                              "ES1" ||
-                          Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1" ||
-                          Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1"
-                      ? Container()
-                      : InkWell(
-                          onTap: () {
-                            buildPopupDialog(context, size);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 12.0),
-                            child: Consumer<Controller>(
-                              builder: (context, value, child) {
-                                return Row(
-                                  // mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Icon(
-                                      Icons.place,
-                                      size: 17,
-                                      color: Colors.red,
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      value.selected == null
-                                          ? "Choose Area"
-                                          : value.selected.toString(),
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[800]),
-                                    ),
-                                  ],
-                                );
+            : Provider.of<RegistrationController>(context, listen: false)
+                        .menu_index ==
+                    "AD1"
+                ? AppBar(
+                    backgroundColor: P_Settings.loginPagetheme,
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: InkWell(
+                            onTap: () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              userGp = prefs.getString("userGroup");
+                              if (userGp == "1") {
+                                Provider.of<QuotationController>(context,
+                                        listen: false)
+                                    .getCount(context, todaydate.toString());
+                              }
+                            },
+                            child: Icon(Icons.notifications)),
+                      )
+                    ],
+                  )
+                : AppBar(
+                    actions: [
+                      // Provider.of<RegistrationController>(context, listen: false)
+                      //                 .menu_index ==
+                      //             "E2" ||
+                      //         Provider.of<RegistrationController>(context,
+                      //                     listen: false)
+                      //                 .menu_index ==
+                      //             "Q1"
+                      //     ? Container()
+                      //     : Container(
+                      //         margin: EdgeInsets.only(right: 8),
+                      //         child: InkWell(
+                      //             onTap: () {
+                      //               Navigator.push(
+                      //                 context,
+                      //                 MaterialPageRoute(
+                      //                     builder: (context) => EnQHistory()),
+                      //               );
+                      //             },
+                      //             child: Icon(
+                      //               Icons.history,
+                      //               size: 20,
+                      //               color: Colors.red,
+                      //             )),
+                      //       ),
+                      Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "Q1" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "SL1" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "DS" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "SR" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "DR1" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "DP1" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "UW1" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "TI1" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "CR1" ||
+                              Provider.of<RegistrationController>(context, listen: false)
+                                      .menu_index ==
+                                  "ES1" ||
+                              Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1" ||
+                              Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1" ||
+                              Provider.of<RegistrationController>(context, listen: false).menu_index == "SA1" ||
+                              Provider.of<RegistrationController>(context, listen: false).menu_index == "SA"
+                          ? Container()
+                          : InkWell(
+                              onTap: () {
+                                buildPopupDialog(context, size);
                               },
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 12.0),
+                                child: Consumer<Controller>(
+                                  builder: (context, value, child) {
+                                    return Row(
+                                      // mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(
+                                          Icons.place,
+                                          size: 17,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          value.selected == null
+                                              ? "Choose Area"
+                                              : value.selected.toString(),
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[800]),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                ],
-                title: Text(
-                  Provider.of<RegistrationController>(context, listen: false)
-                              .menu_index ==
-                          "Q1"
-                      ? "QUOTATION LIST"
-                      : Provider.of<RegistrationController>(context, listen: false)
+                    ],
+                    title: Text(
+                      Provider.of<RegistrationController>(context, listen: false)
                                   .menu_index ==
-                              "E2"
-                          ? "ENQUIRY LIST"
+                              "Q1"
+                          ? "QUOTATION LIST"
                           : Provider.of<RegistrationController>(context, listen: false)
                                       .menu_index ==
-                                  "E1"
-                              ? "ENQUIRY"
+                                  "E2"
+                              ? "ENQUIRY LIST"
                               : Provider.of<RegistrationController>(context, listen: false)
                                           .menu_index ==
-                                      "SL1"
-                                  ? "SCHEDULE LIST"
-                                  : Provider.of<RegistrationController>(context, listen: false)
+                                      "E1"
+                                  ? "ENQUIRY"
+                                  : Provider.of<RegistrationController>(context,
+                                                  listen: false)
                                               .menu_index ==
-                                          "SR"
-                                      ? " SERVICE SCHEDULE LIST"
-                                      : Provider.of<RegistrationController>(context, listen: false)
+                                          "SL1"
+                                      ? "SCHEDULE LIST"
+                                      : Provider.of<RegistrationController>(context,
+                                                      listen: false)
                                                   .menu_index ==
-                                              "DR1"
-                                          ? "DEALER WISE REPORT"
+                                              "SR"
+                                          ? " SERVICE SCHEDULE LIST"
                                           : Provider.of<RegistrationController>(context,
                                                           listen: false)
                                                       .menu_index ==
-                                                  "DP1"
-                                              ? "DEALER WISE PRODUCT"
-                                              : Provider.of<RegistrationController>(context, listen: false).menu_index == "UW1"
-                                                  ? "USER WISE REPORT"
-                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "TI1"
-                                                      ? "TOP ITEMS REPORT"
-                                                      : Provider.of<RegistrationController>(context, listen: false).menu_index == "CR1"
-                                                          ? "CUSTOMER WISE REPORT"
-                                                          : Provider.of<RegistrationController>(context, listen: false).menu_index == "ES1"
-                                                              ? "ENQUIRY SCHEDULE"
-                                                              : Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
-                                                                  ? "AREA WISE REPORT"
-                                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1"
-                                                                      ? "CONFIRMED QUOTATION"
-                                                                      : "",
-                  style: TextStyle(fontSize: 15),
-                ),
-                backgroundColor: Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
-                        Provider.of<RegistrationController>(context, listen: false).menu_index ==
-                            "Q1" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "SL1" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "SR" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "DR1" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "DP1" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "UW1" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "TI1" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "CR1" ||
-                        Provider.of<RegistrationController>(context, listen: false)
-                                .menu_index ==
-                            "ES1" ||
-                        Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1" ||
-                        Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
-                    ? P_Settings.loginPagetheme
-                    : P_Settings.whiteColor,
-                elevation: 1,
-                leading: Consumer<RegistrationController>(
-                  builder: (context, value, child) {
-                    return IconButton(
-                        onPressed: () {
-                          _key.currentState!.openDrawer();
-                        },
-                        icon: Icon(Icons.menu,
-                            color: value.menu_index == "E2" ||
-                                    value.menu_index == "Q1" ||
-                                    value.menu_index == "SL1" ||
-                                    value.menu_index == "SR" ||
-                                    value.menu_index == "DR1" ||
-                                    value.menu_index == "DP1" ||
-                                    value.menu_index == "UW1" ||
-                                    value.menu_index == "TI1" ||
-                                    value.menu_index == "CR1" ||
-                                    value.menu_index == "ES1" ||
-                                    value.menu_index == "AP1" ||
-                                    value.menu_index == "CQ1"
-                                ? P_Settings.whiteColor
-                                : Colors.grey[800]));
-                  },
-                ),
-                // leading: Builder(
-                //   builder: (context) => Consumer<RegistrationController>(
-                //     builder: (context, value, child) {
-                //       return IconButton(
-                //           icon: new Icon(Icons.menu,
-                //               color: value.menu_index == "E2" ||
-                //                       value.menu_index == "Q1"
-                //                   ? P_Settings.whiteColor
-                //                   : Colors.grey[800]),
-                //           onPressed: () async {
-                //             SharedPreferences prefs =
-                //                 await SharedPreferences.getInstance();
-                //             staffName = await prefs.getString("staff_name");
-                //             drawerOpts.clear();
-                //             for (var i = 0; i < value.menuList.length; i++) {
-                //               // var d =Provider.of<Controller>(context, listen: false).drawerItems[i];
+                                                  "DR1"
+                                              ? "DEALER WISE REPORT"
+                                              : Provider.of<RegistrationController>(context, listen: false).menu_index == "DP1"
+                                                  ? "DEALER WISE PRODUCT"
+                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "UW1"
+                                                      ? "USER WISE REPORT"
+                                                      : Provider.of<RegistrationController>(context, listen: false).menu_index == "TI1"
+                                                          ? "TOP ITEMS REPORT"
+                                                          : Provider.of<RegistrationController>(context, listen: false).menu_index == "CR1"
+                                                              ? "CUSTOMER WISE REPORT"
+                                                              : Provider.of<RegistrationController>(context, listen: false).menu_index == "ES1"
+                                                                  ? "ENQUIRY SCHEDULE"
+                                                                  : Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1"
+                                                                      ? "AREA WISE REPORT"
+                                                                      : Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1"
+                                                                          ? "CONFIRMED QUOTATION"
+                                                                          : Provider.of<RegistrationController>(context, listen: false).menu_index == "SA1"
+                                                                              ? "APPROVE SALE ORDER"
+                                                                              : Provider.of<RegistrationController>(context, listen: false).menu_index == "SA"
+                                                                                  ? "SALE ORDER"
+                                                                                  : "",
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    backgroundColor: Provider.of<RegistrationController>(context, listen: false).menu_index == "E2" ||
+                            Provider.of<RegistrationController>(context, listen: false).menu_index ==
+                                "Q1" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "SL1" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "SR" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "DR1" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "DP1" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "UW1" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "TI1" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "CR1" ||
+                            Provider.of<RegistrationController>(context, listen: false)
+                                    .menu_index ==
+                                "ES1" ||
+                            Provider.of<RegistrationController>(context, listen: false).menu_index == "CQ1" ||
+                            Provider.of<RegistrationController>(context, listen: false).menu_index == "AP1" ||
+                            Provider.of<RegistrationController>(context, listen: false).menu_index == "SA1" ||
+                            Provider.of<RegistrationController>(context, listen: false).menu_index == "SA"
+                        ? P_Settings.loginPagetheme
+                        : P_Settings.whiteColor,
+                    elevation: 1,
+                    leading: Consumer<RegistrationController>(
+                      builder: (context, value, child) {
+                        return IconButton(
+                            onPressed: () {
+                              _key.currentState!.openDrawer();
+                            },
+                            icon: Icon(Icons.menu,
+                                color: value.menu_index == "E2" ||
+                                        value.menu_index == "Q1" ||
+                                        value.menu_index == "SL1" ||
+                                        value.menu_index == "SR" ||
+                                        value.menu_index == "DR1" ||
+                                        value.menu_index == "DP1" ||
+                                        value.menu_index == "UW1" ||
+                                        value.menu_index == "TI1" ||
+                                        value.menu_index == "CR1" ||
+                                        value.menu_index == "ES1" ||
+                                        value.menu_index == "AP1" ||
+                                        value.menu_index == "CQ1" ||
+                                        value.menu_index == "SA1" ||
+                                        value.menu_index == "SA"
+                                    ? P_Settings.whiteColor
+                                    : Colors.grey[800]));
+                      },
+                    ),
+                    // leading: Builder(
+                    //   builder: (context) => Consumer<RegistrationController>(
+                    //     builder: (context, value, child) {
+                    //       return IconButton(
+                    //           icon: new Icon(Icons.menu,
+                    //               color: value.menu_index == "E2" ||
+                    //                       value.menu_index == "Q1"
+                    //                   ? P_Settings.whiteColor
+                    //                   : Colors.grey[800]),
+                    //           onPressed: () async {
+                    //             SharedPreferences prefs =
+                    //                 await SharedPreferences.getInstance();
+                    //             staffName = await prefs.getString("staff_name");
+                    //             drawerOpts.clear();
+                    //             for (var i = 0; i < value.menuList.length; i++) {
+                    //               // var d =Provider.of<Controller>(context, listen: false).drawerItems[i];
 
-                //               drawerOpts.add(Consumer<RegistrationController>(
-                //                 builder: (context, value, child) {
-                //                   // print(
-                //                   //     "menulist[menu]-------${value.menuList[i]["menu_name"]}");
-                //                   return Padding(
-                //                     padding: const EdgeInsets.only(
-                //                         left: 8.0,
-                //                         right: 8,
-                //                         top: 10,
-                //                         bottom: 0),
-                //                     child: InkWell(
-                //                       onTap: () {
-                //                         _onSelectItem(
-                //                             value.menuList[i]["menu_index"]);
-                //                       },
-                //                       child: Column(
-                //                         children: [
-                //                           Row(
-                //                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //                             children: [
-                //                               // Icon(
-                //                               //   Icons.history,
-                //                               //   // color: Colors.red,
-                //                               // ),
-                //                               Container(
-                //                                 child: Text(
-                //                                   value.menuList[i]
-                //                                       ["menu_name"],
-                //                                   style: TextStyle(
-                //                                       fontWeight:
-                //                                           FontWeight.w500,
-                //                                       fontSize: 17),
-                //                                 ),
-                //                               ),
-                //                               Spacer(),
-                //                               Image.asset(
-                //                                 "assets/right.png",
-                //                                 height: 28,
-                //                                 color: Colors.grey[700],
-                //                               )
-                //                             ],
-                //                           ),
-                //                           Divider(),
-                //                         ],
-                //                       ),
-                //                     ),
-                //                   );
-                //                 },
-                //               ));
-                //             }
-                //             _key.currentState!.openDrawer();
-                //           });
-                //     },
-                //   ),
-                // ),
-              ),
+                    //               drawerOpts.add(Consumer<RegistrationController>(
+                    //                 builder: (context, value, child) {
+                    //                   // print(
+                    //                   //     "menulist[menu]-------${value.menuList[i]["menu_name"]}");
+                    //                   return Padding(
+                    //                     padding: const EdgeInsets.only(
+                    //                         left: 8.0,
+                    //                         right: 8,
+                    //                         top: 10,
+                    //                         bottom: 0),
+                    //                     child: InkWell(
+                    //                       onTap: () {
+                    //                         _onSelectItem(
+                    //                             value.menuList[i]["menu_index"]);
+                    //                       },
+                    //                       child: Column(
+                    //                         children: [
+                    //                           Row(
+                    //                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //                             children: [
+                    //                               // Icon(
+                    //                               //   Icons.history,
+                    //                               //   // color: Colors.red,
+                    //                               // ),
+                    //                               Container(
+                    //                                 child: Text(
+                    //                                   value.menuList[i]
+                    //                                       ["menu_name"],
+                    //                                   style: TextStyle(
+                    //                                       fontWeight:
+                    //                                           FontWeight.w500,
+                    //                                       fontSize: 17),
+                    //                                 ),
+                    //                               ),
+                    //                               Spacer(),
+                    //                               Image.asset(
+                    //                                 "assets/right.png",
+                    //                                 height: 28,
+                    //                                 color: Colors.grey[700],
+                    //                               )
+                    //                             ],
+                    //                           ),
+                    //                           Divider(),
+                    //                         ],
+                    //                       ),
+                    //                     ),
+                    //                   );
+                    //                 },
+                    //               ));
+                    //             }
+                    //             _key.currentState!.openDrawer();
+                    //           });
+                    //     },
+                    //   ),
+                    // ),
+                  ),
         drawer: Consumer<Controller>(
           builder: (context, value, child) {
             return Drawer(

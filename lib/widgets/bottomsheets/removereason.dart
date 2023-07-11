@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class RemoveReason {
   TextEditingController reason = TextEditingController();
-  showDeleteReasonSheet(BuildContext context, int index) {
+  showDeleteReasonSheet(BuildContext context, int index,String enqcode,String enqid,) {
     Size size = MediaQuery.of(context).size;
     return showModalBottomSheet<void>(
       isScrollControlled: true,
@@ -91,11 +91,11 @@ class RemoveReason {
                             Navigator.pop(mycontext);
                             deletepopup.builddeletePopupDialog(
                                 context,
-                                value.enQhistoryList[index].enqCode.toString(),
-                                value.enQhistoryList[index].enqId.toString(),
+                               enqcode,
+                               enqid,
                                 index,
                                 "history",
-                                value.enQhistoryList[index].enqId.toString(),
+                                enqid,
                                 "",
                                 "",
                                 reason.text,"","");

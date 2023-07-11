@@ -1,12 +1,6 @@
-import 'dart:io';
-
-import 'package:bestengineer/screen/Quotation/utils.dart';
 
 import 'package:flutter/services.dart';
-import 'package:image_watermark/image_watermark.dart';
 import 'package:intl/intl.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -21,6 +15,7 @@ class PdfQuotation {
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList,
+      List<Map<String, dynamic>> msg_log,
       String br) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     staff_name = prefs.getString("staff_name");
@@ -83,7 +78,7 @@ class PdfQuotation {
         return buildHeader(headerimage);
       },
       footer: (context) =>
-          buildFooter(termsList, footerimage, staff_name.toString()),
+          buildFooter(termsList, msg_log, footerimage, staff_name.toString()),
     ));
 
     // final List<int> bytes = await pdf.save();
@@ -443,11 +438,11 @@ class PdfQuotation {
   returnRows(Map listmap, String i) {
     double netrate = double.parse(listmap["net_rate"]!);
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-    String parsedstring1 = listmap["product_desc"].replaceAll(exp, '').toString().toLowerCase();
-    
+    String parsedstring1 = listmap["product_desc"].replaceAll(exp, '');
+
     return [
       i,
-      "${listmap["product_name"]}  \n    $parsedstring1",
+      "${listmap["product_name"]}  \n $parsedstring1",
       listmap["qty"],
       listmap["rate"],
       listmap["amount"],
@@ -766,59 +761,73 @@ class PdfQuotation {
   }
 
   //////////////////////////////////////////////////////////////////
-  static Widget buildFooter(List<Map<String, dynamic>> listterms,
-          ImageProvider image, String staffName) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text("Prepared By : $staffName", style: TextStyle(fontSize: 9)),
-            // Row(children: [
-            //   Text("Signature : ", style: TextStyle(fontSize: 8)),
-            //   Container(width: 40)
-            // ])
-          ]),
+  static Widget buildFooter(
+      List<Map<String, dynamic>> listterms,
+      List<Map<String, dynamic>> msg_log,
+      ImageProvider image,
+      String staffName) {
+    // ignore: avoid_print
+    print("nddn----${msg_log}");
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Text(msg_log[0]["remarks"], style: TextStyle(fontSize: 9)),
+          SizedBox(width: 10),
 
-          // Container(
-          //   // width: 100,
-          //   // decoration:
-          //   //     BoxDecoration(border: Border.all(color: PdfColors.black)),
-          //   alignment: Alignment.centerLeft,
-          //   child: Padding(
-          //       padding: EdgeInsets.all(3),
-          //       child: Text("Prepared By : $staffName",
-          //           style: TextStyle(fontSize: 10))),
-          // ),
-          // Container(
-          //   width:400 ,
-          //     // margin: const EdgeInsets.all(15.0),
-          //     // padding: const EdgeInsets.all(3.0),
-          //     decoration:
-          //         BoxDecoration(border: Border.all(color: PdfColors.black)),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.start,
-          //       children: [
-          //       Text("Prepared By  : ", style: TextStyle(fontSize: 13)),
-          //       Text(staffName, style: TextStyle(fontSize: 12))
-          //     ])),
-          SizedBox(height: 2 * PdfPageFormat.mm),
-          buildSimpleText(
-              title: listterms[0]["t_head"], value: listterms[0]["t_detail"]),
-          // SizedBox(height: 1 * PdfPageFormat.mm),
-          // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
-          SizedBox(height: 0.2 * PdfPageFormat.cm),
-          Row(children: [
-            Text(
-                " * This quotation is system generated hence no signature required * ",
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold))
-          ]),
-          Container(
-              color: PdfColors.red,
-              width: 800,
-              // height:160,
-              child: Image(image, fit: BoxFit.contain))
-        ],
-      );
+          msg_log.length > 1
+              ? Text(msg_log[1]["remarks"], style: TextStyle(fontSize: 9))
+              : Container()
+          // Text(msg_log[1]["remarks"], style: TextStyle(fontSize: 9)),
+
+          // Row(children: [
+          //   Text("Signature : ", style: TextStyle(fontSize: 8)),
+          //   Container(width: 40)
+          // ])
+        ]),
+
+        // Container(
+        //   // width: 100,
+        //   // decoration:
+        //   //     BoxDecoration(border: Border.all(color: PdfColors.black)),
+        //   alignment: Alignment.centerLeft,
+        //   child: Padding(
+        //       padding: EdgeInsets.all(3),
+        //       child: Text("Prepared By : $staffName",
+        //           style: TextStyle(fontSize: 10))),
+        // ),
+        // Container(
+        //   width:400 ,
+        //     // margin: const EdgeInsets.all(15.0),
+        //     // padding: const EdgeInsets.all(3.0),
+        //     decoration:
+        //         BoxDecoration(border: Border.all(color: PdfColors.black)),
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.start,
+        //       children: [
+        //       Text("Prepared By  : ", style: TextStyle(fontSize: 13)),
+        //       Text(staffName, style: TextStyle(fontSize: 12))
+        //     ])),
+        SizedBox(height: 2 * PdfPageFormat.mm),
+        buildSimpleText(
+            title: listterms[0]["t_head"], value: listterms[0]["t_detail"]),
+        // SizedBox(height: 1 * PdfPageFormat.mm),
+        // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
+        SizedBox(height: 0.2 * PdfPageFormat.cm),
+        Row(children: [
+          Text(
+              " * This quotation is system generated hence no signature required * ",
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold))
+        ]),
+        Container(
+            color: PdfColors.red,
+            width: 800,
+            // height:160,
+            child: Image(image, fit: BoxFit.contain))
+      ],
+    );
+  }
+
 //////////////////////////////////////////////////////////////////////
   static buildSimpleText({
     required String title,

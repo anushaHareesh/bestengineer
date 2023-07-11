@@ -43,6 +43,7 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("jkjkssjkd----${widget.id}");
     Provider.of<QuotationController>(context, listen: false)
         .getPdfData(context, widget.id);
   }
@@ -75,8 +76,12 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
               builder: (context, value, child) {
                 return IconButton(
                     onPressed: () async {
-                      final pdffile = await pdfSave.savepdf(value.detailPdf,
-                          value.masterPdf, value.termsPdf, widget.br);
+                      final pdffile = await pdfSave.savepdf(
+                          value.detailPdf,
+                          value.masterPdf,
+                          value.termsPdf,
+                          value.msgLogsPdf,
+                          widget.br);
                       print("pdffile----$pdffile");
                       PdFSave.sendFile(pdffile);
                     },
@@ -89,8 +94,12 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
                   padding: const EdgeInsets.only(left: 12.0),
                   child: IconButton(
                     onPressed: () async {
-                      final pdffile = await dwnload.downLoadpdf(value.detailPdf,
-                          value.masterPdf, value.termsPdf, widget.br);
+                      final pdffile = await dwnload.downLoadpdf(
+                          value.detailPdf,
+                          value.masterPdf,
+                          value.termsPdf,
+                          value.msgLogsPdf,
+                          widget.br);
                       print("kjxnzx-------$pdffile");
                       final snackBar = SnackBar(
                         duration: Duration(seconds: 2),
@@ -122,8 +131,12 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
             } else {
               return PdfPreview(
                   useActions: false,
-                  build: (context) => quotation1.generate(value.detailPdf,
-                      value.masterPdf, value.termsPdf, widget.br));
+                  build: (context) => quotation1.generate(
+                      value.detailPdf,
+                      value.masterPdf,
+                      value.termsPdf,
+                      value.msgLogsPdf,
+                      widget.br));
             }
           },
         ),
@@ -164,81 +177,81 @@ class _PdfPreviewPageState extends State<PdfPreviewPage> {
     );
   }
 
-  Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
-    final path = (await getExternalStorageDirectory())!.path;
-    final file = File('$path/$fileName');
-    await file.writeAsBytes(bytes, flush: true);
-    OpenFilex.open('$path/$fileName');
-  }
+  // Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
+  //   final path = (await getExternalStorageDirectory())!.path;
+  //   final file = File('$path/$fileName');
+  //   await file.writeAsBytes(bytes, flush: true);
+  //   OpenFilex.open('$path/$fileName');
+  // }
 
-  Future<List<int>> _readDocumentData(String name) async {
-    final ByteData data = await rootBundle.load('assets/$name');
-    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-  }
+  // Future<List<int>> _readDocumentData(String name) async {
+  //   final ByteData data = await rootBundle.load('assets/$name');
+  //   return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  // }
 
-  Future<void> _addWatermarkToPDF() async {
-    // final image = await imageFromAssetBundle('assets/noImg.png');
-    var imgBytes =
-        (await rootBundle.load("assets/noImg.png")).buffer.asUint8List();
-    //   final watermarkedImg = await ImageWatermark.addTextWatermarkCentered(
-    //     imgBytes: imgBytes,
-    //     watermarktext: 'watermarkText',
-    //   );
-    PdfDocument document =
-        PdfDocument(inputBytes: await _readDocumentData('Invoice1.pdf'));
+  // Future<void> _addWatermarkToPDF() async {
+  //   // final image = await imageFromAssetBundle('assets/noImg.png');
+  //   var imgBytes =
+  //       (await rootBundle.load("assets/noImg.png")).buffer.asUint8List();
+  //   //   final watermarkedImg = await ImageWatermark.addTextWatermarkCentered(
+  //   //     imgBytes: imgBytes,
+  //   //     watermarktext: 'watermarkText',
+  //   //   );
+  //   PdfDocument document =
+  //       PdfDocument(inputBytes: await _readDocumentData('Invoice1.pdf'));
 
-    //Get first page from document
-    PdfPage page = document.pages[0];
+  //   //Get first page from document
+  //   PdfPage page = document.pages[0];
 
-    //Get page size
-    Size pageSize = page.getClientSize();
+  //   //Get page size
+  //   Size pageSize = page.getClientSize();
 
-    //Set a standard font
-    PdfFont font = PdfStandardFont(PdfFontFamily.helvetica, 40);
+  //   //Set a standard font
+  //   PdfFont font = PdfStandardFont(PdfFontFamily.helvetica, 40);
 
-    //Measure the text
-    Size size = font.measureString('Confidential');
+  //   //Measure the text
+  //   Size size = font.measureString('Confidential');
 
-    //Create PDF graphics for the page
-    PdfGraphics graphics = page.graphics;
+  //   //Create PDF graphics for the page
+  //   PdfGraphics graphics = page.graphics;
 
-    //Calculate the center point
-    double x = pageSize.width / 2;
-    double y = pageSize.height / 2;
+  //   //Calculate the center point
+  //   double x = pageSize.width / 2;
+  //   double y = pageSize.height / 2;
 
-    //Save the graphics state for the watermark text
-    graphics.save();
+  //   //Save the graphics state for the watermark text
+  //   graphics.save();
 
-    //Tranlate the transform with the center point
-    graphics.translateTransform(x, y);
+  //   //Tranlate the transform with the center point
+  //   graphics.translateTransform(x, y);
 
-    //Set transparency level for the text
-    graphics.setTransparency(0.25);
+  //   //Set transparency level for the text
+  //   graphics.setTransparency(0.25);
 
-    //Rotate the text to -40 Degree
-    graphics.rotateTransform(-40);
+  //   //Rotate the text to -40 Degree
+  //   graphics.rotateTransform(-40);
 
-    //Draw the watermark text to the desired position over the PDF page with red color
-    graphics.drawImage(
-        PdfBitmap(imgBytes),
-        Rect.fromLTWH(
-            -size.width / 2, -size.height / 2, size.width, size.height));
-    // graphics.drawString('Confidential', font,
-    //     pen: PdfPen(PdfColor(255, 0, 0)),
-    //     brush: PdfBrushes.red,
-    //     bounds: Rect.fromLTWH(
-    //         -size.width / 2, -size.height / 2, size.width, size.height));
+  //   //Draw the watermark text to the desired position over the PDF page with red color
+  //   graphics.drawImage(
+  //       PdfBitmap(imgBytes),
+  //       Rect.fromLTWH(
+  //           -size.width / 2, -size.height / 2, size.width, size.height));
+  //   // graphics.drawString('Confidential', font,
+  //   //     pen: PdfPen(PdfColor(255, 0, 0)),
+  //   //     brush: PdfBrushes.red,
+  //   //     bounds: Rect.fromLTWH(
+  //   //         -size.width / 2, -size.height / 2, size.width, size.height));
 
-    //Restore the graphics
-    graphics.restore();
+  //   //Restore the graphics
+  //   graphics.restore();
 
-    //Save the document
-    List<int> bytes = await document.save();
+  //   //Save the document
+  //   List<int> bytes = await document.save();
 
-    //Dispose the document
-    document.dispose();
+  //   //Dispose the document
+  //   document.dispose();
 
-    //Save the file and launch/download
-    saveAndLaunchFile(bytes, 'Invoice3.pdf');
-  }
+  //   //Save the file and launch/download
+  //   saveAndLaunchFile(bytes, 'Invoice3.pdf');
+  // }
 }

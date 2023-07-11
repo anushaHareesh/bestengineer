@@ -203,21 +203,20 @@ class RemarkSheet {
                               // } else {
                               //   print("editt----");
 
-
-                                Navigator.of(_scaffoldKey.currentContext!)
-                                    .pop();
-                                showDailogue(context, true, _keyLoader, 1);
-                                Provider.of<QuotationController>(context,
-                                        listen: false)
-                                    .saveQuotation(
-                                        _scaffoldKey.currentContext!,
-                                        remark.text,
-                                        sdate,
-                                        int.parse(rwId),
-                                        enq_id,
-                                        type,
-                                        hiddenstatus,
-                                        selected!,);
+                              Navigator.of(_scaffoldKey.currentContext!).pop();
+                              showDailogue(context, true, _keyLoader, 1);
+                              Provider.of<QuotationController>(context,
+                                      listen: false)
+                                  .saveQuotation(
+                                _scaffoldKey.currentContext!,
+                                remark.text,
+                                sdate,
+                                int.parse(rwId),
+                                enq_id,
+                                type,
+                                hiddenstatus,
+                                selected!,
+                              );
                               // }
                               //  Navigator.of(_scaffoldKey.currentContext!)
                               //               .pop();

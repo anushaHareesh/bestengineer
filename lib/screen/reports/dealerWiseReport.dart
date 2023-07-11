@@ -146,53 +146,7 @@ class _DealerWiseReportState extends State<DealerWiseReport> {
                 ),
                 // dropDownCustom(size,""),
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     SizedBox(
-              //       width: 20,
-              //     ),
-              //     Container(
-              //       height: size.height * 0.05,
-              //       child: ElevatedButton(
-              //           style: ElevatedButton.styleFrom(
-              //             primary: P_Settings.loginPagetheme,
-              //             shape: RoundedRectangleBorder(
-              //               borderRadius:
-              //                   BorderRadius.circular(2), // <-- Radius
-              //             ),
-              //           ),
-              //           onPressed: () {
-              //             String df;
-              //             String tf;
-
-              //             if (value.fromDate == null) {
-              //               df = todaydate.toString();
-              //             } else {
-              //               df = value.fromDate.toString();
-              //             }
-              //             if (value.todate == null) {
-              //               tf = todaydate.toString();
-              //             } else {
-              //               tf = value.todate.toString();
-              //             }
-
-              //             Provider.of<QuotationController>(context,
-              //                     listen: false)
-              //                 .getDealerWiseReport(context, df, tf);
-              //           },
-              //           child: Text(
-              //             "Apply",
-              //             style: GoogleFonts.aBeeZee(
-              //               textStyle: Theme.of(context).textTheme.bodyText2,
-              //               fontSize: 17,
-              //               fontWeight: FontWeight.bold,
-              //               color: P_Settings.whiteColor,
-              //             ),
-              //           )),
-              //     )
-              //   ],
-              // ),
+             
               Divider(),
               value.isLoading
                   ? Container(

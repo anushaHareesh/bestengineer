@@ -20,6 +20,7 @@ class PdfDownload {
       List<Map<String, dynamic>> detailPdf,
       List<Map<String, dynamic>> masterPdf,
       List<Map<String, dynamic>> termsList,
+       List<Map<String, dynamic>> msg_log,
       String br) async {
     date = DateFormat('ddMMyyyy').format(now);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -75,7 +76,7 @@ class PdfDownload {
         return buildHeader(headerimage);
       },
       footer: (context) =>
-          buildFooter(termsList, footerimage, staff_name.toString()),
+          buildFooter(termsList, msg_log, footerimage, staff_name.toString()),
     ));
     String inv = masterPdf[0]["s_customer_name"] + date;
 
@@ -423,15 +424,14 @@ class PdfDownload {
     );
   }
 
-
-  returnRows(Map listmap, String i) {
+returnRows(Map listmap, String i) {
     double netrate = double.parse(listmap["net_rate"]!);
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-    String parsedstring1 = listmap["product_desc"].replaceAll(exp, '').toString().toLowerCase();
+    String parsedstring1 = listmap["product_desc"].replaceAll(exp, '');
     
     return [
       i,
-      "${listmap["product_name"]}  \n    $parsedstring1",
+      "${listmap["product_name"]}  \n $parsedstring1",
       listmap["qty"],
       listmap["rate"],
       listmap["amount"],
@@ -565,13 +565,21 @@ class PdfDownload {
   }
 
   //////////////////////////////////////////////////////////////////
-  static Widget buildFooter(List<Map<String, dynamic>> listterms,
-          ImageProvider image, String staffName) =>
+  static Widget buildFooter(
+          List<Map<String, dynamic>> listterms,
+          List<Map<String, dynamic>> msg_log,
+          ImageProvider image,
+          String staffName) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text("Prepared By : $staffName", style: TextStyle(fontSize: 9)),
+            Text(msg_log[0]["remarks"], style: TextStyle(fontSize: 9)),
+            SizedBox(width: 10),
+            msg_log.length>1 
+              ? Text(msg_log[1]["remarks"], style: TextStyle(fontSize: 9))
+              : Container()
+
             // Row(children: [
             //   Text("Signature : ", style: TextStyle(fontSize: 8)),
             //   Container(width: 40)

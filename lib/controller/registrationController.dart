@@ -230,41 +230,41 @@ class RegistrationController extends ChangeNotifier {
   }
 
   //////////////////////////////////////////////////////////////////
-  Future<StaffDetails?> getStaffDetails(String cid, int index) async {
-    print("getStaffDetails...............${cid}");
-    var restaff;
-    try {
-      Uri url = Uri.parse("https://trafiqerp.in/order/fj/get_staff.php");
-      Map body = {
-        'cid': cid,
-      };
-      // isDownloaded = true;
-      // isCompleted = true;
-      isLoading = true;
-      notifyListeners();
-      http.Response response = await http.post(
-        url,
-        body: body,
-      );
-      List map = jsonDecode(response.body);
-      await BestEngineer.instance
-          .deleteFromTableCommonQuery("staffDetailsTable", "");
-      print("map ${map}");
-      for (var staff in map) {
-        staffModel = StaffDetails.fromJson(staff);
-        restaff = await BestEngineer.instance.insertStaffDetails(staffModel);
-      }
-      print("inserted staff ${restaff}");
-      // isDownloaded = false;
-      // isDown[index] = true;
-      isLoading = false;
-      notifyListeners();
-      return staffModel;
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
+  // Future<StaffDetails?> getStaffDetails(String cid, int index) async {
+  //   print("getStaffDetails...............${cid}");
+  //   var restaff;
+  //   try {
+  //     Uri url = Uri.parse("https://trafiqerp.in/order/fj/get_staff.php");
+  //     Map body = {
+  //       'cid': cid,
+  //     };
+  //     // isDownloaded = true;
+  //     // isCompleted = true;
+  //     isLoading = true;
+  //     notifyListeners();
+  //     http.Response response = await http.post(
+  //       url,
+  //       body: body,
+  //     );
+  //     List map = jsonDecode(response.body);
+  //     await BestEngineer.instance
+  //         .deleteFromTableCommonQuery("staffDetailsTable", "");
+  //     print("map ${map}");
+  //     for (var staff in map) {
+  //       staffModel = StaffDetails.fromJson(staff);
+  //       restaff = await BestEngineer.instance.insertStaffDetails(staffModel);
+  //     }
+  //     print("inserted staff ${restaff}");
+  //     // isDownloaded = false;
+  //     // isDown[index] = true;
+  //     isLoading = false;
+  //     notifyListeners();
+  //     return staffModel;
+  //   } catch (e) {
+  //     print(e);
+  //     return null;
+  //   }
+  // }
 
 //////////////////////////////////////////////////////////////////////////////
   getMenu(
@@ -361,14 +361,11 @@ class RegistrationController extends ChangeNotifier {
           String? user_id = prefs.getString("user_id");
           String? qutation_id1 = prefs.getString("qutation_id");
           String? mobile_menu_type = prefs.getString("mobile_user_type");
-
           String? staff_nam = prefs.getString("staff_name");
-
           Uri url = Uri.parse("$urlgolabl/get_schedule.php");
           Map body = {
             'staff_id': user_id,
           };
-
           print("schedule list jjj body----$body");
           isSchedulelIstLoadind = true;
           notifyListeners();

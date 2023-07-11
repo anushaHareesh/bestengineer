@@ -1,12 +1,12 @@
 import 'dart:convert';
-
 import 'dart:io';
-
 import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/components/globaldata.dart';
 import 'package:bestengineer/components/networkConnectivity.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
 import 'package:bestengineer/screen/Quotation/testPage.dart';
+import 'package:bestengineer/screen/sale%20order/pending_sale_order.dart';
+import 'package:bestengineer/widgets/alertCommon/pending_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,21 +20,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
+import '../components/dateFind.dart';
 import '../screen/Quotation/pdfPrev.dart';
 import '../screen/Quotation/pdfQuotation.dart';
+import '../widgets/alertCommon/customerPopup.dart';
+import '../widgets/alertCommon/set_schedule_date_popup.dart';
 
 class QuotationController extends ChangeNotifier {
   String? todaydate;
   String? qt_pre;
+  String? staffSelId;
   bool isLoading = false;
   String? reportdealerselected;
   String? enq_id;
   String? area;
   int? sivd;
+  bool isPendingListLoading = false;
+  double sale_order_net_amt = 0.0;
   bool ispdfOpend = false;
   bool isQuotSearch = false;
   bool isReportLoading = false;
-
+  bool saleOrderLoading = false;
   bool isSchedulelIstLoadind = false;
   String? dealerselected;
   String commonurlgolabl = Globaldata.commonapiglobal;
@@ -64,7 +70,7 @@ class QuotationController extends ChangeNotifier {
   String? color1;
   String? cust_id;
   List<String> qtScheduldate = [];
-
+  String? staffSelected;
   double total = 0.0;
   double stotal_qty = 0.0;
   double s_total_taxable = 0.0;
@@ -92,6 +98,7 @@ class QuotationController extends ChangeNotifier {
   List<TextEditingController> rateEdit = [];
   List<TextEditingController> quotqty = [];
   List<TextEditingController> discount_amount = [];
+  List<Map<String, dynamic>> staff_list = [];
 
   bool isDetailLoading = false;
 
@@ -104,11 +111,12 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> adminDashTileDetail = [];
   List<Map<String, dynamic>> enqScheduleList = [];
   List<Map<String, dynamic>> confrimedQuotList = [];
-
-
+  String? selected;
   List<Map<String, dynamic>> masterPdf = [];
   List<Map<String, dynamic>> detailPdf = [];
   List<Map<String, dynamic>> termsPdf = [];
+  List<Map<String, dynamic>> msgLogsPdf = [];
+
   List<Map<String, dynamic>> dealerList = [];
   List<Map<String, dynamic>> quotationList = [];
   List<Map<String, dynamic>> newquotationList = [];
@@ -116,9 +124,13 @@ class QuotationController extends ChangeNotifier {
   List<Map<String, dynamic>> reportDealerList = [];
   List<Map<String, dynamic>> dealerwiseProductList = [];
   List<Map<String, dynamic>> areaWiseReportList = [];
-
+  List<Map<String, dynamic>> pendingSaleOrder = [];
   List<Map<String, dynamic>> quotationEditList = [];
   List<Map<String, dynamic>> dealerwiseReportList = [];
+  List<Map<String, dynamic>> saleOrderDetails = [];
+  List<Map<String, dynamic>> pendingServiceList = [];
+  List<Map<String, dynamic>> pendingQuotationList = [];
+  List<Map<String, dynamic>> saleOrderList = [];
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   String rawCalculation(
@@ -713,6 +725,11 @@ class QuotationController extends ChangeNotifier {
           for (var item in map["terms_condtions"]) {
             termsPdf.add(item);
           }
+
+          msgLogsPdf.clear();
+          for (var item in map["msg_log"]) {
+            msgLogsPdf.add(item);
+          }
           // quotation1.generate(detailPdf, masterPdf, termsPdf);
           isPdfLoading = false;
           // generateInvoice();
@@ -1017,7 +1034,6 @@ class QuotationController extends ChangeNotifier {
           // notifyListeners();
           http.Response response = await http.post(
             url,
-            body: {'json_data': jsonEnc},
           );
           var map = jsonDecode(response.body);
           if (map["flag"] == 0) {
@@ -2249,6 +2265,466 @@ class QuotationController extends ChangeNotifier {
   //         return [];
   //       }
   //     }
-  //   });
+  //
   // }
+  getPendingSaleOrder(BuildContext context, String fromdate, String tilldate) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/fetch_pending_sale_order.php");
+          Map body = {
+            "from_date": fromdate,
+            "till_date": tilldate,
+          };
+          isLoading = true;
+          notifyListeners();
+          print("cust body----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("pendingSaleOrder--$map");
+          pendingSaleOrder.clear();
+          for (var item in map["so_list"]) {
+            pendingSaleOrder.add(item);
+          }
+          print("pendingSaleOrder--$pendingSaleOrder");
+
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+/////////////////////////////////////////////////////
+  viewSaleOrder(BuildContext context, String fromdate, String tilldate) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? user_id = prefs.getString("user_id");
+
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/view_sale_order.php");
+          Map body = {
+            "user_id": user_id,
+            "from_date": fromdate,
+            "till_date": tilldate,
+          };
+          isLoading = true;
+          notifyListeners();
+          print("view SO body----$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("so map----$map");
+          saleOrderList.clear();
+          for (var item in map["so_list"]) {
+            saleOrderList.add(item);
+          }
+          print("saleOrderList--$saleOrderList");
+
+          isLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  //////////////////////////////////////////////////
+  getSaleOrderDetails(BuildContext context, String qtn) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          sale_order_net_amt = 0.0;
+          // isChatLoading = true;
+          // notifyListeners();
+          // notifyListeners();
+          Uri url = Uri.parse("$commonurlgolabl/fetch_sale_order_detail.php");
+          Map body = {"so_id": qtn};
+          saleOrderLoading = true;
+          notifyListeners();
+          print("fetch sale order body--$body");
+          http.Response response = await http.post(
+            url,
+            body: body,
+          );
+          var map = jsonDecode(response.body);
+          print("fetch sale order map--$map");
+          saleOrderDetails.clear();
+          for (var item in map["so_list_detl"]) {
+            saleOrderDetails.add(item);
+            sale_order_net_amt =
+                sale_order_net_amt + double.parse(item["net_rate"]);
+          }
+          print("fetch sale order map--${saleOrderDetails.length}");
+
+          saleOrderLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+//////////////////////////////////////////////////////////////////////
+  approveSaleOrder(BuildContext context, String qtn, String soId) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+
+          Uri url = Uri.parse("$commonurlgolabl/approve_sale_order.php");
+          Map body = {"added_by": user_id, "so_id": soId, "qtn_id": qtn};
+          String jsonEnc = jsonEncode(body);
+          isLoading = true;
+          notifyListeners();
+          print("confrm quot  $body");
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: "${map["msg"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+            // Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (Context) {
+              return EnqHome(
+                type: "return from sale order",
+              );
+            }), (route) => false);
+          }
+
+          saleOrderLoading = false;
+          notifyListeners();
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////
+  getCount(BuildContext context, String date) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+
+          Uri url = Uri.parse("$commonurlgolabl/get_count.php");
+          // Uri url =
+          //     Uri.parse("https://192.168.18.4/beste/common_api/get_count.php");
+
+          Map body = {"f_date": date, "added_by": user_id};
+          print("getcount--------$body");
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("get count map----${map}");
+
+          int cnt = int.parse(map["cnt"]);
+          if (cnt > 0) {
+            getTodaysPendingList(context, date);
+          }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////
+  getTodaysPendingList(BuildContext context, String date) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          print("todsy  pen---");
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          Map body = {"f_date": date, "added_by": user_id};
+          Uri url = Uri.parse("$commonurlgolabl/load_todays_pending.php");
+          isPendingListLoading = true;
+          notifyListeners();
+          http.Response response = await http.post(url, body: body);
+          var map = jsonDecode(response.body);
+          print("load_todays_pending map----$map");
+          if (map["qtns"].length > 0) {
+            pendingQuotationList.clear();
+            // for (int i = 0; i <4; i++) {
+            //   pendingQuotationList.add({
+            //     's_invoice_id': '21',
+            //     's_invoice_no': 'KNR/0001-01',
+            //     'days': '21',
+            //     'to_staff': 'BYJU',
+            //     'company_name': ' IDEAL REFINERS LLP',
+            //     'enq_id': '0',
+            //     'next_date': '13-05-2023',
+            //     'status': '1',
+            //     'schedule_to': '50'
+            //   });
+            // }
+            for (var item in map["qtns"]) {
+              pendingQuotationList.add(item);
+            }
+            print("pendingQuotationList--------$pendingQuotationList");
+          }
+          if (map["services"].length > 0) {
+            pendingServiceList.clear();
+            // for (int i = 0; i < 2; i++) {
+            // // pendingServiceList.add(
+            // //   {
+            // //     "c_id": ' 1',
+            // //     'series': 'CM0001',
+            // //     'type': 'AKSHAY PRADEEP-[Service]',
+            // //     'form_id': '29',
+            // //     'to_staff': 'SMITHA',
+            // //     'flg': '2',
+            // //     'ser_date': '17-05-2023',
+            // //     'ser_staff': '58'
+            // //   },
+            // // );
+            // }
+            for (var item in map["services"]) {
+              pendingServiceList.add(item);
+            }
+            print("pendingServiceList--------$pendingServiceList");
+          }
+          isPendingListLoading = false;
+          notifyListeners();
+          if (pendingQuotationList.length > 0 ||
+              pendingServiceList.length > 0) {
+            PendingList pendingList = PendingList();
+            pendingList.buildPendingPopup(context, MediaQuery.of(context).size);
+          }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  //////////////////////////////////////////////////////
+  getStaffs(BuildContext context, String to_staff) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        DateFind dateFind = DateFind();
+        String? todaydate;
+        try {
+          todaydate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+
+          Uri url = Uri.parse("$commonurlgolabl/get_staffs.php");
+          // Uri url =
+          //     Uri.parse("https://192.168.18.4/beste/common_api/get_count.php");
+
+          http.Response response = await http.post(
+            url,
+          );
+          var map = jsonDecode(response.body);
+          print("get_staffs map----${map}");
+          staff_list.clear();
+          for (var item in map) {
+            staff_list.add(item);
+          }
+          print("staff_list======$staff_list");
+          if (map != null) {
+            // staffSelected = to_staff.toString();
+            for (var item in staff_list) {
+              if (to_staff == item["NAME"]) {
+                staffSelId = item["USERS_ID"];
+              }
+              ;
+            }
+          }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+////////////////////////////////////////////////////////////////
+  setStaffSelected(String s) {
+    for (int i = 0; i < staff_list.length; i++) {
+      print("com------${staff_list[i]["USERS_ID"]}---$s");
+      if (staff_list[i]["USERS_ID"] == s) {
+        staffSelected = staff_list[i]["NAME"];
+        print("staffSelected---$staffSelected");
+        // notifyListeners();
+      }
+    }
+    print("s------$s");
+    notifyListeners();
+  }
+
+////////////////////////////////////////////////////////////////
+  saveNextScheduleServiceDate(String date, String form_id, String qb_id,
+      BuildContext context, String st_id) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+          todaydate = DateFormat('dd-MM-yyyy').format(now);
+
+          Uri url =
+              Uri.parse("$commonurlgolabl/save_next_schedule_service.php");
+          Map body = {
+            'staff_id': st_id,
+            "staff_name": staff_nam,
+            "added_by": user_id,
+            "form_id": form_id,
+            "next_date": date,
+            "qb_id": qb_id,
+            "type": "1"
+          };
+
+          print("save fffffff schedue---service---$body");
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+          print("ffffff---${map}");
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: "${map["msg"]}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+            getTodaysPendingList(context, todaydate!);
+            Navigator.pop(context);
+          }
+          notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
+
+  saveNextScheduleDate(String date, String inv_id, String enq_id,
+      BuildContext context, String staff_id) {
+    NetConnection.networkConnection(context).then((value) async {
+      if (value == true) {
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          String? branch_id = prefs.getString("branch_id");
+          String? user_id = prefs.getString("user_id");
+          String? qutation_id1 = prefs.getString("qutation_id");
+
+          String? staff_nam = prefs.getString("staff_name");
+
+          notifyListeners();
+          Uri url = Uri.parse(
+              "https://trafiqerp.in/webapp/beste/common_api/save_next_schedule.php");
+          Map body = {
+            'staff_id': staff_id,
+            "staff_name": staff_nam,
+            "added_by": user_id,
+            "s_invoice_id": inv_id,
+            "next_date": date,
+            "enq_id": enq_id,
+          };
+
+          print("save schedue----$body");
+
+          var jsonEnc = jsonEncode(body);
+          print("jsonEnc--$jsonEnc");
+          // isQuotLoading = true;
+          // notifyListeners();
+          http.Response response = await http.post(
+            url,
+            body: {'json_data': jsonEnc},
+          );
+          var map = jsonDecode(response.body);
+
+          print("save_next_schedule ----$map");
+          if (map["flag"] == 0) {
+            Fluttertoast.showToast(
+              msg: map["msg"],
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 14.0,
+              backgroundColor: Colors.green,
+            );
+            getTodaysPendingList(context, todaydate!);
+            Navigator.pop(context);
+          }
+          // isQuotLoading = false;
+          // notifyListeners();
+        } catch (e) {
+          print(e);
+          // return null;
+          return [];
+        }
+      }
+    });
+  }
 }

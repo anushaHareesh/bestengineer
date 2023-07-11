@@ -7,6 +7,7 @@ import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/commonColor.dart';
 
@@ -18,6 +19,23 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  String? userGp;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // notification();
+  }
+
+  // notification() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   userGp = prefs.getString("userGroup");
+  //   if (userGp == "1") {
+  //     Provider.of<QuotationController>(context, listen: false)
+  //         .getCount(context,toda);
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -92,7 +110,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     ? Container()
                     : Padding(
                         padding: const EdgeInsets.all(8),
-                        child: Row( 
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Flexible(

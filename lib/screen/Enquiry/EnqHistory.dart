@@ -2,7 +2,7 @@ import 'package:bestengineer/components/commonColor.dart';
 // import 'package:bestengineer/components/dateFind.dart';
 import 'package:bestengineer/controller/productController.dart';
 import 'package:bestengineer/controller/quotationController.dart';
-import 'package:bestengineer/screen/Enquiry/addNewProduct.dart';
+
 import 'package:bestengineer/screen/Enquiry/enqHistDetails.dart';
 import 'package:bestengineer/screen/Enquiry/productList.dart';
 import 'package:bestengineer/screen/Quotation/directQuotation.dart';
@@ -84,7 +84,6 @@ class _EnQHistoryState extends State<EnQHistory> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -155,7 +154,7 @@ class _EnQHistoryState extends State<EnQHistory> {
                         : Expanded(
                             child: ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollableScrollPhysics(),
                               itemCount: value.isEnqSearch
                                   ? value.newenQhistoryList.length
                                   : value.enQhistoryList.length,
@@ -313,7 +312,11 @@ class _EnQHistoryState extends State<EnQHistory> {
                     }
 
                     RemoveReason reason = RemoveReason();
-                    reason.showDeleteReasonSheet(context, index);
+                    reason.showDeleteReasonSheet(
+                        context,
+                        index,
+                        value.enQhistoryList[index].enqCode.toString(),
+                        value.enQhistoryList[index].enqId.toString());
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -558,7 +561,11 @@ class _EnQHistoryState extends State<EnQHistory> {
                     // }
 
                     RemoveReason reason = RemoveReason();
-                    reason.showDeleteReasonSheet(context, index);
+                    reason.showDeleteReasonSheet(
+                        context,
+                        index,
+                        value.newenQhistoryList[index].enqCode.toString(),
+                        value.newenQhistoryList[index].enqId.toString());
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

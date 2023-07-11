@@ -1,13 +1,8 @@
 import 'dart:io';
-
-import 'package:bestengineer/components/commonColor.dart';
 import 'package:bestengineer/screen/Enquiry/enqHome.dart';
-import 'package:bestengineer/screen/Quotation/quotation_listScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-
 import '../../controller/quotationController.dart';
 
 class JustPage extends StatefulWidget {

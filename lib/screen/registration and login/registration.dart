@@ -18,12 +18,12 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Map<String, dynamic> _deviceData = <String, dynamic>{};
   final _formKey = GlobalKey<FormState>();
   FocusNode? fieldFocusNode;
   TextEditingController codeController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
 
   String? manufacturer;
   String? model;

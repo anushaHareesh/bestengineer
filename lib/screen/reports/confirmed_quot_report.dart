@@ -294,7 +294,7 @@ class _ConfirmedQuotationState extends State<ConfirmedQuotation> {
                                               SelectBranchSheet();
                                           quot.showRemarkSheet(
                                               context,
-                                              value.quotationList[index]
+                                              value.confrimedQuotList[index]
                                                   ["s_invoice_id"]);
                                           // Navigator.of(context).push(MaterialPageRoute(builder: (context) => PdfPreview()));
                                         },
