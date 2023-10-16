@@ -17,20 +17,20 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final _formKey = GlobalKey<FormState>();
   FocusNode? fieldFocusNode;
   TextEditingController codeController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  late String uniqId;
 
   String? manufacturer;
   String? model;
   String? fp;
   String? textFile;
   ExternalDir externalDir = ExternalDir();
-  late String uniqId;
 
   Future<void> initPlatformState() async {
     var deviceData = <String, dynamic>{};
