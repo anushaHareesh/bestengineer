@@ -15,9 +15,6 @@ import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../widgets/alertCommon/itemSelectionAlert.dart';
-import '../../widgets/bottomsheets/itemSelectionSheet.dart';
-
 class EnquiryScreen extends StatefulWidget {
   @override
   State<EnquiryScreen> createState() => _EnquiryScreenState();
@@ -156,7 +153,7 @@ class _EnquiryScreenState extends State<EnquiryScreen>
                       InkWell(
                         onTap: () {
                           if (value.selected == null) {
-                            _showCustomFlash();
+                            // _showCustomFlash();
                           } else {
                             Provider.of<Controller>(context, listen: false)
                                 .setSelectedCustomer(false);
@@ -723,37 +720,34 @@ class _EnquiryScreenState extends State<EnquiryScreen>
       },
     );
   }
-
-  void _showCustomFlash({FlashBehavior style = FlashBehavior.fixed}) {
-    showFlash(
-      context: context,
-      duration: const Duration(seconds: 3),
-      persistent: true,
-      builder: (_, controller) {
-        return Flash(
-          controller: controller,
-          // backgroundColor: Colors.white,
-          // brightness: Brightness.light,
-          // barrierColor: Colors.black38,
-          barrierDismissible: true,
-          behavior: style,
-          position: FlashPosition.top,
-          backgroundGradient: LinearGradient(
-            colors: [P_Settings.loginPagetheme, P_Settings.fillcolor],
-          ),
-          child: FlashBar(
-            // title: Text('Hey User!'),
-            content: Text(
-              'Please Choose an Area',
-              style: TextStyle(color: Colors.white, fontSize: 15),
-            ),
-            primaryAction: TextButton(
-              onPressed: () {},
-              child: Text('DISMISS', style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
+    }
+//   void _showCustomFlash({FlashBehavior style = FlashBehavior.fixed}) {
+//     showFlash(
+//       context: context,
+//       duration: const Duration(seconds: 3),
+//       persistent: true,
+//       builder: (_, controller) {
+//         return Flash(
+//           controller: controller,
+//           barrierDismissible: true,
+//           behavior: style,
+//           position: FlashPosition.top,
+//           backgroundGradient: LinearGradient(
+//             colors: [P_Settings.loginPagetheme, P_Settings.fillcolor],
+//           ),
+//           child: FlashBar(
+//             // title: Text('Hey User!'),
+//             content: Text(
+//               'Please Choose an Area',
+//               style: TextStyle(color: Colors.white, fontSize: 15),
+//             ),
+//             primaryAction: TextButton(
+//               onPressed: () {},
+//               child: Text('DISMISS', style: TextStyle(color: Colors.white)),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
